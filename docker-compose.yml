@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: telemforge
+      POSTGRES_USER: telemforge
+      POSTGRES_PASSWORD: telemforge
+    ports:
+      - "5433:5432"
+
+  api:
+    build:
+      context: ./apps/api
+    environment:
+      TELEMFORGE_DATABASE_URL: postgresql://telemforge:telemforge@postgres:5432/telemforge
+    ports:
+      - "8010:8010"
+    depends_on:
+      - postgres
+
+  web:
+    build:
+      context: ./apps/web
+    environment:
+      VITE_API_BASE_URL: http://localhost:8010
+    ports:
+      - "5174:5173"
+    depends_on:
+      - api
+
