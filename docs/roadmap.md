@@ -1,22 +1,23 @@
 # TelemForge Roadmap
 
-## Phase 1
+This file now acts as the short-form roadmap. The detailed, human-reviewable build path lives in [docs/development/README.md](/Users/sam./Desktop/spaceProjects/telemforge/docs/development/README.md).
 
-- simulation scaffold
-- telemetry contracts
-- mission overview shell
-- fault injection contract
+## Build Order
 
-## Phase 2
+1. keep the repo implementation-free until the working agreement and stack choices are reviewed
+2. choose the working stack and repo conventions
+3. define telemetry contracts and static fixture data
+4. build the deterministic simulation in isolation with visible outputs
+5. add API boundaries and persistence around validated data flows
+6. ship a live mission console against known-good sample data, then live data
+7. add faults, alerts, and event logging with human-observable behavior
+8. add replay and anomaly scoring only after history is trustworthy
+9. harden, dockerize, and document the operating workflow
 
-- alert engine
-- replay timeline support
-- anomaly summaries
-- seeded scenario packs
+## Guiding Principle
 
-## Phase 3
+Every stage should be:
 
-- richer subsystem realism
-- additional scenario libraries
-- optional interoperability integrations
-
+- human testable
+- reviewable for logic before the next stage begins
+- teachable by the AI agent with options and tradeoffs, not just implementation

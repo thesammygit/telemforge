@@ -1,31 +1,24 @@
 # TelemForge
 
-TelemForge is an open-source synthetic telemetry and mission-operations project template. This repository provides starter backend/frontend structure, neutral engineering documentation, and Docker scaffolding for the initial project workspace.
+TelemForge is an open-source synthetic telemetry and mission-operations sandbox project.
 
-## Template Contents
+This repository is intentionally starting from scratch. At this point it is a planning and design workspace, not an implementation workspace.
 
-- FastAPI backend skeleton for simulation, telemetry, alerts, replay, and anomaly workflows
-- React + Vite frontend shell for a mission-control-style console
-- Docker Compose template for API, web, and PostgreSQL services
+## Current Contents
+
 - architecture, API, and roadmap documentation
+- a staged human-in-the-loop development path under `docs/development/`
+- no checked-in backend or frontend implementation yet
 
 ## Repository Layout
 
 ```text
-apps/
-  api/
-    app/
-      api/
-      core/
-      domain/
-  web/
 docs/
-docker-compose.yml
 ```
 
 ## Intended Scope
 
-The repository is set up for:
+The project is intended to grow into:
 
 - synthetic subsystem simulation
 - live telemetry transport
@@ -33,10 +26,26 @@ The repository is set up for:
 - replay workflow support
 - anomaly scoring overlays
 
-The current code is intentionally skeletal so dedicated implementation agents can build each subsystem out independently.
+Implementation should be added only stage by stage after the relevant design choices are reviewed.
+
+## Human-Centric Development Path
+
+If you do not want to build TelemForge in one shot, start with:
+
+- [Development Path](/Users/sam./Desktop/spaceProjects/telemforge/docs/development/README.md)
+- [Working Principles](/Users/sam./Desktop/spaceProjects/telemforge/docs/development/principles.md)
+- [Review Loop](/Users/sam./Desktop/spaceProjects/telemforge/docs/development/review-loop.md)
+
+That track is designed for:
+
+- stepwise implementation
+- explicit design decisions at each stage
+- human-testable milestones
+- visible data and behavior before deep abstraction
+- AI-assisted teaching and option analysis at each checkpoint
 
 ## Notes
 
 - Keep the product positioning focused on operator tooling and simulation.
-- Treat the current code as scaffolding, not a finished mission-ops platform.
+- Do not add implementation scaffolding before the stage explicitly calls for it.
 - Keep anomaly methods explainable in the early implementation phases.

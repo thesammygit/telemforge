@@ -1,5 +1,7 @@
 # TelemForge Architecture
 
+This document describes the target architecture. It does not imply that the modules below already exist in the repository.
+
 ## Product Direction
 
 TelemForge is structured as an operator-facing mission-operations sandbox. The core workflow is:
@@ -35,3 +37,8 @@ TelemForge is structured as an operator-facing mission-operations sandbox. The c
 - injected faults
 - anomaly outputs
 
+## Current State
+
+- there is no checked-in backend implementation yet
+- there is no checked-in frontend implementation yet
+- architecture decisions should be confirmed stage by stage before code is introduced

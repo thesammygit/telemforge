@@ -1,5 +1,7 @@
 # TelemForge API Outline
 
+This is a target API outline for future stages. No API implementation is currently checked in.
+
 ## Baseline Routes
 
 - `GET /health`
@@ -23,4 +25,3 @@
 - fault injection request
 - replay session payload
 - anomaly score summary
-
