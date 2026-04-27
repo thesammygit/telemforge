@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-04-27T16:00:30Z",
+  "project_id": "telemforge",
+  "automation": "telemforge-repo-hygiene",
+  "status": "scheduled",
+  "purpose": "Keep the automation branch clean through semantic classification, targeted verification, local commits, and automatic push; never destructive-clean.",
+  "forbidden_actions": [
+    "git reset --hard",
+    "broad git clean",
+    "force-push",
+    "history rewrite",
+    "data deletion",
+    "secret commits"
+  ],
+  "last_run": null
+}

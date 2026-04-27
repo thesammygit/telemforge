@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "mode": "normal",
+  "updated_at": "2026-04-27T16:00:30Z",
+  "expires_at": null,
+  "paused_automations": [],
+  "autonomy": "full_automation_until_human_only_blocker",
+  "automatic_push": true,
+  "force_next_task": "Complete Stage 01 stack/workspace foundation, then proceed stage-by-stage automatically.",
+  "priority_override": "Build TelemForge into a polished open-source mission-ops telemetry sandbox through the existing staged development path without waiting for manual approval between stages.",
+  "blocked_paths": [],
+  "human_decision_needed": null,
+  "notes": [
+    {
+      "at": "2026-04-27T16:00:30Z",
+      "source": "sam_signal_via_hermes",
+      "summary": "Sam approved full automation for TelemForge: create automation workspace/control plane, make local commits, push automatically, implement code stage-by-stage, and only stop for human-only blockers.",
+      "accepted_stack": [
+        "Python",
+        "FastAPI",
+        "React",
+        "Vite",
+        "SQLite local/tests",
+        "PostgreSQL later"
+      ],
+      "requires_sam": [
+        "credentials",
+        "paid APIs/cloud costs",
+        "force-push/history rewrite",
+        "merge to main",
+        "deploy/release/publish",
+        "destructive cleanup",
+        "legal/licensing ambiguity"
+      ]
+    }
+  ]
+}

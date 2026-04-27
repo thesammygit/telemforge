@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-04-27T16:00:30Z",
+  "project_id": "telemforge",
+  "status": "healthy",
+  "blockers": [],
+  "summary": "Automation workspace bootstrapped; repo is docs-first and ready for Stage 01 work.",
+  "checks": {
+    "source_repo_clean_at_setup": true,
+    "automation_workspace_created": true,
+    "control_plane_present": true,
+    "human_only_blocker": null
+  }
+}

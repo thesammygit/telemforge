@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-04-27T16:00:30Z",
+  "project_id": "telemforge",
+  "automation": "telemforge-governor",
+  "status": "ready",
+  "posture": "full automation enabled; build stage-by-stage; preserve human-readable artifacts and product coherence"
+}

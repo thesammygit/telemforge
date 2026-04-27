@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-04-27T16:00:30Z",
+  "project_id": "telemforge",
+  "automation": "telemforge-planner",
+  "status": "ready",
+  "last_selected_task": "Complete Stage 01 stack/workspace foundation",
+  "queue_path": "docs/automation/queue/current_task.md"
+}
