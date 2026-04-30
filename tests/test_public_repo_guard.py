@@ -1,4 +1,5 @@
 import importlib.util
+import subprocess
 import sys
 from pathlib import Path
 
@@ -51,3 +52,16 @@ def test_allows_public_relative_docs_and_placeholder_secrets():
     DATABASE_URL=postgresql://user:password@localhost:5432/telemforge
     """
     assert collect_for_text(text) == []
+
+
+def test_scans_staged_index_even_when_worktree_was_cleaned(tmp_path):
+    guard = load_guard()
+    subprocess.run(["git", "init"], cwd=tmp_path, check=True, stdout=subprocess.DEVNULL)
+    leaked = tmp_path / "leak.txt"
+    leaked.write_text(("API_" + "TOKEN") + "='abc123" + "def456ghi789'\n")
+    subprocess.run(["git", "add", "leak.txt"], cwd=tmp_path, check=True)
+    leaked.write_text("token moved to environment variables\n")
+
+    findings = guard.scan_staged_index(tmp_path)
+
+    assert any(item.path == "leak.txt" and item.kind == "secret_assignment" for item in findings)

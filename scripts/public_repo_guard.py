@@ -217,6 +217,34 @@ def scan_worktree(root: Path) -> list[Finding]:
     return findings
 
 
+def scan_staged_index(root: Path) -> list[Finding]:
+    proc = subprocess.run(
+        ["git", "diff", "--cached", "--name-only", "--diff-filter=ACMR"],
+        cwd=root,
+        check=False,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(proc.stderr.strip() or "git diff --cached failed")
+
+    findings: list[Finding] = []
+    for relative_path in proc.stdout.splitlines():
+        if not relative_path or should_skip_path(relative_path):
+            continue
+        findings.extend(scan_filename(relative_path, source="staged"))
+        if should_skip_content_scan(relative_path):
+            continue
+        data = git_output(root, ["show", f":{relative_path}"], binary=True)
+        assert isinstance(data, bytes)
+        if len(data) > MAX_TEXT_BYTES or b"\x00" in data[:4096]:
+            continue
+        text = data.decode("utf-8", errors="replace")
+        findings.extend(scan_text(text, relative_path, source="staged"))
+    return findings
+
+
 def git_output(root: Path, args: list[str], binary: bool = False) -> bytes | str:
     proc = subprocess.run(
         ["git", *args],
@@ -296,7 +324,8 @@ def main(argv: list[str] | None = None) -> int:
             print(f"not a git repository: {root}", file=sys.stderr)
             return 2
 
-    findings = scan_worktree(root)
+    findings = scan_staged_index(root)
+    findings.extend(scan_worktree(root))
     if args.scan_history:
         findings.extend(scan_history(root))
     findings = dedupe_findings(findings)
