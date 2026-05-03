@@ -82,12 +82,12 @@ A reviewer should be able to:
 Current baseline command:
 
 ```text
-python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
+python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md
 ```
 
-The generated report is a Python/FastAPI control-plane baseline. It keeps Rust
-tracked as the future data-plane direction for hot paths, not as a whole-project
-rewrite.
+The generated JSON report and Markdown summary are a Python/FastAPI
+control-plane baseline. They keep Rust tracked as the future data-plane
+direction for hot paths, not as a whole-project rewrite.
 
 ## Test Preference
 

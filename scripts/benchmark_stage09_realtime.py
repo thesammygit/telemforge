@@ -206,6 +206,16 @@ def write_stage09_report(summary: dict[str, Any], output_path: Path | str) -> Pa
     return path
 
 
+def write_stage09_markdown_summary(
+    summary: dict[str, Any],
+    output_path: Path | str,
+) -> Path:
+    path = Path(output_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(_stage09_markdown_summary(summary), encoding="utf-8")
+    return path
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Run the bounded Stage 09 realtime baseline benchmark."
@@ -219,6 +229,11 @@ def main() -> None:
         "--output",
         default=None,
         help="Optional JSON report path to write after the benchmark run.",
+    )
+    parser.add_argument(
+        "--summary-output",
+        default=None,
+        help="Optional Markdown summary path to write after the benchmark run.",
     )
     parser.add_argument("--alert-iterations", type=int, default=5)
     parser.add_argument("--replay-iterations", type=int, default=5)
@@ -240,6 +255,9 @@ def main() -> None:
 
     if args.output is not None:
         write_stage09_report(summary, args.output)
+
+    if args.summary_output is not None:
+        write_stage09_markdown_summary(summary, args.summary_output)
 
     print(json.dumps(summary, indent=2, sort_keys=True))
 
@@ -389,6 +407,74 @@ def _target_check(
         "unit": unit,
         "meets_target": meets_target,
     }
+
+
+def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
+    workload = summary["workload"]
+    metrics = summary["metrics"]
+    target_results = summary["target_results"]
+    checks = target_results["checks"]
+    missed_targets = target_results["missed_targets"]
+
+    rows = [
+        ("Channel count", checks["channel_count"]),
+        ("Per-channel sample rate", checks["per_channel_sample_rate_hz"]),
+        ("Aggregate sample rate", checks["aggregate_sample_rate_hz"]),
+        ("P95 alert latency", checks["p95_alert_latency_ms"]),
+        ("P95 replay query latency", checks["p95_replay_query_latency_ms"]),
+        ("Dropped events", checks["dropped_event_count"]),
+    ]
+    target_table = "\n".join(
+        "| "
+        + " | ".join(
+            [
+                label,
+                _format_observed(check),
+                _format_target(check),
+                "PASS" if check["meets_target"] else "MISS",
+            ]
+        )
+        + " |"
+        for label, check in rows
+    )
+    missed_line = ", ".join(missed_targets) if missed_targets else "none"
+
+    return (
+        "# Stage 09 Realtime Baseline Summary\n\n"
+        f"Generated at: `{summary['generated_at']}`\n\n"
+        "Runtime direction: Rust data plane direction, not a whole-project "
+        "rewrite. Python/FastAPI remains the measured control-plane baseline "
+        "for this report.\n\n"
+        "## Workload\n\n"
+        f"- Scenario: `{workload['scenario']}`\n"
+        f"- Channels: `{workload['channel_count']}`\n"
+        f"- Samples per channel: `{workload['samples_per_channel']}`\n"
+        f"- Sample window: `{workload['sample_window']['start_at']}` to "
+        f"`{workload['sample_window']['last_sample_at']}`\n"
+        f"- Telemetry rows written: `{workload['telemetry_rows_written']}`\n\n"
+        "## Metrics\n\n"
+        f"- Aggregate sample rate: `{metrics['telemetry_sample_rate_hz']} Hz`\n"
+        f"- Per-channel sample rate: `{metrics['per_channel_sample_rate_hz']} Hz`\n"
+        f"- P95 alert latency: `{metrics['p95_alert_latency_ms']} ms`\n"
+        f"- P95 replay query latency: `{metrics['p95_replay_query_latency_ms']} ms`\n"
+        f"- Dropped events: `{metrics['dropped_event_count']}`\n\n"
+        "## Target Results\n\n"
+        "| Metric | Observed | Target | Result |\n"
+        "| --- | ---: | ---: | --- |\n"
+        f"{target_table}\n\n"
+        f"Missed targets: `{missed_line}`.\n\n"
+        "A future Rust data-plane candidate should emit the same JSON report "
+        "shape and this summary before replacing a Python hot path.\n"
+    )
+
+
+def _format_observed(check: dict[str, Any]) -> str:
+    return f"{check['observed']} {check['unit']}"
+
+
+def _format_target(check: dict[str, Any]) -> str:
+    comparator = ">=" if check["comparison"] == "at_least" else "<="
+    return f"{comparator} {check['target']} {check['unit']}"
 
 
 def _offset_timestamp(start_at: str, offset_seconds: int) -> str:

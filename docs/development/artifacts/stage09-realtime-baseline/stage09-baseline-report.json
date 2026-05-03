@@ -24,12 +24,12 @@
       "step_seconds": 1
     }
   },
-  "generated_at": "2026-05-03T20:05:25Z",
+  "generated_at": "2026-05-03T20:53:19Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 3.087,
-    "p95_replay_query_latency_ms": 3.593,
+    "p95_alert_latency_ms": 2.565,
+    "p95_replay_query_latency_ms": 2.971,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -83,14 +83,14 @@
       "p95_alert_latency_ms": {
         "comparison": "at_most",
         "meets_target": true,
-        "observed": 3.087,
+        "observed": 2.565,
         "target": 50,
         "unit": "ms"
       },
       "p95_replay_query_latency_ms": {
         "comparison": "at_most",
         "meets_target": true,
-        "observed": 3.593,
+        "observed": 2.971,
         "target": 500,
         "unit": "ms"
       },

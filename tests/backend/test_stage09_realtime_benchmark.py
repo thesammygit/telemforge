@@ -5,7 +5,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.benchmark_stage09_realtime import run_stage09_realtime_baseline
+from scripts.benchmark_stage09_realtime import (
+    run_stage09_realtime_baseline,
+    write_stage09_markdown_summary,
+)
 
 
 class Stage09RealtimeBenchmarkTest(unittest.TestCase):
@@ -102,10 +105,36 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 ],
             )
 
+    def test_markdown_summary_reports_target_results(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            database_path = Path(tmpdir) / "stage09-baseline.sqlite"
+            summary_path = Path(tmpdir) / "stage09-baseline-summary.md"
+
+            summary = run_stage09_realtime_baseline(
+                database_path=database_path,
+                alert_iterations=2,
+                replay_iterations=2,
+            )
+            write_stage09_markdown_summary(summary, summary_path)
+
+            summary_text = summary_path.read_text(encoding="utf-8")
+            self.assertIn("# Stage 09 Realtime Baseline Summary", summary_text)
+            self.assertIn(
+                "Rust data plane direction, not a whole-project rewrite",
+                summary_text,
+            )
+            self.assertIn(
+                "| Per-channel sample rate | 1.0 Hz | >= 10 Hz | MISS |",
+                summary_text,
+            )
+            self.assertIn("| Dropped events | 0 events | <= 0 events | PASS |", summary_text)
+            self.assertIn("Missed targets: `", summary_text)
+
     def test_benchmark_script_writes_report_from_repo_root(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
             database_path = Path(tmpdir) / "stage09-baseline-cli.sqlite"
             report_path = Path(tmpdir) / "stage09-baseline-report.json"
+            summary_path = Path(tmpdir) / "stage09-baseline-summary.md"
 
             result = subprocess.run(
                 [
@@ -115,6 +144,8 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     str(database_path),
                     "--output",
                     str(report_path),
+                    "--summary-output",
+                    str(summary_path),
                     "--alert-iterations",
                     "2",
                     "--replay-iterations",
@@ -127,11 +158,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(report_path.exists())
+            self.assertTrue(summary_path.exists())
             report = json.loads(report_path.read_text(encoding="utf-8"))
+            summary_text = summary_path.read_text(encoding="utf-8")
             stdout_report = json.loads(result.stdout)
             self.assertEqual(report["schema"], "telemforge.stage09_realtime_baseline.v1")
             self.assertEqual(stdout_report["schema"], report["schema"])
             self.assertEqual(report["metrics"]["dropped_event_count"], 0)
+            self.assertIn("Python/FastAPI remains the measured control-plane", summary_text)
 
 
 if __name__ == "__main__":

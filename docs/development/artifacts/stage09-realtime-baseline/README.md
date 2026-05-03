@@ -13,11 +13,13 @@ queries.
   latency, dropped-event count, deterministic sample-window metadata, target
   comparison results, benchmark contract metadata, and the tracked Rust
   data-plane boundary.
+- `stage09-baseline-summary.md`: human-readable summary generated from the same
+  benchmark run, with the workload, headline metrics, and pass/miss target table.
 
 ## Inspect
 
 ```text
-python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
+python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 ```
 
