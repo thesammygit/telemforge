@@ -170,6 +170,11 @@ def run_stage09_realtime_baseline(
         "generated_at": _utc_now(),
         "stage": "09-realtime-performance-and-rust-data-plane",
         "health_stage": health["stage"],
+        "execution_profile": _execution_profile(
+            channel_count=channel_count,
+            per_channel_sample_rate_hz=per_channel_sample_rate_hz,
+            aggregate_sample_rate_hz=aggregate_sample_rate_hz,
+        ),
         "benchmark_contract": _benchmark_contract(),
         "workload": workload,
         "metrics": metrics,
@@ -384,6 +389,43 @@ def _benchmark_contract() -> dict[str, Any]:
                 "A Rust data-plane candidate should emit this report shape, "
                 "including gap-to-target values, before replacing a Python hot path."
             ),
+            (
+                "Keep execution_profile fields explicit so future Rust results "
+                "are not compared against a different client/process/load shape."
+            ),
+        ],
+    }
+
+
+def _execution_profile(
+    channel_count: int,
+    per_channel_sample_rate_hz: float,
+    aggregate_sample_rate_hz: float,
+) -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_execution_profile.v1",
+        "purpose": "Declare the local benchmark shape before comparing runtimes.",
+        "process_model": "single-process in-process FastAPI TestClient",
+        "client_count": 1,
+        "database": "fresh local SQLite database unless --database is provided",
+        "resource_scope": "bounded local smoke, no worker fan-out",
+        "load_shape": {
+            "scenario": BENCHMARK_SCENARIO,
+            "channel_count": channel_count,
+            "samples_per_channel": BENCHMARK_SAMPLES_PER_CHANNEL,
+            "step_seconds": BENCHMARK_STEP_SECONDS,
+            "per_channel_sample_rate_hz": per_channel_sample_rate_hz,
+            "aggregate_sample_rate_hz": aggregate_sample_rate_hz,
+        },
+        "measured_paths": [
+            "simulation write through the FastAPI control plane",
+            "manual fault alert evaluation",
+            "bounded replay query",
+        ],
+        "deferred_paths": [
+            "websocket stream fanout",
+            "client reconnect behavior",
+            "backpressure under multi-client load",
         ],
     }
 
@@ -424,6 +466,8 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     target_results = summary["target_results"]
     checks = target_results["checks"]
     missed_targets = target_results["missed_targets"]
+    execution_profile = summary["execution_profile"]
+    deferred_paths = ", ".join(execution_profile["deferred_paths"])
 
     rows = [
         ("Channel count", checks["channel_count"]),
@@ -462,6 +506,11 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Sample window: `{workload['sample_window']['start_at']}` to "
         f"`{workload['sample_window']['last_sample_at']}`\n"
         f"- Telemetry rows written: `{workload['telemetry_rows_written']}`\n\n"
+        "## Execution Profile\n\n"
+        f"- Process model: `{execution_profile['process_model']}`\n"
+        f"- Client count: `{execution_profile['client_count']}`\n"
+        f"- Resource scope: `{execution_profile['resource_scope']}`\n"
+        f"- Deferred paths: `{deferred_paths}`\n\n"
         "## Metrics\n\n"
         f"- Aggregate sample rate: `{metrics['telemetry_sample_rate_hz']} Hz`\n"
         f"- Per-channel sample rate: `{metrics['per_channel_sample_rate_hz']} Hz`\n"

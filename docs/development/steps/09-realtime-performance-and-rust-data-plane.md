@@ -75,7 +75,7 @@ A reviewer should be able to:
 - watch telemetry update live in the console
 - run one benchmark command
 - read a short report with channel count, sample rate, p95 alert latency, replay
-  query latency, and dropped-event count
+  query latency, dropped-event count, and execution profile
 - see which path remains Python control plane and which path is a Rust
   data-plane candidate
 

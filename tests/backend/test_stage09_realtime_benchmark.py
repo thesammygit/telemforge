@@ -25,6 +25,28 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertTrue(database_path.exists())
             self.assertEqual(summary["schema"], "telemforge.stage09_realtime_baseline.v1")
             self.assertEqual(summary["stage"], "09-realtime-performance-and-rust-data-plane")
+            execution_profile = summary["execution_profile"]
+            self.assertEqual(
+                execution_profile["schema"],
+                "telemforge.stage09_execution_profile.v1",
+            )
+            self.assertEqual(
+                execution_profile["process_model"],
+                "single-process in-process FastAPI TestClient",
+            )
+            self.assertEqual(execution_profile["client_count"], 1)
+            self.assertEqual(
+                execution_profile["resource_scope"],
+                "bounded local smoke, no worker fan-out",
+            )
+            self.assertEqual(
+                execution_profile["load_shape"]["aggregate_sample_rate_hz"],
+                10.0,
+            )
+            self.assertIn(
+                "websocket stream fanout",
+                execution_profile["deferred_paths"],
+            )
             contract = summary["benchmark_contract"]
             self.assertEqual(
                 contract["schema"],
@@ -125,6 +147,13 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "Rust data plane direction, not a whole-project rewrite",
                 summary_text,
             )
+            self.assertIn("## Execution Profile", summary_text)
+            self.assertIn(
+                "- Process model: `single-process in-process FastAPI TestClient`",
+                summary_text,
+            )
+            self.assertIn("- Client count: `1`", summary_text)
+            self.assertIn("websocket stream fanout", summary_text)
             self.assertIn(
                 "| Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |",
                 summary_text,
@@ -169,6 +198,7 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             stdout_report = json.loads(result.stdout)
             self.assertEqual(report["schema"], "telemforge.stage09_realtime_baseline.v1")
             self.assertEqual(stdout_report["schema"], report["schema"])
+            self.assertEqual(report["execution_profile"]["client_count"], 1)
             self.assertEqual(report["metrics"]["dropped_event_count"], 0)
             self.assertEqual(
                 report["target_results"]["checks"]["aggregate_sample_rate_hz"][
