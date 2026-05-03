@@ -77,6 +77,7 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     "target": 10,
                     "comparison": "at_least",
                     "unit": "Hz",
+                    "gap_to_target": 9.0,
                     "meets_target": False,
                 },
             )
@@ -87,6 +88,7 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     "target": 0,
                     "comparison": "at_most",
                     "unit": "events",
+                    "gap_to_target": 0,
                     "meets_target": True,
                 },
             )
@@ -124,10 +126,13 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 summary_text,
             )
             self.assertIn(
-                "| Per-channel sample rate | 1.0 Hz | >= 10 Hz | MISS |",
+                "| Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |",
                 summary_text,
             )
-            self.assertIn("| Dropped events | 0 events | <= 0 events | PASS |", summary_text)
+            self.assertIn(
+                "| Dropped events | 0 events | <= 0 events | 0 events | PASS |",
+                summary_text,
+            )
             self.assertIn("Missed targets: `", summary_text)
 
     def test_benchmark_script_writes_report_from_repo_root(self) -> None:
@@ -165,6 +170,12 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(report["schema"], "telemforge.stage09_realtime_baseline.v1")
             self.assertEqual(stdout_report["schema"], report["schema"])
             self.assertEqual(report["metrics"]["dropped_event_count"], 0)
+            self.assertEqual(
+                report["target_results"]["checks"]["aggregate_sample_rate_hz"][
+                    "gap_to_target"
+                ],
+                990.0,
+            )
             self.assertIn("Python/FastAPI remains the measured control-plane", summary_text)
 
 

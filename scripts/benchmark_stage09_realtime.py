@@ -381,8 +381,8 @@ def _benchmark_contract() -> dict[str, Any]:
                 "workload, targets, and contract fields are stable."
             ),
             (
-                "A Rust data-plane candidate should emit this report shape "
-                "before replacing a Python hot path."
+                "A Rust data-plane candidate should emit this report shape, "
+                "including gap-to-target values, before replacing a Python hot path."
             ),
         ],
     }
@@ -396,8 +396,10 @@ def _target_check(
 ) -> dict[str, Any]:
     if comparison == "at_least":
         meets_target = observed >= target
+        gap_to_target = max(target - observed, 0)
     elif comparison == "at_most":
         meets_target = observed <= target
+        gap_to_target = max(observed - target, 0)
     else:
         raise ValueError(f"Unsupported target comparison: {comparison}")
     return {
@@ -405,8 +407,15 @@ def _target_check(
         "target": target,
         "comparison": comparison,
         "unit": unit,
+        "gap_to_target": _round_gap(gap_to_target),
         "meets_target": meets_target,
     }
+
+
+def _round_gap(value: int | float) -> int | float:
+    if isinstance(value, float):
+        return round(value, 3)
+    return value
 
 
 def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
@@ -431,6 +440,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
                 label,
                 _format_observed(check),
                 _format_target(check),
+                _format_gap(check),
                 "PASS" if check["meets_target"] else "MISS",
             ]
         )
@@ -459,12 +469,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- P95 replay query latency: `{metrics['p95_replay_query_latency_ms']} ms`\n"
         f"- Dropped events: `{metrics['dropped_event_count']}`\n\n"
         "## Target Results\n\n"
-        "| Metric | Observed | Target | Result |\n"
-        "| --- | ---: | ---: | --- |\n"
+        "| Metric | Observed | Target | Gap | Result |\n"
+        "| --- | ---: | ---: | ---: | --- |\n"
         f"{target_table}\n\n"
         f"Missed targets: `{missed_line}`.\n\n"
         "A future Rust data-plane candidate should emit the same JSON report "
-        "shape and this summary before replacing a Python hot path.\n"
+        "shape, including gap-to-target values, before replacing a Python hot path.\n"
     )
 
 
@@ -475,6 +485,10 @@ def _format_observed(check: dict[str, Any]) -> str:
 def _format_target(check: dict[str, Any]) -> str:
     comparator = ">=" if check["comparison"] == "at_least" else "<="
     return f"{comparator} {check['target']} {check['unit']}"
+
+
+def _format_gap(check: dict[str, Any]) -> str:
+    return f"{check['gap_to_target']} {check['unit']}"
 
 
 def _offset_timestamp(start_at: str, offset_seconds: int) -> str:

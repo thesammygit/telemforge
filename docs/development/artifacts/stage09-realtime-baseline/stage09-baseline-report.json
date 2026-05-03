@@ -4,7 +4,7 @@
       "Run single-process against the local in-process TestClient.",
       "Use the same scenario, seed, sample count, and step interval before comparing runtime implementations.",
       "Treat generated_at and latency values as run-specific; workload, targets, and contract fields are stable.",
-      "A Rust data-plane candidate should emit this report shape before replacing a Python hot path."
+      "A Rust data-plane candidate should emit this report shape, including gap-to-target values, before replacing a Python hot path."
     ],
     "measurement_method": {
       "alert_latency": "elapsed wall-clock time around manual fault POST requests, summarized as nearest-rank p95",
@@ -24,12 +24,12 @@
       "step_seconds": 1
     }
   },
-  "generated_at": "2026-05-03T20:53:19Z",
+  "generated_at": "2026-05-03T21:43:06Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.565,
-    "p95_replay_query_latency_ms": 2.971,
+    "p95_alert_latency_ms": 5.381,
+    "p95_replay_query_latency_ms": 3.188,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -61,6 +61,7 @@
     "checks": {
       "aggregate_sample_rate_hz": {
         "comparison": "at_least",
+        "gap_to_target": 990.0,
         "meets_target": false,
         "observed": 10.0,
         "target": 1000,
@@ -68,6 +69,7 @@
       },
       "channel_count": {
         "comparison": "at_least",
+        "gap_to_target": 90,
         "meets_target": false,
         "observed": 10,
         "target": 100,
@@ -75,6 +77,7 @@
       },
       "dropped_event_count": {
         "comparison": "at_most",
+        "gap_to_target": 0,
         "meets_target": true,
         "observed": 0,
         "target": 0,
@@ -82,20 +85,23 @@
       },
       "p95_alert_latency_ms": {
         "comparison": "at_most",
+        "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.565,
+        "observed": 5.381,
         "target": 50,
         "unit": "ms"
       },
       "p95_replay_query_latency_ms": {
         "comparison": "at_most",
+        "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.971,
+        "observed": 3.188,
         "target": 500,
         "unit": "ms"
       },
       "per_channel_sample_rate_hz": {
         "comparison": "at_least",
+        "gap_to_target": 9.0,
         "meets_target": false,
         "observed": 1.0,
         "target": 10,

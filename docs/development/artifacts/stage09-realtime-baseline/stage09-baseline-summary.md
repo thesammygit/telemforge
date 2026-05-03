@@ -1,6 +1,6 @@
 # Stage 09 Realtime Baseline Summary
 
-Generated at: `2026-05-03T20:53:19Z`
+Generated at: `2026-05-03T21:43:06Z`
 
 Runtime direction: Rust data plane direction, not a whole-project rewrite. Python/FastAPI remains the measured control-plane baseline for this report.
 
@@ -16,21 +16,21 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 - Aggregate sample rate: `10.0 Hz`
 - Per-channel sample rate: `1.0 Hz`
-- P95 alert latency: `2.565 ms`
-- P95 replay query latency: `2.971 ms`
+- P95 alert latency: `5.381 ms`
+- P95 replay query latency: `3.188 ms`
 - Dropped events: `0`
 
 ## Target Results
 
-| Metric | Observed | Target | Result |
-| --- | ---: | ---: | --- |
-| Channel count | 10 channels | >= 100 channels | MISS |
-| Per-channel sample rate | 1.0 Hz | >= 10 Hz | MISS |
-| Aggregate sample rate | 10.0 Hz | >= 1000 Hz | MISS |
-| P95 alert latency | 2.565 ms | <= 50 ms | PASS |
-| P95 replay query latency | 2.971 ms | <= 500 ms | PASS |
-| Dropped events | 0 events | <= 0 events | PASS |
+| Metric | Observed | Target | Gap | Result |
+| --- | ---: | ---: | ---: | --- |
+| Channel count | 10 channels | >= 100 channels | 90 channels | MISS |
+| Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |
+| Aggregate sample rate | 10.0 Hz | >= 1000 Hz | 990.0 Hz | MISS |
+| P95 alert latency | 5.381 ms | <= 50 ms | 0 ms | PASS |
+| P95 replay query latency | 3.188 ms | <= 500 ms | 0 ms | PASS |
+| Dropped events | 0 events | <= 0 events | 0 events | PASS |
 
 Missed targets: `channel_count, per_channel_sample_rate_hz, aggregate_sample_rate_hz`.
 
-A future Rust data-plane candidate should emit the same JSON report shape and this summary before replacing a Python hot path.
+A future Rust data-plane candidate should emit the same JSON report shape, including gap-to-target values, before replacing a Python hot path.

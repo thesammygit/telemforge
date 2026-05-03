@@ -11,10 +11,11 @@ queries.
 - `stage09-baseline-report.json`: current local baseline report with telemetry
   sample rate, per-channel sample rate, p95 alert latency, p95 replay query
   latency, dropped-event count, deterministic sample-window metadata, target
-  comparison results, benchmark contract metadata, and the tracked Rust
-  data-plane boundary.
+  comparison results with gap-to-target values, benchmark contract metadata,
+  and the tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
-  benchmark run, with the workload, headline metrics, and pass/miss target table.
+  benchmark run, with the workload, headline metrics, and pass/miss target table
+  including each metric's remaining target gap.
 
 ## Inspect
 
@@ -32,4 +33,5 @@ synthetic stream start, last generated sample, interval, and sample span so
 future Rust data-plane runs compare against the same measured window. The
 `benchmark_contract` block records workload generation, measurement methods, and
 comparability rules so a future Rust data-plane candidate can emit the same
-report shape before replacing any Python hot path.
+report shape, including gap-to-target values, before replacing any Python hot
+path.
