@@ -130,32 +130,38 @@ def run_stage09_realtime_baseline(
         raise RuntimeError("replay benchmark did not run")
 
     channel_count = int(simulation["row_count"]) // BENCHMARK_SAMPLES_PER_CHANNEL
-    aggregate_sample_rate_hz = round(channel_count / BENCHMARK_STEP_SECONDS, 2)
     replay_sample_count = int(replay["summary"]["sample_count"])
+    per_channel_sample_rate_hz = round(1 / BENCHMARK_STEP_SECONDS, 2)
+    aggregate_sample_rate_hz = round(channel_count * per_channel_sample_rate_hz, 2)
+    workload = {
+        "scenario": BENCHMARK_SCENARIO,
+        "channel_count": channel_count,
+        "samples_per_channel": BENCHMARK_SAMPLES_PER_CHANNEL,
+        "step_seconds": BENCHMARK_STEP_SECONDS,
+        "per_channel_sample_rate_hz": per_channel_sample_rate_hz,
+        "aggregate_sample_rate_hz": aggregate_sample_rate_hz,
+        "telemetry_rows_written": int(simulation["row_count"]),
+        "alert_iterations": alert_iterations,
+        "replay_iterations": replay_iterations,
+    }
+    metrics = {
+        "telemetry_sample_rate_hz": aggregate_sample_rate_hz,
+        "per_channel_sample_rate_hz": per_channel_sample_rate_hz,
+        "p95_alert_latency_ms": _p95_ms(alert_latency_ms),
+        "p95_replay_query_latency_ms": _p95_ms(replay_latency_ms),
+        "dropped_event_count": max(expected_telemetry_rows - replay_sample_count, 0),
+        "replay_sample_count": replay_sample_count,
+    }
 
     return {
         "schema": "telemforge.stage09_realtime_baseline.v1",
         "generated_at": _utc_now(),
         "stage": "09-realtime-performance-and-rust-data-plane",
         "health_stage": health["stage"],
-        "workload": {
-            "scenario": BENCHMARK_SCENARIO,
-            "channel_count": channel_count,
-            "samples_per_channel": BENCHMARK_SAMPLES_PER_CHANNEL,
-            "step_seconds": BENCHMARK_STEP_SECONDS,
-            "aggregate_sample_rate_hz": aggregate_sample_rate_hz,
-            "telemetry_rows_written": int(simulation["row_count"]),
-            "alert_iterations": alert_iterations,
-            "replay_iterations": replay_iterations,
-        },
-        "metrics": {
-            "telemetry_sample_rate_hz": aggregate_sample_rate_hz,
-            "p95_alert_latency_ms": _p95_ms(alert_latency_ms),
-            "p95_replay_query_latency_ms": _p95_ms(replay_latency_ms),
-            "dropped_event_count": max(expected_telemetry_rows - replay_sample_count, 0),
-            "replay_sample_count": replay_sample_count,
-        },
+        "workload": workload,
+        "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
+        "target_results": _target_results(workload, metrics),
         "runtime_boundary": {
             "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
             "python_control_plane": [
@@ -247,6 +253,77 @@ def _p95_ms(values: list[float]) -> float:
     ordered = sorted(values)
     index = max(0, int(len(ordered) * 0.95 + 0.999999) - 1)
     return round(ordered[index], 3)
+
+
+def _target_results(
+    workload: dict[str, Any],
+    metrics: dict[str, Any],
+) -> dict[str, Any]:
+    checks = {
+        "channel_count": _target_check(
+            observed=workload["channel_count"],
+            target=BENCHMARK_TARGETS["channel_count"],
+            comparison="at_least",
+            unit="channels",
+        ),
+        "per_channel_sample_rate_hz": _target_check(
+            observed=workload["per_channel_sample_rate_hz"],
+            target=BENCHMARK_TARGETS["per_channel_sample_rate_hz"],
+            comparison="at_least",
+            unit="Hz",
+        ),
+        "aggregate_sample_rate_hz": _target_check(
+            observed=workload["aggregate_sample_rate_hz"],
+            target=BENCHMARK_TARGETS["aggregate_sample_rate_hz"],
+            comparison="at_least",
+            unit="Hz",
+        ),
+        "p95_alert_latency_ms": _target_check(
+            observed=metrics["p95_alert_latency_ms"],
+            target=BENCHMARK_TARGETS["p95_alert_latency_ms"],
+            comparison="at_most",
+            unit="ms",
+        ),
+        "p95_replay_query_latency_ms": _target_check(
+            observed=metrics["p95_replay_query_latency_ms"],
+            target=BENCHMARK_TARGETS["replay_query_latency_ms"],
+            comparison="at_most",
+            unit="ms",
+        ),
+        "dropped_event_count": _target_check(
+            observed=metrics["dropped_event_count"],
+            target=BENCHMARK_TARGETS["dropped_event_count"],
+            comparison="at_most",
+            unit="events",
+        ),
+    }
+    missed_targets = [name for name, check in checks.items() if not check["meets_target"]]
+    return {
+        "meets_all_targets": not missed_targets,
+        "missed_targets": missed_targets,
+        "checks": checks,
+    }
+
+
+def _target_check(
+    observed: int | float,
+    target: int | float,
+    comparison: str,
+    unit: str,
+) -> dict[str, Any]:
+    if comparison == "at_least":
+        meets_target = observed >= target
+    elif comparison == "at_most":
+        meets_target = observed <= target
+    else:
+        raise ValueError(f"Unsupported target comparison: {comparison}")
+    return {
+        "observed": observed,
+        "target": target,
+        "comparison": comparison,
+        "unit": unit,
+        "meets_target": meets_target,
+    }
 
 
 def _offset_timestamp(start_at: str, offset_seconds: int) -> str:

@@ -24,10 +24,37 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(summary["stage"], "09-realtime-performance-and-rust-data-plane")
             self.assertEqual(summary["workload"]["channel_count"], 10)
             self.assertEqual(summary["workload"]["samples_per_channel"], 10)
+            self.assertEqual(summary["workload"]["per_channel_sample_rate_hz"], 1.0)
             self.assertEqual(summary["workload"]["aggregate_sample_rate_hz"], 10.0)
+            self.assertEqual(summary["metrics"]["per_channel_sample_rate_hz"], 1.0)
             self.assertEqual(summary["metrics"]["dropped_event_count"], 0)
             self.assertGreaterEqual(summary["metrics"]["p95_alert_latency_ms"], 0.0)
             self.assertGreaterEqual(summary["metrics"]["p95_replay_query_latency_ms"], 0.0)
+            self.assertFalse(summary["target_results"]["meets_all_targets"])
+            self.assertIn(
+                "per_channel_sample_rate_hz",
+                summary["target_results"]["missed_targets"],
+            )
+            self.assertEqual(
+                summary["target_results"]["checks"]["per_channel_sample_rate_hz"],
+                {
+                    "observed": 1.0,
+                    "target": 10,
+                    "comparison": "at_least",
+                    "unit": "Hz",
+                    "meets_target": False,
+                },
+            )
+            self.assertEqual(
+                summary["target_results"]["checks"]["dropped_event_count"],
+                {
+                    "observed": 0,
+                    "target": 0,
+                    "comparison": "at_most",
+                    "unit": "events",
+                    "meets_target": True,
+                },
+            )
             self.assertIn(
                 "Rust data plane direction, not a whole-project rewrite",
                 summary["runtime_boundary"]["tracked_direction"],

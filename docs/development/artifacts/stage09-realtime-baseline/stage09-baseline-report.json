@@ -1,10 +1,11 @@
 {
-  "generated_at": "2026-05-03T16:46:09Z",
+  "generated_at": "2026-05-03T17:34:11Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.445,
-    "p95_replay_query_latency_ms": 3.19,
+    "p95_alert_latency_ms": 3.414,
+    "p95_replay_query_latency_ms": 3.696,
+    "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
   },
@@ -31,6 +32,58 @@
   },
   "schema": "telemforge.stage09_realtime_baseline.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
+  "target_results": {
+    "checks": {
+      "aggregate_sample_rate_hz": {
+        "comparison": "at_least",
+        "meets_target": false,
+        "observed": 10.0,
+        "target": 1000,
+        "unit": "Hz"
+      },
+      "channel_count": {
+        "comparison": "at_least",
+        "meets_target": false,
+        "observed": 10,
+        "target": 100,
+        "unit": "channels"
+      },
+      "dropped_event_count": {
+        "comparison": "at_most",
+        "meets_target": true,
+        "observed": 0,
+        "target": 0,
+        "unit": "events"
+      },
+      "p95_alert_latency_ms": {
+        "comparison": "at_most",
+        "meets_target": true,
+        "observed": 3.414,
+        "target": 50,
+        "unit": "ms"
+      },
+      "p95_replay_query_latency_ms": {
+        "comparison": "at_most",
+        "meets_target": true,
+        "observed": 3.696,
+        "target": 500,
+        "unit": "ms"
+      },
+      "per_channel_sample_rate_hz": {
+        "comparison": "at_least",
+        "meets_target": false,
+        "observed": 1.0,
+        "target": 10,
+        "unit": "Hz"
+      }
+    },
+    "meets_all_targets": false,
+    "missed_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ]
+  },
   "targets": {
     "aggregate_sample_rate_hz": 1000,
     "channel_count": 100,
@@ -43,6 +96,7 @@
     "aggregate_sample_rate_hz": 10.0,
     "alert_iterations": 5,
     "channel_count": 10,
+    "per_channel_sample_rate_hz": 1.0,
     "replay_iterations": 5,
     "samples_per_channel": 10,
     "scenario": "nominal-orbit-daylight",

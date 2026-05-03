@@ -9,8 +9,9 @@ queries.
 ## Files
 
 - `stage09-baseline-report.json`: current local baseline report with telemetry
-  sample rate, p95 alert latency, p95 replay query latency, dropped-event count,
-  and the tracked Rust data-plane boundary.
+  sample rate, per-channel sample rate, p95 alert latency, p95 replay query
+  latency, dropped-event count, target comparison results, and the tracked Rust
+  data-plane boundary.
 
 ## Inspect
 
@@ -21,4 +22,6 @@ python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage0
 
 This report tracks Rust as the future data-plane direction, not a whole-project
 rewrite. Python/FastAPI remains the measured control-plane baseline until a
-narrow hot path has benchmark evidence.
+narrow hot path has benchmark evidence. The target comparison intentionally
+separates the current small Python baseline from the later realtime hypothesis
+of 100 channels at 10 Hz per channel.
