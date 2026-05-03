@@ -1,10 +1,35 @@
 {
-  "generated_at": "2026-05-03T19:14:10Z",
+  "benchmark_contract": {
+    "comparability_rules": [
+      "Run single-process against the local in-process TestClient.",
+      "Use the same scenario, seed, sample count, and step interval before comparing runtime implementations.",
+      "Treat generated_at and latency values as run-specific; workload, targets, and contract fields are stable.",
+      "A Rust data-plane candidate should emit this report shape before replacing a Python hot path."
+    ],
+    "measurement_method": {
+      "alert_latency": "elapsed wall-clock time around manual fault POST requests, summarized as nearest-rank p95",
+      "dropped_events": "expected telemetry query rows minus bounded replay sample count, floored at zero",
+      "replay_latency": "elapsed wall-clock time around bounded replay GET requests, summarized as nearest-rank p95",
+      "sample_rate": "catalog channel count multiplied by 1 / step_seconds"
+    },
+    "purpose": "Comparable baseline contract for the current Python/FastAPI control-plane path and future narrow Rust data-plane hot paths.",
+    "schema": "telemforge.stage09_realtime_benchmark_contract.v1",
+    "workload_generation": {
+      "database": "fresh local SQLite database unless --database is provided",
+      "samples_per_channel": 10,
+      "scenario": "nominal-orbit-daylight",
+      "seed": 9090,
+      "source": "Stage 02 telemetry channel catalog via the FastAPI simulation endpoint",
+      "start_at": "2026-05-03T16:00:00Z",
+      "step_seconds": 1
+    }
+  },
+  "generated_at": "2026-05-03T20:05:25Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 3.54,
-    "p95_replay_query_latency_ms": 3.412,
+    "p95_alert_latency_ms": 3.087,
+    "p95_replay_query_latency_ms": 3.593,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -58,14 +83,14 @@
       "p95_alert_latency_ms": {
         "comparison": "at_most",
         "meets_target": true,
-        "observed": 3.54,
+        "observed": 3.087,
         "target": 50,
         "unit": "ms"
       },
       "p95_replay_query_latency_ms": {
         "comparison": "at_most",
         "meets_target": true,
-        "observed": 3.412,
+        "observed": 3.593,
         "target": 500,
         "unit": "ms"
       },

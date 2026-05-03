@@ -11,7 +11,8 @@ queries.
 - `stage09-baseline-report.json`: current local baseline report with telemetry
   sample rate, per-channel sample rate, p95 alert latency, p95 replay query
   latency, dropped-event count, deterministic sample-window metadata, target
-  comparison results, and the tracked Rust data-plane boundary.
+  comparison results, benchmark contract metadata, and the tracked Rust
+  data-plane boundary.
 
 ## Inspect
 
@@ -26,4 +27,7 @@ narrow hot path has benchmark evidence. The target comparison intentionally
 separates the current small Python baseline from the later realtime hypothesis
 of 100 channels at 10 Hz per channel. The `sample_window` block records the
 synthetic stream start, last generated sample, interval, and sample span so
-future Rust data-plane runs compare against the same measured window.
+future Rust data-plane runs compare against the same measured window. The
+`benchmark_contract` block records workload generation, measurement methods, and
+comparability rules so a future Rust data-plane candidate can emit the same
+report shape before replacing any Python hot path.

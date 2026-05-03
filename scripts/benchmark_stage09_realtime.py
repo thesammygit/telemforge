@@ -170,6 +170,7 @@ def run_stage09_realtime_baseline(
         "generated_at": _utc_now(),
         "stage": "09-realtime-performance-and-rust-data-plane",
         "health_stage": health["stage"],
+        "benchmark_contract": _benchmark_contract(),
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
@@ -314,6 +315,58 @@ def _target_results(
         "meets_all_targets": not missed_targets,
         "missed_targets": missed_targets,
         "checks": checks,
+    }
+
+
+def _benchmark_contract() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_realtime_benchmark_contract.v1",
+        "purpose": (
+            "Comparable baseline contract for the current Python/FastAPI "
+            "control-plane path and future narrow Rust data-plane hot paths."
+        ),
+        "workload_generation": {
+            "source": (
+                "Stage 02 telemetry channel catalog via the FastAPI "
+                "simulation endpoint"
+            ),
+            "scenario": BENCHMARK_SCENARIO,
+            "seed": BENCHMARK_SEED,
+            "start_at": BENCHMARK_START_AT,
+            "samples_per_channel": BENCHMARK_SAMPLES_PER_CHANNEL,
+            "step_seconds": BENCHMARK_STEP_SECONDS,
+            "database": "fresh local SQLite database unless --database is provided",
+        },
+        "measurement_method": {
+            "sample_rate": "catalog channel count multiplied by 1 / step_seconds",
+            "alert_latency": (
+                "elapsed wall-clock time around manual fault POST requests, "
+                "summarized as nearest-rank p95"
+            ),
+            "replay_latency": (
+                "elapsed wall-clock time around bounded replay GET requests, "
+                "summarized as nearest-rank p95"
+            ),
+            "dropped_events": (
+                "expected telemetry query rows minus bounded replay sample count, "
+                "floored at zero"
+            ),
+        },
+        "comparability_rules": [
+            "Run single-process against the local in-process TestClient.",
+            (
+                "Use the same scenario, seed, sample count, and step interval "
+                "before comparing runtime implementations."
+            ),
+            (
+                "Treat generated_at and latency values as run-specific; "
+                "workload, targets, and contract fields are stable."
+            ),
+            (
+                "A Rust data-plane candidate should emit this report shape "
+                "before replacing a Python hot path."
+            ),
+        ],
     }
 
 

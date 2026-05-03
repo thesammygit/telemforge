@@ -22,6 +22,29 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertTrue(database_path.exists())
             self.assertEqual(summary["schema"], "telemforge.stage09_realtime_baseline.v1")
             self.assertEqual(summary["stage"], "09-realtime-performance-and-rust-data-plane")
+            contract = summary["benchmark_contract"]
+            self.assertEqual(
+                contract["schema"],
+                "telemforge.stage09_realtime_benchmark_contract.v1",
+            )
+            self.assertEqual(
+                contract["workload_generation"]["source"],
+                "Stage 02 telemetry channel catalog via the FastAPI "
+                "simulation endpoint",
+            )
+            self.assertEqual(contract["workload_generation"]["seed"], 9090)
+            self.assertEqual(
+                contract["measurement_method"]["sample_rate"],
+                "catalog channel count multiplied by 1 / step_seconds",
+            )
+            self.assertIn(
+                "nearest-rank p95",
+                contract["measurement_method"]["alert_latency"],
+            )
+            self.assertIn(
+                "Rust data-plane candidate",
+                contract["comparability_rules"][3],
+            )
             self.assertEqual(summary["workload"]["channel_count"], 10)
             self.assertEqual(summary["workload"]["samples_per_channel"], 10)
             self.assertEqual(summary["workload"]["per_channel_sample_rate_hz"], 1.0)
