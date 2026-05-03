@@ -76,6 +76,8 @@ Implemented through Stage 08:
 Deferred:
 
 - websocket streaming;
+- realtime latency and throughput benchmarks;
+- Rust data-plane spike for telemetry ingest, replay indexing, stream fanout, and alert/anomaly hot paths;
 - animated replay playback;
 - alert acknowledgement and clearing;
 - scheduled fault workflows;

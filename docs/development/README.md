@@ -35,6 +35,7 @@ For each stage:
 6. [Faults, Alerts, And Events](steps/06-faults-alerts-and-events.md)
 7. [Replay And Anomaly Layer](steps/07-replay-and-anomaly.md)
 8. [Hardening, Docker, And Release](steps/08-hardening-docker-and-release.md)
+9. [Realtime Performance And Rust Data Plane](steps/09-realtime-performance-and-rust-data-plane.md)
 
 ## Development Rules
 

@@ -78,4 +78,6 @@ Concrete next-milestone deferred work:
 - Run `npm --prefix frontend run build` after the dependency set is present.
 - Run Docker image build and compose runtime smoke on a machine with safe memory pressure.
 - Decide whether the local Compose runtime should add a PostgreSQL profile before public release.
+- Add websocket streaming and realtime latency/throughput benchmarks before treating the runtime as time-sensitive.
+- Plan a Rust data-plane spike for telemetry ingest, replay indexing, stream fanout, and alert/anomaly hot paths after benchmark targets are explicit.
 - Prepare release notes and version tagging only after the above checks pass.

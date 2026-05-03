@@ -14,3 +14,4 @@ Current decisions:
 - [ADR-006: Faults, Alerts, And Events](0006-faults-alerts-and-events.md)
 - [ADR-007: Replay And Anomaly Layer](0007-replay-and-anomaly-layer.md)
 - [ADR-008: Hardening, Docker, And Release Readiness](0008-hardening-docker-and-release-readiness.md)
+- [ADR-009: Realtime Performance And Rust Data Plane Direction](0009-realtime-performance-and-rust-data-plane.md)
