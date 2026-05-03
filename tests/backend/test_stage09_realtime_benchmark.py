@@ -26,6 +26,15 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(summary["workload"]["samples_per_channel"], 10)
             self.assertEqual(summary["workload"]["per_channel_sample_rate_hz"], 1.0)
             self.assertEqual(summary["workload"]["aggregate_sample_rate_hz"], 10.0)
+            self.assertEqual(
+                summary["workload"]["sample_window"],
+                {
+                    "start_at": "2026-05-03T16:00:00Z",
+                    "last_sample_at": "2026-05-03T16:00:09Z",
+                    "sample_interval_seconds": 1,
+                    "sample_span_seconds": 9,
+                },
+            )
             self.assertEqual(summary["metrics"]["per_channel_sample_rate_hz"], 1.0)
             self.assertEqual(summary["metrics"]["dropped_event_count"], 0)
             self.assertGreaterEqual(summary["metrics"]["p95_alert_latency_ms"], 0.0)

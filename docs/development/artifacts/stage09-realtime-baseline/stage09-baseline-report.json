@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-05-03T18:23:44Z",
+  "generated_at": "2026-05-03T19:14:10Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.657,
-    "p95_replay_query_latency_ms": 2.905,
+    "p95_alert_latency_ms": 3.54,
+    "p95_replay_query_latency_ms": 3.412,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -58,14 +58,14 @@
       "p95_alert_latency_ms": {
         "comparison": "at_most",
         "meets_target": true,
-        "observed": 2.657,
+        "observed": 3.54,
         "target": 50,
         "unit": "ms"
       },
       "p95_replay_query_latency_ms": {
         "comparison": "at_most",
         "meets_target": true,
-        "observed": 2.905,
+        "observed": 3.412,
         "target": 500,
         "unit": "ms"
       },
@@ -98,6 +98,12 @@
     "channel_count": 10,
     "per_channel_sample_rate_hz": 1.0,
     "replay_iterations": 5,
+    "sample_window": {
+      "last_sample_at": "2026-05-03T16:00:09Z",
+      "sample_interval_seconds": 1,
+      "sample_span_seconds": 9,
+      "start_at": "2026-05-03T16:00:00Z"
+    },
     "samples_per_channel": 10,
     "scenario": "nominal-orbit-daylight",
     "step_seconds": 1,

@@ -133,11 +133,23 @@ def run_stage09_realtime_baseline(
     replay_sample_count = int(replay["summary"]["sample_count"])
     per_channel_sample_rate_hz = round(1 / BENCHMARK_STEP_SECONDS, 2)
     aggregate_sample_rate_hz = round(channel_count * per_channel_sample_rate_hz, 2)
+    sample_span_seconds = (
+        BENCHMARK_SAMPLES_PER_CHANNEL - 1
+    ) * BENCHMARK_STEP_SECONDS
     workload = {
         "scenario": BENCHMARK_SCENARIO,
         "channel_count": channel_count,
         "samples_per_channel": BENCHMARK_SAMPLES_PER_CHANNEL,
         "step_seconds": BENCHMARK_STEP_SECONDS,
+        "sample_window": {
+            "start_at": BENCHMARK_START_AT,
+            "last_sample_at": _offset_timestamp(
+                BENCHMARK_START_AT,
+                sample_span_seconds,
+            ),
+            "sample_interval_seconds": BENCHMARK_STEP_SECONDS,
+            "sample_span_seconds": sample_span_seconds,
+        },
         "per_channel_sample_rate_hz": per_channel_sample_rate_hz,
         "aggregate_sample_rate_hz": aggregate_sample_rate_hz,
         "telemetry_rows_written": int(simulation["row_count"]),
