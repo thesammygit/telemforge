@@ -1,0 +1,227 @@
+{
+  "schema": "telemforge.telemetry.channels.v1",
+  "spacecraft_id": "tf-sat-01",
+  "description": "Small Stage 02 starter telemetry channel catalog for fixture validation.",
+  "channels": [
+    {
+      "channel_id": "eps.battery_voltage",
+      "name": "Battery Bus Voltage",
+      "subsystem": "eps",
+      "unit": "V",
+      "cadence_ms": 1000,
+      "description": "Main regulated spacecraft battery bus voltage.",
+      "value_type": "float",
+      "precision": 2,
+      "nominal_range": {
+        "min": 28.0,
+        "max": 31.5
+      },
+      "warning_range": {
+        "min": 26.0,
+        "max": 33.0
+      },
+      "critical_range": {
+        "min": 24.0,
+        "max": 34.5
+      }
+    },
+    {
+      "channel_id": "eps.solar_array_current",
+      "name": "Solar Array Current",
+      "subsystem": "eps",
+      "unit": "A",
+      "cadence_ms": 1000,
+      "description": "Combined current from the deployed solar array strings.",
+      "value_type": "float",
+      "precision": 2,
+      "nominal_range": {
+        "min": 6.5,
+        "max": 10.5
+      },
+      "warning_range": {
+        "min": 4.0,
+        "max": 12.0
+      },
+      "critical_range": {
+        "min": 1.5,
+        "max": 14.0
+      }
+    },
+    {
+      "channel_id": "thermal.avionics_temp",
+      "name": "Avionics Bay Temperature",
+      "subsystem": "thermal",
+      "unit": "degC",
+      "cadence_ms": 1000,
+      "description": "Internal avionics bay temperature near flight computer stack.",
+      "value_type": "float",
+      "precision": 1,
+      "nominal_range": {
+        "min": 18.0,
+        "max": 42.0
+      },
+      "warning_range": {
+        "min": 5.0,
+        "max": 55.0
+      },
+      "critical_range": {
+        "min": -10.0,
+        "max": 70.0
+      }
+    },
+    {
+      "channel_id": "thermal.radiator_temp",
+      "name": "Radiator Panel Temperature",
+      "subsystem": "thermal",
+      "unit": "degC",
+      "cadence_ms": 2000,
+      "description": "External radiator panel temperature used to judge heat rejection margin.",
+      "value_type": "float",
+      "precision": 1,
+      "nominal_range": {
+        "min": -20.0,
+        "max": 15.0
+      },
+      "warning_range": {
+        "min": -35.0,
+        "max": 30.0
+      },
+      "critical_range": {
+        "min": -55.0,
+        "max": 45.0
+      }
+    },
+    {
+      "channel_id": "adcs.reaction_wheel_x_rpm",
+      "name": "Reaction Wheel X Speed",
+      "subsystem": "adcs",
+      "unit": "rpm",
+      "cadence_ms": 500,
+      "description": "X-axis reaction wheel speed for attitude control monitoring.",
+      "value_type": "float",
+      "precision": 0,
+      "nominal_range": {
+        "min": -2200.0,
+        "max": 2200.0
+      },
+      "warning_range": {
+        "min": -3600.0,
+        "max": 3600.0
+      },
+      "critical_range": {
+        "min": -5000.0,
+        "max": 5000.0
+      }
+    },
+    {
+      "channel_id": "adcs.bus_quaternion_error_deg",
+      "name": "Attitude Error",
+      "subsystem": "adcs",
+      "unit": "deg",
+      "cadence_ms": 500,
+      "description": "Pointing error between commanded and estimated spacecraft attitude.",
+      "value_type": "float",
+      "precision": 3,
+      "nominal_range": {
+        "min": 0.0,
+        "max": 0.2
+      },
+      "warning_range": {
+        "min": 0.0,
+        "max": 0.7
+      },
+      "critical_range": {
+        "min": 0.0,
+        "max": 2.0
+      }
+    },
+    {
+      "channel_id": "comms.downlink_snr_db",
+      "name": "Downlink Signal-To-Noise Ratio",
+      "subsystem": "comms",
+      "unit": "dB",
+      "cadence_ms": 1000,
+      "description": "Estimated S-band downlink margin at the active ground station.",
+      "value_type": "float",
+      "precision": 1,
+      "nominal_range": {
+        "min": 9.0,
+        "max": 18.0
+      },
+      "warning_range": {
+        "min": 5.0,
+        "max": 22.0
+      },
+      "critical_range": {
+        "min": 0.0,
+        "max": 26.0
+      }
+    },
+    {
+      "channel_id": "comms.packet_error_rate_pct",
+      "name": "Packet Error Rate",
+      "subsystem": "comms",
+      "unit": "pct",
+      "cadence_ms": 1000,
+      "description": "Rolling percentage of malformed or uncorrectable telemetry frames.",
+      "value_type": "float",
+      "precision": 2,
+      "nominal_range": {
+        "min": 0.0,
+        "max": 0.5
+      },
+      "warning_range": {
+        "min": 0.0,
+        "max": 2.0
+      },
+      "critical_range": {
+        "min": 0.0,
+        "max": 10.0
+      }
+    },
+    {
+      "channel_id": "prop.tank_pressure_kpa",
+      "name": "Propellant Tank Pressure",
+      "subsystem": "prop",
+      "unit": "kPa",
+      "cadence_ms": 2000,
+      "description": "Regulated monopropellant tank pressure.",
+      "value_type": "float",
+      "precision": 1,
+      "nominal_range": {
+        "min": 1800.0,
+        "max": 2200.0
+      },
+      "warning_range": {
+        "min": 1600.0,
+        "max": 2400.0
+      },
+      "critical_range": {
+        "min": 1300.0,
+        "max": 2600.0
+      }
+    },
+    {
+      "channel_id": "payload.imager_temp",
+      "name": "Payload Imager Temperature",
+      "subsystem": "payload",
+      "unit": "degC",
+      "cadence_ms": 2000,
+      "description": "Primary imager focal-plane electronics temperature.",
+      "value_type": "float",
+      "precision": 1,
+      "nominal_range": {
+        "min": -5.0,
+        "max": 25.0
+      },
+      "warning_range": {
+        "min": -15.0,
+        "max": 35.0
+      },
+      "critical_range": {
+        "min": -30.0,
+        "max": 50.0
+      }
+    }
+  ]
+}

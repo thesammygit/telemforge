@@ -1,0 +1,108 @@
+{
+  "schema": "telemforge.replay_payload.v1",
+  "replay_id": "replay-degraded-eclipse-20260430T150800Z",
+  "scenario": "degraded-eclipse-thermal-comms",
+  "spacecraft_id": "tf-sat-01",
+  "source_fixture": "degraded_snapshot.json",
+  "window": {
+    "start": "2026-04-30T15:08:00Z",
+    "end": "2026-04-30T15:12:00Z"
+  },
+  "playback_rate": 2.0,
+  "points": [
+    {
+      "channel_id": "eps.battery_voltage",
+      "timestamp": "2026-04-30T15:08:00Z",
+      "value": 26.2,
+      "unit": "V",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 3001
+    },
+    {
+      "channel_id": "thermal.avionics_temp",
+      "timestamp": "2026-04-30T15:08:00Z",
+      "value": 56.1,
+      "unit": "degC",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 3002
+    },
+    {
+      "channel_id": "comms.downlink_snr_db",
+      "timestamp": "2026-04-30T15:08:00Z",
+      "value": 5.2,
+      "unit": "dB",
+      "status": "warning",
+      "quality": "suspect",
+      "sequence": 3003
+    },
+    {
+      "channel_id": "eps.battery_voltage",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 25.4,
+      "unit": "V",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 3004
+    },
+    {
+      "channel_id": "thermal.avionics_temp",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 62.8,
+      "unit": "degC",
+      "status": "critical",
+      "quality": "valid",
+      "sequence": 3005
+    },
+    {
+      "channel_id": "comms.downlink_snr_db",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 4.1,
+      "unit": "dB",
+      "status": "critical",
+      "quality": "suspect",
+      "sequence": 3006
+    },
+    {
+      "channel_id": "thermal.avionics_temp",
+      "timestamp": "2026-04-30T15:12:00Z",
+      "value": 60.7,
+      "unit": "degC",
+      "status": "critical",
+      "quality": "valid",
+      "sequence": 3007
+    },
+    {
+      "channel_id": "comms.packet_error_rate_pct",
+      "timestamp": "2026-04-30T15:12:00Z",
+      "value": 2.2,
+      "unit": "pct",
+      "status": "warning",
+      "quality": "suspect",
+      "sequence": 3008
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "alert-thermal-avionics-20260430T151000Z",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "channel_id": "thermal.avionics_temp",
+      "severity": "critical",
+      "state": "active",
+      "message": "Avionics bay temperature is above warning limit and approaching critical thermal margin.",
+      "observed_value": 62.8,
+      "threshold": {
+        "operator": ">",
+        "value": 55.0,
+        "range_name": "warning_range.max"
+      },
+      "recommended_action": "Reduce payload duty cycle and prioritize thermal recovery monitoring.",
+      "related_fault_id": "fault-eclipse-thermal-comms-001"
+    }
+  ],
+  "notes": [
+    "Replay payload is a compact contract example, not a replay engine.",
+    "Later stages may expand this into streamed replay behavior."
+  ]
+}

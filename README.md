@@ -1,51 +1,83 @@
 # TelemForge
 
-TelemForge is an open-source synthetic telemetry and mission-operations sandbox project.
+TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current Stage 08 workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, manual fault and alert workflows, replay/anomaly inspection, and a fixture-backed React/Vite mission console.
 
-This repository is intentionally starting from scratch. At this point it is a planning and design workspace, not an implementation workspace.
+## Quick Verification
 
-## Current Contents
+From the repository root:
 
-- architecture, API, and roadmap documentation
-- a staged human-in-the-loop development path under `docs/development/`
-- no checked-in backend or frontend implementation yet
+```text
+python3 scripts/smoke_stage08.py
+python3 -m unittest discover -s tests/backend
+python3 -m unittest discover -s tests/contracts
+node --experimental-strip-types --test tests/frontend/consoleViewModel.test.ts
+```
+
+The smoke command runs the core backend workflow in process: health, session creation, tiny simulation, manual fault injection, telemetry, alerts, events, replay, and anomalies.
+
+## Local Run Paths
+
+Backend:
+
+```text
+python3 -m pip install -r backend/requirements.txt
+python3 -m uvicorn backend.app.main:app --reload
+curl -s http://127.0.0.1:8000/health
+```
+
+Frontend:
+
+```text
+cd frontend
+npm install
+npm run dev
+```
+
+Optional Docker Compose local review:
+
+```text
+docker compose config
+docker compose up --build
+```
+
+Compose is local-only review tooling. Do not publish images, deploy, or create cloud resources from this workflow.
 
 ## Repository Layout
 
 ```text
-docs/
+backend/    Python/FastAPI backend, domain logic, SQLite storage, Dockerfile.
+frontend/   React/TypeScript/Vite mission console and Dockerfile.
+fixtures/   Human-readable telemetry contracts and examples.
+scripts/    Small local generators and smoke verification helpers.
+tests/      Backend, contract, and frontend logic tests.
+docs/       Architecture, local runbook, readiness docs, staged development path, ADRs, and automation records.
 ```
 
-## Intended Scope
+## Reviewer Docs
 
-The project is intended to grow into:
-
-- synthetic subsystem simulation
-- live telemetry transport
-- alerting and fault injection
-- replay workflow support
-- anomaly scoring overlays
-
-Implementation should be added only stage by stage after the relevant design choices are reviewed.
-
-## Human-Centric Development Path
-
-If you do not want to build TelemForge in one shot, start with:
-
+- [Local Runbook](docs/local-runbook.md)
+- [Release Readiness](docs/release-readiness.md)
+- [API Outline](docs/api-outline.md)
+- [Architecture](docs/architecture.md)
 - [Development Path](docs/development/README.md)
-- [Working Principles](docs/development/principles.md)
-- [Review Loop](docs/development/review-loop.md)
+- [Decision Records](docs/development/decisions/README.md)
 
-That track is designed for:
+## Current Scope
 
-- stepwise implementation
-- explicit design decisions at each stage
-- human-testable milestones
-- visible data and behavior before deep abstraction
-- AI-assisted teaching and option analysis at each checkpoint
+Implemented through Stage 08:
 
-## Notes
+- telemetry contracts and fixture examples;
+- deterministic simulation artifacts;
+- FastAPI routes for sessions, simulation, telemetry, faults, alerts, events, replay, and anomalies;
+- SQLite persistence for local/test workflows;
+- fixture-backed mission console with incident and replay/anomaly views;
+- local smoke verification and local-only Docker/Compose configuration.
 
-- Keep the product positioning focused on operator tooling and simulation.
-- Do not add implementation scaffolding before the stage explicitly calls for it.
-- Keep anomaly methods explainable in the early implementation phases.
+Deferred:
+
+- websocket streaming;
+- animated replay playback;
+- alert acknowledgement and clearing;
+- scheduled fault workflows;
+- PostgreSQL runtime profile;
+- publishing releases, packages, or container images.

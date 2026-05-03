@@ -1,0 +1,164 @@
+{
+  "channels": {
+    "adcs.bus_quaternion_error_deg": {
+      "average": 0.2269,
+      "first": 0.156,
+      "last": 0.33,
+      "maximum": 0.33,
+      "minimum": 0.156,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 6,
+        "offline": 0,
+        "warning": 6
+      },
+      "unit": "deg"
+    },
+    "adcs.reaction_wheel_x_rpm": {
+      "average": 2004.3333,
+      "first": -227.0,
+      "last": 3460.0,
+      "maximum": 3460.0,
+      "minimum": -227.0,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 6,
+        "offline": 0,
+        "warning": 6
+      },
+      "unit": "rpm"
+    },
+    "comms.downlink_snr_db": {
+      "average": 8.975,
+      "first": 11.5,
+      "last": 4.1,
+      "maximum": 12.8,
+      "minimum": 4.1,
+      "status_counts": {
+        "critical": 3,
+        "nominal": 7,
+        "offline": 0,
+        "warning": 2
+      },
+      "unit": "dB"
+    },
+    "comms.packet_error_rate_pct": {
+      "average": 1.4892,
+      "first": 0.17,
+      "last": 2.8,
+      "maximum": 2.8,
+      "minimum": 0.17,
+      "status_counts": {
+        "critical": 5,
+        "nominal": 3,
+        "offline": 0,
+        "warning": 4
+      },
+      "unit": "pct"
+    },
+    "eps.battery_voltage": {
+      "average": 27.5583,
+      "first": 30.63,
+      "last": 25.35,
+      "maximum": 30.63,
+      "minimum": 25.35,
+      "status_counts": {
+        "critical": 3,
+        "nominal": 5,
+        "offline": 0,
+        "warning": 4
+      },
+      "unit": "V"
+    },
+    "eps.solar_array_current": {
+      "average": 5.3458,
+      "first": 8.44,
+      "last": 2.75,
+      "maximum": 8.44,
+      "minimum": 2.75,
+      "status_counts": {
+        "critical": 4,
+        "nominal": 4,
+        "offline": 0,
+        "warning": 4
+      },
+      "unit": "A"
+    },
+    "payload.imager_temp": {
+      "average": 21.0333,
+      "first": 18.3,
+      "last": 29.4,
+      "maximum": 29.4,
+      "minimum": 15.7,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 9,
+        "offline": 0,
+        "warning": 3
+      },
+      "unit": "degC"
+    },
+    "prop.tank_pressure_kpa": {
+      "average": 1987.0167,
+      "first": 2112.5,
+      "last": 2018.5,
+      "maximum": 2112.5,
+      "minimum": 1895.8,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "kPa"
+    },
+    "thermal.avionics_temp": {
+      "average": 46.9833,
+      "first": 24.7,
+      "last": 62.8,
+      "maximum": 62.8,
+      "minimum": 24.7,
+      "status_counts": {
+        "critical": 4,
+        "nominal": 4,
+        "offline": 0,
+        "warning": 4
+      },
+      "unit": "degC"
+    },
+    "thermal.radiator_temp": {
+      "average": 15.6583,
+      "first": -10.0,
+      "last": 32.5,
+      "maximum": 32.5,
+      "minimum": -10.0,
+      "status_counts": {
+        "critical": 2,
+        "nominal": 5,
+        "offline": 0,
+        "warning": 5
+      },
+      "unit": "degC"
+    }
+  },
+  "row_count": 120,
+  "samples": 12,
+  "scenario": "degraded-eclipse-thermal-comms",
+  "schema": "telemforge.telemetry.simulation_summary.v1",
+  "seed": 4242,
+  "spacecraft_id": "tf-sat-01",
+  "start_at": "2026-04-30T16:00:00Z",
+  "status_counts": {
+    "critical": 21,
+    "nominal": 61,
+    "offline": 0,
+    "warning": 38
+  },
+  "step_seconds": 10,
+  "story": [
+    "Spacecraft enters eclipse with reduced solar-array current.",
+    "Battery bus voltage trends downward as loads stay active.",
+    "Thermal rejection margin worsens and avionics temperature climbs.",
+    "Downlink margin falls and packet errors rise during the same window."
+  ]
+}

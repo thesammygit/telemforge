@@ -1,0 +1,162 @@
+{
+  "channels": {
+    "adcs.bus_quaternion_error_deg": {
+      "average": 0.0962,
+      "first": 0.156,
+      "last": 0.088,
+      "maximum": 0.159,
+      "minimum": 0.04,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "deg"
+    },
+    "adcs.reaction_wheel_x_rpm": {
+      "average": 166.0,
+      "first": -227.0,
+      "last": -1158.0,
+      "maximum": 1270.0,
+      "minimum": -1165.0,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "rpm"
+    },
+    "comms.downlink_snr_db": {
+      "average": 13.9083,
+      "first": 11.5,
+      "last": 11.6,
+      "maximum": 15.9,
+      "minimum": 11.5,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "dB"
+    },
+    "comms.packet_error_rate_pct": {
+      "average": 0.2508,
+      "first": 0.17,
+      "last": 0.33,
+      "maximum": 0.39,
+      "minimum": 0.12,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "pct"
+    },
+    "eps.battery_voltage": {
+      "average": 29.6008,
+      "first": 30.63,
+      "last": 30.32,
+      "maximum": 30.63,
+      "minimum": 28.76,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "V"
+    },
+    "eps.solar_array_current": {
+      "average": 8.4225,
+      "first": 8.44,
+      "last": 9.6,
+      "maximum": 9.6,
+      "minimum": 7.46,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "A"
+    },
+    "payload.imager_temp": {
+      "average": 9.1833,
+      "first": 18.3,
+      "last": 10.0,
+      "maximum": 18.3,
+      "minimum": 1.2,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "degC"
+    },
+    "prop.tank_pressure_kpa": {
+      "average": 1987.0167,
+      "first": 2112.5,
+      "last": 2018.5,
+      "maximum": 2112.5,
+      "minimum": 1895.8,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "kPa"
+    },
+    "thermal.avionics_temp": {
+      "average": 31.0417,
+      "first": 24.7,
+      "last": 24.1,
+      "maximum": 37.1,
+      "minimum": 24.1,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "degC"
+    },
+    "thermal.radiator_temp": {
+      "average": -0.9167,
+      "first": -10.0,
+      "last": -9.0,
+      "maximum": 6.9,
+      "minimum": -10.0,
+      "status_counts": {
+        "critical": 0,
+        "nominal": 12,
+        "offline": 0,
+        "warning": 0
+      },
+      "unit": "degC"
+    }
+  },
+  "row_count": 120,
+  "samples": 12,
+  "scenario": "nominal-orbit-daylight",
+  "schema": "telemforge.telemetry.simulation_summary.v1",
+  "seed": 4242,
+  "spacecraft_id": "tf-sat-01",
+  "start_at": "2026-04-30T16:00:00Z",
+  "status_counts": {
+    "critical": 0,
+    "nominal": 120,
+    "offline": 0,
+    "warning": 0
+  },
+  "step_seconds": 10,
+  "story": [
+    "Daylight pass keeps power generation healthy.",
+    "Thermal, attitude, comms, propulsion, and payload channels remain inside nominal ranges."
+  ]
+}

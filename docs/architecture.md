@@ -14,12 +14,18 @@ TelemForge is structured as an operator-facing mission-operations sandbox. The c
 
 ## Planned Backend Modules
 
-- `app/api/`
-  HTTP routes and request/response contracts
-- `app/core/`
+- `backend/app/api/`
+  Future split route modules as the API grows
+- `backend/app/main.py`
+  Current FastAPI app factory and synchronous Stage 08 route definitions
+- `backend/app/core/`
   configuration, settings, shared dependencies
-- `app/domain/`
+- `backend/app/domain/`
   simulation, telemetry, alerting, replay, and anomaly logic
+- `backend/app/schemas/`
+  typed contracts introduced after the fixture format is accepted
+- `backend/app/storage/`
+  SQLite persistence boundary introduced in Stage 04, PostgreSQL later
 
 ## Planned Frontend Areas
 
@@ -29,16 +35,29 @@ TelemForge is structured as an operator-facing mission-operations sandbox. The c
 - fault injection controls
 - replay and anomaly views
 
+Frontend implementation will live under `frontend/src/` after the relevant stage begins.
+
+## Planned Fixture Areas
+
+- `fixtures/telemetry/`
+  human-readable Stage 02 contract examples for nominal, degraded, alerting, and replay scenarios
+
 ## Persistence Targets
 
-- missions
-- telemetry points
+- sessions
+- simulation runs
+- telemetry samples
 - alerts
+- events
 - injected faults
-- anomaly outputs
+- anomaly outputs derived at request time in Stage 07, persisted later if needed
 
 ## Current State
 
-- there is no checked-in backend implementation yet
-- there is no checked-in frontend implementation yet
-- architecture decisions should be confirmed stage by stage before code is introduced
+- Stage 04 has a checked-in FastAPI skeleton with SQLite-backed session and telemetry history.
+- Stage 05 has a fixture-backed React/Vite mission console for mission overview, subsystem detail, trend summaries, and alert display.
+- Stage 06 has immediate manual thermal/comms faults, threshold-first alerts, event-log persistence, incident query routes, and a fixture-backed console incident timeline.
+- Stage 07 has bounded replay-window assembly from existing SQLite telemetry/fault/alert/event records, explainable nominal-envelope anomaly scoring, replay/anomaly API routes, and a fixture-backed console replay overlay.
+- Stage 08 has a bounded in-process smoke workflow, local-only Docker/Compose configuration, and reviewer-facing run/readiness docs.
+- Stage 02 telemetry contracts and Stage 03 simulation remain the source of the API's baseline telemetry data behavior.
+- Websocket streaming, animated replay playback, background anomaly daemons, alert acknowledgement, scheduled faults, PostgreSQL runtime wiring, deploy, release, and publish behavior remain deferred.

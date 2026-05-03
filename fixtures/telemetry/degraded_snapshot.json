@@ -1,0 +1,154 @@
+{
+  "schema": "telemforge.telemetry.snapshot.v1",
+  "snapshot_id": "snapshot-degraded-20260430T151000Z",
+  "scenario": "degraded-eclipse-thermal-comms",
+  "spacecraft_id": "tf-sat-01",
+  "captured_at": "2026-04-30T15:10:00Z",
+  "description": "Degraded static snapshot showing eclipse power draw, avionics heating, and reduced downlink margin.",
+  "points": [
+    {
+      "channel_id": "eps.battery_voltage",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 25.4,
+      "unit": "V",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 2001
+    },
+    {
+      "channel_id": "eps.solar_array_current",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 2.8,
+      "unit": "A",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 2002
+    },
+    {
+      "channel_id": "thermal.avionics_temp",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 62.8,
+      "unit": "degC",
+      "status": "critical",
+      "quality": "valid",
+      "sequence": 2003
+    },
+    {
+      "channel_id": "thermal.radiator_temp",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 32.5,
+      "unit": "degC",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 2004
+    },
+    {
+      "channel_id": "adcs.reaction_wheel_x_rpm",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 3460,
+      "unit": "rpm",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 2005
+    },
+    {
+      "channel_id": "adcs.bus_quaternion_error_deg",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 0.33,
+      "unit": "deg",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 2006
+    },
+    {
+      "channel_id": "comms.downlink_snr_db",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 4.1,
+      "unit": "dB",
+      "status": "critical",
+      "quality": "suspect",
+      "sequence": 2007
+    },
+    {
+      "channel_id": "comms.packet_error_rate_pct",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 2.8,
+      "unit": "pct",
+      "status": "warning",
+      "quality": "suspect",
+      "sequence": 2008
+    },
+    {
+      "channel_id": "prop.tank_pressure_kpa",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 1998.0,
+      "unit": "kPa",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 2009
+    },
+    {
+      "channel_id": "payload.imager_temp",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "value": 29.4,
+      "unit": "degC",
+      "status": "warning",
+      "quality": "valid",
+      "sequence": 2010
+    }
+  ],
+  "alerts": [
+    {
+      "alert_id": "alert-thermal-avionics-20260430T151000Z",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "channel_id": "thermal.avionics_temp",
+      "severity": "critical",
+      "state": "active",
+      "message": "Avionics bay temperature is above warning limit and approaching critical thermal margin.",
+      "observed_value": 62.8,
+      "threshold": {
+        "operator": ">",
+        "value": 55.0,
+        "range_name": "warning_range.max"
+      },
+      "recommended_action": "Reduce payload duty cycle and prioritize thermal recovery monitoring.",
+      "related_fault_id": "fault-eclipse-thermal-comms-001"
+    },
+    {
+      "alert_id": "alert-comms-snr-20260430T151000Z",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "channel_id": "comms.downlink_snr_db",
+      "severity": "critical",
+      "state": "active",
+      "message": "Downlink SNR has dropped below the warning floor during the pass.",
+      "observed_value": 4.1,
+      "threshold": {
+        "operator": "<",
+        "value": 5.0,
+        "range_name": "warning_range.min"
+      },
+      "recommended_action": "Switch to lower-rate telemetry profile and confirm ground-station pointing.",
+      "related_fault_id": "fault-eclipse-thermal-comms-001"
+    },
+    {
+      "alert_id": "alert-eps-battery-20260430T151000Z",
+      "timestamp": "2026-04-30T15:10:00Z",
+      "channel_id": "eps.battery_voltage",
+      "severity": "warning",
+      "state": "active",
+      "message": "Battery bus voltage is below the nominal operating band.",
+      "observed_value": 25.4,
+      "threshold": {
+        "operator": "<",
+        "value": 26.0,
+        "range_name": "warning_range.min"
+      },
+      "recommended_action": "Track recovery after eclipse exit before enabling nonessential payload loads.",
+      "related_fault_id": "fault-eclipse-thermal-comms-001"
+    }
+  ],
+  "notes": [
+    "This fixture intentionally differs from nominal_snapshot.json across power, thermal, attitude, comms, and payload channels.",
+    "Alerts are static records for contract validation; alert generation behavior is deferred."
+  ]
+}

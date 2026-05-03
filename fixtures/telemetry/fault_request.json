@@ -1,0 +1,33 @@
+{
+  "schema": "telemforge.fault_injection_request.v1",
+  "request_id": "fault-eclipse-thermal-comms-001",
+  "name": "Eclipse Thermal Load With Downlink Degradation",
+  "subsystem": "mission",
+  "mode": "static_fixture_degradation",
+  "target_channel_ids": [
+    "eps.battery_voltage",
+    "eps.solar_array_current",
+    "thermal.avionics_temp",
+    "thermal.radiator_temp",
+    "comms.downlink_snr_db",
+    "comms.packet_error_rate_pct",
+    "payload.imager_temp"
+  ],
+  "start_at": "2026-04-30T15:08:00Z",
+  "duration_seconds": 900,
+  "parameters": {
+    "eclipse_fraction": 0.72,
+    "payload_duty_cycle_pct": 85,
+    "ground_station_elevation_deg": 9.5,
+    "thermal_load_watts": 38
+  },
+  "expected_effects": [
+    "Solar array current falls as the vehicle enters eclipse.",
+    "Battery bus voltage trends below nominal power margin.",
+    "Avionics and payload temperatures rise while heat rejection margin degrades.",
+    "Downlink SNR falls and packet error rate increases near low elevation."
+  ],
+  "notes": [
+    "This is a request contract fixture only. No fault execution behavior is implemented in Stage 02."
+  ]
+}

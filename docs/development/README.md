@@ -2,7 +2,7 @@
 
 This folder defines a human-centric way to build TelemForge without one-shotting the whole system.
 
-Current rule: do not keep backend/frontend implementation code in the repo before the relevant stage is approved.
+Current rule: do not keep runnable backend/frontend implementation code in the repo before the relevant stage is approved. Placeholder workspace README files and fixture directories are allowed when a stage explicitly calls for conventions or human-testable artifacts.
 
 The intent is:
 
@@ -55,6 +55,8 @@ For each stage:
 - [Working Principles](principles.md)
 - [Review Loop](review-loop.md)
 - [ADR Template](adr-template.md)
+- [Workspace Conventions](workspace-conventions.md)
+- [Decision Records](decisions/README.md)
 
 ## What The AI Should Do At Each Stage
 

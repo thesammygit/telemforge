@@ -1,0 +1,105 @@
+{
+  "schema": "telemforge.telemetry.snapshot.v1",
+  "snapshot_id": "snapshot-nominal-20260430T150000Z",
+  "scenario": "nominal-orbit-daylight",
+  "spacecraft_id": "tf-sat-01",
+  "captured_at": "2026-04-30T15:00:00Z",
+  "description": "Nominal daylight pass with healthy power, thermal, ADCS, comms, propulsion, and payload channels.",
+  "points": [
+    {
+      "channel_id": "eps.battery_voltage",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 29.6,
+      "unit": "V",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1001
+    },
+    {
+      "channel_id": "eps.solar_array_current",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 8.7,
+      "unit": "A",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1002
+    },
+    {
+      "channel_id": "thermal.avionics_temp",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 31.4,
+      "unit": "degC",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1003
+    },
+    {
+      "channel_id": "thermal.radiator_temp",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": -7.5,
+      "unit": "degC",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1004
+    },
+    {
+      "channel_id": "adcs.reaction_wheel_x_rpm",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 840,
+      "unit": "rpm",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1005
+    },
+    {
+      "channel_id": "adcs.bus_quaternion_error_deg",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 0.042,
+      "unit": "deg",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1006
+    },
+    {
+      "channel_id": "comms.downlink_snr_db",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 13.8,
+      "unit": "dB",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1007
+    },
+    {
+      "channel_id": "comms.packet_error_rate_pct",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 0.08,
+      "unit": "pct",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1008
+    },
+    {
+      "channel_id": "prop.tank_pressure_kpa",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 2036.2,
+      "unit": "kPa",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1009
+    },
+    {
+      "channel_id": "payload.imager_temp",
+      "timestamp": "2026-04-30T15:00:00Z",
+      "value": 11.8,
+      "unit": "degC",
+      "status": "nominal",
+      "quality": "valid",
+      "sequence": 1010
+    }
+  ],
+  "alerts": [],
+  "notes": [
+    "All channel values sit inside nominal ranges from channels.json.",
+    "This fixture is a static snapshot, not generated simulation output."
+  ]
+}
