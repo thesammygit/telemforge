@@ -1,0 +1,79 @@
+import json
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+from scripts.benchmark_stage09_realtime import run_stage09_realtime_baseline
+
+
+class Stage09RealtimeBenchmarkTest(unittest.TestCase):
+    def test_baseline_reports_realtime_metrics_and_runtime_boundary(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            database_path = Path(tmpdir) / "stage09-baseline.sqlite"
+
+            summary = run_stage09_realtime_baseline(
+                database_path=database_path,
+                alert_iterations=3,
+                replay_iterations=3,
+            )
+
+            self.assertTrue(database_path.exists())
+            self.assertEqual(summary["schema"], "telemforge.stage09_realtime_baseline.v1")
+            self.assertEqual(summary["stage"], "09-realtime-performance-and-rust-data-plane")
+            self.assertEqual(summary["workload"]["channel_count"], 10)
+            self.assertEqual(summary["workload"]["samples_per_channel"], 10)
+            self.assertEqual(summary["workload"]["aggregate_sample_rate_hz"], 10.0)
+            self.assertEqual(summary["metrics"]["dropped_event_count"], 0)
+            self.assertGreaterEqual(summary["metrics"]["p95_alert_latency_ms"], 0.0)
+            self.assertGreaterEqual(summary["metrics"]["p95_replay_query_latency_ms"], 0.0)
+            self.assertIn(
+                "Rust data plane direction, not a whole-project rewrite",
+                summary["runtime_boundary"]["tracked_direction"],
+            )
+            self.assertEqual(
+                summary["runtime_boundary"]["python_control_plane"],
+                [
+                    "API orchestration",
+                    "local review workflows",
+                    "configuration",
+                    "fixture generation",
+                    "product-shaping behavior",
+                ],
+            )
+
+    def test_benchmark_script_writes_report_from_repo_root(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            database_path = Path(tmpdir) / "stage09-baseline-cli.sqlite"
+            report_path = Path(tmpdir) / "stage09-baseline-report.json"
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/benchmark_stage09_realtime.py",
+                    "--database",
+                    str(database_path),
+                    "--output",
+                    str(report_path),
+                    "--alert-iterations",
+                    "2",
+                    "--replay-iterations",
+                    "2",
+                ],
+                check=False,
+                capture_output=True,
+                text=True,
+            )
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue(report_path.exists())
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            stdout_report = json.loads(result.stdout)
+            self.assertEqual(report["schema"], "telemforge.stage09_realtime_baseline.v1")
+            self.assertEqual(stdout_report["schema"], report["schema"])
+            self.assertEqual(report["metrics"]["dropped_event_count"], 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

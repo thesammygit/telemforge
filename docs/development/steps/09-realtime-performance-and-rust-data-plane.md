@@ -79,6 +79,16 @@ A reviewer should be able to:
 - see which path remains Python control plane and which path is a Rust
   data-plane candidate
 
+Current baseline command:
+
+```text
+python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
+```
+
+The generated report is a Python/FastAPI control-plane baseline. It keeps Rust
+tracked as the future data-plane direction for hot paths, not as a whole-project
+rewrite.
+
 ## Test Preference
 
 Favor:

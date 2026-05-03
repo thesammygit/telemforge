@@ -1,0 +1,52 @@
+{
+  "generated_at": "2026-05-03T16:46:09Z",
+  "health_stage": "08-hardening-docker-and-release",
+  "metrics": {
+    "dropped_event_count": 0,
+    "p95_alert_latency_ms": 2.445,
+    "p95_replay_query_latency_ms": 3.19,
+    "replay_sample_count": 107,
+    "telemetry_sample_rate_hz": 10.0
+  },
+  "notes": [
+    "This benchmark is intentionally small and local-resource safe.",
+    "It measures the current Python/FastAPI path to make future Rust migration evidence-driven.",
+    "Dropped events are measured as bounded replay rows missing from the local synthetic workload."
+  ],
+  "runtime_boundary": {
+    "python_control_plane": [
+      "API orchestration",
+      "local review workflows",
+      "configuration",
+      "fixture generation",
+      "product-shaping behavior"
+    ],
+    "rust_data_plane_candidates": [
+      "telemetry ingest and validation",
+      "stream fanout, reconnect, and backpressure",
+      "replay indexing and bounded replay queries",
+      "alert and anomaly hot-path evaluation"
+    ],
+    "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
+  },
+  "schema": "telemforge.stage09_realtime_baseline.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "targets": {
+    "aggregate_sample_rate_hz": 1000,
+    "channel_count": 100,
+    "dropped_event_count": 0,
+    "p95_alert_latency_ms": 50,
+    "per_channel_sample_rate_hz": 10,
+    "replay_query_latency_ms": 500
+  },
+  "workload": {
+    "aggregate_sample_rate_hz": 10.0,
+    "alert_iterations": 5,
+    "channel_count": 10,
+    "replay_iterations": 5,
+    "samples_per_channel": 10,
+    "scenario": "nominal-orbit-daylight",
+    "step_seconds": 1,
+    "telemetry_rows_written": 100
+  }
+}

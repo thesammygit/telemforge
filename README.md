@@ -8,12 +8,14 @@ From the repository root:
 
 ```text
 python3 scripts/smoke_stage08.py
+python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m unittest discover -s tests/backend
 python3 -m unittest discover -s tests/contracts
 node --experimental-strip-types --test tests/frontend/consoleViewModel.test.ts
 ```
 
 The smoke command runs the core backend workflow in process: health, session creation, tiny simulation, manual fault injection, telemetry, alerts, events, replay, and anomalies.
+The Stage 09 benchmark command records the current Python/FastAPI realtime baseline and keeps Rust tracked as a future data-plane direction, not a whole-project rewrite.
 
 ## Local Run Paths
 
