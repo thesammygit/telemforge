@@ -24,12 +24,12 @@
       "step_seconds": 1
     }
   },
-  "generated_at": "2026-05-03T21:43:06Z",
+  "generated_at": "2026-05-03T22:32:35Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 5.381,
-    "p95_replay_query_latency_ms": 3.188,
+    "p95_alert_latency_ms": 3.593,
+    "p95_replay_query_latency_ms": 3.542,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -87,7 +87,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 5.381,
+        "observed": 3.593,
         "target": 50,
         "unit": "ms"
       },
@@ -95,7 +95,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.188,
+        "observed": 3.542,
         "target": 500,
         "unit": "ms"
       },
