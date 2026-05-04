@@ -94,6 +94,11 @@ The companion contract artifact
 defines the websocket/live telemetry envelope, reconnect token, backpressure
 policy, and dropped-event reporting shape before runtime fanout is implemented.
 
+The boundary note
+`docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
+keeps the first Rust spike constrained to one measured data-plane hot path and
+requires a compatible benchmark report before any Python path is replaced.
+
 ## Test Preference
 
 Favor:

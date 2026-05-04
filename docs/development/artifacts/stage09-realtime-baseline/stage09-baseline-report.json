@@ -51,12 +51,12 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T00:13:31Z",
+  "generated_at": "2026-05-04T01:02:52Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 3.236,
-    "p95_replay_query_latency_ms": 3.012,
+    "p95_alert_latency_ms": 2.335,
+    "p95_replay_query_latency_ms": 3.254,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -114,7 +114,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.236,
+        "observed": 2.335,
         "target": 50,
         "unit": "ms"
       },
@@ -122,7 +122,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.012,
+        "observed": 3.254,
         "target": 500,
         "unit": "ms"
       },

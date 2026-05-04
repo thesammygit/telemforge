@@ -20,6 +20,14 @@ BASELINE_REPORT_PATH = (
     / "stage09-realtime-baseline"
     / "stage09-baseline-report.json"
 )
+RUST_BOUNDARY_NOTE_PATH = (
+    ROOT
+    / "docs"
+    / "development"
+    / "artifacts"
+    / "stage09-realtime-baseline"
+    / "rust-data-plane-boundary.md"
+)
 CHANNEL_CATALOG_PATH = ROOT / "fixtures" / "telemetry" / "channels.json"
 
 
@@ -130,6 +138,16 @@ class Stage09LiveTelemetryContractTest(unittest.TestCase):
         self.assertIn(sample["payload"]["channel_id"], channel_ids)
         self.assertGreater(sample["sequence"], 0)
         self.assertGreaterEqual(sample["payload"]["sequence"], 0)
+
+    def test_rust_boundary_note_keeps_data_plane_spike_narrow(self) -> None:
+        note = RUST_BOUNDARY_NOTE_PATH.read_text(encoding="utf-8")
+
+        self.assertIn("not approval for a whole-project rewrite", note)
+        self.assertIn("Python/FastAPI path remains the measured control plane", note)
+        self.assertIn("stream fanout with reconnect/backpressure reporting", note)
+        self.assertIn("stage09-live-telemetry-contract.json", note)
+        self.assertIn("stage09-baseline-report.json", note)
+        self.assertIn("Promotion Gates", note)
 
 
 if __name__ == "__main__":
