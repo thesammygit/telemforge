@@ -137,7 +137,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T06:03:32Z",
+  "generated_at": "2026-05-04T06:51:47Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -155,20 +155,20 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.814,
-      "bounded_replay_query": 3.225
+      "alert_evaluation": 2.574,
+      "bounded_replay_query": 3.184
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.186,
-      "bounded_replay_query": 496.775
+      "alert_evaluation": 47.426,
+      "bounded_replay_query": 496.816
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.814,
-    "p95_replay_query_latency_ms": 3.225,
+    "p95_alert_latency_ms": 2.574,
+    "p95_replay_query_latency_ms": 3.184,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -240,7 +240,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.814,
+        "observed": 2.574,
         "target": 50,
         "unit": "ms"
       },
@@ -248,7 +248,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.225,
+        "observed": 3.184,
         "target": 500,
         "unit": "ms"
       },
