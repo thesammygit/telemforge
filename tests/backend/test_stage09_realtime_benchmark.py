@@ -62,6 +62,23 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 contract["schema"],
                 "telemforge.stage09_realtime_benchmark_contract.v1",
             )
+            comparison_profile = summary["comparison_profile"]
+            self.assertEqual(
+                comparison_profile["schema"],
+                "telemforge.stage09_realtime_comparison_profile.v1",
+            )
+            self.assertIn(
+                "execution_profile.load_shape",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "metrics.p95_alert_latency_ms",
+                comparison_profile["run_specific_fields"],
+            )
+            self.assertIn(
+                "Report dropped_event_count explicitly",
+                comparison_profile["compatibility_requirements"][2],
+            )
             self.assertEqual(
                 contract["workload_generation"]["source"],
                 "Stage 02 telemetry channel catalog via the FastAPI "
@@ -168,6 +185,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("## Resource Guard", summary_text)
             self.assertIn("- Worker processes: `1`", summary_text)
             self.assertIn("- Uses paid services: `False`", summary_text)
+            self.assertIn("## Comparison Profile", summary_text)
+            self.assertIn("execution_profile.load_shape", summary_text)
+            self.assertIn("metrics.p95_alert_latency_ms", summary_text)
+            self.assertIn("Report dropped_event_count explicitly", summary_text)
             self.assertIn(
                 "| Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |",
                 summary_text,
@@ -214,6 +235,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(stdout_report["schema"], report["schema"])
             self.assertEqual(report["execution_profile"]["client_count"], 1)
             self.assertEqual(report["resource_guard"]["worker_processes"], 1)
+            self.assertEqual(
+                report["comparison_profile"]["schema"],
+                "telemforge.stage09_realtime_comparison_profile.v1",
+            )
             self.assertFalse(report["resource_guard"]["uses_network"])
             self.assertEqual(report["metrics"]["dropped_event_count"], 0)
             self.assertEqual(

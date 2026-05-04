@@ -12,8 +12,9 @@ queries.
   sample rate, per-channel sample rate, p95 alert latency, p95 replay query
   latency, dropped-event count, deterministic sample-window metadata, target
   comparison results with gap-to-target values, benchmark execution profile,
-  local resource-guard provenance, benchmark contract metadata, and the tracked
-  Rust data-plane boundary.
+  local resource-guard provenance, benchmark contract metadata, a comparison
+  profile that separates stable fields from run-specific timing values, and the
+  tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -57,6 +58,10 @@ The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service
 free, and expected to stay within the automation safety envelope, so future Rust
 data-plane runs do not win by changing the workload shape.
+
+The `comparison_profile` block identifies which fields are stable enough for
+Python/Rust runtime comparison and which fields, such as generated timestamps
+and p95 latency observations, are expected to vary between bounded local runs.
 
 The Rust data-plane boundary note is also intentionally pre-implementation. It
 keeps the first Rust spike constrained to a measured hot path, with the existing

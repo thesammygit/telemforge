@@ -26,6 +26,42 @@
       "step_seconds": 1
     }
   },
+  "comparison_profile": {
+    "compatibility_requirements": [
+      "Use the same workload scenario, seed, sample count, and step interval.",
+      "Keep execution_profile and resource_guard visible in every report.",
+      "Report dropped_event_count explicitly for stream/backpressure comparisons.",
+      "Preserve the benchmark metric names before replacing any Python control-plane hot path with a Rust data-plane candidate."
+    ],
+    "purpose": "Separate stable report fields from run-specific timing and provenance before comparing Python/FastAPI and future Rust data-plane candidates.",
+    "run_specific_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed"
+    ],
+    "schema": "telemforge.stage09_realtime_comparison_profile.v1",
+    "stable_fields": [
+      "schema",
+      "stage",
+      "health_stage",
+      "execution_profile.process_model",
+      "execution_profile.client_count",
+      "execution_profile.resource_scope",
+      "execution_profile.load_shape",
+      "resource_guard.worker_processes",
+      "resource_guard.uses_network",
+      "resource_guard.uses_paid_services",
+      "benchmark_contract",
+      "workload.scenario",
+      "workload.sample_window",
+      "workload.samples_per_channel",
+      "workload.step_seconds",
+      "targets",
+      "runtime_boundary"
+    ]
+  },
   "execution_profile": {
     "client_count": 1,
     "database": "fresh local SQLite database unless --database is provided",
@@ -52,12 +88,12 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T01:52:54Z",
+  "generated_at": "2026-05-04T02:42:42Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.621,
-    "p95_replay_query_latency_ms": 2.916,
+    "p95_alert_latency_ms": 2.415,
+    "p95_replay_query_latency_ms": 2.882,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -129,7 +165,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.621,
+        "observed": 2.415,
         "target": 50,
         "unit": "ms"
       },
@@ -137,7 +173,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.916,
+        "observed": 2.882,
         "target": 500,
         "unit": "ms"
       },

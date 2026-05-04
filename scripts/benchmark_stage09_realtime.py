@@ -177,6 +177,7 @@ def run_stage09_realtime_baseline(
         ),
         "resource_guard": _resource_guard(),
         "benchmark_contract": _benchmark_contract(),
+        "comparison_profile": _comparison_profile(),
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
@@ -402,6 +403,52 @@ def _benchmark_contract() -> dict[str, Any]:
     }
 
 
+def _comparison_profile() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_realtime_comparison_profile.v1",
+        "purpose": (
+            "Separate stable report fields from run-specific timing and "
+            "provenance before comparing Python/FastAPI and future Rust "
+            "data-plane candidates."
+        ),
+        "stable_fields": [
+            "schema",
+            "stage",
+            "health_stage",
+            "execution_profile.process_model",
+            "execution_profile.client_count",
+            "execution_profile.resource_scope",
+            "execution_profile.load_shape",
+            "resource_guard.worker_processes",
+            "resource_guard.uses_network",
+            "resource_guard.uses_paid_services",
+            "benchmark_contract",
+            "workload.scenario",
+            "workload.sample_window",
+            "workload.samples_per_channel",
+            "workload.step_seconds",
+            "targets",
+            "runtime_boundary",
+        ],
+        "run_specific_fields": [
+            "generated_at",
+            "metrics.p95_alert_latency_ms",
+            "metrics.p95_replay_query_latency_ms",
+            "target_results.checks.p95_alert_latency_ms.observed",
+            "target_results.checks.p95_replay_query_latency_ms.observed",
+        ],
+        "compatibility_requirements": [
+            "Use the same workload scenario, seed, sample count, and step interval.",
+            "Keep execution_profile and resource_guard visible in every report.",
+            "Report dropped_event_count explicitly for stream/backpressure comparisons.",
+            (
+                "Preserve the benchmark metric names before replacing any Python "
+                "control-plane hot path with a Rust data-plane candidate."
+            ),
+        ],
+    }
+
+
 def _execution_profile(
     channel_count: int,
     per_channel_sample_rate_hz: float,
@@ -490,7 +537,13 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     missed_targets = target_results["missed_targets"]
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
+    comparison_profile = summary["comparison_profile"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
+    stable_fields = ", ".join(comparison_profile["stable_fields"])
+    run_specific_fields = ", ".join(comparison_profile["run_specific_fields"])
+    compatibility_requirements = "; ".join(
+        comparison_profile["compatibility_requirements"]
+    )
 
     rows = [
         ("Channel count", checks["channel_count"]),
@@ -540,6 +593,10 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Max expected memory: `{resource_guard['max_expected_memory_mb']} MB`\n"
         f"- Uses network: `{resource_guard['uses_network']}`\n"
         f"- Uses paid services: `{resource_guard['uses_paid_services']}`\n\n"
+        "## Comparison Profile\n\n"
+        f"- Stable fields: `{stable_fields}`\n"
+        f"- Run-specific fields: `{run_specific_fields}`\n"
+        f"- Compatibility requirements: `{compatibility_requirements}`\n\n"
         "## Metrics\n\n"
         f"- Aggregate sample rate: `{metrics['telemetry_sample_rate_hz']} Hz`\n"
         f"- Per-channel sample rate: `{metrics['per_channel_sample_rate_hz']} Hz`\n"
