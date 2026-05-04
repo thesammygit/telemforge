@@ -88,8 +88,16 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
+                "latency_budget_profile.budgets",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
                 "Keep determinism_profile.workload_identity unchanged",
                 comparison_profile["compatibility_requirements"][3],
+            )
+            self.assertIn(
+                "latency_budget_profile fields",
+                comparison_profile["compatibility_requirements"][5],
             )
             determinism_profile = summary["determinism_profile"]
             self.assertEqual(
@@ -114,6 +122,34 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "metrics.p95_alert_latency_ms",
                 determinism_profile["run_variant_fields"],
+            )
+            latency_budget_profile = summary["latency_budget_profile"]
+            self.assertEqual(
+                latency_budget_profile["schema"],
+                "telemforge.stage09_latency_budget_profile.v1",
+            )
+            self.assertEqual(
+                latency_budget_profile["budgets"],
+                {
+                    "alert_evaluation_p95_ms": 50,
+                    "bounded_replay_query_p95_ms": 500,
+                },
+            )
+            self.assertEqual(
+                latency_budget_profile["observed_p95_ms"]["alert_evaluation"],
+                summary["metrics"]["p95_alert_latency_ms"],
+            )
+            self.assertEqual(
+                latency_budget_profile["observed_p95_ms"]["bounded_replay_query"],
+                summary["metrics"]["p95_replay_query_latency_ms"],
+            )
+            self.assertGreaterEqual(
+                latency_budget_profile["remaining_budget_ms"]["alert_evaluation"],
+                0,
+            )
+            self.assertIn(
+                "workload_identity",
+                latency_budget_profile["comparison_rule"],
             )
             self.assertEqual(
                 contract["workload_generation"]["source"],
@@ -259,9 +295,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "Only compare runtime implementations when workload_identity",
                 summary_text,
             )
+            self.assertIn("## Latency Budget Profile", summary_text)
+            self.assertIn("- Alert p95 budget: `50 ms`", summary_text)
+            self.assertIn("- Replay p95 budget: `500 ms`", summary_text)
+            self.assertIn("latency headroom", summary_text)
             self.assertIn("## Comparison Profile", summary_text)
             self.assertIn("execution_profile.load_shape", summary_text)
             self.assertIn("determinism_profile.workload_identity", summary_text)
+            self.assertIn("latency_budget_profile.budgets", summary_text)
             self.assertIn("metrics.p95_alert_latency_ms", summary_text)
             self.assertIn("Report dropped_event_count explicitly", summary_text)
             self.assertIn(

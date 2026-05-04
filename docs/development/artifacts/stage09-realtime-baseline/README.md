@@ -14,8 +14,9 @@ queries.
   comparison results with gap-to-target values, benchmark execution profile,
   local resource-guard provenance, benchmark contract metadata, a comparison
   profile that separates stable fields from run-specific timing values, a
-  determinism profile with the stable workload identity, an explicit baseline
-  verdict, and the tracked Rust data-plane boundary.
+  determinism profile with the stable workload identity, a latency budget
+  profile for alert/replay headroom, an explicit baseline verdict, and the
+  tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -68,6 +69,11 @@ The `determinism_profile` block names the stable workload identity, seed,
 scenario, sample window inputs, and run-variant timing fields. A future Rust
 data-plane candidate must preserve that workload identity before its metrics are
 compared with the Python/FastAPI control-plane baseline.
+
+The `latency_budget_profile` block records the Stage 09 p95 alert and replay
+budgets, the observed p95 latencies for the current run, and the remaining
+latency headroom. It keeps latency budget comparison explicit for future Rust
+data-plane candidates without promoting Rust to a whole-project rewrite.
 
 The `baseline_verdict` block states whether the current Python/FastAPI baseline
 is only a comparison baseline or has met the realtime targets. It also names the

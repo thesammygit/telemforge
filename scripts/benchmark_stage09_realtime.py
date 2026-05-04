@@ -181,6 +181,7 @@ def run_stage09_realtime_baseline(
         "benchmark_contract": _benchmark_contract(),
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
+        "latency_budget_profile": _latency_budget_profile(metrics),
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
@@ -433,6 +434,7 @@ def _comparison_profile() -> dict[str, Any]:
             "benchmark_contract",
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
+            "latency_budget_profile.budgets",
             "workload.scenario",
             "workload.sample_window",
             "workload.samples_per_channel",
@@ -447,6 +449,8 @@ def _comparison_profile() -> dict[str, Any]:
             "metrics.p95_replay_query_latency_ms",
             "target_results.checks.p95_alert_latency_ms.observed",
             "target_results.checks.p95_replay_query_latency_ms.observed",
+            "latency_budget_profile.observed_p95_ms.alert_evaluation",
+            "latency_budget_profile.observed_p95_ms.bounded_replay_query",
         ],
         "compatibility_requirements": [
             "Use the same workload scenario, seed, sample count, and step interval.",
@@ -457,7 +461,42 @@ def _comparison_profile() -> dict[str, Any]:
                 "Preserve the benchmark metric names before replacing any Python "
                 "control-plane hot path with a Rust data-plane candidate."
             ),
+            (
+                "Preserve latency_budget_profile fields so alert and replay "
+                "headroom remain visible across runtime candidates."
+            ),
         ],
+    }
+
+
+def _latency_budget_profile(metrics: dict[str, Any]) -> dict[str, Any]:
+    alert_budget_ms = BENCHMARK_TARGETS["p95_alert_latency_ms"]
+    replay_budget_ms = BENCHMARK_TARGETS["replay_query_latency_ms"]
+    alert_observed_ms = metrics["p95_alert_latency_ms"]
+    replay_observed_ms = metrics["p95_replay_query_latency_ms"]
+    return {
+        "schema": "telemforge.stage09_latency_budget_profile.v1",
+        "purpose": (
+            "Keep alert and replay latency headroom explicit before comparing "
+            "the Python/FastAPI control plane with a future Rust data-plane "
+            "candidate."
+        ),
+        "budgets": {
+            "alert_evaluation_p95_ms": alert_budget_ms,
+            "bounded_replay_query_p95_ms": replay_budget_ms,
+        },
+        "observed_p95_ms": {
+            "alert_evaluation": alert_observed_ms,
+            "bounded_replay_query": replay_observed_ms,
+        },
+        "remaining_budget_ms": {
+            "alert_evaluation": _round_gap(max(alert_budget_ms - alert_observed_ms, 0)),
+            "bounded_replay_query": _round_gap(max(replay_budget_ms - replay_observed_ms, 0)),
+        },
+        "comparison_rule": (
+            "Only compare latency headroom when determinism_profile.workload_identity "
+            "matches; treat observed p95 values as run-specific."
+        ),
     }
 
 
@@ -619,6 +658,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     resource_guard = summary["resource_guard"]
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
+    latency_budget_profile = summary["latency_budget_profile"]
     baseline_verdict = summary["baseline_verdict"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
@@ -680,6 +720,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Stable inputs: `{', '.join(determinism_profile['stable_inputs'].keys())}`\n"
         f"- Run-variant fields: `{', '.join(determinism_profile['run_variant_fields'])}`\n"
         f"- Comparison rule: `{determinism_profile['comparison_rule']}`\n\n"
+        "## Latency Budget Profile\n\n"
+        f"- Alert p95 budget: `{latency_budget_profile['budgets']['alert_evaluation_p95_ms']} ms`\n"
+        f"- Alert p95 remaining budget: `{latency_budget_profile['remaining_budget_ms']['alert_evaluation']} ms`\n"
+        f"- Replay p95 budget: `{latency_budget_profile['budgets']['bounded_replay_query_p95_ms']} ms`\n"
+        f"- Replay p95 remaining budget: `{latency_budget_profile['remaining_budget_ms']['bounded_replay_query']} ms`\n"
+        f"- Comparison rule: `{latency_budget_profile['comparison_rule']}`\n\n"
         "## Comparison Profile\n\n"
         f"- Stable fields: `{stable_fields}`\n"
         f"- Run-specific fields: `{run_specific_fields}`\n"
