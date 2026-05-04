@@ -8,6 +8,7 @@ Rust data-plane hot path is worth introducing.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 import tempfile
@@ -30,6 +31,7 @@ BENCHMARK_SCENARIO = "nominal-orbit-daylight"
 BENCHMARK_SAMPLES_PER_CHANNEL = 10
 BENCHMARK_STEP_SECONDS = 1
 BENCHMARK_SEED = 9090
+TELEMETRY_CATALOG_PATH = Path("fixtures/telemetry/channels.json")
 BENCHMARK_TARGETS = {
     "channel_count": 100,
     "per_channel_sample_rate_hz": 10,
@@ -179,6 +181,7 @@ def run_stage09_realtime_baseline(
         ),
         "resource_guard": _resource_guard(),
         "benchmark_contract": _benchmark_contract(),
+        "input_provenance": _input_provenance(channel_count),
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
         "latency_budget_profile": _latency_budget_profile(metrics),
@@ -435,6 +438,7 @@ def _comparison_profile() -> dict[str, Any]:
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "latency_budget_profile.budgets",
+            "input_provenance.telemetry_catalog_sha256",
             "workload.scenario",
             "workload.sample_window",
             "workload.samples_per_channel",
@@ -464,6 +468,10 @@ def _comparison_profile() -> dict[str, Any]:
             (
                 "Preserve latency_budget_profile fields so alert and replay "
                 "headroom remain visible across runtime candidates."
+            ),
+            (
+                "Preserve input_provenance.telemetry_catalog_sha256 so runtime "
+                "candidates do not compare against a different channel catalog."
             ),
         ],
     }
@@ -618,6 +626,24 @@ def _resource_guard() -> dict[str, Any]:
     }
 
 
+def _input_provenance(channel_count: int) -> dict[str, Any]:
+    catalog_path = ROOT / TELEMETRY_CATALOG_PATH
+    catalog_bytes = catalog_path.read_bytes()
+    catalog = json.loads(catalog_bytes)
+    return {
+        "schema": "telemforge.stage09_input_provenance.v1",
+        "purpose": (
+            "Bind comparable benchmark runs to the exact telemetry catalog "
+            "used for workload generation."
+        ),
+        "telemetry_catalog_path": TELEMETRY_CATALOG_PATH.as_posix(),
+        "telemetry_catalog_schema": catalog["schema"],
+        "telemetry_catalog_sha256": hashlib.sha256(catalog_bytes).hexdigest(),
+        "telemetry_catalog_bytes": len(catalog_bytes),
+        "channel_count": channel_count,
+    }
+
+
 def _target_check(
     observed: int | float,
     target: int | float,
@@ -659,6 +685,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
+    input_provenance = summary["input_provenance"]
     baseline_verdict = summary["baseline_verdict"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
@@ -726,6 +753,11 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Replay p95 budget: `{latency_budget_profile['budgets']['bounded_replay_query_p95_ms']} ms`\n"
         f"- Replay p95 remaining budget: `{latency_budget_profile['remaining_budget_ms']['bounded_replay_query']} ms`\n"
         f"- Comparison rule: `{latency_budget_profile['comparison_rule']}`\n\n"
+        "## Input Provenance\n\n"
+        f"- Telemetry catalog: `{input_provenance['telemetry_catalog_path']}`\n"
+        f"- Catalog schema: `{input_provenance['telemetry_catalog_schema']}`\n"
+        f"- Catalog channels: `{input_provenance['channel_count']}`\n"
+        f"- Catalog SHA-256: `{input_provenance['telemetry_catalog_sha256']}`\n\n"
         "## Comparison Profile\n\n"
         f"- Stable fields: `{stable_fields}`\n"
         f"- Run-specific fields: `{run_specific_fields}`\n"

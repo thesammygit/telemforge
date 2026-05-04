@@ -3,6 +3,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from hashlib import sha256
 from pathlib import Path
 
 from scripts.benchmark_stage09_realtime import (
@@ -92,6 +93,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
+                "input_provenance.telemetry_catalog_sha256",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
                 "Keep determinism_profile.workload_identity unchanged",
                 comparison_profile["compatibility_requirements"][3],
             )
@@ -117,6 +122,24 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     "channel_count": 10,
                     "samples_per_channel": 10,
                     "step_seconds": 1,
+                },
+            )
+            input_provenance = summary["input_provenance"]
+            catalog_path = Path("fixtures/telemetry/channels.json")
+            catalog_bytes = catalog_path.read_bytes()
+            self.assertEqual(
+                input_provenance,
+                {
+                    "schema": "telemforge.stage09_input_provenance.v1",
+                    "purpose": (
+                        "Bind comparable benchmark runs to the exact telemetry "
+                        "catalog used for workload generation."
+                    ),
+                    "telemetry_catalog_path": "fixtures/telemetry/channels.json",
+                    "telemetry_catalog_schema": "telemforge.telemetry.channels.v1",
+                    "telemetry_catalog_sha256": sha256(catalog_bytes).hexdigest(),
+                    "telemetry_catalog_bytes": len(catalog_bytes),
+                    "channel_count": 10,
                 },
             )
             self.assertIn(
@@ -299,9 +322,20 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("- Alert p95 budget: `50 ms`", summary_text)
             self.assertIn("- Replay p95 budget: `500 ms`", summary_text)
             self.assertIn("latency headroom", summary_text)
+            self.assertIn("## Input Provenance", summary_text)
+            self.assertIn(
+                "- Telemetry catalog: `fixtures/telemetry/channels.json`",
+                summary_text,
+            )
+            self.assertIn("- Catalog channels: `10`", summary_text)
+            self.assertIn("- Catalog SHA-256: `", summary_text)
             self.assertIn("## Comparison Profile", summary_text)
             self.assertIn("execution_profile.load_shape", summary_text)
             self.assertIn("determinism_profile.workload_identity", summary_text)
+            self.assertIn(
+                "input_provenance.telemetry_catalog_sha256",
+                summary_text,
+            )
             self.assertIn("latency_budget_profile.budgets", summary_text)
             self.assertIn("metrics.p95_alert_latency_ms", summary_text)
             self.assertIn("Report dropped_event_count explicitly", summary_text)
@@ -367,6 +401,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["determinism_profile"]["workload_identity"],
                 "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
+            )
+            self.assertEqual(
+                report["input_provenance"]["telemetry_catalog_path"],
+                "fixtures/telemetry/channels.json",
             )
             self.assertEqual(
                 report["baseline_verdict"]["status"],

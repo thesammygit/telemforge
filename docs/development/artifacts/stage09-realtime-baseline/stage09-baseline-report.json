@@ -51,7 +51,8 @@
       "Report dropped_event_count explicitly for stream/backpressure comparisons.",
       "Keep determinism_profile.workload_identity unchanged for comparable runs.",
       "Preserve the benchmark metric names before replacing any Python control-plane hot path with a Rust data-plane candidate.",
-      "Preserve latency_budget_profile fields so alert and replay headroom remain visible across runtime candidates."
+      "Preserve latency_budget_profile fields so alert and replay headroom remain visible across runtime candidates.",
+      "Preserve input_provenance.telemetry_catalog_sha256 so runtime candidates do not compare against a different channel catalog."
     ],
     "purpose": "Separate stable report fields from run-specific timing and provenance before comparing Python/FastAPI and future Rust data-plane candidates.",
     "run_specific_fields": [
@@ -79,6 +80,7 @@
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "latency_budget_profile.budgets",
+      "input_provenance.telemetry_catalog_sha256",
       "workload.scenario",
       "workload.sample_window",
       "workload.samples_per_channel",
@@ -135,8 +137,17 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T05:13:11Z",
+  "generated_at": "2026-05-04T06:03:32Z",
   "health_stage": "08-hardening-docker-and-release",
+  "input_provenance": {
+    "channel_count": 10,
+    "purpose": "Bind comparable benchmark runs to the exact telemetry catalog used for workload generation.",
+    "schema": "telemforge.stage09_input_provenance.v1",
+    "telemetry_catalog_bytes": 5543,
+    "telemetry_catalog_path": "fixtures/telemetry/channels.json",
+    "telemetry_catalog_schema": "telemforge.telemetry.channels.v1",
+    "telemetry_catalog_sha256": "fe0a09191f4b04677025887035ad0156627ef73bf6cca5692c8eb775f6dc3daf"
+  },
   "latency_budget_profile": {
     "budgets": {
       "alert_evaluation_p95_ms": 50,
@@ -144,20 +155,20 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.838,
-      "bounded_replay_query": 2.92
+      "alert_evaluation": 2.814,
+      "bounded_replay_query": 3.225
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.162,
-      "bounded_replay_query": 497.08
+      "alert_evaluation": 47.186,
+      "bounded_replay_query": 496.775
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.838,
-    "p95_replay_query_latency_ms": 2.92,
+    "p95_alert_latency_ms": 2.814,
+    "p95_replay_query_latency_ms": 3.225,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -229,7 +240,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.838,
+        "observed": 2.814,
         "target": 50,
         "unit": "ms"
       },
@@ -237,7 +248,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.92,
+        "observed": 3.225,
         "target": 500,
         "unit": "ms"
       },

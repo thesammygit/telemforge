@@ -15,8 +15,9 @@ queries.
   local resource-guard provenance, benchmark contract metadata, a comparison
   profile that separates stable fields from run-specific timing values, a
   determinism profile with the stable workload identity, a latency budget
-  profile for alert/replay headroom, an explicit baseline verdict, and the
-  tracked Rust data-plane boundary.
+  profile for alert/replay headroom, input provenance for the exact telemetry
+  catalog hash used to generate the workload, an explicit baseline verdict, and
+  the tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -74,6 +75,11 @@ The `latency_budget_profile` block records the Stage 09 p95 alert and replay
 budgets, the observed p95 latencies for the current run, and the remaining
 latency headroom. It keeps latency budget comparison explicit for future Rust
 data-plane candidates without promoting Rust to a whole-project rewrite.
+
+The `input_provenance` block records the telemetry catalog path, schema, byte
+count, channel count, and SHA-256 hash. A future Rust data-plane candidate
+should preserve that catalog hash before comparing metrics with this
+Python/FastAPI baseline.
 
 The `baseline_verdict` block states whether the current Python/FastAPI baseline
 is only a comparison baseline or has met the realtime targets. It also names the
