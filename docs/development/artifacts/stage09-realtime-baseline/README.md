@@ -15,9 +15,10 @@ queries.
   local resource-guard provenance, benchmark contract metadata, a comparison
   profile that separates stable fields from run-specific timing values, a
   determinism profile with the stable workload identity, a latency budget
-  profile for alert/replay headroom, input provenance for the exact telemetry
-  catalog hash used to generate the workload, an explicit baseline verdict, and
-  the tracked Rust data-plane boundary.
+  profile for alert/replay headroom, a runtime observation that confirms the
+  bounded command stayed inside the expected local runtime envelope, input
+  provenance for the exact telemetry catalog hash used to generate the workload,
+  an explicit baseline verdict, and the tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -61,6 +62,11 @@ The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service
 free, and expected to stay within the automation safety envelope, so future Rust
 data-plane runs do not win by changing the workload shape.
+
+The `runtime_observation` block records the observed duration of the bounded
+benchmark command and whether it stayed inside the expected local runtime
+envelope. This keeps resource claims evidence-backed without turning Stage 09
+into a heavy load test.
 
 The `comparison_profile` block identifies which fields are stable enough for
 Python/Rust runtime comparison and which fields, such as generated timestamps

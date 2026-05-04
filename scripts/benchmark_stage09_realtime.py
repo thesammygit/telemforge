@@ -54,6 +54,7 @@ def run_stage09_realtime_baseline(
     if replay_iterations <= 0:
         raise ValueError("replay_iterations must be positive")
 
+    started_ns = time.perf_counter_ns()
     client = TestClient(create_app(database_path=Path(database_path)))
     health = _expect_json(client.get("/health"), 200, "health check")
     session = _expect_json(
@@ -168,6 +169,8 @@ def run_stage09_realtime_baseline(
     }
 
     target_results = _target_results(workload, metrics)
+    resource_guard = _resource_guard()
+    runtime_observation = _runtime_observation(started_ns, resource_guard)
 
     return {
         "schema": "telemforge.stage09_realtime_baseline.v1",
@@ -179,7 +182,8 @@ def run_stage09_realtime_baseline(
             per_channel_sample_rate_hz=per_channel_sample_rate_hz,
             aggregate_sample_rate_hz=aggregate_sample_rate_hz,
         ),
-        "resource_guard": _resource_guard(),
+        "resource_guard": resource_guard,
+        "runtime_observation": runtime_observation,
         "benchmark_contract": _benchmark_contract(),
         "input_provenance": _input_provenance(channel_count),
         "comparison_profile": _comparison_profile(),
@@ -455,6 +459,8 @@ def _comparison_profile() -> dict[str, Any]:
             "target_results.checks.p95_replay_query_latency_ms.observed",
             "latency_budget_profile.observed_p95_ms.alert_evaluation",
             "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+            "runtime_observation.duration_ms",
+            "runtime_observation.within_expected_runtime",
         ],
         "compatibility_requirements": [
             "Use the same workload scenario, seed, sample count, and step interval.",
@@ -626,6 +632,25 @@ def _resource_guard() -> dict[str, Any]:
     }
 
 
+def _runtime_observation(
+    started_ns: int,
+    resource_guard: dict[str, Any],
+) -> dict[str, Any]:
+    duration_ms = _elapsed_ms(started_ns)
+    max_expected_runtime_seconds = resource_guard["max_expected_runtime_seconds"]
+    return {
+        "schema": "telemforge.stage09_runtime_observation.v1",
+        "purpose": (
+            "Record the observed bounded benchmark duration so future runtime "
+            "candidates do not compare against an unverified resource envelope."
+        ),
+        "duration_ms": duration_ms,
+        "max_expected_runtime_seconds": max_expected_runtime_seconds,
+        "within_expected_runtime": duration_ms <= max_expected_runtime_seconds * 1000,
+        "worker_processes_observed": resource_guard["worker_processes"],
+    }
+
+
 def _input_provenance(channel_count: int) -> dict[str, Any]:
     catalog_path = ROOT / TELEMETRY_CATALOG_PATH
     catalog_bytes = catalog_path.read_bytes()
@@ -682,6 +707,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     missed_targets = target_results["missed_targets"]
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
+    runtime_observation = summary["runtime_observation"]
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
@@ -742,6 +768,11 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Max expected memory: `{resource_guard['max_expected_memory_mb']} MB`\n"
         f"- Uses network: `{resource_guard['uses_network']}`\n"
         f"- Uses paid services: `{resource_guard['uses_paid_services']}`\n\n"
+        "## Runtime Observation\n\n"
+        f"- Duration: `{runtime_observation['duration_ms']} ms`\n"
+        f"- Max expected runtime: `{runtime_observation['max_expected_runtime_seconds']} seconds`\n"
+        f"- Within expected runtime: `{runtime_observation['within_expected_runtime']}`\n"
+        f"- Worker processes observed: `{runtime_observation['worker_processes_observed']}`\n\n"
         "## Determinism Profile\n\n"
         f"- Workload identity: `{determinism_profile['workload_identity']}`\n"
         f"- Stable inputs: `{', '.join(determinism_profile['stable_inputs'].keys())}`\n"

@@ -50,6 +50,15 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(resource_guard["max_expected_memory_mb"], 512)
             self.assertFalse(resource_guard["uses_network"])
             self.assertFalse(resource_guard["uses_paid_services"])
+            runtime_observation = summary["runtime_observation"]
+            self.assertEqual(
+                runtime_observation["schema"],
+                "telemforge.stage09_runtime_observation.v1",
+            )
+            self.assertGreaterEqual(runtime_observation["duration_ms"], 0.0)
+            self.assertEqual(runtime_observation["max_expected_runtime_seconds"], 30)
+            self.assertTrue(runtime_observation["within_expected_runtime"])
+            self.assertEqual(runtime_observation["worker_processes_observed"], 1)
             self.assertEqual(
                 execution_profile["load_shape"]["aggregate_sample_rate_hz"],
                 10.0,
@@ -309,6 +318,9 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("## Resource Guard", summary_text)
             self.assertIn("- Worker processes: `1`", summary_text)
             self.assertIn("- Uses paid services: `False`", summary_text)
+            self.assertIn("## Runtime Observation", summary_text)
+            self.assertIn("- Within expected runtime: `True`", summary_text)
+            self.assertIn("- Worker processes observed: `1`", summary_text)
             self.assertIn("## Determinism Profile", summary_text)
             self.assertIn(
                 "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
@@ -394,6 +406,11 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(stdout_report["schema"], report["schema"])
             self.assertEqual(report["execution_profile"]["client_count"], 1)
             self.assertEqual(report["resource_guard"]["worker_processes"], 1)
+            self.assertEqual(
+                report["runtime_observation"]["schema"],
+                "telemforge.stage09_runtime_observation.v1",
+            )
+            self.assertTrue(report["runtime_observation"]["within_expected_runtime"])
             self.assertEqual(
                 report["comparison_profile"]["schema"],
                 "telemforge.stage09_realtime_comparison_profile.v1",
