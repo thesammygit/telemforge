@@ -95,6 +95,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "target_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "runtime_observation.duration_ms",
                 verification_contract["allowed_run_variant_fields"],
             )
@@ -133,6 +137,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "latency_budget_profile.budgets",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "target_profile",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -220,6 +228,45 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "workload_identity",
                 latency_budget_profile["comparison_rule"],
+            )
+            target_profile = summary["target_profile"]
+            self.assertEqual(
+                target_profile["schema"],
+                "telemforge.stage09_target_profile.v1",
+            )
+            self.assertEqual(
+                target_profile["baseline_status"],
+                "comparison_baseline_not_realtime_claim",
+            )
+            self.assertEqual(
+                target_profile["workload_hypothesis"],
+                {
+                    "channel_count": 100,
+                    "per_channel_sample_rate_hz": 10,
+                    "aggregate_sample_rate_hz": 1000,
+                    "client_scope": (
+                        "single local client smoke before multi-client fanout"
+                    ),
+                },
+            )
+            self.assertEqual(
+                target_profile["metric_targets"]["p95_alert_latency_ms"],
+                {
+                    "comparison": "at_most",
+                    "target": 50,
+                    "unit": "ms",
+                    "report_binding": "metrics.p95_alert_latency_ms",
+                },
+            )
+            self.assertEqual(
+                target_profile["metric_targets"]["dropped_event_count"][
+                    "report_binding"
+                ],
+                "metrics.dropped_event_count",
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                target_profile["rust_scope"],
             )
             self.assertEqual(
                 contract["workload_generation"]["source"],
@@ -384,6 +431,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn("- Catalog channels: `10`", summary_text)
             self.assertIn("- Catalog SHA-256: `", summary_text)
+            self.assertIn("## Target Profile", summary_text)
+            self.assertIn(
+                "comparison_baseline_not_realtime_claim",
+                summary_text,
+            )
+            self.assertIn("ADR-009 initial benchmark hypotheses", summary_text)
+            self.assertIn("metrics.p95_alert_latency_ms", summary_text)
+            self.assertIn("metrics.dropped_event_count", summary_text)
             self.assertIn("## Comparison Profile", summary_text)
             self.assertIn("execution_profile.load_shape", summary_text)
             self.assertIn("determinism_profile.workload_identity", summary_text)
@@ -473,6 +528,16 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["input_provenance"]["telemetry_catalog_path"],
                 "fixtures/telemetry/channels.json",
+            )
+            self.assertEqual(
+                report["target_profile"]["schema"],
+                "telemforge.stage09_target_profile.v1",
+            )
+            self.assertEqual(
+                report["target_profile"]["metric_targets"]["aggregate_sample_rate_hz"][
+                    "report_binding"
+                ],
+                "metrics.telemetry_sample_rate_hz",
             )
             self.assertEqual(
                 report["baseline_verdict"]["status"],

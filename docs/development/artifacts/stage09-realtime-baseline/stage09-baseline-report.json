@@ -90,6 +90,7 @@
       "workload.samples_per_channel",
       "workload.step_seconds",
       "targets",
+      "target_profile",
       "baseline_verdict",
       "runtime_boundary"
     ]
@@ -141,7 +142,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T08:33:43Z",
+  "generated_at": "2026-05-04T09:23:51Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -159,20 +160,20 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.561,
-      "bounded_replay_query": 3.543
+      "alert_evaluation": 2.712,
+      "bounded_replay_query": 3.402
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.439,
-      "bounded_replay_query": 496.457
+      "alert_evaluation": 47.288,
+      "bounded_replay_query": 496.598
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.561,
-    "p95_replay_query_latency_ms": 3.543,
+    "p95_alert_latency_ms": 2.712,
+    "p95_replay_query_latency_ms": 3.402,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -213,7 +214,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 55.077,
+    "duration_ms": 56.88,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -222,6 +223,58 @@
   },
   "schema": "telemforge.stage09_realtime_baseline.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
+  "target_profile": {
+    "baseline_status": "comparison_baseline_not_realtime_claim",
+    "metric_targets": {
+      "aggregate_sample_rate_hz": {
+        "comparison": "at_least",
+        "report_binding": "metrics.telemetry_sample_rate_hz",
+        "target": 1000,
+        "unit": "Hz"
+      },
+      "channel_count": {
+        "comparison": "at_least",
+        "report_binding": "workload.channel_count",
+        "target": 100,
+        "unit": "channels"
+      },
+      "dropped_event_count": {
+        "comparison": "at_most",
+        "report_binding": "metrics.dropped_event_count",
+        "target": 0,
+        "unit": "events"
+      },
+      "p95_alert_latency_ms": {
+        "comparison": "at_most",
+        "report_binding": "metrics.p95_alert_latency_ms",
+        "target": 50,
+        "unit": "ms"
+      },
+      "p95_replay_query_latency_ms": {
+        "comparison": "at_most",
+        "report_binding": "metrics.p95_replay_query_latency_ms",
+        "target": 500,
+        "unit": "ms"
+      },
+      "per_channel_sample_rate_hz": {
+        "comparison": "at_least",
+        "report_binding": "workload.per_channel_sample_rate_hz",
+        "target": 10,
+        "unit": "Hz"
+      }
+    },
+    "promotion_rule": "A future runtime candidate must preserve these report bindings and emit target_results.checks before replacing a Python hot path.",
+    "purpose": "Keep the realtime target envelope explicit before Python/FastAPI and future Rust data-plane candidates are compared.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_target_profile.v1",
+    "source": "ADR-009 initial benchmark hypotheses",
+    "workload_hypothesis": {
+      "aggregate_sample_rate_hz": 1000,
+      "channel_count": 100,
+      "client_scope": "single local client smoke before multi-client fanout",
+      "per_channel_sample_rate_hz": 10
+    }
+  },
   "target_results": {
     "checks": {
       "aggregate_sample_rate_hz": {
@@ -252,7 +305,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.561,
+        "observed": 2.712,
         "target": 50,
         "unit": "ms"
       },
@@ -260,7 +313,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.543,
+        "observed": 3.402,
         "target": 500,
         "unit": "ms"
       },
@@ -327,6 +380,7 @@
       "metrics.p95_alert_latency_ms",
       "metrics.p95_replay_query_latency_ms",
       "metrics.dropped_event_count",
+      "target_profile",
       "target_results.checks",
       "baseline_verdict",
       "runtime_boundary"

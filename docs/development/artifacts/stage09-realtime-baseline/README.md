@@ -19,7 +19,9 @@ queries.
   profile for alert/replay headroom, a runtime observation that confirms the
   bounded command stayed inside the expected local runtime envelope, input
   provenance for the exact telemetry catalog hash used to generate the workload,
-  an explicit baseline verdict, and the tracked Rust data-plane boundary.
+  a target profile that binds the ADR-009 realtime hypotheses to stable report
+  fields, an explicit baseline verdict, and the tracked Rust data-plane
+  boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -93,6 +95,11 @@ The `input_provenance` block records the telemetry catalog path, schema, byte
 count, channel count, and SHA-256 hash. A future Rust data-plane candidate
 should preserve that catalog hash before comparing metrics with this
 Python/FastAPI baseline.
+
+The `target_profile` block records the ADR-009 target envelope, metric report
+bindings, and promotion rule for future runtime candidates. It keeps the current
+Python/FastAPI run labeled as a comparison baseline, not a production realtime
+claim, while preserving the tracked Rust data-plane direction.
 
 The `baseline_verdict` block states whether the current Python/FastAPI baseline
 is only a comparison baseline or has met the realtime targets. It also names the

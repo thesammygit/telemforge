@@ -193,6 +193,7 @@ def run_stage09_realtime_baseline(
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
+        "target_profile": _target_profile(),
         "target_results": target_results,
         "baseline_verdict": _baseline_verdict(target_results),
         "runtime_boundary": {
@@ -450,6 +451,7 @@ def _comparison_profile() -> dict[str, Any]:
             "workload.samples_per_channel",
             "workload.step_seconds",
             "targets",
+            "target_profile",
             "baseline_verdict",
             "runtime_boundary",
         ],
@@ -531,6 +533,7 @@ def _verification_contract() -> dict[str, Any]:
             "metrics.p95_alert_latency_ms",
             "metrics.p95_replay_query_latency_ms",
             "metrics.dropped_event_count",
+            "target_profile",
             "target_results.checks",
             "baseline_verdict",
             "runtime_boundary",
@@ -584,6 +587,71 @@ def _latency_budget_profile(metrics: dict[str, Any]) -> dict[str, Any]:
         "comparison_rule": (
             "Only compare latency headroom when determinism_profile.workload_identity "
             "matches; treat observed p95 values as run-specific."
+        ),
+    }
+
+
+def _target_profile() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_target_profile.v1",
+        "purpose": (
+            "Keep the realtime target envelope explicit before Python/FastAPI "
+            "and future Rust data-plane candidates are compared."
+        ),
+        "baseline_status": "comparison_baseline_not_realtime_claim",
+        "source": "ADR-009 initial benchmark hypotheses",
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+        "workload_hypothesis": {
+            "channel_count": BENCHMARK_TARGETS["channel_count"],
+            "per_channel_sample_rate_hz": BENCHMARK_TARGETS[
+                "per_channel_sample_rate_hz"
+            ],
+            "aggregate_sample_rate_hz": BENCHMARK_TARGETS[
+                "aggregate_sample_rate_hz"
+            ],
+            "client_scope": "single local client smoke before multi-client fanout",
+        },
+        "metric_targets": {
+            "channel_count": {
+                "comparison": "at_least",
+                "target": BENCHMARK_TARGETS["channel_count"],
+                "unit": "channels",
+                "report_binding": "workload.channel_count",
+            },
+            "per_channel_sample_rate_hz": {
+                "comparison": "at_least",
+                "target": BENCHMARK_TARGETS["per_channel_sample_rate_hz"],
+                "unit": "Hz",
+                "report_binding": "workload.per_channel_sample_rate_hz",
+            },
+            "aggregate_sample_rate_hz": {
+                "comparison": "at_least",
+                "target": BENCHMARK_TARGETS["aggregate_sample_rate_hz"],
+                "unit": "Hz",
+                "report_binding": "metrics.telemetry_sample_rate_hz",
+            },
+            "p95_alert_latency_ms": {
+                "comparison": "at_most",
+                "target": BENCHMARK_TARGETS["p95_alert_latency_ms"],
+                "unit": "ms",
+                "report_binding": "metrics.p95_alert_latency_ms",
+            },
+            "p95_replay_query_latency_ms": {
+                "comparison": "at_most",
+                "target": BENCHMARK_TARGETS["replay_query_latency_ms"],
+                "unit": "ms",
+                "report_binding": "metrics.p95_replay_query_latency_ms",
+            },
+            "dropped_event_count": {
+                "comparison": "at_most",
+                "target": BENCHMARK_TARGETS["dropped_event_count"],
+                "unit": "events",
+                "report_binding": "metrics.dropped_event_count",
+            },
+        },
+        "promotion_rule": (
+            "A future runtime candidate must preserve these report bindings and "
+            "emit target_results.checks before replacing a Python hot path."
         ),
     }
 
@@ -788,6 +856,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     latency_budget_profile = summary["latency_budget_profile"]
     input_provenance = summary["input_provenance"]
     baseline_verdict = summary["baseline_verdict"]
+    target_profile = summary["target_profile"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
     run_specific_fields = ", ".join(comparison_profile["run_specific_fields"])
@@ -876,6 +945,14 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Catalog schema: `{input_provenance['telemetry_catalog_schema']}`\n"
         f"- Catalog channels: `{input_provenance['channel_count']}`\n"
         f"- Catalog SHA-256: `{input_provenance['telemetry_catalog_sha256']}`\n\n"
+        "## Target Profile\n\n"
+        f"- Schema: `{target_profile['schema']}`\n"
+        f"- Baseline status: `{target_profile['baseline_status']}`\n"
+        f"- Source: `{target_profile['source']}`\n"
+        f"- Rust scope: `{target_profile['rust_scope']}`\n"
+        f"- Workload hypothesis: `{_format_target_profile_hypothesis(target_profile)}`\n"
+        f"- Report bindings: `{_format_target_profile_bindings(target_profile)}`\n"
+        f"- Promotion rule: `{target_profile['promotion_rule']}`\n\n"
         "## Comparison Profile\n\n"
         f"- Stable fields: `{stable_fields}`\n"
         f"- Run-specific fields: `{run_specific_fields}`\n"
@@ -915,6 +992,23 @@ def _format_target(check: dict[str, Any]) -> str:
 
 def _format_gap(check: dict[str, Any]) -> str:
     return f"{check['gap_to_target']} {check['unit']}"
+
+
+def _format_target_profile_hypothesis(target_profile: dict[str, Any]) -> str:
+    hypothesis = target_profile["workload_hypothesis"]
+    return (
+        f"{hypothesis['channel_count']} channels at "
+        f"{hypothesis['per_channel_sample_rate_hz']} Hz per channel "
+        f"({hypothesis['aggregate_sample_rate_hz']} Hz aggregate), "
+        f"{hypothesis['client_scope']}"
+    )
+
+
+def _format_target_profile_bindings(target_profile: dict[str, Any]) -> str:
+    return ", ".join(
+        target["report_binding"]
+        for target in target_profile["metric_targets"].values()
+    )
 
 
 def _offset_timestamp(start_at: str, offset_seconds: int) -> str:
