@@ -186,6 +186,7 @@ def run_stage09_realtime_baseline(
         "runtime_observation": runtime_observation,
         "benchmark_contract": _benchmark_contract(),
         "verification_contract": _verification_contract(),
+        "run_variant_policy": _run_variant_policy(),
         "input_provenance": _input_provenance(channel_count),
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
@@ -442,6 +443,7 @@ def _comparison_profile() -> dict[str, Any]:
             "resource_guard.uses_paid_services",
             "benchmark_contract",
             "verification_contract",
+            "run_variant_policy",
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "latency_budget_profile.budgets",
@@ -528,6 +530,7 @@ def _verification_contract() -> dict[str, Any]:
             "verification_contract",
             "determinism_profile",
             "latency_budget_profile",
+            "run_variant_policy",
             "input_provenance",
             "metrics.telemetry_sample_rate_hz",
             "metrics.p95_alert_latency_ms",
@@ -556,6 +559,53 @@ def _verification_contract() -> dict[str, Any]:
             "uses_network": False,
             "uses_paid_services": False,
         },
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    }
+
+
+def _run_variant_policy() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_run_variant_policy.v1",
+        "purpose": (
+            "Separate repeatable benchmark identity from expected local timing "
+            "variance before comparing the Python/FastAPI baseline with future "
+            "Rust data-plane candidates."
+        ),
+        "stable_identity_fields": [
+            "schema",
+            "stage",
+            "execution_profile.process_model",
+            "execution_profile.client_count",
+            "resource_guard.worker_processes",
+            "resource_guard.uses_network",
+            "resource_guard.uses_paid_services",
+            "determinism_profile.workload_identity",
+            "determinism_profile.stable_inputs",
+            "input_provenance.telemetry_catalog_sha256",
+            "workload.scenario",
+            "workload.samples_per_channel",
+            "workload.step_seconds",
+            "targets",
+            "runtime_boundary",
+        ],
+        "allowed_variant_fields": [
+            "generated_at",
+            "metrics.p95_alert_latency_ms",
+            "metrics.p95_replay_query_latency_ms",
+            "target_results.checks.p95_alert_latency_ms.observed",
+            "target_results.checks.p95_replay_query_latency_ms.observed",
+            "latency_budget_profile.observed_p95_ms.alert_evaluation",
+            "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+            "latency_budget_profile.remaining_budget_ms.alert_evaluation",
+            "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+            "runtime_observation.duration_ms",
+            "runtime_observation.within_expected_runtime",
+        ],
+        "comparison_gate": (
+            "Do not compare runtime candidates unless stable_identity_fields "
+            "match or the candidate explicitly documents a versioned workload "
+            "change."
+        ),
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
 
@@ -855,6 +905,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
     input_provenance = summary["input_provenance"]
+    run_variant_policy = summary["run_variant_policy"]
     baseline_verdict = summary["baseline_verdict"]
     target_profile = summary["target_profile"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
@@ -868,6 +919,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     verification_fields = ", ".join(verification_contract["required_report_fields"])
     allowed_run_variant_fields = ", ".join(
         verification_contract["allowed_run_variant_fields"]
+    )
+    run_variant_stable_fields = ", ".join(
+        run_variant_policy["stable_identity_fields"]
+    )
+    run_variant_allowed_fields = ", ".join(
+        run_variant_policy["allowed_variant_fields"]
     )
 
     rows = [
@@ -945,6 +1002,11 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Catalog schema: `{input_provenance['telemetry_catalog_schema']}`\n"
         f"- Catalog channels: `{input_provenance['channel_count']}`\n"
         f"- Catalog SHA-256: `{input_provenance['telemetry_catalog_sha256']}`\n\n"
+        "## Run Variant Policy\n\n"
+        f"- Stable identity fields: `{run_variant_stable_fields}`\n"
+        f"- Allowed variant fields: `{run_variant_allowed_fields}`\n"
+        f"- Comparison gate: `{run_variant_policy['comparison_gate']}`\n"
+        f"- Rust scope: `{run_variant_policy['rust_scope']}`\n\n"
         "## Target Profile\n\n"
         f"- Schema: `{target_profile['schema']}`\n"
         f"- Baseline status: `{target_profile['baseline_status']}`\n"

@@ -102,6 +102,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "runtime_observation.duration_ms",
                 verification_contract["allowed_run_variant_fields"],
             )
+            self.assertIn(
+                "run_variant_policy",
+                verification_contract["required_report_fields"],
+            )
             self.assertEqual(
                 verification_contract["resource_expectations"]["worker_processes"],
                 1,
@@ -109,6 +113,35 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "not a whole-project rewrite",
                 verification_contract["rust_scope"],
+            )
+            run_variant_policy = summary["run_variant_policy"]
+            self.assertEqual(
+                run_variant_policy["schema"],
+                "telemforge.stage09_run_variant_policy.v1",
+            )
+            self.assertIn(
+                "determinism_profile.workload_identity",
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
+                "input_provenance.telemetry_catalog_sha256",
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
+                "runtime_observation.duration_ms",
+                run_variant_policy["allowed_variant_fields"],
+            )
+            self.assertIn(
+                "latency_budget_profile.remaining_budget_ms.alert_evaluation",
+                run_variant_policy["allowed_variant_fields"],
+            )
+            self.assertIn(
+                "stable_identity_fields",
+                run_variant_policy["comparison_gate"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                run_variant_policy["rust_scope"],
             )
             comparison_profile = summary["comparison_profile"]
             self.assertEqual(
@@ -149,6 +182,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "verification_contract",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "run_variant_policy",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -446,6 +483,11 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "input_provenance.telemetry_catalog_sha256",
                 summary_text,
             )
+            self.assertIn("## Run Variant Policy", summary_text)
+            self.assertIn("Stable identity fields: `", summary_text)
+            self.assertIn("Allowed variant fields: `", summary_text)
+            self.assertIn("runtime_observation.duration_ms", summary_text)
+            self.assertIn("Do not compare runtime candidates unless", summary_text)
             self.assertIn("latency_budget_profile.budgets", summary_text)
             self.assertIn("metrics.p95_alert_latency_ms", summary_text)
             self.assertIn("Report dropped_event_count explicitly", summary_text)
@@ -517,8 +559,16 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 report["verification_contract"]["schema"],
                 "telemforge.stage09_baseline_verification_contract.v1",
             )
+            self.assertEqual(
+                report["run_variant_policy"]["schema"],
+                "telemforge.stage09_run_variant_policy.v1",
+            )
             self.assertIn(
                 "target_results.checks",
+                report["verification_contract"]["required_report_fields"],
+            )
+            self.assertIn(
+                "run_variant_policy",
                 report["verification_contract"]["required_report_fields"],
             )
             self.assertEqual(

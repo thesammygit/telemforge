@@ -81,6 +81,7 @@
       "resource_guard.uses_paid_services",
       "benchmark_contract",
       "verification_contract",
+      "run_variant_policy",
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "latency_budget_profile.budgets",
@@ -142,7 +143,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T09:23:51Z",
+  "generated_at": "2026-05-04T10:12:37Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -160,20 +161,20 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.712,
-      "bounded_replay_query": 3.402
+      "alert_evaluation": 3.904,
+      "bounded_replay_query": 3.52
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.288,
-      "bounded_replay_query": 496.598
+      "alert_evaluation": 46.096,
+      "bounded_replay_query": 496.48
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.712,
-    "p95_replay_query_latency_ms": 3.402,
+    "p95_alert_latency_ms": 3.904,
+    "p95_replay_query_latency_ms": 3.52,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -197,6 +198,42 @@
       "optional Markdown summary when --summary-output is provided"
     ]
   },
+  "run_variant_policy": {
+    "allowed_variant_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed",
+      "latency_budget_profile.observed_p95_ms.alert_evaluation",
+      "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "latency_budget_profile.remaining_budget_ms.alert_evaluation",
+      "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "comparison_gate": "Do not compare runtime candidates unless stable_identity_fields match or the candidate explicitly documents a versioned workload change.",
+    "purpose": "Separate repeatable benchmark identity from expected local timing variance before comparing the Python/FastAPI baseline with future Rust data-plane candidates.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_run_variant_policy.v1",
+    "stable_identity_fields": [
+      "schema",
+      "stage",
+      "execution_profile.process_model",
+      "execution_profile.client_count",
+      "resource_guard.worker_processes",
+      "resource_guard.uses_network",
+      "resource_guard.uses_paid_services",
+      "determinism_profile.workload_identity",
+      "determinism_profile.stable_inputs",
+      "input_provenance.telemetry_catalog_sha256",
+      "workload.scenario",
+      "workload.samples_per_channel",
+      "workload.step_seconds",
+      "targets",
+      "runtime_boundary"
+    ]
+  },
   "runtime_boundary": {
     "python_control_plane": [
       "API orchestration",
@@ -214,7 +251,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 56.88,
+    "duration_ms": 61.756,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -305,7 +342,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.712,
+        "observed": 3.904,
         "target": 50,
         "unit": "ms"
       },
@@ -313,7 +350,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.402,
+        "observed": 3.52,
         "target": 500,
         "unit": "ms"
       },
@@ -375,6 +412,7 @@
       "verification_contract",
       "determinism_profile",
       "latency_budget_profile",
+      "run_variant_policy",
       "input_provenance",
       "metrics.telemetry_sample_rate_hz",
       "metrics.p95_alert_latency_ms",
