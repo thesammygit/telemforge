@@ -185,6 +185,7 @@ def run_stage09_realtime_baseline(
         "resource_guard": resource_guard,
         "runtime_observation": runtime_observation,
         "benchmark_contract": _benchmark_contract(),
+        "verification_contract": _verification_contract(),
         "input_provenance": _input_provenance(channel_count),
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
@@ -439,6 +440,7 @@ def _comparison_profile() -> dict[str, Any]:
             "resource_guard.uses_network",
             "resource_guard.uses_paid_services",
             "benchmark_contract",
+            "verification_contract",
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "latency_budget_profile.budgets",
@@ -479,7 +481,79 @@ def _comparison_profile() -> dict[str, Any]:
                 "Preserve input_provenance.telemetry_catalog_sha256 so runtime "
                 "candidates do not compare against a different channel catalog."
             ),
+            (
+                "Preserve verification_contract.command and required_report_fields "
+                "so reruns regenerate both public baseline artifacts together."
+            ),
         ],
+    }
+
+
+def _verification_contract() -> dict[str, Any]:
+    report_path = (
+        "docs/development/artifacts/stage09-realtime-baseline/"
+        "stage09-baseline-report.json"
+    )
+    summary_path = (
+        "docs/development/artifacts/stage09-realtime-baseline/"
+        "stage09-baseline-summary.md"
+    )
+    return {
+        "schema": "telemforge.stage09_baseline_verification_contract.v1",
+        "purpose": (
+            "Pin the lightweight rerun command and report fields that prove the "
+            "Stage 09 baseline remains comparable before a Python control-plane "
+            "hot path is replaced by a Rust data-plane candidate."
+        ),
+        "command": [
+            "python3",
+            "scripts/benchmark_stage09_realtime.py",
+            "--output",
+            report_path,
+            "--summary-output",
+            summary_path,
+        ],
+        "required_outputs": [
+            report_path,
+            summary_path,
+        ],
+        "required_report_fields": [
+            "schema",
+            "execution_profile",
+            "resource_guard",
+            "runtime_observation",
+            "benchmark_contract",
+            "verification_contract",
+            "determinism_profile",
+            "latency_budget_profile",
+            "input_provenance",
+            "metrics.telemetry_sample_rate_hz",
+            "metrics.p95_alert_latency_ms",
+            "metrics.p95_replay_query_latency_ms",
+            "metrics.dropped_event_count",
+            "target_results.checks",
+            "baseline_verdict",
+            "runtime_boundary",
+        ],
+        "allowed_run_variant_fields": [
+            "generated_at",
+            "metrics.p95_alert_latency_ms",
+            "metrics.p95_replay_query_latency_ms",
+            "target_results.checks.p95_alert_latency_ms.observed",
+            "target_results.checks.p95_replay_query_latency_ms.observed",
+            "latency_budget_profile.observed_p95_ms.alert_evaluation",
+            "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+            "runtime_observation.duration_ms",
+            "runtime_observation.within_expected_runtime",
+        ],
+        "resource_expectations": {
+            "worker_processes": 1,
+            "max_expected_runtime_seconds": 30,
+            "max_expected_memory_mb": 512,
+            "uses_network": False,
+            "uses_paid_services": False,
+        },
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
 
 
@@ -708,6 +782,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
     runtime_observation = summary["runtime_observation"]
+    verification_contract = summary["verification_contract"]
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
@@ -718,6 +793,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     run_specific_fields = ", ".join(comparison_profile["run_specific_fields"])
     compatibility_requirements = "; ".join(
         comparison_profile["compatibility_requirements"]
+    )
+    verification_command = " ".join(verification_contract["command"])
+    verification_outputs = ", ".join(verification_contract["required_outputs"])
+    verification_fields = ", ".join(verification_contract["required_report_fields"])
+    allowed_run_variant_fields = ", ".join(
+        verification_contract["allowed_run_variant_fields"]
     )
 
     rows = [
@@ -773,6 +854,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Max expected runtime: `{runtime_observation['max_expected_runtime_seconds']} seconds`\n"
         f"- Within expected runtime: `{runtime_observation['within_expected_runtime']}`\n"
         f"- Worker processes observed: `{runtime_observation['worker_processes_observed']}`\n\n"
+        "## Verification Contract\n\n"
+        f"- Command: `{verification_command}`\n"
+        f"- Required outputs: `{verification_outputs}`\n"
+        f"- Required report fields: `{verification_fields}`\n"
+        f"- Allowed run-variant fields: `{allowed_run_variant_fields}`\n"
+        f"- Rust scope: `{verification_contract['rust_scope']}`\n\n"
         "## Determinism Profile\n\n"
         f"- Workload identity: `{determinism_profile['workload_identity']}`\n"
         f"- Stable inputs: `{', '.join(determinism_profile['stable_inputs'].keys())}`\n"

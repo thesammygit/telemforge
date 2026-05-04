@@ -72,6 +72,40 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 contract["schema"],
                 "telemforge.stage09_realtime_benchmark_contract.v1",
             )
+            verification_contract = summary["verification_contract"]
+            self.assertEqual(
+                verification_contract["schema"],
+                "telemforge.stage09_baseline_verification_contract.v1",
+            )
+            self.assertEqual(
+                verification_contract["command"],
+                [
+                    "python3",
+                    "scripts/benchmark_stage09_realtime.py",
+                    "--output",
+                    "docs/development/artifacts/stage09-realtime-baseline/"
+                    "stage09-baseline-report.json",
+                    "--summary-output",
+                    "docs/development/artifacts/stage09-realtime-baseline/"
+                    "stage09-baseline-summary.md",
+                ],
+            )
+            self.assertIn(
+                "metrics.dropped_event_count",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
+                "runtime_observation.duration_ms",
+                verification_contract["allowed_run_variant_fields"],
+            )
+            self.assertEqual(
+                verification_contract["resource_expectations"]["worker_processes"],
+                1,
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                verification_contract["rust_scope"],
+            )
             comparison_profile = summary["comparison_profile"]
             self.assertEqual(
                 comparison_profile["schema"],
@@ -103,6 +137,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "input_provenance.telemetry_catalog_sha256",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "verification_contract",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -321,6 +359,11 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("## Runtime Observation", summary_text)
             self.assertIn("- Within expected runtime: `True`", summary_text)
             self.assertIn("- Worker processes observed: `1`", summary_text)
+            self.assertIn("## Verification Contract", summary_text)
+            self.assertIn("scripts/benchmark_stage09_realtime.py", summary_text)
+            self.assertIn("stage09-baseline-report.json", summary_text)
+            self.assertIn("metrics.dropped_event_count", summary_text)
+            self.assertIn("data-plane candidate only", summary_text)
             self.assertIn("## Determinism Profile", summary_text)
             self.assertIn(
                 "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
@@ -414,6 +457,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["comparison_profile"]["schema"],
                 "telemforge.stage09_realtime_comparison_profile.v1",
+            )
+            self.assertEqual(
+                report["verification_contract"]["schema"],
+                "telemforge.stage09_baseline_verification_contract.v1",
+            )
+            self.assertIn(
+                "target_results.checks",
+                report["verification_contract"]["required_report_fields"],
             )
             self.assertEqual(
                 report["determinism_profile"]["workload_identity"],

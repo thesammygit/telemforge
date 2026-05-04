@@ -14,6 +14,7 @@ queries.
   comparison results with gap-to-target values, benchmark execution profile,
   local resource-guard provenance, benchmark contract metadata, a comparison
   profile that separates stable fields from run-specific timing values, a
+  verification contract that pins the rerun command and required report fields, a
   determinism profile with the stable workload identity, a latency budget
   profile for alert/replay headroom, a runtime observation that confirms the
   bounded command stayed inside the expected local runtime envelope, input
@@ -71,6 +72,12 @@ into a heavy load test.
 The `comparison_profile` block identifies which fields are stable enough for
 Python/Rust runtime comparison and which fields, such as generated timestamps
 and p95 latency observations, are expected to vary between bounded local runs.
+
+The `verification_contract` block pins the safe rerun command, expected JSON and
+Markdown output paths, required report fields, local resource expectations, and
+allowed run-variant timing fields. It keeps future Python/FastAPI baseline
+refreshes and narrow Rust data-plane candidates tied to the same public evidence
+shape.
 
 The `determinism_profile` block names the stable workload identity, seed,
 scenario, sample window inputs, and run-variant timing fields. A future Rust
