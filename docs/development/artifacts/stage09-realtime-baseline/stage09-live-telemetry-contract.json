@@ -1,0 +1,155 @@
+{
+  "schema": "telemforge.stage09_live_telemetry_contract.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "implementation_status": "contract_only_no_runtime_fanout",
+  "purpose": "Define the websocket/live telemetry stream contract before adding full runtime fanout.",
+  "endpoint": {
+    "protocol": "websocket",
+    "path": "/sessions/{session_id}/telemetry/live",
+    "session_id_source": "existing session resource from POST /sessions",
+    "startup_snapshot": true
+  },
+  "control_plane_inputs": {
+    "session_route": "/sessions/{session_id}",
+    "telemetry_history_route": "/sessions/{session_id}/telemetry",
+    "alert_route": "/sessions/{session_id}/alerts",
+    "channel_catalog": "fixtures/telemetry/channels.json"
+  },
+  "message_envelope": {
+    "required_fields": [
+      "type",
+      "session_id",
+      "sequence",
+      "emitted_at",
+      "payload"
+    ],
+    "sequence": {
+      "scope": "per session stream",
+      "starts_at": 1,
+      "monotonic": true
+    },
+    "timestamp_format": "UTC ISO-8601 with trailing Z"
+  },
+  "message_types": [
+    {
+      "type": "stream.snapshot",
+      "when": "sent once after the connection is accepted",
+      "payload_required_fields": [
+        "channels",
+        "latest_points",
+        "active_alerts"
+      ],
+      "payload_notes": "latest_points and active_alerts reuse the existing Stage 02 telemetry point and alert record shapes."
+    },
+    {
+      "type": "telemetry.sample",
+      "when": "sent for each live telemetry point admitted to the stream",
+      "payload_required_fields": [
+        "channel_id",
+        "timestamp",
+        "value",
+        "unit",
+        "status",
+        "quality",
+        "sequence"
+      ],
+      "status_values": [
+        "nominal",
+        "warning",
+        "critical",
+        "offline"
+      ],
+      "quality_values": [
+        "valid",
+        "suspect",
+        "missing"
+      ]
+    },
+    {
+      "type": "alert.raised",
+      "when": "sent when alert evaluation creates a new active alert",
+      "payload_required_fields": [
+        "alert_id",
+        "timestamp",
+        "channel_id",
+        "severity",
+        "state",
+        "message",
+        "observed_value",
+        "threshold",
+        "recommended_action"
+      ]
+    },
+    {
+      "type": "stream.heartbeat",
+      "when": "sent when no telemetry or alert message has been emitted during the heartbeat interval",
+      "payload_required_fields": [
+        "stream_time",
+        "last_sequence"
+      ],
+      "interval_seconds": 5
+    },
+    {
+      "type": "stream.backpressure",
+      "when": "sent before the server drops queued messages for a slow client",
+      "payload_required_fields": [
+        "policy",
+        "client_queue_depth",
+        "dropped_event_count"
+      ],
+      "policy": "drop_oldest_and_report"
+    }
+  ],
+  "reconnect": {
+    "resume_token_field": "last_sequence",
+    "client_query_parameter": "after_sequence",
+    "server_behavior": "replay available retained messages after after_sequence, then continue live delivery",
+    "out_of_window_behavior": "send stream.snapshot before resuming live delivery"
+  },
+  "backpressure": {
+    "max_client_queue_events": 250,
+    "overflow_behavior": "drop_oldest_and_report",
+    "dropped_event_count_source": "stream.backpressure.payload.dropped_event_count"
+  },
+  "benchmark_binding": {
+    "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "baseline_report_schema": "telemforge.stage09_realtime_baseline.v1",
+    "required_report_metrics": [
+      "telemetry_sample_rate_hz",
+      "p95_alert_latency_ms",
+      "p95_replay_query_latency_ms",
+      "dropped_event_count"
+    ],
+    "single_client_smoke": "The Stage 09 benchmark must keep dropped_event_count visible before any Rust data-plane replacement."
+  },
+  "runtime_boundary": {
+    "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
+    "python_control_plane": [
+      "session lifecycle",
+      "operator-facing API orchestration",
+      "local review and fixture workflows"
+    ],
+    "rust_data_plane_candidates": [
+      "telemetry ingest and validation",
+      "stream fanout, reconnect, and backpressure",
+      "alert and anomaly hot-path evaluation"
+    ]
+  },
+  "examples": {
+    "nominal_sample": {
+      "type": "telemetry.sample",
+      "session_id": "session-stage09-example",
+      "sequence": 42,
+      "emitted_at": "2026-05-03T16:00:04Z",
+      "payload": {
+        "channel_id": "eps.battery_voltage",
+        "timestamp": "2026-05-03T16:00:04Z",
+        "value": 29.8,
+        "unit": "V",
+        "status": "nominal",
+        "quality": "valid",
+        "sequence": 4
+      }
+    }
+  }
+}

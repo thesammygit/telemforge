@@ -89,6 +89,11 @@ The generated JSON report and Markdown summary are a Python/FastAPI
 control-plane baseline. They keep Rust tracked as the future data-plane
 direction for hot paths, not as a whole-project rewrite.
 
+The companion contract artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json`
+defines the websocket/live telemetry envelope, reconnect token, backpressure
+policy, and dropped-event reporting shape before runtime fanout is implemented.
+
 ## Test Preference
 
 Favor:

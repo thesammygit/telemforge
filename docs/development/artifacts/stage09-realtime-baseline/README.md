@@ -16,12 +16,17 @@ queries.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
+- `stage09-live-telemetry-contract.json`: static websocket/live telemetry
+  contract for the next stream slice. It defines the message envelope,
+  snapshot/sample/alert/heartbeat/backpressure message types, reconnect
+  behavior, and benchmark binding without adding runtime fanout yet.
 
 ## Inspect
 
 ```text
 python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
+python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -38,3 +43,8 @@ path. The `execution_profile` block makes the client count, process model,
 resource scope, measured paths, and deferred websocket/reconnect/backpressure
 paths explicit so future results are not compared against a different workload
 shape by accident.
+
+The live telemetry contract is intentionally contract-only. It keeps the
+websocket path, reconnect token, backpressure policy, and dropped-event reporting
+shape reviewable before any Python fanout implementation or narrow Rust
+data-plane candidate is introduced.
