@@ -182,6 +182,7 @@ def run_stage09_realtime_baseline(
             per_channel_sample_rate_hz=per_channel_sample_rate_hz,
             aggregate_sample_rate_hz=aggregate_sample_rate_hz,
         ),
+        "measurement_boundary": _measurement_boundary(),
         "resource_guard": resource_guard,
         "runtime_observation": runtime_observation,
         "benchmark_contract": _benchmark_contract(),
@@ -444,6 +445,7 @@ def _comparison_profile() -> dict[str, Any]:
             "resource_guard.uses_paid_services",
             "benchmark_contract",
             "verification_contract",
+            "measurement_boundary",
             "run_variant_policy",
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
@@ -530,6 +532,7 @@ def _verification_contract() -> dict[str, Any]:
             "runtime_observation",
             "benchmark_contract",
             "verification_contract",
+            "measurement_boundary",
             "determinism_profile",
             "latency_budget_profile",
             "run_variant_policy",
@@ -776,6 +779,35 @@ def _execution_profile(
     }
 
 
+def _measurement_boundary() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_measurement_boundary.v1",
+        "purpose": (
+            "Prevent the Python/FastAPI baseline from being treated as "
+            "evidence for realtime stream paths that are still contract-only."
+        ),
+        "baseline_claim": "bounded Python/FastAPI control-plane comparison baseline",
+        "measured_now": [
+            "simulation write through the FastAPI control plane",
+            "manual fault alert evaluation",
+            "bounded replay query",
+            "dropped-event accounting from bounded replay coverage",
+        ],
+        "not_measured_yet": [
+            "websocket stream fanout",
+            "client reconnect resume",
+            "backpressure behavior under slow-client queues",
+            "multi-client delivery",
+        ],
+        "future_evidence_required": (
+            "A Rust data-plane candidate must emit a compatible benchmark "
+            "report and separately prove any websocket, reconnect, or "
+            "backpressure claim before replacing a Python hot path."
+        ),
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    }
+
+
 def _baseline_verdict(target_results: dict[str, Any]) -> dict[str, Any]:
     missed_targets = target_results["missed_targets"]
     passed_targets = [
@@ -952,6 +984,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
     runtime_observation = summary["runtime_observation"]
+    measurement_boundary = summary["measurement_boundary"]
     verification_contract = summary["verification_contract"]
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
@@ -1033,6 +1066,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Max expected runtime: `{runtime_observation['max_expected_runtime_seconds']} seconds`\n"
         f"- Within expected runtime: `{runtime_observation['within_expected_runtime']}`\n"
         f"- Worker processes observed: `{runtime_observation['worker_processes_observed']}`\n\n"
+        "## Measurement Boundary\n\n"
+        f"- Baseline claim: `{measurement_boundary['baseline_claim']}`\n"
+        f"- Measured now: `{', '.join(measurement_boundary['measured_now'])}`\n"
+        f"- Not measured yet: `{', '.join(measurement_boundary['not_measured_yet'])}`\n"
+        f"- Future evidence required: `{measurement_boundary['future_evidence_required']}`\n"
+        f"- Rust scope: `{measurement_boundary['rust_scope']}`\n\n"
         "## Verification Contract\n\n"
         f"- Command: `{verification_command}`\n"
         f"- Required outputs: `{verification_outputs}`\n"

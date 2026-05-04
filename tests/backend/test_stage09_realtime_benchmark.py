@@ -59,6 +59,31 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(runtime_observation["max_expected_runtime_seconds"], 30)
             self.assertTrue(runtime_observation["within_expected_runtime"])
             self.assertEqual(runtime_observation["worker_processes_observed"], 1)
+            measurement_boundary = summary["measurement_boundary"]
+            self.assertEqual(
+                measurement_boundary["schema"],
+                "telemforge.stage09_measurement_boundary.v1",
+            )
+            self.assertEqual(
+                measurement_boundary["baseline_claim"],
+                "bounded Python/FastAPI control-plane comparison baseline",
+            )
+            self.assertIn(
+                "dropped-event accounting from bounded replay coverage",
+                measurement_boundary["measured_now"],
+            )
+            self.assertIn(
+                "websocket stream fanout",
+                measurement_boundary["not_measured_yet"],
+            )
+            self.assertIn(
+                "backpressure claim",
+                measurement_boundary["future_evidence_required"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                measurement_boundary["rust_scope"],
+            )
             self.assertEqual(
                 execution_profile["load_shape"]["aggregate_sample_rate_hz"],
                 10.0,
@@ -92,6 +117,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "metrics.dropped_event_count",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
+                "measurement_boundary",
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
@@ -190,6 +219,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "verification_contract",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "measurement_boundary",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -496,6 +529,13 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("## Runtime Observation", summary_text)
             self.assertIn("- Within expected runtime: `True`", summary_text)
             self.assertIn("- Worker processes observed: `1`", summary_text)
+            self.assertIn("## Measurement Boundary", summary_text)
+            self.assertIn(
+                "bounded Python/FastAPI control-plane comparison baseline",
+                summary_text,
+            )
+            self.assertIn("websocket stream fanout", summary_text)
+            self.assertIn("backpressure claim", summary_text)
             self.assertIn("## Verification Contract", summary_text)
             self.assertIn("scripts/benchmark_stage09_realtime.py", summary_text)
             self.assertIn("stage09-baseline-report.json", summary_text)
@@ -624,6 +664,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["comparison_profile"]["schema"],
                 "telemforge.stage09_realtime_comparison_profile.v1",
+            )
+            self.assertEqual(
+                report["measurement_boundary"]["schema"],
+                "telemforge.stage09_measurement_boundary.v1",
             )
             self.assertEqual(
                 report["verification_contract"]["schema"],

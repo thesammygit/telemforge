@@ -81,6 +81,7 @@
       "resource_guard.uses_paid_services",
       "benchmark_contract",
       "verification_contract",
+      "measurement_boundary",
       "run_variant_policy",
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
@@ -144,7 +145,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T11:03:35Z",
+  "generated_at": "2026-05-04T22:45:06Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -162,20 +163,39 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.916,
-      "bounded_replay_query": 3.412
+      "alert_evaluation": 2.493,
+      "bounded_replay_query": 2.873
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.084,
-      "bounded_replay_query": 496.588
+      "alert_evaluation": 47.507,
+      "bounded_replay_query": 497.127
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
+  "measurement_boundary": {
+    "baseline_claim": "bounded Python/FastAPI control-plane comparison baseline",
+    "future_evidence_required": "A Rust data-plane candidate must emit a compatible benchmark report and separately prove any websocket, reconnect, or backpressure claim before replacing a Python hot path.",
+    "measured_now": [
+      "simulation write through the FastAPI control plane",
+      "manual fault alert evaluation",
+      "bounded replay query",
+      "dropped-event accounting from bounded replay coverage"
+    ],
+    "not_measured_yet": [
+      "websocket stream fanout",
+      "client reconnect resume",
+      "backpressure behavior under slow-client queues",
+      "multi-client delivery"
+    ],
+    "purpose": "Prevent the Python/FastAPI baseline from being treated as evidence for realtime stream paths that are still contract-only.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_measurement_boundary.v1"
+  },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.916,
-    "p95_replay_query_latency_ms": 3.412,
+    "p95_alert_latency_ms": 2.493,
+    "p95_replay_query_latency_ms": 2.873,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -278,7 +298,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 57.402,
+    "duration_ms": 52.142,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -369,7 +389,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.916,
+        "observed": 2.493,
         "target": 50,
         "unit": "ms"
       },
@@ -377,7 +397,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.412,
+        "observed": 2.873,
         "target": 500,
         "unit": "ms"
       },
@@ -437,6 +457,7 @@
       "runtime_observation",
       "benchmark_contract",
       "verification_contract",
+      "measurement_boundary",
       "determinism_profile",
       "latency_budget_profile",
       "run_variant_policy",

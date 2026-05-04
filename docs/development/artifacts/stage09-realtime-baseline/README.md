@@ -12,8 +12,10 @@ queries.
   sample rate, per-channel sample rate, p95 alert latency, p95 replay query
   latency, dropped-event count, deterministic sample-window metadata, target
   comparison results with gap-to-target values, benchmark execution profile,
-  local resource-guard provenance, benchmark contract metadata, a comparison
-  profile that separates stable fields from run-specific timing values, a
+  a measurement boundary that separates measured control-plane paths from
+  websocket/reconnect/backpressure paths that are still contract-only, local
+  resource-guard provenance, benchmark contract metadata, a comparison profile
+  that separates stable fields from run-specific timing values, a
   verification contract that pins the rerun command and required report fields, a
   run-variant policy that gates Python/Rust comparisons on stable identity
   fields while allowing local timing variance, a
@@ -58,6 +60,12 @@ path. The `execution_profile` block makes the client count, process model,
 resource scope, measured paths, and deferred websocket/reconnect/backpressure
 paths explicit so future results are not compared against a different workload
 shape by accident.
+
+The `measurement_boundary` block records exactly which paths the current
+Python/FastAPI baseline measures and which realtime stream claims remain
+unproven. Future Rust data-plane candidates must emit compatible benchmark
+evidence and separately prove websocket, reconnect, or backpressure behavior
+before replacing any Python hot path.
 
 The live telemetry contract is intentionally contract-only. It keeps the
 websocket path, reconnect token, backpressure policy, and dropped-event reporting
