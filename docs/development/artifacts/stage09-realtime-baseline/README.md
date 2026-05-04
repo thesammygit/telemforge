@@ -19,6 +19,8 @@ queries.
   verification contract that pins the rerun command and required report fields, a
   run-variant policy that gates Python/Rust comparisons on stable identity
   fields while allowing local timing variance, a
+  stream contract profile that binds the report to the websocket contract
+  without claiming runtime fanout,
   determinism profile with the stable workload identity, a latency budget
   profile for alert/replay headroom, a runtime observation that confirms the
   bounded command stayed inside the expected local runtime envelope, input
@@ -71,6 +73,12 @@ The live telemetry contract is intentionally contract-only. It keeps the
 websocket path, reconnect token, backpressure policy, and dropped-event reporting
 shape reviewable before any Python fanout implementation or narrow Rust
 data-plane candidate is introduced.
+
+The `stream_contract_profile` block binds the generated benchmark report to the
+contract-only websocket artifact. It lists the live evidence still required
+before TelemForge can claim runtime stream fanout: connection acceptance,
+startup snapshot delivery, monotonic stream sequence values, reconnect resume,
+backpressure reporting, and dropped-event accounting from stream messages.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

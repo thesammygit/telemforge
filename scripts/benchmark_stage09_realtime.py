@@ -188,6 +188,7 @@ def run_stage09_realtime_baseline(
         "benchmark_contract": _benchmark_contract(),
         "verification_contract": _verification_contract(),
         "run_variant_policy": _run_variant_policy(),
+        "stream_contract_profile": _stream_contract_profile(),
         "input_provenance": _input_provenance(channel_count),
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
@@ -446,6 +447,7 @@ def _comparison_profile() -> dict[str, Any]:
             "benchmark_contract",
             "verification_contract",
             "measurement_boundary",
+            "stream_contract_profile",
             "run_variant_policy",
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
@@ -533,6 +535,7 @@ def _verification_contract() -> dict[str, Any]:
             "benchmark_contract",
             "verification_contract",
             "measurement_boundary",
+            "stream_contract_profile",
             "determinism_profile",
             "latency_budget_profile",
             "run_variant_policy",
@@ -612,6 +615,48 @@ def _run_variant_policy() -> dict[str, Any]:
             "match or the candidate explicitly documents a versioned workload "
             "change."
         ),
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    }
+
+
+def _stream_contract_profile() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_stream_contract_profile.v1",
+        "purpose": (
+            "Bind the bounded Python/FastAPI baseline to the live telemetry "
+            "contract without claiming websocket runtime fanout is implemented."
+        ),
+        "contract_artifact": (
+            "docs/development/artifacts/stage09-realtime-baseline/"
+            "stage09-live-telemetry-contract.json"
+        ),
+        "implementation_status": "contract_only_no_runtime_fanout",
+        "endpoint": {
+            "protocol": "websocket",
+            "path": "/sessions/{session_id}/telemetry/live",
+            "startup_snapshot_required": True,
+        },
+        "required_live_evidence_before_runtime_claim": [
+            "websocket connection acceptance for an existing session",
+            "startup snapshot emitted before incremental telemetry samples",
+            "monotonic per-session stream sequence values",
+            "after_sequence reconnect resume behavior",
+            "drop_oldest_and_report backpressure behavior",
+            "dropped_event_count reported from stream.backpressure payloads",
+        ],
+        "baseline_binding": {
+            "report_schema": "telemforge.stage09_realtime_baseline.v1",
+            "required_metrics": [
+                "telemetry_sample_rate_hz",
+                "p95_alert_latency_ms",
+                "p95_replay_query_latency_ms",
+                "dropped_event_count",
+            ],
+            "current_evidence": (
+                "The current benchmark measures control-plane simulation, "
+                "alert, replay, and dropped-event accounting only."
+            ),
+        },
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
 
@@ -986,6 +1031,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     runtime_observation = summary["runtime_observation"]
     measurement_boundary = summary["measurement_boundary"]
     verification_contract = summary["verification_contract"]
+    stream_contract_profile = summary["stream_contract_profile"]
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
@@ -1005,6 +1051,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     verification_fields = ", ".join(verification_contract["required_report_fields"])
     allowed_run_variant_fields = ", ".join(
         verification_contract["allowed_run_variant_fields"]
+    )
+    required_live_evidence = ", ".join(
+        stream_contract_profile["required_live_evidence_before_runtime_claim"]
+    )
+    stream_required_metrics = ", ".join(
+        stream_contract_profile["baseline_binding"]["required_metrics"]
     )
     run_variant_stable_fields = ", ".join(
         run_variant_policy["stable_identity_fields"]
@@ -1072,6 +1124,15 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Not measured yet: `{', '.join(measurement_boundary['not_measured_yet'])}`\n"
         f"- Future evidence required: `{measurement_boundary['future_evidence_required']}`\n"
         f"- Rust scope: `{measurement_boundary['rust_scope']}`\n\n"
+        "## Stream Contract Profile\n\n"
+        f"- Contract artifact: `{stream_contract_profile['contract_artifact']}`\n"
+        f"- Implementation status: `{stream_contract_profile['implementation_status']}`\n"
+        f"- Endpoint: `{stream_contract_profile['endpoint']['protocol']} "
+        f"{stream_contract_profile['endpoint']['path']}`\n"
+        f"- Required live evidence before runtime claim: `{required_live_evidence}`\n"
+        f"- Required baseline metrics: `{stream_required_metrics}`\n"
+        f"- Current evidence: `{stream_contract_profile['baseline_binding']['current_evidence']}`\n"
+        f"- Rust scope: `{stream_contract_profile['rust_scope']}`\n\n"
         "## Verification Contract\n\n"
         f"- Command: `{verification_command}`\n"
         f"- Required outputs: `{verification_outputs}`\n"

@@ -132,6 +132,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "stream_contract_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "runtime_observation.duration_ms",
                 verification_contract["allowed_run_variant_fields"],
             )
@@ -230,6 +234,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
+                "stream_contract_profile",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
                 "Keep determinism_profile.workload_identity unchanged",
                 comparison_profile["compatibility_requirements"][3],
             )
@@ -274,6 +282,37 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     "telemetry_catalog_bytes": len(catalog_bytes),
                     "channel_count": 10,
                 },
+            )
+            stream_contract_profile = summary["stream_contract_profile"]
+            self.assertEqual(
+                stream_contract_profile["schema"],
+                "telemforge.stage09_stream_contract_profile.v1",
+            )
+            self.assertEqual(
+                stream_contract_profile["implementation_status"],
+                "contract_only_no_runtime_fanout",
+            )
+            self.assertEqual(
+                stream_contract_profile["endpoint"]["path"],
+                "/sessions/{session_id}/telemetry/live",
+            )
+            self.assertIn(
+                "stage09-live-telemetry-contract.json",
+                stream_contract_profile["contract_artifact"],
+            )
+            self.assertIn(
+                "after_sequence reconnect resume behavior",
+                stream_contract_profile[
+                    "required_live_evidence_before_runtime_claim"
+                ],
+            )
+            self.assertIn(
+                "dropped_event_count",
+                stream_contract_profile["baseline_binding"]["required_metrics"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                stream_contract_profile["rust_scope"],
             )
             self.assertIn(
                 "metrics.p95_alert_latency_ms",
@@ -536,6 +575,11 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn("websocket stream fanout", summary_text)
             self.assertIn("backpressure claim", summary_text)
+            self.assertIn("## Stream Contract Profile", summary_text)
+            self.assertIn("stage09-live-telemetry-contract.json", summary_text)
+            self.assertIn("contract_only_no_runtime_fanout", summary_text)
+            self.assertIn("after_sequence reconnect resume behavior", summary_text)
+            self.assertIn("Required baseline metrics", summary_text)
             self.assertIn("## Verification Contract", summary_text)
             self.assertIn("scripts/benchmark_stage09_realtime.py", summary_text)
             self.assertIn("stage09-baseline-report.json", summary_text)
@@ -684,6 +728,18 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "run_variant_policy",
                 report["verification_contract"]["required_report_fields"],
+            )
+            self.assertIn(
+                "stream_contract_profile",
+                report["verification_contract"]["required_report_fields"],
+            )
+            self.assertEqual(
+                report["stream_contract_profile"]["schema"],
+                "telemforge.stage09_stream_contract_profile.v1",
+            )
+            self.assertEqual(
+                report["stream_contract_profile"]["implementation_status"],
+                "contract_only_no_runtime_fanout",
             )
             self.assertEqual(
                 report["determinism_profile"]["workload_identity"],

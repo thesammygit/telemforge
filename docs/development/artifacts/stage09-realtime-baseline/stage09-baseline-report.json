@@ -82,6 +82,7 @@
       "benchmark_contract",
       "verification_contract",
       "measurement_boundary",
+      "stream_contract_profile",
       "run_variant_policy",
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
@@ -145,7 +146,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T22:45:06Z",
+  "generated_at": "2026-05-04T23:32:43Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -163,13 +164,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.493,
-      "bounded_replay_query": 2.873
+      "alert_evaluation": 2.683,
+      "bounded_replay_query": 2.976
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.507,
-      "bounded_replay_query": 497.127
+      "alert_evaluation": 47.317,
+      "bounded_replay_query": 497.024
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -194,8 +195,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.493,
-    "p95_replay_query_latency_ms": 2.873,
+    "p95_alert_latency_ms": 2.683,
+    "p95_replay_query_latency_ms": 2.976,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -298,7 +299,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 52.142,
+    "duration_ms": 51.486,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -307,6 +308,36 @@
   },
   "schema": "telemforge.stage09_realtime_baseline.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
+  "stream_contract_profile": {
+    "baseline_binding": {
+      "current_evidence": "The current benchmark measures control-plane simulation, alert, replay, and dropped-event accounting only.",
+      "report_schema": "telemforge.stage09_realtime_baseline.v1",
+      "required_metrics": [
+        "telemetry_sample_rate_hz",
+        "p95_alert_latency_ms",
+        "p95_replay_query_latency_ms",
+        "dropped_event_count"
+      ]
+    },
+    "contract_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "endpoint": {
+      "path": "/sessions/{session_id}/telemetry/live",
+      "protocol": "websocket",
+      "startup_snapshot_required": true
+    },
+    "implementation_status": "contract_only_no_runtime_fanout",
+    "purpose": "Bind the bounded Python/FastAPI baseline to the live telemetry contract without claiming websocket runtime fanout is implemented.",
+    "required_live_evidence_before_runtime_claim": [
+      "websocket connection acceptance for an existing session",
+      "startup snapshot emitted before incremental telemetry samples",
+      "monotonic per-session stream sequence values",
+      "after_sequence reconnect resume behavior",
+      "drop_oldest_and_report backpressure behavior",
+      "dropped_event_count reported from stream.backpressure payloads"
+    ],
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_stream_contract_profile.v1"
+  },
   "target_profile": {
     "baseline_status": "comparison_baseline_not_realtime_claim",
     "metric_targets": {
@@ -389,7 +420,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.493,
+        "observed": 2.683,
         "target": 50,
         "unit": "ms"
       },
@@ -397,7 +428,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.873,
+        "observed": 2.976,
         "target": 500,
         "unit": "ms"
       },
@@ -458,6 +489,7 @@
       "benchmark_contract",
       "verification_contract",
       "measurement_boundary",
+      "stream_contract_profile",
       "determinism_profile",
       "latency_budget_profile",
       "run_variant_policy",
