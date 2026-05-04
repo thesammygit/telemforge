@@ -12,7 +12,8 @@ queries.
   sample rate, per-channel sample rate, p95 alert latency, p95 replay query
   latency, dropped-event count, deterministic sample-window metadata, target
   comparison results with gap-to-target values, benchmark execution profile,
-  benchmark contract metadata, and the tracked Rust data-plane boundary.
+  local resource-guard provenance, benchmark contract metadata, and the tracked
+  Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -51,6 +52,11 @@ The live telemetry contract is intentionally contract-only. It keeps the
 websocket path, reconnect token, backpressure policy, and dropped-event reporting
 shape reviewable before any Python fanout implementation or narrow Rust
 data-plane candidate is introduced.
+
+The `resource_guard` block in the baseline report is part of the comparison
+contract. It records that the run is serial, local, network-free, paid-service
+free, and expected to stay within the automation safety envelope, so future Rust
+data-plane runs do not win by changing the workload shape.
 
 The Rust data-plane boundary note is also intentionally pre-implementation. It
 keeps the first Rust spike constrained to a measured hot path, with the existing

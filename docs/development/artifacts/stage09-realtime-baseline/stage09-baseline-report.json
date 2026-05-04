@@ -5,7 +5,8 @@
       "Use the same scenario, seed, sample count, and step interval before comparing runtime implementations.",
       "Treat generated_at and latency values as run-specific; workload, targets, and contract fields are stable.",
       "A Rust data-plane candidate should emit this report shape, including gap-to-target values, before replacing a Python hot path.",
-      "Keep execution_profile fields explicit so future Rust results are not compared against a different client/process/load shape."
+      "Keep execution_profile fields explicit so future Rust results are not compared against a different client/process/load shape.",
+      "Preserve resource_guard fields so future runs stay comparable and inside the local automation safety envelope."
     ],
     "measurement_method": {
       "alert_latency": "elapsed wall-clock time around manual fault POST requests, summarized as nearest-rank p95",
@@ -51,12 +52,12 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T01:02:52Z",
+  "generated_at": "2026-05-04T01:52:54Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.335,
-    "p95_replay_query_latency_ms": 3.254,
+    "p95_alert_latency_ms": 2.621,
+    "p95_replay_query_latency_ms": 2.916,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -66,6 +67,20 @@
     "It measures the current Python/FastAPI path to make future Rust migration evidence-driven.",
     "Dropped events are measured as bounded replay rows missing from the local synthetic workload."
   ],
+  "resource_guard": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "policy": "bounded local smoke under the TelemForge automation resource guard",
+    "schema": "telemforge.stage09_resource_guard.v1",
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1,
+    "writes": [
+      "optional local SQLite benchmark database",
+      "optional JSON report when --output is provided",
+      "optional Markdown summary when --summary-output is provided"
+    ]
+  },
   "runtime_boundary": {
     "python_control_plane": [
       "API orchestration",
@@ -114,7 +129,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.335,
+        "observed": 2.621,
         "target": 50,
         "unit": "ms"
       },
@@ -122,7 +137,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.254,
+        "observed": 2.916,
         "target": 500,
         "unit": "ms"
       },

@@ -39,6 +39,16 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 execution_profile["resource_scope"],
                 "bounded local smoke, no worker fan-out",
             )
+            resource_guard = summary["resource_guard"]
+            self.assertEqual(
+                resource_guard["schema"],
+                "telemforge.stage09_resource_guard.v1",
+            )
+            self.assertEqual(resource_guard["worker_processes"], 1)
+            self.assertEqual(resource_guard["max_expected_runtime_seconds"], 30)
+            self.assertEqual(resource_guard["max_expected_memory_mb"], 512)
+            self.assertFalse(resource_guard["uses_network"])
+            self.assertFalse(resource_guard["uses_paid_services"])
             self.assertEqual(
                 execution_profile["load_shape"]["aggregate_sample_rate_hz"],
                 10.0,
@@ -70,6 +80,7 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "Rust data-plane candidate",
                 contract["comparability_rules"][3],
             )
+            self.assertIn("resource_guard", contract["comparability_rules"][5])
             self.assertEqual(summary["workload"]["channel_count"], 10)
             self.assertEqual(summary["workload"]["samples_per_channel"], 10)
             self.assertEqual(summary["workload"]["per_channel_sample_rate_hz"], 1.0)
@@ -154,6 +165,9 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn("- Client count: `1`", summary_text)
             self.assertIn("websocket stream fanout", summary_text)
+            self.assertIn("## Resource Guard", summary_text)
+            self.assertIn("- Worker processes: `1`", summary_text)
+            self.assertIn("- Uses paid services: `False`", summary_text)
             self.assertIn(
                 "| Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |",
                 summary_text,
@@ -199,6 +213,8 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(report["schema"], "telemforge.stage09_realtime_baseline.v1")
             self.assertEqual(stdout_report["schema"], report["schema"])
             self.assertEqual(report["execution_profile"]["client_count"], 1)
+            self.assertEqual(report["resource_guard"]["worker_processes"], 1)
+            self.assertFalse(report["resource_guard"]["uses_network"])
             self.assertEqual(report["metrics"]["dropped_event_count"], 0)
             self.assertEqual(
                 report["target_results"]["checks"]["aggregate_sample_rate_hz"][

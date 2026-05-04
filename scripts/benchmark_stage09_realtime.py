@@ -175,6 +175,7 @@ def run_stage09_realtime_baseline(
             per_channel_sample_rate_hz=per_channel_sample_rate_hz,
             aggregate_sample_rate_hz=aggregate_sample_rate_hz,
         ),
+        "resource_guard": _resource_guard(),
         "benchmark_contract": _benchmark_contract(),
         "workload": workload,
         "metrics": metrics,
@@ -393,6 +394,10 @@ def _benchmark_contract() -> dict[str, Any]:
                 "Keep execution_profile fields explicit so future Rust results "
                 "are not compared against a different client/process/load shape."
             ),
+            (
+                "Preserve resource_guard fields so future runs stay comparable "
+                "and inside the local automation safety envelope."
+            ),
         ],
     }
 
@@ -426,6 +431,23 @@ def _execution_profile(
             "websocket stream fanout",
             "client reconnect behavior",
             "backpressure under multi-client load",
+        ],
+    }
+
+
+def _resource_guard() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_resource_guard.v1",
+        "policy": "bounded local smoke under the TelemForge automation resource guard",
+        "worker_processes": 1,
+        "max_expected_runtime_seconds": 30,
+        "max_expected_memory_mb": 512,
+        "uses_network": False,
+        "uses_paid_services": False,
+        "writes": [
+            "optional local SQLite benchmark database",
+            "optional JSON report when --output is provided",
+            "optional Markdown summary when --summary-output is provided",
         ],
     }
 
@@ -467,6 +489,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     checks = target_results["checks"]
     missed_targets = target_results["missed_targets"]
     execution_profile = summary["execution_profile"]
+    resource_guard = summary["resource_guard"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
 
     rows = [
@@ -511,6 +534,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Client count: `{execution_profile['client_count']}`\n"
         f"- Resource scope: `{execution_profile['resource_scope']}`\n"
         f"- Deferred paths: `{deferred_paths}`\n\n"
+        "## Resource Guard\n\n"
+        f"- Worker processes: `{resource_guard['worker_processes']}`\n"
+        f"- Max expected runtime: `{resource_guard['max_expected_runtime_seconds']} seconds`\n"
+        f"- Max expected memory: `{resource_guard['max_expected_memory_mb']} MB`\n"
+        f"- Uses network: `{resource_guard['uses_network']}`\n"
+        f"- Uses paid services: `{resource_guard['uses_paid_services']}`\n\n"
         "## Metrics\n\n"
         f"- Aggregate sample rate: `{metrics['telemetry_sample_rate_hz']} Hz`\n"
         f"- Per-channel sample rate: `{metrics['per_channel_sample_rate_hz']} Hz`\n"
