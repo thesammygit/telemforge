@@ -23,7 +23,8 @@
       "Treat generated_at and latency values as run-specific; workload, targets, and contract fields are stable.",
       "A Rust data-plane candidate should emit this report shape, including gap-to-target values, before replacing a Python hot path.",
       "Keep execution_profile fields explicit so future Rust results are not compared against a different client/process/load shape.",
-      "Preserve resource_guard fields so future runs stay comparable and inside the local automation safety envelope."
+      "Preserve resource_guard fields so future runs stay comparable and inside the local automation safety envelope.",
+      "Preserve determinism_profile.workload_identity for comparable baseline and Rust data-plane candidate runs."
     ],
     "measurement_method": {
       "alert_latency": "elapsed wall-clock time around manual fault POST requests, summarized as nearest-rank p95",
@@ -48,6 +49,7 @@
       "Use the same workload scenario, seed, sample count, and step interval.",
       "Keep execution_profile and resource_guard visible in every report.",
       "Report dropped_event_count explicitly for stream/backpressure comparisons.",
+      "Keep determinism_profile.workload_identity unchanged for comparable runs.",
       "Preserve the benchmark metric names before replacing any Python control-plane hot path with a Rust data-plane candidate."
     ],
     "purpose": "Separate stable report fields from run-specific timing and provenance before comparing Python/FastAPI and future Rust data-plane candidates.",
@@ -71,6 +73,8 @@
       "resource_guard.uses_network",
       "resource_guard.uses_paid_services",
       "benchmark_contract",
+      "determinism_profile.workload_identity",
+      "determinism_profile.stable_inputs",
       "workload.scenario",
       "workload.sample_window",
       "workload.samples_per_channel",
@@ -79,6 +83,27 @@
       "baseline_verdict",
       "runtime_boundary"
     ]
+  },
+  "determinism_profile": {
+    "comparison_rule": "Only compare runtime implementations when workload_identity and stable_inputs match; treat latency observations as run-specific.",
+    "purpose": "Declare which inputs define the comparable workload identity before Python/FastAPI and future Rust data-plane results are compared.",
+    "run_variant_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed"
+    ],
+    "schema": "telemforge.stage09_determinism_profile.v1",
+    "stable_inputs": {
+      "channel_count": 10,
+      "samples_per_channel": 10,
+      "scenario": "nominal-orbit-daylight",
+      "seed": 9090,
+      "start_at": "2026-05-03T16:00:00Z",
+      "step_seconds": 1
+    },
+    "workload_identity": "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s"
   },
   "execution_profile": {
     "client_count": 1,
@@ -106,12 +131,12 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T03:32:48Z",
+  "generated_at": "2026-05-04T04:22:56Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.695,
-    "p95_replay_query_latency_ms": 3.294,
+    "p95_alert_latency_ms": 3.33,
+    "p95_replay_query_latency_ms": 3.456,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -183,7 +208,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.695,
+        "observed": 3.33,
         "target": 50,
         "unit": "ms"
       },
@@ -191,7 +216,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.294,
+        "observed": 3.456,
         "target": 500,
         "unit": "ms"
       },

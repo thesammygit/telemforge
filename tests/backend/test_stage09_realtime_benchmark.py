@@ -79,6 +79,42 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "Report dropped_event_count explicitly",
                 comparison_profile["compatibility_requirements"][2],
             )
+            self.assertIn(
+                "determinism_profile.workload_identity",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "determinism_profile.stable_inputs",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "Keep determinism_profile.workload_identity unchanged",
+                comparison_profile["compatibility_requirements"][3],
+            )
+            determinism_profile = summary["determinism_profile"]
+            self.assertEqual(
+                determinism_profile["schema"],
+                "telemforge.stage09_determinism_profile.v1",
+            )
+            self.assertEqual(
+                determinism_profile["workload_identity"],
+                "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
+            )
+            self.assertEqual(
+                determinism_profile["stable_inputs"],
+                {
+                    "scenario": "nominal-orbit-daylight",
+                    "seed": 9090,
+                    "start_at": "2026-05-03T16:00:00Z",
+                    "channel_count": 10,
+                    "samples_per_channel": 10,
+                    "step_seconds": 1,
+                },
+            )
+            self.assertIn(
+                "metrics.p95_alert_latency_ms",
+                determinism_profile["run_variant_fields"],
+            )
             self.assertEqual(
                 contract["workload_generation"]["source"],
                 "Stage 02 telemetry channel catalog via the FastAPI "
@@ -214,8 +250,18 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("## Resource Guard", summary_text)
             self.assertIn("- Worker processes: `1`", summary_text)
             self.assertIn("- Uses paid services: `False`", summary_text)
+            self.assertIn("## Determinism Profile", summary_text)
+            self.assertIn(
+                "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
+                summary_text,
+            )
+            self.assertIn(
+                "Only compare runtime implementations when workload_identity",
+                summary_text,
+            )
             self.assertIn("## Comparison Profile", summary_text)
             self.assertIn("execution_profile.load_shape", summary_text)
+            self.assertIn("determinism_profile.workload_identity", summary_text)
             self.assertIn("metrics.p95_alert_latency_ms", summary_text)
             self.assertIn("Report dropped_event_count explicitly", summary_text)
             self.assertIn(
@@ -276,6 +322,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["comparison_profile"]["schema"],
                 "telemforge.stage09_realtime_comparison_profile.v1",
+            )
+            self.assertEqual(
+                report["determinism_profile"]["workload_identity"],
+                "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
             )
             self.assertEqual(
                 report["baseline_verdict"]["status"],

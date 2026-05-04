@@ -180,6 +180,7 @@ def run_stage09_realtime_baseline(
         "resource_guard": _resource_guard(),
         "benchmark_contract": _benchmark_contract(),
         "comparison_profile": _comparison_profile(),
+        "determinism_profile": _determinism_profile(channel_count),
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
@@ -402,6 +403,10 @@ def _benchmark_contract() -> dict[str, Any]:
                 "Preserve resource_guard fields so future runs stay comparable "
                 "and inside the local automation safety envelope."
             ),
+            (
+                "Preserve determinism_profile.workload_identity for comparable "
+                "baseline and Rust data-plane candidate runs."
+            ),
         ],
     }
 
@@ -426,6 +431,8 @@ def _comparison_profile() -> dict[str, Any]:
             "resource_guard.uses_network",
             "resource_guard.uses_paid_services",
             "benchmark_contract",
+            "determinism_profile.workload_identity",
+            "determinism_profile.stable_inputs",
             "workload.scenario",
             "workload.sample_window",
             "workload.samples_per_channel",
@@ -445,11 +452,46 @@ def _comparison_profile() -> dict[str, Any]:
             "Use the same workload scenario, seed, sample count, and step interval.",
             "Keep execution_profile and resource_guard visible in every report.",
             "Report dropped_event_count explicitly for stream/backpressure comparisons.",
+            "Keep determinism_profile.workload_identity unchanged for comparable runs.",
             (
                 "Preserve the benchmark metric names before replacing any Python "
                 "control-plane hot path with a Rust data-plane candidate."
             ),
         ],
+    }
+
+
+def _determinism_profile(channel_count: int) -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_determinism_profile.v1",
+        "purpose": (
+            "Declare which inputs define the comparable workload identity before "
+            "Python/FastAPI and future Rust data-plane results are compared."
+        ),
+        "workload_identity": (
+            f"{BENCHMARK_SCENARIO}:seed-{BENCHMARK_SEED}:"
+            f"channels-{channel_count}:samples-{BENCHMARK_SAMPLES_PER_CHANNEL}:"
+            f"step-{BENCHMARK_STEP_SECONDS}s"
+        ),
+        "stable_inputs": {
+            "scenario": BENCHMARK_SCENARIO,
+            "seed": BENCHMARK_SEED,
+            "start_at": BENCHMARK_START_AT,
+            "channel_count": channel_count,
+            "samples_per_channel": BENCHMARK_SAMPLES_PER_CHANNEL,
+            "step_seconds": BENCHMARK_STEP_SECONDS,
+        },
+        "run_variant_fields": [
+            "generated_at",
+            "metrics.p95_alert_latency_ms",
+            "metrics.p95_replay_query_latency_ms",
+            "target_results.checks.p95_alert_latency_ms.observed",
+            "target_results.checks.p95_replay_query_latency_ms.observed",
+        ],
+        "comparison_rule": (
+            "Only compare runtime implementations when workload_identity and "
+            "stable_inputs match; treat latency observations as run-specific."
+        ),
     }
 
 
@@ -576,6 +618,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
     comparison_profile = summary["comparison_profile"]
+    determinism_profile = summary["determinism_profile"]
     baseline_verdict = summary["baseline_verdict"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
@@ -632,6 +675,11 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Max expected memory: `{resource_guard['max_expected_memory_mb']} MB`\n"
         f"- Uses network: `{resource_guard['uses_network']}`\n"
         f"- Uses paid services: `{resource_guard['uses_paid_services']}`\n\n"
+        "## Determinism Profile\n\n"
+        f"- Workload identity: `{determinism_profile['workload_identity']}`\n"
+        f"- Stable inputs: `{', '.join(determinism_profile['stable_inputs'].keys())}`\n"
+        f"- Run-variant fields: `{', '.join(determinism_profile['run_variant_fields'])}`\n"
+        f"- Comparison rule: `{determinism_profile['comparison_rule']}`\n\n"
         "## Comparison Profile\n\n"
         f"- Stable fields: `{stable_fields}`\n"
         f"- Run-specific fields: `{run_specific_fields}`\n"

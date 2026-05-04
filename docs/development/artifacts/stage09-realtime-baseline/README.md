@@ -13,8 +13,9 @@ queries.
   latency, dropped-event count, deterministic sample-window metadata, target
   comparison results with gap-to-target values, benchmark execution profile,
   local resource-guard provenance, benchmark contract metadata, a comparison
-  profile that separates stable fields from run-specific timing values, an
-  explicit baseline verdict, and the tracked Rust data-plane boundary.
+  profile that separates stable fields from run-specific timing values, a
+  determinism profile with the stable workload identity, an explicit baseline
+  verdict, and the tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -62,6 +63,11 @@ data-plane runs do not win by changing the workload shape.
 The `comparison_profile` block identifies which fields are stable enough for
 Python/Rust runtime comparison and which fields, such as generated timestamps
 and p95 latency observations, are expected to vary between bounded local runs.
+
+The `determinism_profile` block names the stable workload identity, seed,
+scenario, sample window inputs, and run-variant timing fields. A future Rust
+data-plane candidate must preserve that workload identity before its metrics are
+compared with the Python/FastAPI control-plane baseline.
 
 The `baseline_verdict` block states whether the current Python/FastAPI baseline
 is only a comparison baseline or has met the realtime targets. It also names the
