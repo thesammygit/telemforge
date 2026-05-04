@@ -93,6 +93,7 @@
       "targets",
       "target_profile",
       "baseline_verdict",
+      "next_hot_path_profile",
       "runtime_boundary"
     ]
   },
@@ -143,7 +144,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T10:12:37Z",
+  "generated_at": "2026-05-04T11:03:35Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -161,23 +162,49 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 3.904,
-      "bounded_replay_query": 3.52
+      "alert_evaluation": 2.916,
+      "bounded_replay_query": 3.412
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 46.096,
-      "bounded_replay_query": 496.48
+      "alert_evaluation": 47.084,
+      "bounded_replay_query": 496.588
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 3.904,
-    "p95_replay_query_latency_ms": 3.52,
+    "p95_alert_latency_ms": 2.916,
+    "p95_replay_query_latency_ms": 3.412,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
+  },
+  "next_hot_path_profile": {
+    "addresses_missed_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ],
+    "candidate_scope": "stream fanout and sample-rate throughput behind the live telemetry contract; Python/FastAPI remains the control plane",
+    "forbidden_scope": [
+      "whole-project rewrite",
+      "Python control-plane replacement",
+      "unbounded local load test",
+      "multi-worker fanout outside the local resource guard"
+    ],
+    "must_preserve_contracts": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "execution_profile",
+      "resource_guard",
+      "benchmark_contract"
+    ],
+    "promotion_signal": "A comparable candidate report improves at least one missed throughput target without regressing dropped_event_count.",
+    "purpose": "Translate the current baseline misses into the next narrow data-plane candidate without approving a whole-project rewrite.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_next_hot_path_profile.v1",
+    "selected_candidate": "rust_stream_fanout_sample_rate_spike"
   },
   "notes": [
     "This benchmark is intentionally small and local-resource safe.",
@@ -251,7 +278,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 61.756,
+    "duration_ms": 57.402,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -342,7 +369,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.904,
+        "observed": 2.916,
         "target": 50,
         "unit": "ms"
       },
@@ -350,7 +377,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.52,
+        "observed": 3.412,
         "target": 500,
         "unit": "ms"
       },
@@ -421,6 +448,7 @@
       "target_profile",
       "target_results.checks",
       "baseline_verdict",
+      "next_hot_path_profile",
       "runtime_boundary"
     ],
     "resource_expectations": {

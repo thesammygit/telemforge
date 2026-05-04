@@ -22,8 +22,9 @@ queries.
   bounded command stayed inside the expected local runtime envelope, input
   provenance for the exact telemetry catalog hash used to generate the workload,
   a target profile that binds the ADR-009 realtime hypotheses to stable report
-  fields, an explicit baseline verdict, and the tracked Rust data-plane
-  boundary.
+  fields, an explicit baseline verdict, a next-hot-path profile that maps
+  missed throughput targets to the first narrow Rust data-plane candidate, and
+  the tracked Rust data-plane boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -113,6 +114,12 @@ The `baseline_verdict` block states whether the current Python/FastAPI baseline
 is only a comparison baseline or has met the realtime targets. It also names the
 next comparable candidate as a narrow Rust data-plane hot path that must keep
 the same benchmark contract, execution profile, and resource guard.
+
+The `next_hot_path_profile` block translates the baseline misses into the next
+bounded data-plane candidate. It currently points at stream fanout and
+sample-rate throughput behind the live telemetry contract, while explicitly
+forbidding a whole-project rewrite, Python control-plane replacement, unbounded
+local load tests, or worker fanout outside the local resource guard.
 
 The Rust data-plane boundary note is also intentionally pre-implementation. It
 keeps the first Rust spike constrained to a measured hot path, with the existing

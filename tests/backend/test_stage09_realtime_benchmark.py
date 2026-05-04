@@ -99,6 +99,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "next_hot_path_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "runtime_observation.duration_ms",
                 verification_contract["allowed_run_variant_fields"],
             )
@@ -174,6 +178,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "target_profile",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "next_hot_path_profile",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -376,6 +384,51 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 },
             )
             self.assertEqual(
+                summary["next_hot_path_profile"],
+                {
+                    "schema": "telemforge.stage09_next_hot_path_profile.v1",
+                    "purpose": (
+                        "Translate the current baseline misses into the next "
+                        "narrow data-plane candidate without approving a "
+                        "whole-project rewrite."
+                    ),
+                    "selected_candidate": "rust_stream_fanout_sample_rate_spike",
+                    "addresses_missed_targets": [
+                        "channel_count",
+                        "per_channel_sample_rate_hz",
+                        "aggregate_sample_rate_hz",
+                    ],
+                    "candidate_scope": (
+                        "stream fanout and sample-rate throughput behind the "
+                        "live telemetry contract; Python/FastAPI remains the "
+                        "control plane"
+                    ),
+                    "must_preserve_contracts": [
+                        "docs/development/artifacts/stage09-realtime-baseline/"
+                        "stage09-live-telemetry-contract.json",
+                        "docs/development/artifacts/stage09-realtime-baseline/"
+                        "stage09-baseline-report.json",
+                        "execution_profile",
+                        "resource_guard",
+                        "benchmark_contract",
+                    ],
+                    "promotion_signal": (
+                        "A comparable candidate report improves at least one "
+                        "missed throughput target without regressing "
+                        "dropped_event_count."
+                    ),
+                    "forbidden_scope": [
+                        "whole-project rewrite",
+                        "Python control-plane replacement",
+                        "unbounded local load test",
+                        "multi-worker fanout outside the local resource guard",
+                    ],
+                    "rust_scope": (
+                        "data-plane candidate only; not a whole-project rewrite"
+                    ),
+                },
+            )
+            self.assertEqual(
                 summary["target_results"]["checks"]["per_channel_sample_rate_hz"],
                 {
                     "observed": 1.0,
@@ -508,6 +561,23 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "Next comparable candidate: `narrow Rust data-plane hot path",
                 summary_text,
             )
+            self.assertIn("## Next Hot Path Profile", summary_text)
+            self.assertIn(
+                "rust_stream_fanout_sample_rate_spike",
+                summary_text,
+            )
+            self.assertIn(
+                "channel_count, per_channel_sample_rate_hz, aggregate_sample_rate_hz",
+                summary_text,
+            )
+            self.assertIn(
+                "Python/FastAPI remains the control plane",
+                summary_text,
+            )
+            self.assertIn(
+                "multi-worker fanout outside the local resource guard",
+                summary_text,
+            )
             self.assertIn("Missed targets: `", summary_text)
 
     def test_benchmark_script_writes_report_from_repo_root(self) -> None:
@@ -588,6 +658,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     "report_binding"
                 ],
                 "metrics.telemetry_sample_rate_hz",
+            )
+            self.assertEqual(
+                report["next_hot_path_profile"]["selected_candidate"],
+                "rust_stream_fanout_sample_rate_spike",
+            )
+            self.assertIn(
+                "next_hot_path_profile",
+                report["verification_contract"]["required_report_fields"],
             )
             self.assertEqual(
                 report["baseline_verdict"]["status"],

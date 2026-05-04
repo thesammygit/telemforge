@@ -197,6 +197,7 @@ def run_stage09_realtime_baseline(
         "target_profile": _target_profile(),
         "target_results": target_results,
         "baseline_verdict": _baseline_verdict(target_results),
+        "next_hot_path_profile": _next_hot_path_profile(target_results),
         "runtime_boundary": {
             "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
             "python_control_plane": [
@@ -455,6 +456,7 @@ def _comparison_profile() -> dict[str, Any]:
             "targets",
             "target_profile",
             "baseline_verdict",
+            "next_hot_path_profile",
             "runtime_boundary",
         ],
         "run_specific_fields": [
@@ -539,6 +541,7 @@ def _verification_contract() -> dict[str, Any]:
             "target_profile",
             "target_results.checks",
             "baseline_verdict",
+            "next_hot_path_profile",
             "runtime_boundary",
         ],
         "allowed_run_variant_fields": [
@@ -807,6 +810,55 @@ def _baseline_verdict(target_results: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _next_hot_path_profile(target_results: dict[str, Any]) -> dict[str, Any]:
+    missed_targets = target_results["missed_targets"]
+    throughput_targets = [
+        target
+        for target in [
+            "channel_count",
+            "per_channel_sample_rate_hz",
+            "aggregate_sample_rate_hz",
+        ]
+        if target in missed_targets
+    ]
+    candidate_id = (
+        "rust_stream_fanout_sample_rate_spike"
+        if throughput_targets
+        else "no_rust_spike_needed_until_new_hot_path"
+    )
+    return {
+        "schema": "telemforge.stage09_next_hot_path_profile.v1",
+        "purpose": (
+            "Translate the current baseline misses into the next narrow "
+            "data-plane candidate without approving a whole-project rewrite."
+        ),
+        "selected_candidate": candidate_id,
+        "addresses_missed_targets": throughput_targets,
+        "candidate_scope": (
+            "stream fanout and sample-rate throughput behind the live telemetry "
+            "contract; Python/FastAPI remains the control plane"
+        ),
+        "must_preserve_contracts": [
+            "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+            "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+            "execution_profile",
+            "resource_guard",
+            "benchmark_contract",
+        ],
+        "promotion_signal": (
+            "A comparable candidate report improves at least one missed "
+            "throughput target without regressing dropped_event_count."
+        ),
+        "forbidden_scope": [
+            "whole-project rewrite",
+            "Python control-plane replacement",
+            "unbounded local load test",
+            "multi-worker fanout outside the local resource guard",
+        ],
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    }
+
+
 def _resource_guard() -> dict[str, Any]:
     return {
         "schema": "telemforge.stage09_resource_guard.v1",
@@ -908,6 +960,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     run_variant_policy = summary["run_variant_policy"]
     baseline_verdict = summary["baseline_verdict"]
     target_profile = summary["target_profile"]
+    next_hot_path_profile = summary["next_hot_path_profile"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
     run_specific_fields = ", ".join(comparison_profile["run_specific_fields"])
@@ -1038,6 +1091,16 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         "- Next comparable candidate: "
         f"`{baseline_verdict['next_comparable_candidate']}`\n"
         f"- Rust scope: `{baseline_verdict['rust_scope']}`\n\n"
+        "## Next Hot Path Profile\n\n"
+        f"- Selected candidate: `{next_hot_path_profile['selected_candidate']}`\n"
+        "- Addresses missed targets: "
+        f"`{', '.join(next_hot_path_profile['addresses_missed_targets']) or 'none'}`\n"
+        f"- Candidate scope: `{next_hot_path_profile['candidate_scope']}`\n"
+        "- Must preserve contracts: "
+        f"`{', '.join(next_hot_path_profile['must_preserve_contracts'])}`\n"
+        f"- Promotion signal: `{next_hot_path_profile['promotion_signal']}`\n"
+        f"- Forbidden scope: `{', '.join(next_hot_path_profile['forbidden_scope'])}`\n"
+        f"- Rust scope: `{next_hot_path_profile['rust_scope']}`\n\n"
         "A future Rust data-plane candidate should emit the same JSON report "
         "shape, including gap-to-target values, before replacing a Python hot path.\n"
     )
