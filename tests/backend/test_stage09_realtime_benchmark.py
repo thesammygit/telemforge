@@ -121,6 +121,35 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 summary["target_results"]["missed_targets"],
             )
             self.assertEqual(
+                summary["baseline_verdict"],
+                {
+                    "schema": "telemforge.stage09_baseline_verdict.v1",
+                    "status": "baseline_only_targets_not_met",
+                    "summary": (
+                        "Current Python/FastAPI baseline is suitable for "
+                        "comparison, not production realtime claims."
+                    ),
+                    "passed_targets": [
+                        "p95_alert_latency_ms",
+                        "p95_replay_query_latency_ms",
+                        "dropped_event_count",
+                    ],
+                    "missed_targets": [
+                        "channel_count",
+                        "per_channel_sample_rate_hz",
+                        "aggregate_sample_rate_hz",
+                    ],
+                    "next_comparable_candidate": (
+                        "narrow Rust data-plane hot path using the same "
+                        "benchmark_contract, execution_profile, and "
+                        "resource_guard fields"
+                    ),
+                    "rust_scope": (
+                        "data-plane candidate only; not a whole-project rewrite"
+                    ),
+                },
+            )
+            self.assertEqual(
                 summary["target_results"]["checks"]["per_channel_sample_rate_hz"],
                 {
                     "observed": 1.0,
@@ -197,6 +226,15 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "| Dropped events | 0 events | <= 0 events | 0 events | PASS |",
                 summary_text,
             )
+            self.assertIn("## Baseline Verdict", summary_text)
+            self.assertIn(
+                "Status: `baseline_only_targets_not_met`",
+                summary_text,
+            )
+            self.assertIn(
+                "Next comparable candidate: `narrow Rust data-plane hot path",
+                summary_text,
+            )
             self.assertIn("Missed targets: `", summary_text)
 
     def test_benchmark_script_writes_report_from_repo_root(self) -> None:
@@ -238,6 +276,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["comparison_profile"]["schema"],
                 "telemforge.stage09_realtime_comparison_profile.v1",
+            )
+            self.assertEqual(
+                report["baseline_verdict"]["status"],
+                "baseline_only_targets_not_met",
             )
             self.assertFalse(report["resource_guard"]["uses_network"])
             self.assertEqual(report["metrics"]["dropped_event_count"], 0)

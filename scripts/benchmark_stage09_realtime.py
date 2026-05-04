@@ -165,6 +165,8 @@ def run_stage09_realtime_baseline(
         "replay_sample_count": replay_sample_count,
     }
 
+    target_results = _target_results(workload, metrics)
+
     return {
         "schema": "telemforge.stage09_realtime_baseline.v1",
         "generated_at": _utc_now(),
@@ -181,7 +183,8 @@ def run_stage09_realtime_baseline(
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
-        "target_results": _target_results(workload, metrics),
+        "target_results": target_results,
+        "baseline_verdict": _baseline_verdict(target_results),
         "runtime_boundary": {
             "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
             "python_control_plane": [
@@ -428,6 +431,7 @@ def _comparison_profile() -> dict[str, Any]:
             "workload.samples_per_channel",
             "workload.step_seconds",
             "targets",
+            "baseline_verdict",
             "runtime_boundary",
         ],
         "run_specific_fields": [
@@ -479,6 +483,40 @@ def _execution_profile(
             "client reconnect behavior",
             "backpressure under multi-client load",
         ],
+    }
+
+
+def _baseline_verdict(target_results: dict[str, Any]) -> dict[str, Any]:
+    missed_targets = target_results["missed_targets"]
+    passed_targets = [
+        name
+        for name, check in target_results["checks"].items()
+        if check["meets_target"]
+    ]
+    status = (
+        "targets_met"
+        if target_results["meets_all_targets"]
+        else "baseline_only_targets_not_met"
+    )
+    summary = (
+        "Current Python/FastAPI baseline meets the Stage 09 realtime targets."
+        if target_results["meets_all_targets"]
+        else (
+            "Current Python/FastAPI baseline is suitable for comparison, "
+            "not production realtime claims."
+        )
+    )
+    return {
+        "schema": "telemforge.stage09_baseline_verdict.v1",
+        "status": status,
+        "summary": summary,
+        "passed_targets": passed_targets,
+        "missed_targets": missed_targets,
+        "next_comparable_candidate": (
+            "narrow Rust data-plane hot path using the same benchmark_contract, "
+            "execution_profile, and resource_guard fields"
+        ),
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
 
 
@@ -538,6 +576,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
     comparison_profile = summary["comparison_profile"]
+    baseline_verdict = summary["baseline_verdict"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
     run_specific_fields = ", ".join(comparison_profile["run_specific_fields"])
@@ -608,6 +647,14 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         "| --- | ---: | ---: | ---: | --- |\n"
         f"{target_table}\n\n"
         f"Missed targets: `{missed_line}`.\n\n"
+        "## Baseline Verdict\n\n"
+        f"- Status: `{baseline_verdict['status']}`\n"
+        f"- Summary: `{baseline_verdict['summary']}`\n"
+        f"- Passed targets: `{', '.join(baseline_verdict['passed_targets'])}`\n"
+        f"- Missed targets: `{', '.join(baseline_verdict['missed_targets'])}`\n"
+        "- Next comparable candidate: "
+        f"`{baseline_verdict['next_comparable_candidate']}`\n"
+        f"- Rust scope: `{baseline_verdict['rust_scope']}`\n\n"
         "A future Rust data-plane candidate should emit the same JSON report "
         "shape, including gap-to-target values, before replacing a Python hot path.\n"
     )

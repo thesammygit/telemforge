@@ -1,4 +1,21 @@
 {
+  "baseline_verdict": {
+    "missed_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ],
+    "next_comparable_candidate": "narrow Rust data-plane hot path using the same benchmark_contract, execution_profile, and resource_guard fields",
+    "passed_targets": [
+      "p95_alert_latency_ms",
+      "p95_replay_query_latency_ms",
+      "dropped_event_count"
+    ],
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_baseline_verdict.v1",
+    "status": "baseline_only_targets_not_met",
+    "summary": "Current Python/FastAPI baseline is suitable for comparison, not production realtime claims."
+  },
   "benchmark_contract": {
     "comparability_rules": [
       "Run single-process against the local in-process TestClient.",
@@ -59,6 +76,7 @@
       "workload.samples_per_channel",
       "workload.step_seconds",
       "targets",
+      "baseline_verdict",
       "runtime_boundary"
     ]
   },
@@ -88,12 +106,12 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T02:42:42Z",
+  "generated_at": "2026-05-04T03:32:48Z",
   "health_stage": "08-hardening-docker-and-release",
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.415,
-    "p95_replay_query_latency_ms": 2.882,
+    "p95_alert_latency_ms": 2.695,
+    "p95_replay_query_latency_ms": 3.294,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -165,7 +183,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.415,
+        "observed": 2.695,
         "target": 50,
         "unit": "ms"
       },
@@ -173,7 +191,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.882,
+        "observed": 3.294,
         "target": 500,
         "unit": "ms"
       },
