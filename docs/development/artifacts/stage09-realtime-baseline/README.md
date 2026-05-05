@@ -50,6 +50,10 @@ queries.
 - `rust-data-plane-boundary.md`: narrow implementation note that separates the
   Python/FastAPI control plane from future Rust data-plane candidates, with
   promotion gates before any hot path can replace the Python baseline.
+- `first-rust-hot-path-slice.md`: bounded implementation note that constrains
+  the first Rust data-plane experiment to stream fanout evidence behind the
+  live telemetry contract, while keeping replay, alert, anomaly, API, storage,
+  and frontend paths out of scope.
 - `stage09-candidate-report-contract.json`: static compatibility contract for a
   future Python/FastAPI baseline refresh or narrow Rust data-plane candidate. It
   pins the required report fields, metric bindings, stable fingerprint gate,
@@ -200,6 +204,12 @@ local load tests, or worker fanout outside the local resource guard.
 The Rust data-plane boundary note is also intentionally pre-implementation. It
 keeps the first Rust spike constrained to a measured hot path, with the existing
 benchmark report and live stream contract acting as promotion gates.
+
+The first Rust hot-path slice note makes that first candidate concrete without
+adding Rust code yet: stream fanout only, one local client, bounded queues,
+`stream.backpressure` evidence, and the same dropped-event metric binding used
+by the Stage 09 baseline report. Replay indexing, alert/anomaly evaluation,
+API orchestration, storage, and frontend work remain outside the first slice.
 
 The candidate report contract keeps future comparison work bounded. A future
 Rust data-plane candidate must preserve the baseline report shape, metric
