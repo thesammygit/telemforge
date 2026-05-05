@@ -54,12 +54,17 @@ queries.
   pins the required report fields, metric bindings, stable fingerprint gate,
   resource envelope, stream-claim gate, and promotion evidence before candidate
   metrics can be compared with the baseline.
+- `stage09-report-validation-summary.json`: deterministic output from the
+  compatibility validator showing that the current public baseline report
+  satisfies the candidate report contract without running load tests, claiming
+  runtime websocket fanout, or approving a Rust whole-project rewrite.
 
 ## Inspect
 
 ```text
 python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md
 python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json
+python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
@@ -196,3 +201,9 @@ The `scripts/validate_stage09_realtime_report.py` command is the lightweight
 compatibility gate for that contract. It validates the current baseline or a
 future candidate report without running load tests, adding websocket fanout, or
 approving a Rust whole-project rewrite.
+
+When run with `--output`, the validator writes
+`stage09-report-validation-summary.json`. That file is public proof that the
+current baseline report still passes the contract gates for required fields,
+metric bindings, stable identity, resource envelope, stream-claim evidence, and
+promotion evidence before any narrow Rust data-plane candidate is compared.

@@ -79,8 +79,8 @@ def validate_stage09_report(
     return {
         "schema": "telemforge.stage09_report_compatibility_validation.v1",
         "status": "passed",
-        "report_path": str(Path(report_path)),
-        "contract_path": str(Path(contract_path)),
+        "report_path": _display_path(Path(report_path)),
+        "contract_path": _display_path(Path(contract_path)),
         "baseline_report_schema": report["schema"],
         "rust_scope": contract["candidate_scope"]["rust_scope"],
         "validated_gates": [
@@ -108,6 +108,11 @@ def main() -> int:
         default=str(DEFAULT_CONTRACT_PATH.relative_to(ROOT)),
         help="Stage 09 candidate report contract JSON path.",
     )
+    parser.add_argument(
+        "--output",
+        default=None,
+        help="Optional JSON validation summary path to write after validation passes.",
+    )
     args = parser.parse_args()
 
     try:
@@ -118,6 +123,9 @@ def main() -> int:
             file=sys.stderr,
         )
         return 1
+
+    if args.output is not None:
+        _write_json(Path(args.output), result)
 
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
@@ -226,6 +234,21 @@ def _read_json(path: Path) -> dict[str, Any]:
     if not isinstance(value, dict):
         raise ValidationError(f"{path} must contain a JSON object")
     return value
+
+
+def _write_json(path: Path, value: dict[str, Any]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(
+        json.dumps(value, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+
+def _display_path(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path)
 
 
 def _path_value(document: dict[str, Any], field_path: str) -> Any:

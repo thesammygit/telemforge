@@ -1,0 +1,16 @@
+{
+  "baseline_report_schema": "telemforge.stage09_realtime_baseline.v1",
+  "contract_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json",
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_report_compatibility_validation.v1",
+  "status": "passed",
+  "validated_gates": [
+    "required_top_level_fields",
+    "required_metric_bindings",
+    "stable_identity_gate",
+    "resource_envelope",
+    "stream_claim_gate",
+    "promotion_gate"
+  ]
+}
