@@ -181,6 +181,44 @@ class Stage09LiveTelemetryContractTest(unittest.TestCase):
             "metrics.dropped_event_count",
         )
 
+    def test_runtime_evidence_gate_keeps_stream_claims_contract_only(self) -> None:
+        contract = read_json(CONTRACT_PATH)
+        evidence_gate = contract["runtime_evidence_gate"]
+        required_evidence = evidence_gate["required_before_runtime_claim"]
+
+        self.assertEqual(
+            evidence_gate["schema"],
+            "telemforge.stage09_runtime_stream_evidence_gate.v1",
+        )
+        self.assertEqual(evidence_gate["status"], "contract_only_blocked")
+        self.assertEqual(
+            required_evidence,
+            [
+                "websocket connection acceptance for an existing session",
+                "startup snapshot emitted before incremental telemetry samples",
+                "monotonic per-session stream sequence values",
+                "after_sequence reconnect resume behavior",
+                "drop_oldest_and_report backpressure behavior",
+                "dropped_event_count reported from stream.backpressure payloads",
+            ],
+        )
+        self.assertEqual(
+            sorted(evidence_gate["evidence_items"]),
+            sorted(required_evidence),
+        )
+
+        for evidence_name, item in evidence_gate["evidence_items"].items():
+            self.assertEqual(item["claim_status"], "not_claimed_until_runtime_test")
+            self.assertEqual(item["source"], "stage09-live-telemetry-contract.json")
+            self.assertIn(item["proof_artifact"], evidence_gate["proof_artifacts"])
+            self.assertIn("not a whole-project rewrite", item["rust_scope"])
+            self.assertIn(evidence_name, required_evidence)
+
+        self.assertIn(
+            "runtime websocket fanout",
+            evidence_gate["forbidden_without_evidence"],
+        )
+
     def test_example_payload_references_known_channel_catalog(self) -> None:
         contract = read_json(CONTRACT_PATH)
         catalog = read_json(CHANNEL_CATALOG_PATH)

@@ -122,6 +122,12 @@ before TelemForge can claim runtime stream fanout: connection acceptance,
 startup snapshot delivery, monotonic stream sequence values, reconnect resume,
 backpressure reporting, and dropped-event accounting from stream messages.
 
+The live telemetry contract also includes a `runtime_evidence_gate` section
+that maps each future runtime-stream claim to its required proof artifact and
+runtime probe. Every item remains `not_claimed_until_runtime_test`, so the
+contract still does not claim websocket fanout, reconnect, backpressure, or
+stream-based dropped-event evidence.
+
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service
 free, and expected to stay within the automation safety envelope, so future Rust

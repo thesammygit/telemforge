@@ -1,6 +1,6 @@
 # Stage 09 Realtime Baseline Summary
 
-Generated at: `2026-05-05T12:24:36Z`
+Generated at: `2026-05-05T13:13:27Z`
 
 Runtime direction: Rust data plane direction, not a whole-project rewrite. Python/FastAPI remains the measured control-plane baseline for this report.
 
@@ -29,7 +29,7 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 ## Runtime Observation
 
-- Duration: `50.164 ms`
+- Duration: `50.097 ms`
 - Max expected runtime: `30 seconds`
 - Within expected runtime: `True`
 - Worker processes observed: `1`
@@ -78,9 +78,9 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 ## Latency Budget Profile
 
 - Alert p95 budget: `50 ms`
-- Alert p95 remaining budget: `47.379 ms`
+- Alert p95 remaining budget: `47.329 ms`
 - Replay p95 budget: `500 ms`
-- Replay p95 remaining budget: `496.957 ms`
+- Replay p95 remaining budget: `497.007 ms`
 - Comparison rule: `Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.`
 
 ## Alert Latency Profile
@@ -90,7 +90,7 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 - Fault types: `comms_downlink_fade, thermal_avionics_overheat`
 - Latency iterations: `5`
 - Latency method: `nearest-rank p95 over manual fault POST requests`
-- Observed p95: `2.621 ms`
+- Observed p95: `2.671 ms`
 - Comparison rule: `Only compare alert hot-path candidates when the fault mix, iteration count, and determinism_profile.workload_identity match.`
 - Rust scope: `data-plane alert-evaluation candidate only; not a whole-project rewrite`
 
@@ -169,8 +169,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 - Aggregate sample rate: `10.0 Hz`
 - Per-channel sample rate: `1.0 Hz`
-- P95 alert latency: `2.621 ms`
-- P95 replay query latency: `3.043 ms`
+- P95 alert latency: `2.671 ms`
+- P95 replay query latency: `2.993 ms`
 - Dropped events: `0`
 
 ## Target Results
@@ -180,8 +180,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 | Channel count | 10 channels | >= 100 channels | 90 channels | MISS |
 | Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |
 | Aggregate sample rate | 10.0 Hz | >= 1000 Hz | 990.0 Hz | MISS |
-| P95 alert latency | 2.621 ms | <= 50 ms | 0 ms | PASS |
-| P95 replay query latency | 3.043 ms | <= 500 ms | 0 ms | PASS |
+| P95 alert latency | 2.671 ms | <= 50 ms | 0 ms | PASS |
+| P95 replay query latency | 2.993 ms | <= 500 ms | 0 ms | PASS |
 | Dropped events | 0 events | <= 0 events | 0 events | PASS |
 
 Missed targets: `channel_count, per_channel_sample_rate_hz, aggregate_sample_rate_hz`.

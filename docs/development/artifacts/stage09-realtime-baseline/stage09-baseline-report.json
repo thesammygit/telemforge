@@ -8,7 +8,7 @@
     ],
     "latency_iteration_count": 5,
     "latency_method": "nearest-rank p95 over manual fault POST requests",
-    "observed_p95_ms": 2.621,
+    "observed_p95_ms": 2.671,
     "purpose": "Make the manual-fault alert latency measurement explicit before Python/FastAPI and future Rust data-plane alert candidates are compared.",
     "rust_scope": "data-plane alert-evaluation candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_alert_latency_profile.v1",
@@ -190,7 +190,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T12:24:36Z",
+  "generated_at": "2026-05-05T13:13:27Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -208,13 +208,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.621,
-      "bounded_replay_query": 3.043
+      "alert_evaluation": 2.671,
+      "bounded_replay_query": 2.993
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.379,
-      "bounded_replay_query": 496.957
+      "alert_evaluation": 47.329,
+      "bounded_replay_query": 497.007
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -239,8 +239,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.621,
-    "p95_replay_query_latency_ms": 3.043,
+    "p95_alert_latency_ms": 2.671,
+    "p95_replay_query_latency_ms": 2.993,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -410,7 +410,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 50.164,
+    "duration_ms": 50.097,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -575,7 +575,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.621,
+        "observed": 2.671,
         "target": 50,
         "unit": "ms"
       },
@@ -583,7 +583,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 3.043,
+        "observed": 2.993,
         "target": 500,
         "unit": "ms"
       },

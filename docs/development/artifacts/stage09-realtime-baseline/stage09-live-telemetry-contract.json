@@ -185,6 +185,75 @@
       "comparison_metric": "metrics.dropped_event_count"
     }
   },
+  "runtime_evidence_gate": {
+    "schema": "telemforge.stage09_runtime_stream_evidence_gate.v1",
+    "status": "contract_only_blocked",
+    "purpose": "Map each future live-stream runtime claim to explicit proof before TelemForge can claim websocket fanout, reconnect, backpressure, or stream-based dropped-event evidence.",
+    "required_before_runtime_claim": [
+      "websocket connection acceptance for an existing session",
+      "startup snapshot emitted before incremental telemetry samples",
+      "monotonic per-session stream sequence values",
+      "after_sequence reconnect resume behavior",
+      "drop_oldest_and_report backpressure behavior",
+      "dropped_event_count reported from stream.backpressure payloads"
+    ],
+    "proof_artifacts": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "tests/contracts/test_stage09_live_telemetry_contract.py",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
+    ],
+    "evidence_items": {
+      "websocket connection acceptance for an existing session": {
+        "claim_status": "not_claimed_until_runtime_test",
+        "source": "stage09-live-telemetry-contract.json",
+        "proof_artifact": "tests/contracts/test_stage09_live_telemetry_contract.py",
+        "required_runtime_probe": "connect to websocket /sessions/{session_id}/telemetry/live for a session created by POST /sessions",
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite"
+      },
+      "startup snapshot emitted before incremental telemetry samples": {
+        "claim_status": "not_claimed_until_runtime_test",
+        "source": "stage09-live-telemetry-contract.json",
+        "proof_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+        "required_runtime_probe": "assert first accepted stream message is stream.snapshot before telemetry.sample messages",
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite"
+      },
+      "monotonic per-session stream sequence values": {
+        "claim_status": "not_claimed_until_runtime_test",
+        "source": "stage09-live-telemetry-contract.json",
+        "proof_artifact": "tests/contracts/test_stage09_live_telemetry_contract.py",
+        "required_runtime_probe": "assert observed stream sequence values increase within one session stream",
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite"
+      },
+      "after_sequence reconnect resume behavior": {
+        "claim_status": "not_claimed_until_runtime_test",
+        "source": "stage09-live-telemetry-contract.json",
+        "proof_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+        "required_runtime_probe": "reconnect with after_sequence and assert resumed messages have greater sequence values or a snapshot fallback",
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite"
+      },
+      "drop_oldest_and_report backpressure behavior": {
+        "claim_status": "not_claimed_until_runtime_test",
+        "source": "stage09-live-telemetry-contract.json",
+        "proof_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+        "required_runtime_probe": "force a bounded slow-client queue and assert stream.backpressure reports drop_oldest_and_report",
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite"
+      },
+      "dropped_event_count reported from stream.backpressure payloads": {
+        "claim_status": "not_claimed_until_runtime_test",
+        "source": "stage09-live-telemetry-contract.json",
+        "proof_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+        "required_runtime_probe": "bind stream.backpressure.payload.dropped_event_count to metrics.dropped_event_count in a compatible report",
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite"
+      }
+    },
+    "forbidden_without_evidence": [
+      "runtime websocket fanout",
+      "reconnect behavior is implemented",
+      "backpressure behavior is implemented",
+      "stream-based dropped-event count is measured",
+      "Rust has replaced a Python control-plane path"
+    ]
+  },
   "runtime_boundary": {
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
     "python_control_plane": [
