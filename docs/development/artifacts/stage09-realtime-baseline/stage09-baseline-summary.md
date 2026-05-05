@@ -1,6 +1,6 @@
 # Stage 09 Realtime Baseline Summary
 
-Generated at: `2026-05-05T05:43:06Z`
+Generated at: `2026-05-05T08:17:15Z`
 
 Runtime direction: Rust data plane direction, not a whole-project rewrite. Python/FastAPI remains the measured control-plane baseline for this report.
 
@@ -29,10 +29,18 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 ## Runtime Observation
 
-- Duration: `51.622 ms`
+- Duration: `50.963 ms`
 - Max expected runtime: `30 seconds`
 - Within expected runtime: `True`
 - Worker processes observed: `1`
+
+## Timing Source Profile
+
+- Duration clock: `time.perf_counter_ns monotonic process clock`
+- Report timestamp clock: `datetime.now(timezone.utc)`
+- Synthetic sample clock: `deterministic benchmark start_at plus fixed step_seconds`
+- Comparison rule: `Compare duration and latency values only as run-specific metrics; synthetic benchmark timestamps are deterministic workload inputs.`
+- Rust scope: `data-plane candidate only; not a whole-project rewrite`
 
 ## Measurement Boundary
 
@@ -56,7 +64,7 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 - Command: `python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md`
 - Required outputs: `docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json, docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md`
-- Required report fields: `schema, execution_profile, resource_guard, runtime_observation, benchmark_contract, verification_contract, measurement_boundary, stream_contract_profile, determinism_profile, latency_budget_profile, replay_query_profile, dropped_event_profile, rerun_evidence_profile, run_variant_policy, input_provenance, stable_report_fingerprint, metrics.telemetry_sample_rate_hz, metrics.p95_alert_latency_ms, metrics.p95_replay_query_latency_ms, metrics.dropped_event_count, target_profile, target_results.checks, baseline_verdict, next_hot_path_profile, runtime_boundary`
+- Required report fields: `schema, execution_profile, resource_guard, runtime_observation, timing_source_profile, benchmark_contract, verification_contract, measurement_boundary, stream_contract_profile, determinism_profile, latency_budget_profile, replay_query_profile, dropped_event_profile, rerun_evidence_profile, run_variant_policy, input_provenance, stable_report_fingerprint, metrics.telemetry_sample_rate_hz, metrics.p95_alert_latency_ms, metrics.p95_replay_query_latency_ms, metrics.dropped_event_count, target_profile, target_results.checks, baseline_verdict, next_hot_path_profile, runtime_boundary`
 - Allowed run-variant fields: `generated_at, metrics.p95_alert_latency_ms, metrics.p95_replay_query_latency_ms, target_results.checks.p95_alert_latency_ms.observed, target_results.checks.p95_replay_query_latency_ms.observed, latency_budget_profile.observed_p95_ms.alert_evaluation, latency_budget_profile.observed_p95_ms.bounded_replay_query, runtime_observation.duration_ms, runtime_observation.within_expected_runtime`
 - Rust scope: `data-plane candidate only; not a whole-project rewrite`
 
@@ -70,9 +78,9 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 ## Latency Budget Profile
 
 - Alert p95 budget: `50 ms`
-- Alert p95 remaining budget: `47.464 ms`
+- Alert p95 remaining budget: `47.317 ms`
 - Replay p95 budget: `500 ms`
-- Replay p95 remaining budget: `497.053 ms`
+- Replay p95 remaining budget: `497.026 ms`
 - Comparison rule: `Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.`
 
 ## Replay Query Profile
@@ -115,7 +123,7 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 ## Run Variant Policy
 
-- Stable identity fields: `schema, stage, execution_profile.process_model, execution_profile.client_count, resource_guard.worker_processes, resource_guard.uses_network, resource_guard.uses_paid_services, determinism_profile.workload_identity, determinism_profile.stable_inputs, input_provenance.telemetry_catalog_sha256, rerun_evidence_profile.command, rerun_evidence_profile.required_outputs, rerun_evidence_profile.resource_envelope, workload.scenario, workload.samples_per_channel, workload.step_seconds, targets, runtime_boundary`
+- Stable identity fields: `schema, stage, execution_profile.process_model, execution_profile.client_count, resource_guard.worker_processes, resource_guard.uses_network, resource_guard.uses_paid_services, determinism_profile.workload_identity, determinism_profile.stable_inputs, input_provenance.telemetry_catalog_sha256, rerun_evidence_profile.command, rerun_evidence_profile.required_outputs, rerun_evidence_profile.resource_envelope, timing_source_profile, workload.scenario, workload.samples_per_channel, workload.step_seconds, targets, runtime_boundary`
 - Allowed variant fields: `generated_at, metrics.p95_alert_latency_ms, metrics.p95_replay_query_latency_ms, target_results.checks.p95_alert_latency_ms.observed, target_results.checks.p95_replay_query_latency_ms.observed, latency_budget_profile.observed_p95_ms.alert_evaluation, latency_budget_profile.observed_p95_ms.bounded_replay_query, latency_budget_profile.remaining_budget_ms.alert_evaluation, latency_budget_profile.remaining_budget_ms.bounded_replay_query, runtime_observation.duration_ms, runtime_observation.within_expected_runtime`
 - Comparison gate: `Do not compare runtime candidates unless stable_identity_fields match or the candidate explicitly documents a versioned workload change.`
 - Rust scope: `data-plane candidate only; not a whole-project rewrite`
@@ -124,8 +132,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 - Schema: `telemforge.stage09_stable_report_fingerprint.v1`
 - Digest algorithm: `sha256`
-- Digest SHA-256: `3c110d6133f2f4af02f4e13666232740314a74d1b187104587a2bb13d1bef8e7`
-- Stable identity fields: `schema, stage, execution_profile.process_model, execution_profile.client_count, resource_guard.worker_processes, resource_guard.uses_network, resource_guard.uses_paid_services, determinism_profile.workload_identity, determinism_profile.stable_inputs, input_provenance.telemetry_catalog_sha256, rerun_evidence_profile.command, rerun_evidence_profile.required_outputs, rerun_evidence_profile.resource_envelope, workload.scenario, workload.samples_per_channel, workload.step_seconds, targets, runtime_boundary`
+- Digest SHA-256: `10a54ffffda715b07e7b2a543c209ea0db3c906cca0569edbd69496799536609`
+- Stable identity fields: `schema, stage, execution_profile.process_model, execution_profile.client_count, resource_guard.worker_processes, resource_guard.uses_network, resource_guard.uses_paid_services, determinism_profile.workload_identity, determinism_profile.stable_inputs, input_provenance.telemetry_catalog_sha256, rerun_evidence_profile.command, rerun_evidence_profile.required_outputs, rerun_evidence_profile.resource_envelope, timing_source_profile, workload.scenario, workload.samples_per_channel, workload.step_seconds, targets, runtime_boundary`
 - Excluded run-variant fields: `generated_at, metrics.p95_alert_latency_ms, metrics.p95_replay_query_latency_ms, target_results.checks.p95_alert_latency_ms.observed, target_results.checks.p95_replay_query_latency_ms.observed, latency_budget_profile.observed_p95_ms.alert_evaluation, latency_budget_profile.observed_p95_ms.bounded_replay_query, latency_budget_profile.remaining_budget_ms.alert_evaluation, latency_budget_profile.remaining_budget_ms.bounded_replay_query, runtime_observation.duration_ms, runtime_observation.within_expected_runtime`
 - Comparison rule: `Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.`
 - Rust scope: `data-plane candidate only; not a whole-project rewrite`
@@ -142,7 +150,7 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 ## Comparison Profile
 
-- Stable fields: `schema, stage, health_stage, execution_profile.process_model, execution_profile.client_count, execution_profile.resource_scope, execution_profile.load_shape, resource_guard.worker_processes, resource_guard.uses_network, resource_guard.uses_paid_services, benchmark_contract, verification_contract, measurement_boundary, stream_contract_profile, rerun_evidence_profile, run_variant_policy, stable_report_fingerprint, determinism_profile.workload_identity, determinism_profile.stable_inputs, latency_budget_profile.budgets, replay_query_profile.window, replay_query_profile.requested_limit, dropped_event_profile.accounting_source, dropped_event_profile.comparison_rule, input_provenance.telemetry_catalog_sha256, workload.scenario, workload.sample_window, workload.samples_per_channel, workload.step_seconds, targets, target_profile, baseline_verdict, next_hot_path_profile, runtime_boundary`
+- Stable fields: `schema, stage, health_stage, execution_profile.process_model, execution_profile.client_count, execution_profile.resource_scope, execution_profile.load_shape, resource_guard.worker_processes, resource_guard.uses_network, resource_guard.uses_paid_services, benchmark_contract, verification_contract, measurement_boundary, timing_source_profile, stream_contract_profile, rerun_evidence_profile, run_variant_policy, stable_report_fingerprint, determinism_profile.workload_identity, determinism_profile.stable_inputs, latency_budget_profile.budgets, replay_query_profile.window, replay_query_profile.requested_limit, dropped_event_profile.accounting_source, dropped_event_profile.comparison_rule, input_provenance.telemetry_catalog_sha256, workload.scenario, workload.sample_window, workload.samples_per_channel, workload.step_seconds, targets, target_profile, baseline_verdict, next_hot_path_profile, runtime_boundary`
 - Run-specific fields: `generated_at, metrics.p95_alert_latency_ms, metrics.p95_replay_query_latency_ms, target_results.checks.p95_alert_latency_ms.observed, target_results.checks.p95_replay_query_latency_ms.observed, latency_budget_profile.observed_p95_ms.alert_evaluation, latency_budget_profile.observed_p95_ms.bounded_replay_query, runtime_observation.duration_ms, runtime_observation.within_expected_runtime`
 - Compatibility requirements: `Use the same workload scenario, seed, sample count, and step interval.; Keep execution_profile and resource_guard visible in every report.; Report dropped_event_count explicitly for stream/backpressure comparisons.; Keep determinism_profile.workload_identity unchanged for comparable runs.; Preserve the benchmark metric names before replacing any Python control-plane hot path with a Rust data-plane candidate.; Preserve latency_budget_profile fields so alert and replay headroom remain visible across runtime candidates.; Preserve input_provenance.telemetry_catalog_sha256 so runtime candidates do not compare against a different channel catalog.; Preserve verification_contract.command and required_report_fields so reruns regenerate both public baseline artifacts together.; Preserve rerun_evidence_profile fields so baseline refreshes and Rust candidates prove the same command, outputs, and resource envelope before metrics are compared.`
 
@@ -150,8 +158,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 - Aggregate sample rate: `10.0 Hz`
 - Per-channel sample rate: `1.0 Hz`
-- P95 alert latency: `2.536 ms`
-- P95 replay query latency: `2.947 ms`
+- P95 alert latency: `2.683 ms`
+- P95 replay query latency: `2.974 ms`
 - Dropped events: `0`
 
 ## Target Results
@@ -161,8 +169,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 | Channel count | 10 channels | >= 100 channels | 90 channels | MISS |
 | Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |
 | Aggregate sample rate | 10.0 Hz | >= 1000 Hz | 990.0 Hz | MISS |
-| P95 alert latency | 2.536 ms | <= 50 ms | 0 ms | PASS |
-| P95 replay query latency | 2.947 ms | <= 500 ms | 0 ms | PASS |
+| P95 alert latency | 2.683 ms | <= 50 ms | 0 ms | PASS |
+| P95 replay query latency | 2.974 ms | <= 500 ms | 0 ms | PASS |
 | Dropped events | 0 events | <= 0 events | 0 events | PASS |
 
 Missed targets: `channel_count, per_channel_sample_rate_hz, aggregate_sample_rate_hz`.

@@ -59,6 +59,27 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(runtime_observation["max_expected_runtime_seconds"], 30)
             self.assertTrue(runtime_observation["within_expected_runtime"])
             self.assertEqual(runtime_observation["worker_processes_observed"], 1)
+            timing_source_profile = summary["timing_source_profile"]
+            self.assertEqual(
+                timing_source_profile["schema"],
+                "telemforge.stage09_timing_source_profile.v1",
+            )
+            self.assertEqual(
+                timing_source_profile["duration_clock"],
+                "time.perf_counter_ns monotonic process clock",
+            )
+            self.assertEqual(
+                timing_source_profile["report_timestamp_clock"],
+                "datetime.now(timezone.utc)",
+            )
+            self.assertEqual(
+                timing_source_profile["synthetic_sample_clock"],
+                "deterministic benchmark start_at plus fixed step_seconds",
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                timing_source_profile["rust_scope"],
+            )
             measurement_boundary = summary["measurement_boundary"]
             self.assertEqual(
                 measurement_boundary["schema"],
@@ -156,6 +177,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["allowed_run_variant_fields"],
             )
             self.assertIn(
+                "timing_source_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "run_variant_policy",
                 verification_contract["required_report_fields"],
             )
@@ -186,6 +211,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "rerun_evidence_profile.resource_envelope",
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
+                "timing_source_profile",
                 run_variant_policy["stable_identity_fields"],
             )
             self.assertIn(
@@ -220,6 +249,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "runtime_boundary",
+                stable_report_fingerprint["stable_identity_fields"],
+            )
+            self.assertIn(
+                "timing_source_profile",
                 stable_report_fingerprint["stable_identity_fields"],
             )
             self.assertIn(
@@ -313,6 +346,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "stable_report_fingerprint",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "timing_source_profile",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -745,6 +782,15 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("## Runtime Observation", summary_text)
             self.assertIn("- Within expected runtime: `True`", summary_text)
             self.assertIn("- Worker processes observed: `1`", summary_text)
+            self.assertIn("## Timing Source Profile", summary_text)
+            self.assertIn(
+                "- Duration clock: `time.perf_counter_ns monotonic process clock`",
+                summary_text,
+            )
+            self.assertIn(
+                "synthetic benchmark timestamps are deterministic",
+                summary_text,
+            )
             self.assertIn("## Measurement Boundary", summary_text)
             self.assertIn(
                 "bounded Python/FastAPI control-plane comparison baseline",

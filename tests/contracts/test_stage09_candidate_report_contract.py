@@ -44,6 +44,11 @@ class Stage09CandidateReportContractTest(unittest.TestCase):
 
         for field_name in contract["required_top_level_fields"]:
             self.assertIn(field_name, report)
+        self.assertIn("timing_source_profile", contract["required_top_level_fields"])
+        self.assertEqual(
+            report["timing_source_profile"]["schema"],
+            "telemforge.stage09_timing_source_profile.v1",
+        )
 
     def test_metric_bindings_exist_in_baseline_report(self) -> None:
         contract = read_json(CONTRACT_PATH)

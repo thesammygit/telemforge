@@ -83,6 +83,7 @@
       "benchmark_contract",
       "verification_contract",
       "measurement_boundary",
+      "timing_source_profile",
       "stream_contract_profile",
       "rerun_evidence_profile",
       "run_variant_policy",
@@ -168,7 +169,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T05:43:06Z",
+  "generated_at": "2026-05-05T08:17:15Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -186,13 +187,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.536,
-      "bounded_replay_query": 2.947
+      "alert_evaluation": 2.683,
+      "bounded_replay_query": 2.974
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.464,
-      "bounded_replay_query": 497.053
+      "alert_evaluation": 47.317,
+      "bounded_replay_query": 497.026
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -217,8 +218,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.536,
-    "p95_replay_query_latency_ms": 2.947,
+    "p95_alert_latency_ms": 2.683,
+    "p95_replay_query_latency_ms": 2.974,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -361,6 +362,7 @@
       "rerun_evidence_profile.command",
       "rerun_evidence_profile.required_outputs",
       "rerun_evidence_profile.resource_envelope",
+      "timing_source_profile",
       "workload.scenario",
       "workload.samples_per_channel",
       "workload.step_seconds",
@@ -385,7 +387,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 51.622,
+    "duration_ms": 50.963,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -396,7 +398,7 @@
   "stable_report_fingerprint": {
     "comparison_rule": "Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.",
     "digest_algorithm": "sha256",
-    "digest_sha256": "3c110d6133f2f4af02f4e13666232740314a74d1b187104587a2bb13d1bef8e7",
+    "digest_sha256": "10a54ffffda715b07e7b2a543c209ea0db3c906cca0569edbd69496799536609",
     "excluded_run_variant_fields": [
       "generated_at",
       "metrics.p95_alert_latency_ms",
@@ -427,6 +429,7 @@
       "rerun_evidence_profile.command",
       "rerun_evidence_profile.required_outputs",
       "rerun_evidence_profile.resource_envelope",
+      "timing_source_profile",
       "workload.scenario",
       "workload.samples_per_channel",
       "workload.step_seconds",
@@ -547,7 +550,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.536,
+        "observed": 2.683,
         "target": 50,
         "unit": "ms"
       },
@@ -555,7 +558,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.947,
+        "observed": 2.974,
         "target": 500,
         "unit": "ms"
       },
@@ -582,6 +585,15 @@
     "p95_alert_latency_ms": 50,
     "per_channel_sample_rate_hz": 10,
     "replay_query_latency_ms": 500
+  },
+  "timing_source_profile": {
+    "comparison_rule": "Compare duration and latency values only as run-specific metrics; synthetic benchmark timestamps are deterministic workload inputs.",
+    "duration_clock": "time.perf_counter_ns monotonic process clock",
+    "purpose": "Make the benchmark clocks explicit before comparing the Python/FastAPI baseline with a future Rust data-plane candidate.",
+    "report_timestamp_clock": "datetime.now(timezone.utc)",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_timing_source_profile.v1",
+    "synthetic_sample_clock": "deterministic benchmark start_at plus fixed step_seconds"
   },
   "verification_contract": {
     "allowed_run_variant_fields": [
@@ -613,6 +625,7 @@
       "execution_profile",
       "resource_guard",
       "runtime_observation",
+      "timing_source_profile",
       "benchmark_contract",
       "verification_contract",
       "measurement_boundary",

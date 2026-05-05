@@ -24,6 +24,7 @@
     "execution_profile",
     "resource_guard",
     "runtime_observation",
+    "timing_source_profile",
     "measurement_boundary",
     "stream_contract_profile",
     "determinism_profile",

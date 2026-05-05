@@ -185,6 +185,7 @@ def run_stage09_realtime_baseline(
         "measurement_boundary": _measurement_boundary(),
         "resource_guard": resource_guard,
         "runtime_observation": runtime_observation,
+        "timing_source_profile": _timing_source_profile(),
         "benchmark_contract": _benchmark_contract(),
         "verification_contract": _verification_contract(),
         "run_variant_policy": _run_variant_policy(),
@@ -460,6 +461,7 @@ def _comparison_profile() -> dict[str, Any]:
             "benchmark_contract",
             "verification_contract",
             "measurement_boundary",
+            "timing_source_profile",
             "stream_contract_profile",
             "rerun_evidence_profile",
             "run_variant_policy",
@@ -556,6 +558,7 @@ def _verification_contract() -> dict[str, Any]:
             "execution_profile",
             "resource_guard",
             "runtime_observation",
+            "timing_source_profile",
             "benchmark_contract",
             "verification_contract",
             "measurement_boundary",
@@ -622,6 +625,7 @@ def _run_variant_policy() -> dict[str, Any]:
             "rerun_evidence_profile.command",
             "rerun_evidence_profile.required_outputs",
             "rerun_evidence_profile.resource_envelope",
+            "timing_source_profile",
             "workload.scenario",
             "workload.samples_per_channel",
             "workload.step_seconds",
@@ -1147,6 +1151,26 @@ def _runtime_observation(
     }
 
 
+def _timing_source_profile() -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_timing_source_profile.v1",
+        "purpose": (
+            "Make the benchmark clocks explicit before comparing the "
+            "Python/FastAPI baseline with a future Rust data-plane candidate."
+        ),
+        "duration_clock": "time.perf_counter_ns monotonic process clock",
+        "report_timestamp_clock": "datetime.now(timezone.utc)",
+        "synthetic_sample_clock": (
+            "deterministic benchmark start_at plus fixed step_seconds"
+        ),
+        "comparison_rule": (
+            "Compare duration and latency values only as run-specific metrics; "
+            "synthetic benchmark timestamps are deterministic workload inputs."
+        ),
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    }
+
+
 def _input_provenance(channel_count: int) -> dict[str, Any]:
     catalog_path = ROOT / TELEMETRY_CATALOG_PATH
     catalog_bytes = catalog_path.read_bytes()
@@ -1204,6 +1228,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     execution_profile = summary["execution_profile"]
     resource_guard = summary["resource_guard"]
     runtime_observation = summary["runtime_observation"]
+    timing_source_profile = summary["timing_source_profile"]
     measurement_boundary = summary["measurement_boundary"]
     verification_contract = summary["verification_contract"]
     stream_contract_profile = summary["stream_contract_profile"]
@@ -1302,6 +1327,12 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Max expected runtime: `{runtime_observation['max_expected_runtime_seconds']} seconds`\n"
         f"- Within expected runtime: `{runtime_observation['within_expected_runtime']}`\n"
         f"- Worker processes observed: `{runtime_observation['worker_processes_observed']}`\n\n"
+        "## Timing Source Profile\n\n"
+        f"- Duration clock: `{timing_source_profile['duration_clock']}`\n"
+        f"- Report timestamp clock: `{timing_source_profile['report_timestamp_clock']}`\n"
+        f"- Synthetic sample clock: `{timing_source_profile['synthetic_sample_clock']}`\n"
+        f"- Comparison rule: `{timing_source_profile['comparison_rule']}`\n"
+        f"- Rust scope: `{timing_source_profile['rust_scope']}`\n\n"
         "## Measurement Boundary\n\n"
         f"- Baseline claim: `{measurement_boundary['baseline_claim']}`\n"
         f"- Measured now: `{', '.join(measurement_boundary['measured_now'])}`\n"

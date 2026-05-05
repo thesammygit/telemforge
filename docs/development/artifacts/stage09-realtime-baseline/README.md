@@ -30,10 +30,11 @@ queries.
   count, replay sample count, formula, and stream/backpressure comparison rule,
   a rerun evidence profile that pins the refresh command, required outputs,
   resource envelope, and comparable identity before runtime metrics are
-  compared,
-  a runtime observation that confirms the
-  bounded command stayed inside the expected local runtime envelope, input
-  provenance for the exact telemetry catalog hash used to generate the workload,
+  compared, a runtime observation that confirms the bounded command stayed
+  inside the expected local runtime envelope, a timing source profile that names
+  the monotonic duration clock, UTC report timestamp clock, and deterministic
+  synthetic sample clock, input provenance for the exact telemetry catalog hash
+  used to generate the workload,
   a target profile that binds the ADR-009 realtime hypotheses to stable report
   fields, an explicit baseline verdict, a next-hot-path profile that maps
   missed throughput targets to the first narrow Rust data-plane candidate, and
@@ -117,6 +118,13 @@ benchmark command and whether it stayed inside the expected local runtime
 envelope. This keeps resource claims evidence-backed without turning Stage 09
 into a heavy load test.
 
+The `timing_source_profile` block records the clocks behind the benchmark:
+`time.perf_counter_ns` for duration and latency measurements,
+`datetime.now(timezone.utc)` for report timestamps, and deterministic
+`start_at + step_seconds` values for synthetic sample timestamps. This keeps
+future Rust data-plane comparisons from mixing run-specific timing observations
+with stable workload time.
+
 The `comparison_profile` block identifies which fields are stable enough for
 Python/Rust runtime comparison and which fields, such as generated timestamps
 and p95 latency observations, are expected to vary between bounded local runs.
@@ -137,6 +145,8 @@ The `stable_report_fingerprint` block hashes the stable identity fields from the
 run-variant policy. A future Python/FastAPI refresh or Rust data-plane candidate
 should compare timing metrics only after this digest matches, unless it records
 an explicit versioned workload change.
+The timing source profile is included in that stable identity so a runtime
+candidate cannot change clocks without changing the comparison fingerprint.
 
 The `determinism_profile` block names the stable workload identity, seed,
 scenario, sample window inputs, and run-variant timing fields. A future Rust
