@@ -172,7 +172,7 @@ def run_stage09_realtime_baseline(
     resource_guard = _resource_guard()
     runtime_observation = _runtime_observation(started_ns, resource_guard)
 
-    return {
+    summary = {
         "schema": "telemforge.stage09_realtime_baseline.v1",
         "generated_at": _utc_now(),
         "stage": "09-realtime-performance-and-rust-data-plane",
@@ -222,6 +222,8 @@ def run_stage09_realtime_baseline(
             "Dropped events are measured as bounded replay rows missing from the local synthetic workload.",
         ],
     }
+    summary["stable_report_fingerprint"] = _stable_report_fingerprint(summary)
+    return summary
 
 
 def write_stage09_report(summary: dict[str, Any], output_path: Path | str) -> Path:
@@ -449,6 +451,7 @@ def _comparison_profile() -> dict[str, Any]:
             "measurement_boundary",
             "stream_contract_profile",
             "run_variant_policy",
+            "stable_report_fingerprint",
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "latency_budget_profile.budgets",
@@ -540,6 +543,7 @@ def _verification_contract() -> dict[str, Any]:
             "latency_budget_profile",
             "run_variant_policy",
             "input_provenance",
+            "stable_report_fingerprint",
             "metrics.telemetry_sample_rate_hz",
             "metrics.p95_alert_latency_ms",
             "metrics.p95_replay_query_latency_ms",
@@ -614,6 +618,38 @@ def _run_variant_policy() -> dict[str, Any]:
             "Do not compare runtime candidates unless stable_identity_fields "
             "match or the candidate explicitly documents a versioned workload "
             "change."
+        ),
+        "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    }
+
+
+def _stable_report_fingerprint(summary: dict[str, Any]) -> dict[str, Any]:
+    fields = summary["run_variant_policy"]["stable_identity_fields"]
+    stable_values = {field: _path_value(summary, field) for field in fields}
+    payload = {
+        "schema": summary["schema"],
+        "stable_identity_fields": fields,
+        "stable_values": stable_values,
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode(
+        "utf-8"
+    )
+    return {
+        "schema": "telemforge.stage09_stable_report_fingerprint.v1",
+        "purpose": (
+            "Hash the stable benchmark identity fields so local Python/FastAPI "
+            "reruns and future Rust data-plane candidates can reject mismatched "
+            "workloads before timing values are compared."
+        ),
+        "digest_algorithm": "sha256",
+        "digest_sha256": hashlib.sha256(encoded).hexdigest(),
+        "stable_identity_fields": fields,
+        "excluded_run_variant_fields": summary["run_variant_policy"][
+            "allowed_variant_fields"
+        ],
+        "comparison_rule": (
+            "Compare timing metrics only after digest_sha256 matches or a "
+            "versioned workload change is documented."
         ),
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
@@ -1037,6 +1073,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     latency_budget_profile = summary["latency_budget_profile"]
     input_provenance = summary["input_provenance"]
     run_variant_policy = summary["run_variant_policy"]
+    stable_report_fingerprint = summary["stable_report_fingerprint"]
     baseline_verdict = summary["baseline_verdict"]
     target_profile = summary["target_profile"]
     next_hot_path_profile = summary["next_hot_path_profile"]
@@ -1160,6 +1197,16 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Allowed variant fields: `{run_variant_allowed_fields}`\n"
         f"- Comparison gate: `{run_variant_policy['comparison_gate']}`\n"
         f"- Rust scope: `{run_variant_policy['rust_scope']}`\n\n"
+        "## Stable Report Fingerprint\n\n"
+        f"- Schema: `{stable_report_fingerprint['schema']}`\n"
+        f"- Digest algorithm: `{stable_report_fingerprint['digest_algorithm']}`\n"
+        f"- Digest SHA-256: `{stable_report_fingerprint['digest_sha256']}`\n"
+        "- Stable identity fields: "
+        f"`{', '.join(stable_report_fingerprint['stable_identity_fields'])}`\n"
+        "- Excluded run-variant fields: "
+        f"`{', '.join(stable_report_fingerprint['excluded_run_variant_fields'])}`\n"
+        f"- Comparison rule: `{stable_report_fingerprint['comparison_rule']}`\n"
+        f"- Rust scope: `{stable_report_fingerprint['rust_scope']}`\n\n"
         "## Target Profile\n\n"
         f"- Schema: `{target_profile['schema']}`\n"
         f"- Baseline status: `{target_profile['baseline_status']}`\n"
@@ -1234,6 +1281,15 @@ def _format_target_profile_bindings(target_profile: dict[str, Any]) -> str:
         target["report_binding"]
         for target in target_profile["metric_targets"].values()
     )
+
+
+def _path_value(summary: dict[str, Any], field_path: str) -> Any:
+    value: Any = summary
+    for part in field_path.split("."):
+        if not isinstance(value, dict) or part not in value:
+            raise KeyError(f"Cannot fingerprint missing Stage 09 field: {field_path}")
+        value = value[part]
+    return value
 
 
 def _offset_timestamp(start_at: str, offset_seconds: int) -> str:

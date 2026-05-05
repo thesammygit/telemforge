@@ -84,6 +84,7 @@
       "measurement_boundary",
       "stream_contract_profile",
       "run_variant_policy",
+      "stable_report_fingerprint",
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "latency_budget_profile.budgets",
@@ -146,7 +147,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-04T23:32:43Z",
+  "generated_at": "2026-05-05T00:23:12Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -164,13 +165,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.683,
-      "bounded_replay_query": 2.976
+      "alert_evaluation": 2.956,
+      "bounded_replay_query": 2.927
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.317,
-      "bounded_replay_query": 497.024
+      "alert_evaluation": 47.044,
+      "bounded_replay_query": 497.073
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -195,8 +196,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.683,
-    "p95_replay_query_latency_ms": 2.976,
+    "p95_alert_latency_ms": 2.956,
+    "p95_replay_query_latency_ms": 2.927,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -299,7 +300,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 51.486,
+    "duration_ms": 52.828,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -307,6 +308,44 @@
     "worker_processes_observed": 1
   },
   "schema": "telemforge.stage09_realtime_baseline.v1",
+  "stable_report_fingerprint": {
+    "comparison_rule": "Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.",
+    "digest_algorithm": "sha256",
+    "digest_sha256": "23a4ed5ee22b0cb1a130022c7724f12ceeaf894306ce9a1c89c2cb54fbc95d5b",
+    "excluded_run_variant_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed",
+      "latency_budget_profile.observed_p95_ms.alert_evaluation",
+      "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "latency_budget_profile.remaining_budget_ms.alert_evaluation",
+      "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "purpose": "Hash the stable benchmark identity fields so local Python/FastAPI reruns and future Rust data-plane candidates can reject mismatched workloads before timing values are compared.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_stable_report_fingerprint.v1",
+    "stable_identity_fields": [
+      "schema",
+      "stage",
+      "execution_profile.process_model",
+      "execution_profile.client_count",
+      "resource_guard.worker_processes",
+      "resource_guard.uses_network",
+      "resource_guard.uses_paid_services",
+      "determinism_profile.workload_identity",
+      "determinism_profile.stable_inputs",
+      "input_provenance.telemetry_catalog_sha256",
+      "workload.scenario",
+      "workload.samples_per_channel",
+      "workload.step_seconds",
+      "targets",
+      "runtime_boundary"
+    ]
+  },
   "stage": "09-realtime-performance-and-rust-data-plane",
   "stream_contract_profile": {
     "baseline_binding": {
@@ -420,7 +459,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.683,
+        "observed": 2.956,
         "target": 50,
         "unit": "ms"
       },
@@ -428,7 +467,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.976,
+        "observed": 2.927,
         "target": 500,
         "unit": "ms"
       },
@@ -494,6 +533,7 @@
       "latency_budget_profile",
       "run_variant_policy",
       "input_provenance",
+      "stable_report_fingerprint",
       "metrics.telemetry_sample_rate_hz",
       "metrics.p95_alert_latency_ms",
       "metrics.p95_replay_query_latency_ms",

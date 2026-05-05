@@ -136,6 +136,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "stable_report_fingerprint",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "runtime_observation.duration_ms",
                 verification_contract["allowed_run_variant_fields"],
             )
@@ -179,6 +183,36 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "not a whole-project rewrite",
                 run_variant_policy["rust_scope"],
+            )
+            stable_report_fingerprint = summary["stable_report_fingerprint"]
+            self.assertEqual(
+                stable_report_fingerprint["schema"],
+                "telemforge.stage09_stable_report_fingerprint.v1",
+            )
+            self.assertEqual(
+                stable_report_fingerprint["digest_algorithm"],
+                "sha256",
+            )
+            self.assertEqual(len(stable_report_fingerprint["digest_sha256"]), 64)
+            self.assertEqual(
+                stable_report_fingerprint["stable_identity_fields"],
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
+                "runtime_boundary",
+                stable_report_fingerprint["stable_identity_fields"],
+            )
+            self.assertIn(
+                "metrics.p95_alert_latency_ms",
+                stable_report_fingerprint["excluded_run_variant_fields"],
+            )
+            self.assertNotIn(
+                "generated_at",
+                stable_report_fingerprint["stable_identity_fields"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                stable_report_fingerprint["rust_scope"],
             )
             comparison_profile = summary["comparison_profile"]
             self.assertEqual(
@@ -235,6 +269,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "stream_contract_profile",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "stable_report_fingerprint",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -625,6 +663,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("Allowed variant fields: `", summary_text)
             self.assertIn("runtime_observation.duration_ms", summary_text)
             self.assertIn("Do not compare runtime candidates unless", summary_text)
+            self.assertIn("## Stable Report Fingerprint", summary_text)
+            self.assertIn("telemforge.stage09_stable_report_fingerprint.v1", summary_text)
+            self.assertIn("Digest SHA-256", summary_text)
+            self.assertIn("Compare timing metrics only after digest_sha256 matches", summary_text)
             self.assertIn("latency_budget_profile.budgets", summary_text)
             self.assertIn("metrics.p95_alert_latency_ms", summary_text)
             self.assertIn("Report dropped_event_count explicitly", summary_text)
@@ -732,6 +774,18 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "stream_contract_profile",
                 report["verification_contract"]["required_report_fields"],
+            )
+            self.assertIn(
+                "stable_report_fingerprint",
+                report["verification_contract"]["required_report_fields"],
+            )
+            self.assertEqual(
+                report["stable_report_fingerprint"]["schema"],
+                "telemforge.stage09_stable_report_fingerprint.v1",
+            )
+            self.assertEqual(
+                len(report["stable_report_fingerprint"]["digest_sha256"]),
+                64,
             )
             self.assertEqual(
                 report["stream_contract_profile"]["schema"],

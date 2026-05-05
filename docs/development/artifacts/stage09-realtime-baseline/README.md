@@ -19,6 +19,8 @@ queries.
   verification contract that pins the rerun command and required report fields, a
   run-variant policy that gates Python/Rust comparisons on stable identity
   fields while allowing local timing variance, a
+  stable report fingerprint that hashes comparable identity fields before
+  timing values are compared, a
   stream contract profile that binds the report to the websocket contract
   without claiming runtime fanout,
   determinism profile with the stable workload identity, a latency budget
@@ -105,6 +107,11 @@ match before runtime candidates are compared, plus the timing and runtime
 observation fields that are allowed to vary between bounded local runs. This
 keeps the current Python/FastAPI baseline and future Rust data-plane candidates
 comparable without pretending p95 latencies are deterministic.
+
+The `stable_report_fingerprint` block hashes the stable identity fields from the
+run-variant policy. A future Python/FastAPI refresh or Rust data-plane candidate
+should compare timing metrics only after this digest matches, unless it records
+an explicit versioned workload change.
 
 The `determinism_profile` block names the stable workload identity, seed,
 scenario, sample window inputs, and run-variant timing fields. A future Rust
