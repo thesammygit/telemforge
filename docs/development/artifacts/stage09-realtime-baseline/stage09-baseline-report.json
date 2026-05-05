@@ -1,4 +1,19 @@
 {
+  "alert_latency_profile": {
+    "comparison_rule": "Only compare alert hot-path candidates when the fault mix, iteration count, and determinism_profile.workload_identity match.",
+    "endpoint_path": "/sessions/{session_id}/faults",
+    "fault_types": [
+      "comms_downlink_fade",
+      "thermal_avionics_overheat"
+    ],
+    "latency_iteration_count": 5,
+    "latency_method": "nearest-rank p95 over manual fault POST requests",
+    "observed_p95_ms": 2.403,
+    "purpose": "Make the manual-fault alert latency measurement explicit before Python/FastAPI and future Rust data-plane alert candidates are compared.",
+    "rust_scope": "data-plane alert-evaluation candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_alert_latency_profile.v1",
+    "trigger_source": "manual fault POST requests through FastAPI TestClient"
+  },
   "baseline_verdict": {
     "missed_targets": [
       "channel_count",
@@ -65,6 +80,7 @@
       "target_results.checks.p95_replay_query_latency_ms.observed",
       "latency_budget_profile.observed_p95_ms.alert_evaluation",
       "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
       "runtime_observation.duration_ms",
       "runtime_observation.within_expected_runtime"
     ],
@@ -91,6 +107,9 @@
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "latency_budget_profile.budgets",
+      "alert_latency_profile.endpoint_path",
+      "alert_latency_profile.trigger_source",
+      "alert_latency_profile.latency_method",
       "replay_query_profile.window",
       "replay_query_profile.requested_limit",
       "dropped_event_profile.accounting_source",
@@ -169,7 +188,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T09:52:22Z",
+  "generated_at": "2026-05-05T10:44:08Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -187,13 +206,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.655,
-      "bounded_replay_query": 2.888
+      "alert_evaluation": 2.403,
+      "bounded_replay_query": 2.886
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.345,
-      "bounded_replay_query": 497.112
+      "alert_evaluation": 47.597,
+      "bounded_replay_query": 497.114
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -218,8 +237,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.655,
-    "p95_replay_query_latency_ms": 2.888,
+    "p95_alert_latency_ms": 2.403,
+    "p95_replay_query_latency_ms": 2.886,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -341,6 +360,7 @@
       "latency_budget_profile.observed_p95_ms.bounded_replay_query",
       "latency_budget_profile.remaining_budget_ms.alert_evaluation",
       "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
       "runtime_observation.duration_ms",
       "runtime_observation.within_expected_runtime"
     ],
@@ -387,7 +407,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 50.467,
+    "duration_ms": 48.489,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -409,6 +429,7 @@
       "latency_budget_profile.observed_p95_ms.bounded_replay_query",
       "latency_budget_profile.remaining_budget_ms.alert_evaluation",
       "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
       "runtime_observation.duration_ms",
       "runtime_observation.within_expected_runtime"
     ],
@@ -550,7 +571,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.655,
+        "observed": 2.403,
         "target": 50,
         "unit": "ms"
       },
@@ -558,7 +579,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.888,
+        "observed": 2.886,
         "target": 500,
         "unit": "ms"
       },
@@ -604,6 +625,7 @@
       "target_results.checks.p95_replay_query_latency_ms.observed",
       "latency_budget_profile.observed_p95_ms.alert_evaluation",
       "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
       "runtime_observation.duration_ms",
       "runtime_observation.within_expected_runtime"
     ],
@@ -632,6 +654,7 @@
       "stream_contract_profile",
       "determinism_profile",
       "latency_budget_profile",
+      "alert_latency_profile",
       "replay_query_profile",
       "dropped_event_profile",
       "rerun_evidence_profile",

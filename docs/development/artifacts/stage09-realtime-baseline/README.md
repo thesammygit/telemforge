@@ -24,10 +24,12 @@ queries.
   stream contract profile that binds the report to the websocket contract
   without claiming runtime fanout,
   determinism profile with the stable workload identity, a latency budget
-  profile for alert/replay headroom, a replay query profile that records the
-  bounded replay window, requested limit, returned samples, and latency
-  iteration count, a dropped-event profile that records the telemetry query
-  count, replay sample count, formula, and stream/backpressure comparison rule,
+  profile for alert/replay headroom, an alert latency profile that records the
+  manual-fault endpoint, trigger mix, p95 method, observed p95 value, and
+  iteration count, a replay query profile that records the bounded replay
+  window, requested limit, returned samples, and latency iteration count, a
+  dropped-event profile that records the telemetry query count, replay sample
+  count, formula, and stream/backpressure comparison rule,
   a rerun evidence profile that pins the refresh command, required outputs,
   resource envelope, and comparable identity before runtime metrics are
   compared, a runtime observation that confirms the bounded command stayed
@@ -161,6 +163,12 @@ The `latency_budget_profile` block records the Stage 09 p95 alert and replay
 budgets, the observed p95 latencies for the current run, and the remaining
 latency headroom. It keeps latency budget comparison explicit for future Rust
 data-plane candidates without promoting Rust to a whole-project rewrite.
+
+The `alert_latency_profile` block records the manual-fault alert measurement
+boundary: `POST /sessions/{session_id}/faults`, the deterministic fault mix,
+nearest-rank p95 method, iteration count, and observed p95 value. Future Rust
+alert-evaluation candidates should preserve that profile before their latency
+numbers are compared with the Python/FastAPI control-plane baseline.
 
 The `replay_query_profile` block records the exact bounded replay endpoint,
 window, requested limit, returned samples, marker/anomaly counts, and latency

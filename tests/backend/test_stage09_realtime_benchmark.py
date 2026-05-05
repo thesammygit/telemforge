@@ -161,6 +161,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "alert_latency_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "dropped_event_profile",
                 verification_contract["required_report_fields"],
             )
@@ -299,6 +303,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "replay_query_profile.window",
                 comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "alert_latency_profile.endpoint_path",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "alert_latency_profile.observed_p95_ms",
+                comparison_profile["run_specific_fields"],
             )
             self.assertIn(
                 "replay_query_profile.requested_limit",
@@ -460,6 +472,36 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "workload_identity",
                 latency_budget_profile["comparison_rule"],
+            )
+            alert_latency_profile = summary["alert_latency_profile"]
+            self.assertEqual(
+                alert_latency_profile["schema"],
+                "telemforge.stage09_alert_latency_profile.v1",
+            )
+            self.assertEqual(
+                alert_latency_profile["endpoint_path"],
+                "/sessions/{session_id}/faults",
+            )
+            self.assertEqual(
+                alert_latency_profile["trigger_source"],
+                "manual fault POST requests through FastAPI TestClient",
+            )
+            self.assertEqual(
+                alert_latency_profile["fault_types"],
+                ["comms_downlink_fade", "thermal_avionics_overheat"],
+            )
+            self.assertEqual(alert_latency_profile["latency_iteration_count"], 3)
+            self.assertEqual(
+                alert_latency_profile["observed_p95_ms"],
+                summary["metrics"]["p95_alert_latency_ms"],
+            )
+            self.assertIn(
+                "alert hot-path candidates",
+                alert_latency_profile["comparison_rule"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                alert_latency_profile["rust_scope"],
             )
             replay_query_profile = summary["replay_query_profile"]
             self.assertEqual(
@@ -821,6 +863,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("- Alert p95 budget: `50 ms`", summary_text)
             self.assertIn("- Replay p95 budget: `500 ms`", summary_text)
             self.assertIn("latency headroom", summary_text)
+            self.assertIn("## Alert Latency Profile", summary_text)
+            self.assertIn("- Endpoint: `/sessions/{session_id}/faults`", summary_text)
+            self.assertIn(
+                "manual fault POST requests through FastAPI TestClient",
+                summary_text,
+            )
+            self.assertIn("nearest-rank p95 over manual fault POST requests", summary_text)
+            self.assertIn("alert hot-path candidates", summary_text)
             self.assertIn("## Replay Query Profile", summary_text)
             self.assertIn("- Endpoint: `/sessions/{session_id}/replay`", summary_text)
             self.assertIn("- Requested limit: `500`", summary_text)
@@ -1061,6 +1111,18 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["replay_query_profile"]["schema"],
                 "telemforge.stage09_replay_query_profile.v1",
+            )
+            self.assertEqual(
+                report["alert_latency_profile"]["schema"],
+                "telemforge.stage09_alert_latency_profile.v1",
+            )
+            self.assertEqual(
+                report["alert_latency_profile"]["latency_iteration_count"],
+                2,
+            )
+            self.assertEqual(
+                report["alert_latency_profile"]["observed_p95_ms"],
+                report["metrics"]["p95_alert_latency_ms"],
             )
             self.assertEqual(report["replay_query_profile"]["requested_limit"], 500)
             self.assertEqual(

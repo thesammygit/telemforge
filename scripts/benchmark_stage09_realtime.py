@@ -81,10 +81,12 @@ def run_stage09_realtime_baseline(
     )
 
     alert_latency_ms: list[float] = []
+    alert_fault_types: list[str] = []
     for index in range(alert_iterations):
         fault_type = (
             "thermal_avionics_overheat" if index % 2 == 0 else "comms_downlink_fade"
         )
+        alert_fault_types.append(fault_type)
         requested_at = _offset_timestamp(BENCHMARK_START_AT, 10 + index)
         started = time.perf_counter_ns()
         _expect_json(
@@ -194,6 +196,11 @@ def run_stage09_realtime_baseline(
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
         "latency_budget_profile": _latency_budget_profile(metrics),
+        "alert_latency_profile": _alert_latency_profile(
+            alert_latency_ms=alert_latency_ms,
+            fault_types=alert_fault_types,
+            observed_p95_ms=metrics["p95_alert_latency_ms"],
+        ),
         "replay_query_profile": _replay_query_profile(
             replay=replay,
             replay_end_at=replay_end_at,
@@ -469,6 +476,9 @@ def _comparison_profile() -> dict[str, Any]:
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "latency_budget_profile.budgets",
+            "alert_latency_profile.endpoint_path",
+            "alert_latency_profile.trigger_source",
+            "alert_latency_profile.latency_method",
             "replay_query_profile.window",
             "replay_query_profile.requested_limit",
             "dropped_event_profile.accounting_source",
@@ -492,6 +502,7 @@ def _comparison_profile() -> dict[str, Any]:
             "target_results.checks.p95_replay_query_latency_ms.observed",
             "latency_budget_profile.observed_p95_ms.alert_evaluation",
             "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+            "alert_latency_profile.observed_p95_ms",
             "runtime_observation.duration_ms",
             "runtime_observation.within_expected_runtime",
         ],
@@ -565,6 +576,7 @@ def _verification_contract() -> dict[str, Any]:
             "stream_contract_profile",
             "determinism_profile",
             "latency_budget_profile",
+            "alert_latency_profile",
             "replay_query_profile",
             "dropped_event_profile",
             "rerun_evidence_profile",
@@ -589,6 +601,7 @@ def _verification_contract() -> dict[str, Any]:
             "target_results.checks.p95_replay_query_latency_ms.observed",
             "latency_budget_profile.observed_p95_ms.alert_evaluation",
             "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+            "alert_latency_profile.observed_p95_ms",
             "runtime_observation.duration_ms",
             "runtime_observation.within_expected_runtime",
         ],
@@ -642,6 +655,7 @@ def _run_variant_policy() -> dict[str, Any]:
             "latency_budget_profile.observed_p95_ms.bounded_replay_query",
             "latency_budget_profile.remaining_budget_ms.alert_evaluation",
             "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+            "alert_latency_profile.observed_p95_ms",
             "runtime_observation.duration_ms",
             "runtime_observation.within_expected_runtime",
         ],
@@ -755,6 +769,34 @@ def _latency_budget_profile(metrics: dict[str, Any]) -> dict[str, Any]:
         "comparison_rule": (
             "Only compare latency headroom when determinism_profile.workload_identity "
             "matches; treat observed p95 values as run-specific."
+        ),
+    }
+
+
+def _alert_latency_profile(
+    alert_latency_ms: list[float],
+    fault_types: list[str],
+    observed_p95_ms: float,
+) -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_alert_latency_profile.v1",
+        "purpose": (
+            "Make the manual-fault alert latency measurement explicit before "
+            "Python/FastAPI and future Rust data-plane alert candidates are "
+            "compared."
+        ),
+        "endpoint_path": "/sessions/{session_id}/faults",
+        "trigger_source": "manual fault POST requests through FastAPI TestClient",
+        "fault_types": sorted(set(fault_types)),
+        "latency_iteration_count": len(alert_latency_ms),
+        "latency_method": "nearest-rank p95 over manual fault POST requests",
+        "observed_p95_ms": observed_p95_ms,
+        "comparison_rule": (
+            "Only compare alert hot-path candidates when the fault mix, "
+            "iteration count, and determinism_profile.workload_identity match."
+        ),
+        "rust_scope": (
+            "data-plane alert-evaluation candidate only; not a whole-project rewrite"
         ),
     }
 
@@ -1235,6 +1277,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
+    alert_latency_profile = summary["alert_latency_profile"]
     replay_query_profile = summary["replay_query_profile"]
     dropped_event_profile = summary["dropped_event_profile"]
     rerun_evidence_profile = summary["rerun_evidence_profile"]
@@ -1365,6 +1408,15 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Replay p95 budget: `{latency_budget_profile['budgets']['bounded_replay_query_p95_ms']} ms`\n"
         f"- Replay p95 remaining budget: `{latency_budget_profile['remaining_budget_ms']['bounded_replay_query']} ms`\n"
         f"- Comparison rule: `{latency_budget_profile['comparison_rule']}`\n\n"
+        "## Alert Latency Profile\n\n"
+        f"- Endpoint: `{alert_latency_profile['endpoint_path']}`\n"
+        f"- Trigger source: `{alert_latency_profile['trigger_source']}`\n"
+        f"- Fault types: `{', '.join(alert_latency_profile['fault_types'])}`\n"
+        f"- Latency iterations: `{alert_latency_profile['latency_iteration_count']}`\n"
+        f"- Latency method: `{alert_latency_profile['latency_method']}`\n"
+        f"- Observed p95: `{alert_latency_profile['observed_p95_ms']} ms`\n"
+        f"- Comparison rule: `{alert_latency_profile['comparison_rule']}`\n"
+        f"- Rust scope: `{alert_latency_profile['rust_scope']}`\n\n"
         "## Replay Query Profile\n\n"
         f"- Endpoint: `{replay_query_profile['endpoint_path']}`\n"
         f"- Window: `{replay_query_profile['window']['start_at']}` to "

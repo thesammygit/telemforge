@@ -31,6 +31,7 @@
     "stream_contract_profile",
     "determinism_profile",
     "latency_budget_profile",
+    "alert_latency_profile",
     "replay_query_profile",
     "dropped_event_profile",
     "rerun_evidence_profile",

@@ -47,9 +47,14 @@ class Stage09CandidateReportContractTest(unittest.TestCase):
         self.assertIn("benchmark_contract", contract["required_top_level_fields"])
         self.assertIn("verification_contract", contract["required_top_level_fields"])
         self.assertIn("timing_source_profile", contract["required_top_level_fields"])
+        self.assertIn("alert_latency_profile", contract["required_top_level_fields"])
         self.assertEqual(
             report["timing_source_profile"]["schema"],
             "telemforge.stage09_timing_source_profile.v1",
+        )
+        self.assertEqual(
+            report["alert_latency_profile"]["schema"],
+            "telemforge.stage09_alert_latency_profile.v1",
         )
 
     def test_metric_bindings_exist_in_baseline_report(self) -> None:
