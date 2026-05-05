@@ -92,7 +92,8 @@ direction for hot paths, not as a whole-project rewrite.
 The companion contract artifact
 `docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json`
 defines the websocket/live telemetry envelope, reconnect token, backpressure
-policy, and dropped-event reporting shape before runtime fanout is implemented.
+policy, dropped-event reporting shape, and deterministic contract validation
+vectors before runtime fanout is implemented.
 
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`

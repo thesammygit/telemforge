@@ -128,6 +128,59 @@ class Stage09LiveTelemetryContractTest(unittest.TestCase):
             self.assertIn(metric_name, report["metrics"])
         self.assertIn("dropped_event_count", report["target_results"]["checks"])
 
+    def test_contract_validation_vectors_pin_reconnect_and_backpressure(self) -> None:
+        contract = read_json(CONTRACT_PATH)
+        vectors = contract["contract_validation_vectors"]
+        envelope_fields = contract["message_envelope"]["required_fields"]
+        ordered_stream = vectors["ordered_stream"]
+        sequence_values = [message["sequence"] for message in ordered_stream]
+
+        self.assertEqual(
+            vectors["purpose"],
+            (
+                "Pin deterministic websocket envelope examples for contract "
+                "tests before runtime fanout exists."
+            ),
+        )
+        self.assertEqual(sequence_values, sorted(sequence_values))
+        self.assertEqual(sequence_values[0], 1)
+        self.assertEqual(ordered_stream[0]["type"], "stream.snapshot")
+        for message in ordered_stream:
+            for field in envelope_fields:
+                self.assertIn(field, message)
+
+        reconnect = vectors["reconnect_resume"]
+        self.assertEqual(
+            reconnect["client_query"]["after_sequence"],
+            ordered_stream[1]["sequence"],
+        )
+        self.assertEqual(reconnect["resume_token_field"], "last_sequence")
+        self.assertEqual(
+            reconnect["must_resume_with_sequence_greater_than"],
+            ordered_stream[1]["sequence"],
+        )
+        self.assertEqual(reconnect["out_of_window_fallback"], "stream.snapshot")
+        self.assertEqual(
+            contract["reconnect"]["client_query_parameter"],
+            "after_sequence",
+        )
+
+        backpressure = vectors["backpressure_report"]
+        self.assertEqual(backpressure["type"], "stream.backpressure")
+        self.assertEqual(
+            backpressure["payload"]["policy"],
+            contract["backpressure"]["overflow_behavior"],
+        )
+        self.assertEqual(
+            backpressure["payload"]["client_queue_depth"],
+            contract["backpressure"]["max_client_queue_events"],
+        )
+        self.assertGreater(backpressure["payload"]["dropped_event_count"], 0)
+        self.assertEqual(
+            backpressure["comparison_metric"],
+            "metrics.dropped_event_count",
+        )
+
     def test_example_payload_references_known_channel_catalog(self) -> None:
         contract = read_json(CONTRACT_PATH)
         catalog = read_json(CHANNEL_CATALOG_PATH)

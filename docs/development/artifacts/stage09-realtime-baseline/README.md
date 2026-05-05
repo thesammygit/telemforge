@@ -44,7 +44,8 @@ queries.
 - `stage09-live-telemetry-contract.json`: static websocket/live telemetry
   contract for the next stream slice. It defines the message envelope,
   snapshot/sample/alert/heartbeat/backpressure message types, reconnect
-  behavior, and benchmark binding without adding runtime fanout yet.
+  behavior, deterministic validation vectors for reconnect/backpressure
+  contract tests, and benchmark binding without adding runtime fanout yet.
 - `rust-data-plane-boundary.md`: narrow implementation note that separates the
   Python/FastAPI control plane from future Rust data-plane candidates, with
   promotion gates before any hot path can replace the Python baseline.
@@ -82,6 +83,10 @@ The live telemetry contract is intentionally contract-only. It keeps the
 websocket path, reconnect token, backpressure policy, and dropped-event reporting
 shape reviewable before any Python fanout implementation or narrow Rust
 data-plane candidate is introduced.
+
+The contract validation vectors pin a minimal ordered stream, reconnect resume
+query, and `stream.backpressure` dropped-event payload. They are test fixtures
+for the contract shape only; they do not claim websocket runtime fanout exists.
 
 The `stream_contract_profile` block binds the generated benchmark report to the
 contract-only websocket artifact. It lists the live evidence still required

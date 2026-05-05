@@ -122,6 +122,69 @@
     ],
     "single_client_smoke": "The Stage 09 benchmark must keep dropped_event_count visible before any Rust data-plane replacement."
   },
+  "contract_validation_vectors": {
+    "purpose": "Pin deterministic websocket envelope examples for contract tests before runtime fanout exists.",
+    "ordered_stream": [
+      {
+        "type": "stream.snapshot",
+        "session_id": "session-stage09-example",
+        "sequence": 1,
+        "emitted_at": "2026-05-03T16:00:00Z",
+        "payload": {
+          "channels": [
+            "eps.battery_voltage"
+          ],
+          "latest_points": [],
+          "active_alerts": []
+        }
+      },
+      {
+        "type": "telemetry.sample",
+        "session_id": "session-stage09-example",
+        "sequence": 2,
+        "emitted_at": "2026-05-03T16:00:01Z",
+        "payload": {
+          "channel_id": "eps.battery_voltage",
+          "timestamp": "2026-05-03T16:00:01Z",
+          "value": 29.8,
+          "unit": "V",
+          "status": "nominal",
+          "quality": "valid",
+          "sequence": 1
+        }
+      },
+      {
+        "type": "stream.heartbeat",
+        "session_id": "session-stage09-example",
+        "sequence": 3,
+        "emitted_at": "2026-05-03T16:00:06Z",
+        "payload": {
+          "stream_time": "2026-05-03T16:00:06Z",
+          "last_sequence": 2
+        }
+      }
+    ],
+    "reconnect_resume": {
+      "client_query": {
+        "after_sequence": 2
+      },
+      "resume_token_field": "last_sequence",
+      "must_resume_with_sequence_greater_than": 2,
+      "out_of_window_fallback": "stream.snapshot"
+    },
+    "backpressure_report": {
+      "type": "stream.backpressure",
+      "session_id": "session-stage09-example",
+      "sequence": 251,
+      "emitted_at": "2026-05-03T16:00:10Z",
+      "payload": {
+        "policy": "drop_oldest_and_report",
+        "client_queue_depth": 250,
+        "dropped_event_count": 3
+      },
+      "comparison_metric": "metrics.dropped_event_count"
+    }
+  },
   "runtime_boundary": {
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
     "python_control_plane": [
