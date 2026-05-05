@@ -73,6 +73,10 @@ queries.
   that pins the benchmark report, live telemetry contract, candidate report
   contract, validation summary, safe commands, resource envelope, and Rust
   data-plane-only scope using repo-relative paths.
+- `stage09-baseline-bundle-verification.json`: deterministic output from
+  `scripts/verify_stage09_baseline_bundle.py` showing that the report, summary,
+  validation summary, manifest, public relative paths, and Rust data-plane-only
+  scope still agree as one reviewable baseline bundle.
 
 ## Inspect
 
@@ -82,10 +86,13 @@ python3 scripts/validate_stage09_realtime_report.py --report docs/development/ar
 python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
+python3 scripts/verify_stage09_baseline_bundle.py
+python3 scripts/verify_stage09_baseline_bundle.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
 python3 -m unittest tests/contracts/test_stage09_baseline_verification_manifest.py
+python3 -m unittest tests/contracts/test_stage09_baseline_bundle_verifier.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -267,3 +274,10 @@ reviewer can verify the benchmark command, candidate contract, validation
 summary, resource envelope, and Rust data-plane-only boundary from one stable
 manifest before comparing a future Python/FastAPI refresh or narrow Rust hot
 path candidate.
+
+The `scripts/verify_stage09_baseline_bundle.py` command is the deterministic
+bundle gate for the current baseline evidence. It checks the candidate report
+contract, confirms the public validation summary matches the validator output,
+verifies manifest artifacts and repo-relative paths, and confirms the Markdown
+summary records the baseline verdict while Rust remains scoped to future
+data-plane candidates only.

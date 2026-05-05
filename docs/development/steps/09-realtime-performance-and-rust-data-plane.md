@@ -119,6 +119,17 @@ data-plane-only scope together with repo-relative paths. It is a review aid for
 future Python/FastAPI refreshes or narrow Rust hot-path candidates, not runtime
 fanout evidence.
 
+The baseline bundle verifier command:
+
+```text
+python3 scripts/verify_stage09_baseline_bundle.py
+```
+
+checks that the public report, Markdown summary, validation summary, manifest,
+resource envelope, repo-relative paths, and Rust data-plane-only scope still
+agree. It is a deterministic review gate; it does not run a load test, add
+runtime websocket fanout, or approve a Rust whole-project rewrite.
+
 ## Test Preference
 
 Favor:

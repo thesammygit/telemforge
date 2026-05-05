@@ -1,0 +1,26 @@
+{
+  "manifest_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json",
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
+  "schema": "telemforge.stage09_baseline_bundle_verification.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "summary_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "validation_summary_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json",
+  "verified_gates": [
+    "report_contract_validation",
+    "validation_summary_matches",
+    "manifest_artifacts_exist",
+    "manifest_paths_are_public_relative",
+    "summary_records_baseline_verdict",
+    "rust_scope_data_plane_only"
+  ]
+}
