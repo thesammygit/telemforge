@@ -8,6 +8,7 @@ comparison gates only; it does not run load tests or claim runtime fanout.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -149,6 +150,18 @@ def _validate_stable_identity_gate(
 
     if not isinstance(fingerprint, str) or len(fingerprint) != 64:
         errors.append("stable identity fingerprint must be a 64-character digest")
+    if isinstance(fingerprint, str) and isinstance(stable_fields, list):
+        try:
+            expected_fingerprint = _stable_identity_digest(report, stable_fields)
+        except KeyError as error:
+            errors.append(f"missing stable identity field: {error.args[0]}")
+        else:
+            _expect_equal(
+                fingerprint,
+                expected_fingerprint,
+                "stable identity fingerprint",
+                errors,
+            )
     _expect_equal(
         stable_fields,
         report_fingerprint.get("stable_identity_fields"),
@@ -290,6 +303,19 @@ def _path_value(document: dict[str, Any], field_path: str) -> Any:
             raise KeyError(field_path)
         value = value[part]
     return value
+
+
+def _stable_identity_digest(report: dict[str, Any], fields: list[str]) -> str:
+    stable_values = {field: _path_value(report, field) for field in fields}
+    payload = {
+        "schema": report["schema"],
+        "stable_identity_fields": fields,
+        "stable_values": stable_values,
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode(
+        "utf-8"
+    )
+    return hashlib.sha256(encoded).hexdigest()
 
 
 def _optional_path_value(document: dict[str, Any], field_path: str) -> Any:

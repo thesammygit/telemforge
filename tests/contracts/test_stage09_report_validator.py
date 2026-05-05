@@ -147,6 +147,31 @@ class Stage09ReportValidatorTest(unittest.TestCase):
             completed.stderr,
         )
 
+    def test_validator_rejects_report_with_stale_stable_fingerprint(self) -> None:
+        report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        report["workload"]["step_seconds"] = 2
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_report = Path(tmpdir) / "bad-report.json"
+            bad_report.write_text(json.dumps(report), encoding="utf-8")
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/validate_stage09_realtime_report.py",
+                    "--report",
+                    str(bad_report),
+                    "--contract",
+                    str(CONTRACT_PATH),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertNotEqual(completed.returncode, 0)
+        self.assertIn("stable identity fingerprint mismatch", completed.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
