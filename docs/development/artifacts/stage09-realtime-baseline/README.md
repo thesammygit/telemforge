@@ -65,6 +65,10 @@ queries.
   compatibility validator showing that the current public baseline report
   satisfies the candidate report contract without running load tests, claiming
   runtime websocket fanout, or approving a Rust whole-project rewrite.
+- `stage09-baseline-verification-manifest.json`: public verification manifest
+  that pins the benchmark report, live telemetry contract, candidate report
+  contract, validation summary, safe commands, resource envelope, and Rust
+  data-plane-only scope using repo-relative paths.
 
 ## Inspect
 
@@ -73,9 +77,11 @@ python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifact
 python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json
 python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
+python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
+python3 -m unittest tests/contracts/test_stage09_baseline_verification_manifest.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -235,3 +241,10 @@ When run with `--output`, the validator writes
 current baseline report still passes the contract gates for required fields,
 metric bindings, stable identity, resource envelope, stream-claim evidence, and
 promotion evidence before any narrow Rust data-plane candidate is compared.
+
+The `stage09-baseline-verification-manifest.json` file ties those public
+artifacts together without copying ignored automation state. It exists so a
+reviewer can verify the benchmark command, candidate contract, validation
+summary, resource envelope, and Rust data-plane-only boundary from one stable
+manifest before comparing a future Python/FastAPI refresh or narrow Rust hot
+path candidate.

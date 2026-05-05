@@ -111,6 +111,14 @@ envelope, stream-claim evidence, and promotion targets. It is a contract
 validator only; it does not add runtime websocket fanout or approve a Rust
 whole-project rewrite.
 
+The verification manifest
+`docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json`
+ties the public baseline report, live telemetry contract, candidate report
+contract, validation summary, safe commands, resource envelope, and Rust
+data-plane-only scope together with repo-relative paths. It is a review aid for
+future Python/FastAPI refreshes or narrow Rust hot-path candidates, not runtime
+fanout evidence.
+
 ## Test Preference
 
 Favor:

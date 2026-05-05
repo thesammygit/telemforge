@@ -1,0 +1,78 @@
+{
+  "schema": "telemforge.stage09_baseline_verification_manifest.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "generated_at": "2026-05-05T11:32:08Z",
+  "purpose": "Pin the public Stage 09 baseline artifacts, safe verification commands, and candidate gates that make the current Python/FastAPI control-plane benchmark comparable with future narrow Rust data-plane candidates.",
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
+  "benchmark": {
+    "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "summary_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+    "report_schema": "telemforge.stage09_realtime_baseline.v1",
+    "command": [
+      "python3",
+      "scripts/benchmark_stage09_realtime.py",
+      "--output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "--summary-output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "headline_metrics": [
+      "workload.channel_count",
+      "workload.per_channel_sample_rate_hz",
+      "metrics.telemetry_sample_rate_hz",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "metrics.dropped_event_count"
+    ]
+  },
+  "contract_artifacts": [
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "schema": "telemforge.stage09_live_telemetry_contract.v1",
+      "role": "websocket/live telemetry contract before runtime fanout"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json",
+      "schema": "telemforge.stage09_candidate_report_contract.v1",
+      "role": "compatible report shape for Python refreshes and narrow Rust candidates"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json",
+      "schema": "telemforge.stage09_report_compatibility_validation.v1",
+      "role": "public proof that the baseline report currently passes the candidate contract"
+    }
+  ],
+  "resource_envelope": {
+    "worker_processes": 1,
+    "max_expected_runtime_seconds": 30,
+    "max_expected_memory_mb": 512,
+    "uses_network": false,
+    "uses_paid_services": false
+  },
+  "candidate_gate": {
+    "validated_gates": [
+      "required_top_level_fields",
+      "required_metric_bindings",
+      "stable_identity_gate",
+      "resource_envelope",
+      "stream_claim_gate",
+      "promotion_gate"
+    ],
+    "required_evidence": [
+      "candidate report preserves required_top_level_fields",
+      "candidate report preserves required_metric_bindings",
+      "resource envelope stays within the local automation guard",
+      "dropped_event_count does not regress",
+      "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+    ],
+    "runtime_claim_rule": "Do not claim websocket runtime fanout until the live telemetry contract has connection, startup snapshot, monotonic sequence, reconnect, backpressure, and stream dropped-event evidence."
+  },
+  "public_repo_safety": {
+    "paths_are_repo_relative": true,
+    "includes_docs_automation": false,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  }
+}
