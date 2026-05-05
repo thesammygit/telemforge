@@ -153,6 +153,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "throughput_gap_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "stream_contract_profile",
                 verification_contract["required_report_fields"],
             )
@@ -330,6 +334,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "next_hot_path_profile",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "throughput_gap_profile",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -712,6 +720,65 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 },
             )
             self.assertEqual(
+                summary["throughput_gap_profile"],
+                {
+                    "schema": "telemforge.stage09_throughput_gap_profile.v1",
+                    "purpose": (
+                        "Make the missed Stage 09 channel and sample-rate "
+                        "targets explicit before selecting a narrow Rust "
+                        "data-plane throughput candidate."
+                    ),
+                    "baseline_workload_identity": (
+                        "nominal-orbit-daylight:channels-10:samples-10:step-1s"
+                    ),
+                    "gaps": {
+                        "channel_count": {
+                            "observed": 10,
+                            "target": 100,
+                            "unit": "channels",
+                            "gap_to_target": 90,
+                            "observed_to_target_ratio": 0.1,
+                        },
+                        "per_channel_sample_rate_hz": {
+                            "observed": 1.0,
+                            "target": 10,
+                            "unit": "Hz",
+                            "gap_to_target": 9.0,
+                            "observed_to_target_ratio": 0.1,
+                        },
+                        "aggregate_sample_rate_hz": {
+                            "observed": 10.0,
+                            "target": 1000,
+                            "unit": "Hz",
+                            "gap_to_target": 990.0,
+                            "observed_to_target_ratio": 0.01,
+                        },
+                    },
+                    "missed_throughput_targets": [
+                        "channel_count",
+                        "per_channel_sample_rate_hz",
+                        "aggregate_sample_rate_hz",
+                    ],
+                    "candidate_mapping": {
+                        "selected_candidate": "rust_stream_fanout_sample_rate_spike",
+                        "candidate_scope": (
+                            "stream fanout and sample-rate throughput behind "
+                            "the live telemetry contract; Python/FastAPI "
+                            "remains the control plane"
+                        ),
+                        "promotion_rule": (
+                            "Improve at least one throughput gap without "
+                            "regressing dropped_event_count, resource_guard, "
+                            "or stream contract evidence."
+                        ),
+                    },
+                    "rust_scope": (
+                        "data-plane throughput candidate only; not a "
+                        "whole-project rewrite"
+                    ),
+                },
+            )
+            self.assertEqual(
                 summary["next_hot_path_profile"],
                 {
                     "schema": "telemforge.stage09_next_hot_path_profile.v1",
@@ -936,6 +1003,15 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "Next comparable candidate: `narrow Rust data-plane hot path",
                 summary_text,
             )
+            self.assertIn("## Throughput Gap Profile", summary_text)
+            self.assertIn("telemforge.stage09_throughput_gap_profile.v1", summary_text)
+            self.assertIn(
+                "channel_count, per_channel_sample_rate_hz, aggregate_sample_rate_hz",
+                summary_text,
+            )
+            self.assertIn("- Channel count ratio: `0.1`", summary_text)
+            self.assertIn("- Aggregate sample-rate ratio: `0.01`", summary_text)
+            self.assertIn("regressing dropped_event_count", summary_text)
             self.assertIn("## Next Hot Path Profile", summary_text)
             self.assertIn(
                 "rust_stream_fanout_sample_rate_spike",

@@ -48,6 +48,7 @@ class Stage09CandidateReportContractTest(unittest.TestCase):
         self.assertIn("verification_contract", contract["required_top_level_fields"])
         self.assertIn("timing_source_profile", contract["required_top_level_fields"])
         self.assertIn("alert_latency_profile", contract["required_top_level_fields"])
+        self.assertIn("throughput_gap_profile", contract["required_top_level_fields"])
         self.assertEqual(
             report["timing_source_profile"]["schema"],
             "telemforge.stage09_timing_source_profile.v1",
@@ -124,9 +125,20 @@ class Stage09CandidateReportContractTest(unittest.TestCase):
             "dropped_event_count does not regress",
             contract["promotion_gate"]["required_evidence"],
         )
+        self.assertEqual(
+            report["throughput_gap_profile"]["missed_throughput_targets"],
+            report["target_results"]["missed_targets"],
+        )
+        self.assertIn(
+            "rust_stream_fanout_sample_rate_spike",
+            report["throughput_gap_profile"]["candidate_mapping"][
+                "selected_candidate"
+            ],
+        )
         readme_text = README_PATH.read_text(encoding="utf-8")
         self.assertIn("stage09-candidate-report-contract.json", readme_text)
         self.assertIn("future Rust data-plane candidate", readme_text)
+        self.assertIn("throughput gap profile", readme_text)
 
 
 if __name__ == "__main__":

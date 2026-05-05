@@ -217,6 +217,7 @@ def run_stage09_realtime_baseline(
         "target_profile": _target_profile(),
         "target_results": target_results,
         "baseline_verdict": _baseline_verdict(target_results),
+        "throughput_gap_profile": _throughput_gap_profile(workload, target_results),
         "next_hot_path_profile": _next_hot_path_profile(target_results),
         "runtime_boundary": {
             "tracked_direction": "Rust data plane direction, not a whole-project rewrite.",
@@ -491,6 +492,7 @@ def _comparison_profile() -> dict[str, Any]:
             "targets",
             "target_profile",
             "baseline_verdict",
+            "throughput_gap_profile",
             "next_hot_path_profile",
             "runtime_boundary",
         ],
@@ -531,6 +533,10 @@ def _comparison_profile() -> dict[str, Any]:
                 "Preserve rerun_evidence_profile fields so baseline refreshes "
                 "and Rust candidates prove the same command, outputs, and "
                 "resource envelope before metrics are compared."
+            ),
+            (
+                "Preserve throughput_gap_profile fields so missed sample-rate "
+                "targets map to the same narrow data-plane candidate."
             ),
         ],
     }
@@ -590,6 +596,7 @@ def _verification_contract() -> dict[str, Any]:
             "target_profile",
             "target_results.checks",
             "baseline_verdict",
+            "throughput_gap_profile",
             "next_hot_path_profile",
             "runtime_boundary",
         ],
@@ -643,6 +650,7 @@ def _run_variant_policy() -> dict[str, Any]:
             "workload.samples_per_channel",
             "workload.step_seconds",
             "targets",
+            "throughput_gap_profile",
             "runtime_boundary",
         ],
         "allowed_variant_fields": [
@@ -1157,6 +1165,61 @@ def _next_hot_path_profile(target_results: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _throughput_gap_profile(
+    workload: dict[str, Any],
+    target_results: dict[str, Any],
+) -> dict[str, Any]:
+    throughput_targets = [
+        "channel_count",
+        "per_channel_sample_rate_hz",
+        "aggregate_sample_rate_hz",
+    ]
+    checks = target_results["checks"]
+    gaps = {
+        target: {
+            "observed": checks[target]["observed"],
+            "target": checks[target]["target"],
+            "unit": checks[target]["unit"],
+            "gap_to_target": checks[target]["gap_to_target"],
+            "observed_to_target_ratio": _ratio(
+                checks[target]["observed"],
+                checks[target]["target"],
+            ),
+        }
+        for target in throughput_targets
+    }
+    return {
+        "schema": "telemforge.stage09_throughput_gap_profile.v1",
+        "purpose": (
+            "Make the missed Stage 09 channel and sample-rate targets explicit "
+            "before selecting a narrow Rust data-plane throughput candidate."
+        ),
+        "baseline_workload_identity": (
+            f"{workload['scenario']}:channels-{workload['channel_count']}:"
+            f"samples-{workload['samples_per_channel']}:"
+            f"step-{workload['step_seconds']}s"
+        ),
+        "gaps": gaps,
+        "missed_throughput_targets": [
+            target
+            for target in throughput_targets
+            if not checks[target]["meets_target"]
+        ],
+        "candidate_mapping": {
+            "selected_candidate": "rust_stream_fanout_sample_rate_spike",
+            "candidate_scope": (
+                "stream fanout and sample-rate throughput behind the live "
+                "telemetry contract; Python/FastAPI remains the control plane"
+            ),
+            "promotion_rule": (
+                "Improve at least one throughput gap without regressing "
+                "dropped_event_count, resource_guard, or stream contract evidence."
+            ),
+        },
+        "rust_scope": "data-plane throughput candidate only; not a whole-project rewrite",
+    }
+
+
 def _resource_guard() -> dict[str, Any]:
     return {
         "schema": "telemforge.stage09_resource_guard.v1",
@@ -1261,6 +1324,12 @@ def _round_gap(value: int | float) -> int | float:
     return value
 
 
+def _ratio(observed: int | float, target: int | float) -> float:
+    if target == 0:
+        return 0.0
+    return round(observed / target, 3)
+
+
 def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     workload = summary["workload"]
     metrics = summary["metrics"]
@@ -1287,6 +1356,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     baseline_verdict = summary["baseline_verdict"]
     target_profile = summary["target_profile"]
     next_hot_path_profile = summary["next_hot_path_profile"]
+    throughput_gap_profile = summary["throughput_gap_profile"]
     deferred_paths = ", ".join(execution_profile["deferred_paths"])
     stable_fields = ", ".join(comparison_profile["stable_fields"])
     run_specific_fields = ", ".join(comparison_profile["run_specific_fields"])
@@ -1502,6 +1572,21 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         "- Next comparable candidate: "
         f"`{baseline_verdict['next_comparable_candidate']}`\n"
         f"- Rust scope: `{baseline_verdict['rust_scope']}`\n\n"
+        "## Throughput Gap Profile\n\n"
+        f"- Schema: `{throughput_gap_profile['schema']}`\n"
+        "- Missed throughput targets: "
+        f"`{', '.join(throughput_gap_profile['missed_throughput_targets']) or 'none'}`\n"
+        "- Channel count ratio: "
+        f"`{throughput_gap_profile['gaps']['channel_count']['observed_to_target_ratio']}`\n"
+        "- Per-channel sample-rate ratio: "
+        f"`{throughput_gap_profile['gaps']['per_channel_sample_rate_hz']['observed_to_target_ratio']}`\n"
+        "- Aggregate sample-rate ratio: "
+        f"`{throughput_gap_profile['gaps']['aggregate_sample_rate_hz']['observed_to_target_ratio']}`\n"
+        "- Candidate mapping: "
+        f"`{throughput_gap_profile['candidate_mapping']['selected_candidate']}`\n"
+        "- Promotion rule: "
+        f"`{throughput_gap_profile['candidate_mapping']['promotion_rule']}`\n"
+        f"- Rust scope: `{throughput_gap_profile['rust_scope']}`\n\n"
         "## Next Hot Path Profile\n\n"
         f"- Selected candidate: `{next_hot_path_profile['selected_candidate']}`\n"
         "- Addresses missed targets: "

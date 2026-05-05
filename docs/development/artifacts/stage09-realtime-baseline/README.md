@@ -38,9 +38,11 @@ queries.
   synthetic sample clock, input provenance for the exact telemetry catalog hash
   used to generate the workload,
   a target profile that binds the ADR-009 realtime hypotheses to stable report
-  fields, an explicit baseline verdict, a next-hot-path profile that maps
-  missed throughput targets to the first narrow Rust data-plane candidate, and
-  the tracked Rust data-plane boundary.
+  fields, an explicit baseline verdict, a throughput gap profile that converts
+  missed channel and sample-rate targets into deficit ratios and candidate
+  mapping, a next-hot-path profile that maps missed throughput targets to the
+  first narrow Rust data-plane candidate, and the tracked Rust data-plane
+  boundary.
 - `stage09-baseline-summary.md`: human-readable summary generated from the same
   benchmark run, with the workload, execution profile, headline metrics, and
   pass/miss target table including each metric's remaining target gap.
@@ -208,6 +210,12 @@ The `baseline_verdict` block states whether the current Python/FastAPI baseline
 is only a comparison baseline or has met the realtime targets. It also names the
 next comparable candidate as a narrow Rust data-plane hot path that must keep
 the same benchmark contract, execution profile, and resource guard.
+
+The `throughput_gap_profile` block makes the current sample-rate gap explicit:
+the 10-channel, 1 Hz-per-channel baseline is compared with the ADR-009
+100-channel, 10 Hz-per-channel hypothesis, then mapped to the narrow
+`rust_stream_fanout_sample_rate_spike` candidate. It is a report scaffold, not
+runtime fanout evidence.
 
 The `next_hot_path_profile` block translates the baseline misses into the next
 bounded data-plane candidate. It currently points at stream fanout and

@@ -62,6 +62,7 @@
     "required_evidence": [
       "candidate report preserves required_top_level_fields",
       "candidate report preserves required_metric_bindings",
+      "candidate report preserves throughput_gap_profile candidate mapping",
       "resource envelope stays within the local automation guard",
       "dropped_event_count does not regress",
       "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
