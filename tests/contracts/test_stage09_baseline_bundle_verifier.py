@@ -37,6 +37,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
         self.assertEqual(result["status"], "passed")
         self.assertIn("report_contract_validation", result["verified_gates"])
         self.assertIn("first_rust_hot_path_slice_pinned", result["verified_gates"])
+        self.assertIn(
+            "refresh_check_stable_fingerprint_matches",
+            result["verified_gates"],
+        )
         self.assertIn("rust_scope_data_plane_only", result["verified_gates"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
 

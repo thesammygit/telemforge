@@ -21,6 +21,7 @@
     "manifest_artifacts_exist",
     "manifest_paths_are_public_relative",
     "first_rust_hot_path_slice_pinned",
+    "refresh_check_stable_fingerprint_matches",
     "summary_records_baseline_verdict",
     "rust_scope_data_plane_only"
   ]

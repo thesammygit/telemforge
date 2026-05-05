@@ -78,6 +78,11 @@ queries.
   validation summary, first Rust hot-path slice note, manifest, public relative
   paths, and Rust data-plane-only scope still agree as one reviewable baseline
   bundle.
+- `stage09-baseline-refresh-check.json`: deterministic output from
+  `scripts/check_stage09_baseline_refresh.py` showing that a fresh bounded
+  benchmark run still preserves the public report's stable fingerprint,
+  resource envelope, blocked runtime-stream claim, and Rust data-plane-only
+  scope.
 
 ## Inspect
 
@@ -89,6 +94,8 @@ python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage0
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
 python3 scripts/verify_stage09_baseline_bundle.py
 python3 scripts/verify_stage09_baseline_bundle.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json
+python3 scripts/check_stage09_baseline_refresh.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json
+python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -180,6 +187,11 @@ should compare timing metrics only after this digest matches, unless it records
 an explicit versioned workload change.
 The timing source profile is included in that stable identity so a runtime
 candidate cannot change clocks without changing the comparison fingerprint.
+
+The `stage09-baseline-refresh-check.json` artifact proves that a fresh bounded
+Python/FastAPI benchmark run still emits the same stable fingerprint as the
+committed public report. It intentionally ignores run-specific latency values
+and keeps websocket runtime fanout blocked until runtime probes exist.
 
 The `determinism_profile` block names the stable workload identity, seed,
 scenario, sample window inputs, and run-variant timing fields. A future Rust

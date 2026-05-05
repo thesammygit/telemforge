@@ -33,6 +33,7 @@ DEFAULT_MANIFEST_PATH = ARTIFACT_ROOT / "stage09-baseline-verification-manifest.
 DEFAULT_VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-summary.json"
 DEFAULT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 FIRST_RUST_HOT_PATH_SLICE_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
+REFRESH_CHECK_PATH = ARTIFACT_ROOT / "stage09-baseline-refresh-check.json"
 
 
 def verify_stage09_baseline_bundle(
@@ -55,6 +56,7 @@ def verify_stage09_baseline_bundle(
     contract = _read_json(contract_path)
     manifest = _read_json(manifest_path)
     validation_summary = _read_json(validation_summary_path)
+    refresh_check = _read_json(REFRESH_CHECK_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
 
     errors: list[str] = []
@@ -88,6 +90,7 @@ def verify_stage09_baseline_bundle(
     _validate_public_paths(manifest, errors)
     _validate_manifest_artifacts(manifest, errors)
     _validate_hot_path_slice_note(manifest, errors)
+    _validate_refresh_check(report, manifest, refresh_check, errors)
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -116,6 +119,7 @@ def verify_stage09_baseline_bundle(
             "manifest_artifacts_exist",
             "manifest_paths_are_public_relative",
             "first_rust_hot_path_slice_pinned",
+            "refresh_check_stable_fingerprint_matches",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -265,6 +269,61 @@ def _validate_hot_path_slice_note(
     ]:
         if snippet not in note:
             errors.append(f"first Rust hot-path slice note missing snippet: {snippet}")
+
+
+def _validate_refresh_check(
+    report: dict[str, Any],
+    manifest: dict[str, Any],
+    refresh_check: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(REFRESH_CHECK_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(f"manifest must pin baseline refresh check: {artifact_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_baseline_refresh_check.v1",
+        "baseline refresh check schema",
+        errors,
+    )
+    _expect_equal(
+        refresh_check.get("schema"),
+        "telemforge.stage09_baseline_refresh_check.v1",
+        "refresh_check.schema",
+        errors,
+    )
+    _expect_equal(refresh_check.get("status"), "passed", "refresh_check.status", errors)
+    _expect_equal(
+        refresh_check.get("report_path"),
+        _display_path(DEFAULT_REPORT_PATH),
+        "refresh_check.report_path",
+        errors,
+    )
+    _expect_equal(
+        refresh_check.get("stable_digest_sha256"),
+        report.get("stable_report_fingerprint", {}).get("digest_sha256"),
+        "refresh_check stable digest",
+        errors,
+    )
+    _expect_equal(
+        refresh_check.get("runtime_evidence_gate_status"),
+        "contract_only_blocked",
+        "refresh_check.runtime_evidence_gate_status",
+        errors,
+    )
+    if "not a whole-project rewrite" not in refresh_check.get("rust_scope", ""):
+        errors.append("refresh_check.rust_scope must keep Rust data-plane scoped")
+    if "fresh_run_stable_fingerprint_matches" not in refresh_check.get(
+        "verified_gates",
+        [],
+    ):
+        errors.append("refresh_check must verify fresh stable fingerprint matching")
 
 
 def _validate_summary(

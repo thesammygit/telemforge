@@ -130,6 +130,18 @@ resource envelope, repo-relative paths, and Rust data-plane-only scope still
 agree. It is a deterministic review gate; it does not run a load test, add
 runtime websocket fanout, or approve a Rust whole-project rewrite.
 
+The baseline refresh check command:
+
+```text
+python3 scripts/check_stage09_baseline_refresh.py
+```
+
+runs the bounded Python/FastAPI benchmark in a temporary SQLite database and
+compares the fresh stable report fingerprint with the committed public baseline
+report. It is a refresh gate for comparable benchmark identity; it ignores
+run-specific timing variance and does not claim websocket runtime fanout or
+approve a Rust whole-project rewrite.
+
 ## Test Preference
 
 Favor:

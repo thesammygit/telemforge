@@ -1,0 +1,23 @@
+{
+  "benchmark_schema": "telemforge.stage09_realtime_baseline.v1",
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "runtime_evidence_gate_status": "contract_only_blocked",
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_refresh_check.v1",
+  "stable_digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+  "stable_identity_field_count": 21,
+  "status": "passed",
+  "verified_gates": [
+    "fresh_run_stable_fingerprint_matches",
+    "resource_envelope_preserved",
+    "runtime_stream_claim_remains_blocked",
+    "rust_scope_data_plane_only"
+  ]
+}
