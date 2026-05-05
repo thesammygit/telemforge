@@ -1,4 +1,5 @@
 import json
+import re
 import unittest
 from pathlib import Path
 
@@ -29,6 +30,7 @@ RUST_BOUNDARY_NOTE_PATH = (
     / "rust-data-plane-boundary.md"
 )
 CHANNEL_CATALOG_PATH = ROOT / "fixtures" / "telemetry" / "channels.json"
+UTC_TIMESTAMP_PATTERN = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 
 
 def read_json(path: Path) -> dict:
@@ -180,6 +182,42 @@ class Stage09LiveTelemetryContractTest(unittest.TestCase):
             backpressure["comparison_metric"],
             "metrics.dropped_event_count",
         )
+
+    def test_contract_vectors_match_declared_message_shapes(self) -> None:
+        contract = read_json(CONTRACT_PATH)
+        vectors = contract["contract_validation_vectors"]
+        message_types = {item["type"]: item for item in contract["message_types"]}
+        envelope_fields = contract["message_envelope"]["required_fields"]
+        messages = [
+            *vectors["ordered_stream"],
+            vectors["backpressure_report"],
+        ]
+
+        for message in messages:
+            for field in envelope_fields:
+                self.assertIn(field, message)
+            self.assertRegex(message["emitted_at"], UTC_TIMESTAMP_PATTERN)
+
+            declared_type = message_types[message["type"]]
+            payload = message["payload"]
+            for field in declared_type["payload_required_fields"]:
+                self.assertIn(field, payload)
+
+            if "timestamp" in payload:
+                self.assertRegex(payload["timestamp"], UTC_TIMESTAMP_PATTERN)
+            if "stream_time" in payload:
+                self.assertRegex(payload["stream_time"], UTC_TIMESTAMP_PATTERN)
+
+            if message["type"] == "telemetry.sample":
+                self.assertIn(payload["status"], declared_type["status_values"])
+                self.assertIn(payload["quality"], declared_type["quality_values"])
+            if message["type"] == "stream.backpressure":
+                self.assertEqual(payload["policy"], declared_type["policy"])
+                self.assertEqual(
+                    contract["backpressure"]["dropped_event_count_source"],
+                    "stream.backpressure.payload.dropped_event_count",
+                )
+                self.assertGreater(payload["dropped_event_count"], 0)
 
     def test_runtime_evidence_gate_keeps_stream_claims_contract_only(self) -> None:
         contract = read_json(CONTRACT_PATH)
