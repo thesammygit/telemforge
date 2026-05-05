@@ -11,6 +11,7 @@
     "stable_identity_gate",
     "resource_envelope",
     "stream_claim_gate",
+    "runtime_evidence_gate_binding",
     "promotion_gate"
   ]
 }

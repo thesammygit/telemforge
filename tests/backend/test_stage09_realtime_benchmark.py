@@ -161,6 +161,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "stream_contract_profile.runtime_evidence_gate",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "replay_query_profile",
                 verification_contract["required_report_fields"],
             )
@@ -226,6 +230,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 run_variant_policy["stable_identity_fields"],
             )
             self.assertIn(
+                "stream_contract_profile.runtime_evidence_gate.status",
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
                 "runtime_observation.duration_ms",
                 run_variant_policy["allowed_variant_fields"],
             )
@@ -261,6 +269,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "timing_source_profile",
+                stable_report_fingerprint["stable_identity_fields"],
+            )
+            self.assertIn(
+                "stream_contract_profile.runtime_evidence_gate.status",
                 stable_report_fingerprint["stable_identity_fields"],
             )
             self.assertIn(
@@ -361,6 +373,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
+                "stream_contract_profile.runtime_evidence_gate",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
                 "rerun_evidence_profile",
                 comparison_profile["stable_fields"],
             )
@@ -448,6 +464,28 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "not a whole-project rewrite",
                 stream_contract_profile["rust_scope"],
+            )
+            runtime_evidence_gate = stream_contract_profile["runtime_evidence_gate"]
+            self.assertEqual(
+                runtime_evidence_gate["schema"],
+                "telemforge.stage09_runtime_stream_evidence_gate_binding.v1",
+            )
+            self.assertEqual(runtime_evidence_gate["status"], "contract_only_blocked")
+            self.assertEqual(
+                runtime_evidence_gate["claim_status"],
+                "not_claimed_until_runtime_test",
+            )
+            self.assertIn(
+                "tests/contracts/test_stage09_live_telemetry_contract.py",
+                runtime_evidence_gate["proof_artifacts"],
+            )
+            self.assertIn(
+                "runtime websocket fanout",
+                runtime_evidence_gate["forbidden_without_evidence"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                runtime_evidence_gate["rust_scope"],
             )
             self.assertIn(
                 "metrics.p95_alert_latency_ms",
@@ -1101,6 +1139,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 report["verification_contract"]["required_report_fields"],
             )
             self.assertIn(
+                "stream_contract_profile.runtime_evidence_gate",
+                report["verification_contract"]["required_report_fields"],
+            )
+            self.assertIn(
                 "stable_report_fingerprint",
                 report["verification_contract"]["required_report_fields"],
             )
@@ -1145,6 +1187,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["stream_contract_profile"]["implementation_status"],
                 "contract_only_no_runtime_fanout",
+            )
+            self.assertEqual(
+                report["stream_contract_profile"]["runtime_evidence_gate"]["status"],
+                "contract_only_blocked",
             )
             self.assertEqual(
                 report["determinism_profile"]["workload_identity"],

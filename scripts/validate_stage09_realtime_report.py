@@ -71,6 +71,7 @@ def validate_stage09_report(
     _validate_stable_identity_gate(report, contract, errors)
     _validate_resource_envelope(report, contract, errors)
     _validate_stream_claim_gate(report, contract, errors)
+    _validate_runtime_evidence_gate_binding(report, contract, errors)
     _validate_promotion_gate(report, contract, errors)
 
     if errors:
@@ -89,6 +90,7 @@ def validate_stage09_report(
             "stable_identity_gate",
             "resource_envelope",
             "stream_claim_gate",
+            "runtime_evidence_gate_binding",
             "promotion_gate",
         ],
     }
@@ -226,6 +228,36 @@ def _validate_promotion_gate(
     evidence = promotion_gate.get("required_evidence", [])
     if "dropped_event_count does not regress" not in evidence:
         errors.append("promotion gate must protect dropped_event_count")
+
+
+def _validate_runtime_evidence_gate_binding(
+    report: dict[str, Any],
+    contract: dict[str, Any],
+    errors: list[str],
+) -> None:
+    gate = contract.get("stream_claim_gate", {})
+    report_gate = report.get("stream_contract_profile", {}).get(
+        "runtime_evidence_gate",
+        {},
+    )
+    _expect_equal(
+        report_gate.get("status"),
+        gate.get("runtime_evidence_gate_status"),
+        "runtime evidence gate status",
+        errors,
+    )
+    _expect_equal(
+        report_gate.get("claim_status"),
+        "not_claimed_until_runtime_test",
+        "runtime evidence claim status",
+        errors,
+    )
+    for artifact in gate.get("runtime_evidence_proof_artifacts", []):
+        if artifact not in report_gate.get("proof_artifacts", []):
+            errors.append(f"missing runtime evidence proof artifact: {artifact}")
+    for forbidden in gate.get("runtime_forbidden_without_evidence", []):
+        if forbidden not in report_gate.get("forbidden_without_evidence", []):
+            errors.append(f"missing runtime evidence forbidden claim: {forbidden}")
 
 
 def _read_json(path: Path) -> dict[str, Any]:

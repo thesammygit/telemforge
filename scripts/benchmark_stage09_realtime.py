@@ -471,6 +471,7 @@ def _comparison_profile() -> dict[str, Any]:
             "measurement_boundary",
             "timing_source_profile",
             "stream_contract_profile",
+            "stream_contract_profile.runtime_evidence_gate",
             "rerun_evidence_profile",
             "run_variant_policy",
             "stable_report_fingerprint",
@@ -538,6 +539,10 @@ def _comparison_profile() -> dict[str, Any]:
                 "Preserve throughput_gap_profile fields so missed sample-rate "
                 "targets map to the same narrow data-plane candidate."
             ),
+            (
+                "Preserve stream_contract_profile.runtime_evidence_gate so "
+                "runtime stream claims stay blocked until live evidence exists."
+            ),
         ],
     }
 
@@ -580,6 +585,7 @@ def _verification_contract() -> dict[str, Any]:
             "verification_contract",
             "measurement_boundary",
             "stream_contract_profile",
+            "stream_contract_profile.runtime_evidence_gate",
             "determinism_profile",
             "latency_budget_profile",
             "alert_latency_profile",
@@ -646,6 +652,7 @@ def _run_variant_policy() -> dict[str, Any]:
             "rerun_evidence_profile.required_outputs",
             "rerun_evidence_profile.resource_envelope",
             "timing_source_profile",
+            "stream_contract_profile.runtime_evidence_gate.status",
             "workload.scenario",
             "workload.samples_per_channel",
             "workload.step_seconds",
@@ -745,6 +752,31 @@ def _stream_contract_profile() -> dict[str, Any]:
                 "The current benchmark measures control-plane simulation, "
                 "alert, replay, and dropped-event accounting only."
             ),
+        },
+        "runtime_evidence_gate": {
+            "schema": "telemforge.stage09_runtime_stream_evidence_gate_binding.v1",
+            "contract_field": "runtime_evidence_gate",
+            "status": "contract_only_blocked",
+            "claim_status": "not_claimed_until_runtime_test",
+            "proof_artifacts": [
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-live-telemetry-contract.json",
+                "tests/contracts/test_stage09_live_telemetry_contract.py",
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-baseline-report.json",
+            ],
+            "forbidden_without_evidence": [
+                "runtime websocket fanout",
+                "reconnect behavior is implemented",
+                "backpressure behavior is implemented",
+                "stream-based dropped-event count is measured",
+                "Rust has replaced a Python control-plane path",
+            ],
+            "comparison_gate": (
+                "Keep runtime stream claims contract-only until a runtime probe "
+                "proves each required live evidence item."
+            ),
+            "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
         },
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
@@ -1380,6 +1412,13 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     stream_required_metrics = ", ".join(
         stream_contract_profile["baseline_binding"]["required_metrics"]
     )
+    runtime_evidence_gate = stream_contract_profile["runtime_evidence_gate"]
+    runtime_evidence_proof_artifacts = ", ".join(
+        runtime_evidence_gate["proof_artifacts"]
+    )
+    runtime_evidence_forbidden = ", ".join(
+        runtime_evidence_gate["forbidden_without_evidence"]
+    )
     run_variant_stable_fields = ", ".join(
         run_variant_policy["stable_identity_fields"]
     )
@@ -1460,6 +1499,9 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Required live evidence before runtime claim: `{required_live_evidence}`\n"
         f"- Required baseline metrics: `{stream_required_metrics}`\n"
         f"- Current evidence: `{stream_contract_profile['baseline_binding']['current_evidence']}`\n"
+        f"- Runtime evidence gate status: `{runtime_evidence_gate['status']}`\n"
+        f"- Runtime evidence proof artifacts: `{runtime_evidence_proof_artifacts}`\n"
+        f"- Forbidden without evidence: `{runtime_evidence_forbidden}`\n"
         f"- Rust scope: `{stream_contract_profile['rust_scope']}`\n\n"
         "## Verification Contract\n\n"
         f"- Command: `{verification_command}`\n"

@@ -8,7 +8,7 @@
     ],
     "latency_iteration_count": 5,
     "latency_method": "nearest-rank p95 over manual fault POST requests",
-    "observed_p95_ms": 2.671,
+    "observed_p95_ms": 2.369,
     "purpose": "Make the manual-fault alert latency measurement explicit before Python/FastAPI and future Rust data-plane alert candidates are compared.",
     "rust_scope": "data-plane alert-evaluation candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_alert_latency_profile.v1",
@@ -70,7 +70,8 @@
       "Preserve input_provenance.telemetry_catalog_sha256 so runtime candidates do not compare against a different channel catalog.",
       "Preserve verification_contract.command and required_report_fields so reruns regenerate both public baseline artifacts together.",
       "Preserve rerun_evidence_profile fields so baseline refreshes and Rust candidates prove the same command, outputs, and resource envelope before metrics are compared.",
-      "Preserve throughput_gap_profile fields so missed sample-rate targets map to the same narrow data-plane candidate."
+      "Preserve throughput_gap_profile fields so missed sample-rate targets map to the same narrow data-plane candidate.",
+      "Preserve stream_contract_profile.runtime_evidence_gate so runtime stream claims stay blocked until live evidence exists."
     ],
     "purpose": "Separate stable report fields from run-specific timing and provenance before comparing Python/FastAPI and future Rust data-plane candidates.",
     "run_specific_fields": [
@@ -102,6 +103,7 @@
       "measurement_boundary",
       "timing_source_profile",
       "stream_contract_profile",
+      "stream_contract_profile.runtime_evidence_gate",
       "rerun_evidence_profile",
       "run_variant_policy",
       "stable_report_fingerprint",
@@ -190,7 +192,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T13:13:27Z",
+  "generated_at": "2026-05-05T14:05:26Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -208,13 +210,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.671,
-      "bounded_replay_query": 2.993
+      "alert_evaluation": 2.369,
+      "bounded_replay_query": 2.844
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.329,
-      "bounded_replay_query": 497.007
+      "alert_evaluation": 47.631,
+      "bounded_replay_query": 497.156
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -239,8 +241,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.671,
-    "p95_replay_query_latency_ms": 2.993,
+    "p95_alert_latency_ms": 2.369,
+    "p95_replay_query_latency_ms": 2.844,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -385,6 +387,7 @@
       "rerun_evidence_profile.required_outputs",
       "rerun_evidence_profile.resource_envelope",
       "timing_source_profile",
+      "stream_contract_profile.runtime_evidence_gate.status",
       "workload.scenario",
       "workload.samples_per_channel",
       "workload.step_seconds",
@@ -410,7 +413,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 50.097,
+    "duration_ms": 49.994,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -421,7 +424,7 @@
   "stable_report_fingerprint": {
     "comparison_rule": "Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.",
     "digest_algorithm": "sha256",
-    "digest_sha256": "55de3521d255f98338632c7f14337ed412e6ed51ef5c8b90b4e43dabf76f77d7",
+    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
     "excluded_run_variant_fields": [
       "generated_at",
       "metrics.p95_alert_latency_ms",
@@ -454,6 +457,7 @@
       "rerun_evidence_profile.required_outputs",
       "rerun_evidence_profile.resource_envelope",
       "timing_source_profile",
+      "stream_contract_profile.runtime_evidence_gate.status",
       "workload.scenario",
       "workload.samples_per_channel",
       "workload.step_seconds",
@@ -490,6 +494,26 @@
       "drop_oldest_and_report backpressure behavior",
       "dropped_event_count reported from stream.backpressure payloads"
     ],
+    "runtime_evidence_gate": {
+      "claim_status": "not_claimed_until_runtime_test",
+      "comparison_gate": "Keep runtime stream claims contract-only until a runtime probe proves each required live evidence item.",
+      "contract_field": "runtime_evidence_gate",
+      "forbidden_without_evidence": [
+        "runtime websocket fanout",
+        "reconnect behavior is implemented",
+        "backpressure behavior is implemented",
+        "stream-based dropped-event count is measured",
+        "Rust has replaced a Python control-plane path"
+      ],
+      "proof_artifacts": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+        "tests/contracts/test_stage09_live_telemetry_contract.py",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
+      ],
+      "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
+      "schema": "telemforge.stage09_runtime_stream_evidence_gate_binding.v1",
+      "status": "contract_only_blocked"
+    },
     "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_stream_contract_profile.v1"
   },
@@ -575,7 +599,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.671,
+        "observed": 2.369,
         "target": 50,
         "unit": "ms"
       },
@@ -583,7 +607,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.993,
+        "observed": 2.844,
         "target": 500,
         "unit": "ms"
       },
@@ -695,6 +719,7 @@
       "verification_contract",
       "measurement_boundary",
       "stream_contract_profile",
+      "stream_contract_profile.runtime_evidence_gate",
       "determinism_profile",
       "latency_budget_profile",
       "alert_latency_profile",

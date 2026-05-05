@@ -71,6 +71,19 @@
   "stream_claim_gate": {
     "contract_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
     "current_implementation_status": "contract_only_no_runtime_fanout",
+    "runtime_evidence_gate_status": "contract_only_blocked",
+    "runtime_evidence_proof_artifacts": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "tests/contracts/test_stage09_live_telemetry_contract.py",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
+    ],
+    "runtime_forbidden_without_evidence": [
+      "runtime websocket fanout",
+      "reconnect behavior is implemented",
+      "backpressure behavior is implemented",
+      "stream-based dropped-event count is measured",
+      "Rust has replaced a Python control-plane path"
+    ],
     "required_before_runtime_claim": [
       "websocket connection acceptance for an existing session",
       "startup snapshot emitted before incremental telemetry samples",

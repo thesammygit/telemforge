@@ -108,6 +108,32 @@ class Stage09CandidateReportContractTest(unittest.TestCase):
                 "required_live_evidence_before_runtime_claim"
             ],
         )
+        self.assertEqual(
+            contract["stream_claim_gate"]["runtime_evidence_gate_status"],
+            report["stream_contract_profile"]["runtime_evidence_gate"]["status"],
+        )
+        self.assertEqual(
+            report["stream_contract_profile"]["runtime_evidence_gate"]["claim_status"],
+            "not_claimed_until_runtime_test",
+        )
+        for artifact in contract["stream_claim_gate"][
+            "runtime_evidence_proof_artifacts"
+        ]:
+            self.assertIn(
+                artifact,
+                report["stream_contract_profile"]["runtime_evidence_gate"][
+                    "proof_artifacts"
+                ],
+            )
+        for forbidden in contract["stream_claim_gate"][
+            "runtime_forbidden_without_evidence"
+        ]:
+            self.assertIn(
+                forbidden,
+                report["stream_contract_profile"]["runtime_evidence_gate"][
+                    "forbidden_without_evidence"
+                ],
+            )
         self.assertIn(
             "websocket runtime fanout claim without live evidence",
             contract["candidate_scope"]["forbidden"],

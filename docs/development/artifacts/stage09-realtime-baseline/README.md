@@ -22,7 +22,9 @@ queries.
   stable report fingerprint that hashes comparable identity fields before
   timing values are compared, a
   stream contract profile that binds the report to the websocket contract
-  without claiming runtime fanout,
+  without claiming runtime fanout, including a runtime evidence gate binding
+  that keeps websocket, reconnect, backpressure, stream dropped-event, and Rust
+  replacement claims blocked until runtime probes exist,
   determinism profile with the stable workload identity, a latency budget
   profile for alert/replay headroom, an alert latency profile that records the
   manual-fault endpoint, trigger mix, p95 method, observed p95 value, and
@@ -121,6 +123,9 @@ contract-only websocket artifact. It lists the live evidence still required
 before TelemForge can claim runtime stream fanout: connection acceptance,
 startup snapshot delivery, monotonic stream sequence values, reconnect resume,
 backpressure reporting, and dropped-event accounting from stream messages.
+It also mirrors the runtime evidence gate status and proof-artifact list from
+the live telemetry contract so candidate reports cannot silently turn a
+contract-only stream profile into a runtime claim.
 
 The live telemetry contract also includes a `runtime_evidence_gate` section
 that maps each future runtime-stream claim to its required proof artifact and

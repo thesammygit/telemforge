@@ -28,6 +28,7 @@ class Stage09ReportValidatorTest(unittest.TestCase):
         self.assertEqual(result["status"], "passed")
         self.assertIn("resource_envelope", result["validated_gates"])
         self.assertIn("stream_claim_gate", result["validated_gates"])
+        self.assertIn("runtime_evidence_gate_binding", result["validated_gates"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
 
     def test_public_validation_summary_matches_current_contract_result(self) -> None:
@@ -36,6 +37,7 @@ class Stage09ReportValidatorTest(unittest.TestCase):
 
         self.assertEqual(artifact, result)
         self.assertIn("promotion_gate", artifact["validated_gates"])
+        self.assertIn("runtime_evidence_gate_binding", artifact["validated_gates"])
 
     def test_cli_prints_passed_validation_summary(self) -> None:
         completed = subprocess.run(
