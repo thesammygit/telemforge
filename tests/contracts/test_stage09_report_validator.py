@@ -112,6 +112,39 @@ class Stage09ReportValidatorTest(unittest.TestCase):
         self.assertNotEqual(completed.returncode, 0)
         self.assertIn("missing metric binding dropped_event_count", completed.stderr)
 
+    def test_validator_rejects_report_missing_benchmark_verification_contracts(self) -> None:
+        report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        del report["benchmark_contract"]
+        del report["verification_contract"]
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_report = Path(tmpdir) / "bad-report.json"
+            bad_report.write_text(json.dumps(report), encoding="utf-8")
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/validate_stage09_realtime_report.py",
+                    "--report",
+                    str(bad_report),
+                    "--contract",
+                    str(CONTRACT_PATH),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertNotEqual(completed.returncode, 0)
+        self.assertIn(
+            "missing top-level report field: benchmark_contract",
+            completed.stderr,
+        )
+        self.assertIn(
+            "missing top-level report field: verification_contract",
+            completed.stderr,
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

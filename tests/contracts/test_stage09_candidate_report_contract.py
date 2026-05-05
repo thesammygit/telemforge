@@ -44,6 +44,8 @@ class Stage09CandidateReportContractTest(unittest.TestCase):
 
         for field_name in contract["required_top_level_fields"]:
             self.assertIn(field_name, report)
+        self.assertIn("benchmark_contract", contract["required_top_level_fields"])
+        self.assertIn("verification_contract", contract["required_top_level_fields"])
         self.assertIn("timing_source_profile", contract["required_top_level_fields"])
         self.assertEqual(
             report["timing_source_profile"]["schema"],

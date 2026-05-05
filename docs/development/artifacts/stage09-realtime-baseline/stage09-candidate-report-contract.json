@@ -25,6 +25,8 @@
     "resource_guard",
     "runtime_observation",
     "timing_source_profile",
+    "benchmark_contract",
+    "verification_contract",
     "measurement_boundary",
     "stream_contract_profile",
     "determinism_profile",

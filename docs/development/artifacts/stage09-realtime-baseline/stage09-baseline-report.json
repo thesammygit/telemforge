@@ -169,7 +169,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T08:17:15Z",
+  "generated_at": "2026-05-05T09:52:22Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -187,13 +187,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.683,
-      "bounded_replay_query": 2.974
+      "alert_evaluation": 2.655,
+      "bounded_replay_query": 2.888
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.317,
-      "bounded_replay_query": 497.026
+      "alert_evaluation": 47.345,
+      "bounded_replay_query": 497.112
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -218,8 +218,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.683,
-    "p95_replay_query_latency_ms": 2.974,
+    "p95_alert_latency_ms": 2.655,
+    "p95_replay_query_latency_ms": 2.888,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -387,7 +387,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 50.963,
+    "duration_ms": 50.467,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -550,7 +550,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.683,
+        "observed": 2.655,
         "target": 50,
         "unit": "ms"
       },
@@ -558,7 +558,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.974,
+        "observed": 2.888,
         "target": 500,
         "unit": "ms"
       },
