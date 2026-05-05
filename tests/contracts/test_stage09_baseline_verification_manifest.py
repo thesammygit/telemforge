@@ -13,6 +13,9 @@ REPORT_PATH = ARTIFACT_ROOT / "stage09-baseline-report.json"
 LIVE_CONTRACT_PATH = ARTIFACT_ROOT / "stage09-live-telemetry-contract.json"
 CANDIDATE_CONTRACT_PATH = ARTIFACT_ROOT / "stage09-candidate-report-contract.json"
 VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-summary.json"
+LIVE_VALIDATION_SUMMARY_PATH = (
+    ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
+)
 FIRST_RUST_HOT_PATH_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 
 
@@ -35,6 +38,7 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         live_contract = read_json(LIVE_CONTRACT_PATH)
         candidate_contract = read_json(CANDIDATE_CONTRACT_PATH)
         validation_summary = read_json(VALIDATION_SUMMARY_PATH)
+        live_validation_summary = read_json(LIVE_VALIDATION_SUMMARY_PATH)
 
         self.assertEqual(
             manifest["schema"],
@@ -71,6 +75,10 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
             validation_summary["schema"],
         )
         self.assertEqual(
+            contract_paths[repo_path(LIVE_VALIDATION_SUMMARY_PATH)]["schema"],
+            live_validation_summary["schema"],
+        )
+        self.assertEqual(
             contract_paths[repo_path(FIRST_RUST_HOT_PATH_PATH)]["schema"],
             "telemforge.stage09_first_rust_hot_path_slice_note.v1",
         )
@@ -87,10 +95,13 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         self.assertFalse(manifest["public_repo_safety"]["includes_docs_automation"])
         self.assertFalse(manifest["public_repo_safety"]["uses_absolute_local_paths"])
         self.assertFalse(manifest["public_repo_safety"]["uses_credentials"])
-        self.assertEqual(
+        for gate in validation_summary["validated_gates"]:
+            self.assertIn(gate, manifest["candidate_gate"]["validated_gates"])
+        self.assertIn(
+            "live_contract_validation",
             manifest["candidate_gate"]["validated_gates"],
-            validation_summary["validated_gates"],
         )
+        self.assertEqual(live_validation_summary["status"], "passed")
         self.assertIn(
             "dropped_event_count does not regress",
             manifest["candidate_gate"]["required_evidence"],

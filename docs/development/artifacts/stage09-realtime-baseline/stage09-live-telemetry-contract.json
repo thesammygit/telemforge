@@ -199,6 +199,7 @@
     ],
     "proof_artifacts": [
       "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "scripts/validate_stage09_live_telemetry_contract.py",
       "tests/contracts/test_stage09_live_telemetry_contract.py",
       "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
     ],

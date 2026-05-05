@@ -24,6 +24,10 @@ from scripts.validate_stage09_realtime_report import (
     ValidationError,
     validate_stage09_report,
 )
+from scripts.validate_stage09_live_telemetry_contract import (
+    DEFAULT_CONTRACT_PATH as DEFAULT_LIVE_CONTRACT_PATH,
+    validate_stage09_live_telemetry_contract,
+)
 
 
 ARTIFACT_ROOT = (
@@ -34,6 +38,9 @@ DEFAULT_VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-sum
 DEFAULT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 FIRST_RUST_HOT_PATH_SLICE_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 REFRESH_CHECK_PATH = ARTIFACT_ROOT / "stage09-baseline-refresh-check.json"
+LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
+    ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
+)
 
 
 def verify_stage09_baseline_bundle(
@@ -56,11 +63,24 @@ def verify_stage09_baseline_bundle(
     contract = _read_json(contract_path)
     manifest = _read_json(manifest_path)
     validation_summary = _read_json(validation_summary_path)
+    live_contract_validation_summary = _read_json(
+        LIVE_CONTRACT_VALIDATION_SUMMARY_PATH
+    )
     refresh_check = _read_json(REFRESH_CHECK_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
+    live_contract_validation = validate_stage09_live_telemetry_contract(
+        DEFAULT_LIVE_CONTRACT_PATH,
+        report_path,
+    )
 
     errors: list[str] = []
     _expect_equal(validation_summary, report_validation, "validation summary", errors)
+    _expect_equal(
+        live_contract_validation_summary,
+        live_contract_validation,
+        "live contract validation summary",
+        errors,
+    )
     _expect_equal(
         manifest.get("schema"),
         "telemforge.stage09_baseline_verification_manifest.v1",
@@ -118,6 +138,7 @@ def verify_stage09_baseline_bundle(
             "validation_summary_matches",
             "manifest_artifacts_exist",
             "manifest_paths_are_public_relative",
+            "live_contract_validation_summary_matches",
             "first_rust_hot_path_slice_pinned",
             "refresh_check_stable_fingerprint_matches",
             "summary_records_baseline_verdict",

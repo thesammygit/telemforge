@@ -95,6 +95,17 @@ defines the websocket/live telemetry envelope, reconnect token, backpressure
 policy, dropped-event reporting shape, and deterministic contract validation
 vectors before runtime fanout is implemented.
 
+The live contract validator command:
+
+```text
+python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
+```
+
+checks the contract-only websocket envelope, reconnect vector, backpressure
+vector, baseline metric binding, runtime evidence gate, and public proof paths.
+It does not open a websocket, claim runtime fanout, or approve a Rust
+whole-project rewrite.
+
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
 keeps the first Rust spike constrained to one measured data-plane hot path and

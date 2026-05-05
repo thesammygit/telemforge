@@ -53,6 +53,11 @@ queries.
   snapshot/sample/alert/heartbeat/backpressure message types, reconnect
   behavior, deterministic validation vectors for reconnect/backpressure
   contract tests, and benchmark binding without adding runtime fanout yet.
+- `stage09-live-contract-validation-summary.json`: deterministic output from
+  `scripts/validate_stage09_live_telemetry_contract.py` showing that the live
+  telemetry contract envelope, reconnect vector, backpressure vector, baseline
+  metric binding, runtime evidence gate, and public proof-artifact paths agree
+  without claiming runtime websocket fanout.
 - `rust-data-plane-boundary.md`: narrow implementation note that separates the
   Python/FastAPI control plane from future Rust data-plane candidates, with
   promotion gates before any hot path can replace the Python baseline.
@@ -92,11 +97,14 @@ python3 scripts/validate_stage09_realtime_report.py --report docs/development/ar
 python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
+python3 scripts/validate_stage09_live_telemetry_contract.py
+python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
 python3 scripts/verify_stage09_baseline_bundle.py
 python3 scripts/verify_stage09_baseline_bundle.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json
 python3 scripts/check_stage09_baseline_refresh.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
+python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
 python3 -m unittest tests/contracts/test_stage09_baseline_verification_manifest.py

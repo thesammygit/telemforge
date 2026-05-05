@@ -41,6 +41,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
             "refresh_check_stable_fingerprint_matches",
             result["verified_gates"],
         )
+        self.assertIn(
+            "live_contract_validation_summary_matches",
+            result["verified_gates"],
+        )
         self.assertIn("rust_scope_data_plane_only", result["verified_gates"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
 
