@@ -198,6 +198,11 @@ def run_stage09_realtime_baseline(
             replay_end_at=replay_end_at,
             replay_latency_ms=replay_latency_ms,
         ),
+        "dropped_event_profile": _dropped_event_profile(
+            expected_telemetry_rows=expected_telemetry_rows,
+            replay_sample_count=replay_sample_count,
+            dropped_event_count=metrics["dropped_event_count"],
+        ),
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
@@ -462,6 +467,8 @@ def _comparison_profile() -> dict[str, Any]:
             "latency_budget_profile.budgets",
             "replay_query_profile.window",
             "replay_query_profile.requested_limit",
+            "dropped_event_profile.accounting_source",
+            "dropped_event_profile.comparison_rule",
             "input_provenance.telemetry_catalog_sha256",
             "workload.scenario",
             "workload.sample_window",
@@ -549,6 +556,7 @@ def _verification_contract() -> dict[str, Any]:
             "determinism_profile",
             "latency_budget_profile",
             "replay_query_profile",
+            "dropped_event_profile",
             "run_variant_policy",
             "input_provenance",
             "stable_report_fingerprint",
@@ -765,6 +773,41 @@ def _replay_query_profile(
             "limit, and determinism_profile.workload_identity match."
         ),
         "rust_scope": "data-plane replay-index candidate only; not a whole-project rewrite",
+    }
+
+
+def _dropped_event_profile(
+    expected_telemetry_rows: int,
+    replay_sample_count: int,
+    dropped_event_count: int,
+) -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_dropped_event_profile.v1",
+        "purpose": (
+            "Make dropped-event accounting explicit before websocket "
+            "backpressure or Rust stream-fanout candidates are compared."
+        ),
+        "accounting_source": {
+            "expected_rows": (
+                "GET /sessions/{session_id}/telemetry count after simulation "
+                "and manual fault injections"
+            ),
+            "observed_rows": (
+                "GET /sessions/{session_id}/replay summary.sample_count for "
+                "the bounded replay window"
+            ),
+            "formula": "max(expected_telemetry_rows - replay_sample_count, 0)",
+        },
+        "expected_telemetry_rows": expected_telemetry_rows,
+        "replay_sample_count": replay_sample_count,
+        "dropped_event_count": dropped_event_count,
+        "stream_claim_status": "control_plane_replay_accounting_only",
+        "comparison_rule": (
+            "Future websocket or Rust data-plane stream candidates must report "
+            "dropped_event_count from stream.backpressure payloads without "
+            "removing this bounded replay accounting field."
+        ),
+        "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
     }
 
 
@@ -1112,6 +1155,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
     replay_query_profile = summary["replay_query_profile"]
+    dropped_event_profile = summary["dropped_event_profile"]
     input_provenance = summary["input_provenance"]
     run_variant_policy = summary["run_variant_policy"]
     stable_report_fingerprint = summary["stable_report_fingerprint"]
@@ -1240,6 +1284,14 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Latency iterations: `{replay_query_profile['latency_iteration_count']}`\n"
         f"- Comparison rule: `{replay_query_profile['comparison_rule']}`\n"
         f"- Rust scope: `{replay_query_profile['rust_scope']}`\n\n"
+        "## Dropped Event Profile\n\n"
+        f"- Accounting source: `{dropped_event_profile['accounting_source']['formula']}`\n"
+        f"- Expected telemetry rows: `{dropped_event_profile['expected_telemetry_rows']}`\n"
+        f"- Replay sample count: `{dropped_event_profile['replay_sample_count']}`\n"
+        f"- Dropped event count: `{dropped_event_profile['dropped_event_count']}`\n"
+        f"- Stream claim status: `{dropped_event_profile['stream_claim_status']}`\n"
+        f"- Comparison rule: `{dropped_event_profile['comparison_rule']}`\n"
+        f"- Rust scope: `{dropped_event_profile['rust_scope']}`\n\n"
         "## Input Provenance\n\n"
         f"- Telemetry catalog: `{input_provenance['telemetry_catalog_path']}`\n"
         f"- Catalog schema: `{input_provenance['telemetry_catalog_schema']}`\n"

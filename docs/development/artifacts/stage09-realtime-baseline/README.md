@@ -26,7 +26,9 @@ queries.
   determinism profile with the stable workload identity, a latency budget
   profile for alert/replay headroom, a replay query profile that records the
   bounded replay window, requested limit, returned samples, and latency
-  iteration count, a runtime observation that confirms the
+  iteration count, a dropped-event profile that records the telemetry query
+  count, replay sample count, formula, and stream/backpressure comparison rule,
+  a runtime observation that confirms the
   bounded command stayed inside the expected local runtime envelope, input
   provenance for the exact telemetry catalog hash used to generate the workload,
   a target profile that binds the ADR-009 realtime hypotheses to stable report
@@ -130,6 +132,13 @@ window, requested limit, returned samples, marker/anomaly counts, and latency
 iteration count used for the p95 replay query measurement. Future Rust
 data-plane replay-index candidates should preserve this profile before their
 latency numbers are compared with the Python/FastAPI control-plane baseline.
+
+The `dropped_event_profile` block records how the current baseline computes
+`dropped_event_count`: compare the telemetry query count after simulation and
+fault injections with the bounded replay sample count, then floor missing rows
+at zero. Future websocket or Rust stream-fanout candidates must add
+`stream.backpressure` dropped-event evidence without removing this replay
+accounting field.
 
 The `input_provenance` block records the telemetry catalog path, schema, byte
 count, channel count, and SHA-256 hash. A future Rust data-plane candidate

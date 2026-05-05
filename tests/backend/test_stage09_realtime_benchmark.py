@@ -140,6 +140,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "dropped_event_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "stable_report_fingerprint",
                 verification_contract["required_report_fields"],
             )
@@ -253,6 +257,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "replay_query_profile.requested_limit",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "dropped_event_profile.accounting_source",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "dropped_event_profile.comparison_rule",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -426,6 +438,39 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "not a whole-project rewrite",
                 replay_query_profile["rust_scope"],
+            )
+            dropped_event_profile = summary["dropped_event_profile"]
+            self.assertEqual(
+                dropped_event_profile["schema"],
+                "telemforge.stage09_dropped_event_profile.v1",
+            )
+            self.assertEqual(
+                dropped_event_profile["accounting_source"]["formula"],
+                "max(expected_telemetry_rows - replay_sample_count, 0)",
+            )
+            self.assertGreaterEqual(
+                dropped_event_profile["expected_telemetry_rows"],
+                summary["workload"]["telemetry_rows_written"],
+            )
+            self.assertEqual(
+                dropped_event_profile["replay_sample_count"],
+                summary["metrics"]["replay_sample_count"],
+            )
+            self.assertEqual(
+                dropped_event_profile["dropped_event_count"],
+                summary["metrics"]["dropped_event_count"],
+            )
+            self.assertEqual(
+                dropped_event_profile["stream_claim_status"],
+                "control_plane_replay_accounting_only",
+            )
+            self.assertIn(
+                "stream.backpressure",
+                dropped_event_profile["comparison_rule"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                dropped_event_profile["rust_scope"],
             )
             target_profile = summary["target_profile"]
             self.assertEqual(
@@ -683,6 +728,13 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("- Endpoint: `/sessions/{session_id}/replay`", summary_text)
             self.assertIn("- Requested limit: `500`", summary_text)
             self.assertIn("replay-index candidates", summary_text)
+            self.assertIn("## Dropped Event Profile", summary_text)
+            self.assertIn(
+                "max(expected_telemetry_rows - replay_sample_count, 0)",
+                summary_text,
+            )
+            self.assertIn("control_plane_replay_accounting_only", summary_text)
+            self.assertIn("stream.backpressure", summary_text)
             self.assertIn("## Input Provenance", summary_text)
             self.assertIn(
                 "- Telemetry catalog: `fixtures/telemetry/channels.json`",
@@ -830,6 +882,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "replay_query_profile",
                 report["verification_contract"]["required_report_fields"],
             )
+            self.assertIn(
+                "dropped_event_profile",
+                report["verification_contract"]["required_report_fields"],
+            )
             self.assertEqual(
                 report["stable_report_fingerprint"]["schema"],
                 "telemforge.stage09_stable_report_fingerprint.v1",
@@ -892,6 +948,18 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertEqual(
                 report["replay_query_profile"]["latency_iteration_count"],
                 2,
+            )
+            self.assertEqual(
+                report["dropped_event_profile"]["schema"],
+                "telemforge.stage09_dropped_event_profile.v1",
+            )
+            self.assertEqual(
+                report["dropped_event_profile"]["dropped_event_count"],
+                report["metrics"]["dropped_event_count"],
+            )
+            self.assertIn(
+                "stream.backpressure",
+                report["dropped_event_profile"]["comparison_rule"],
             )
             self.assertIn("Python/FastAPI remains the measured control-plane", summary_text)
 
