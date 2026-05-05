@@ -53,7 +53,8 @@
       "Preserve the benchmark metric names before replacing any Python control-plane hot path with a Rust data-plane candidate.",
       "Preserve latency_budget_profile fields so alert and replay headroom remain visible across runtime candidates.",
       "Preserve input_provenance.telemetry_catalog_sha256 so runtime candidates do not compare against a different channel catalog.",
-      "Preserve verification_contract.command and required_report_fields so reruns regenerate both public baseline artifacts together."
+      "Preserve verification_contract.command and required_report_fields so reruns regenerate both public baseline artifacts together.",
+      "Preserve rerun_evidence_profile fields so baseline refreshes and Rust candidates prove the same command, outputs, and resource envelope before metrics are compared."
     ],
     "purpose": "Separate stable report fields from run-specific timing and provenance before comparing Python/FastAPI and future Rust data-plane candidates.",
     "run_specific_fields": [
@@ -83,6 +84,7 @@
       "verification_contract",
       "measurement_boundary",
       "stream_contract_profile",
+      "rerun_evidence_profile",
       "run_variant_policy",
       "stable_report_fingerprint",
       "determinism_profile.workload_identity",
@@ -166,7 +168,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T03:13:45Z",
+  "generated_at": "2026-05-05T04:06:14Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -184,13 +186,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.509,
-      "bounded_replay_query": 2.837
+      "alert_evaluation": 3.082,
+      "bounded_replay_query": 2.981
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.491,
-      "bounded_replay_query": 497.163
+      "alert_evaluation": 46.918,
+      "bounded_replay_query": 497.019
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -215,8 +217,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.509,
-    "p95_replay_query_latency_ms": 2.837,
+    "p95_alert_latency_ms": 3.082,
+    "p95_replay_query_latency_ms": 2.981,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -270,6 +272,49 @@
       "start_at": "2026-05-03T16:00:00Z"
     }
   },
+  "rerun_evidence_profile": {
+    "candidate_scope": "Python/FastAPI baseline refresh or narrow Rust data-plane hot path; not a whole-project rewrite",
+    "command": [
+      "python3",
+      "scripts/benchmark_stage09_realtime.py",
+      "--output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "--summary-output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "comparable_identity": {
+      "stable_inputs": {
+        "channel_count": 10,
+        "samples_per_channel": 10,
+        "scenario": "nominal-orbit-daylight",
+        "seed": 9090,
+        "start_at": "2026-05-03T16:00:00Z",
+        "step_seconds": 1
+      },
+      "stable_report_fingerprint_field": "stable_report_fingerprint.digest_sha256",
+      "telemetry_catalog_sha256": "fe0a09191f4b04677025887035ad0156627ef73bf6cca5692c8eb775f6dc3daf",
+      "workload_identity": "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s"
+    },
+    "purpose": "Make the bounded baseline rerun evidence explicit before a Python/FastAPI refresh or narrow Rust data-plane candidate is compared.",
+    "required_before_metric_comparison": [
+      "rerun command completed successfully",
+      "JSON report and Markdown summary were regenerated together",
+      "resource envelope stayed within the local automation guard",
+      "stable report fingerprint matched or a versioned workload change was documented"
+    ],
+    "required_outputs": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "resource_envelope": {
+      "max_expected_memory_mb": 512,
+      "max_expected_runtime_seconds": 30,
+      "uses_network": false,
+      "uses_paid_services": false,
+      "worker_processes": 1
+    },
+    "schema": "telemforge.stage09_rerun_evidence_profile.v1"
+  },
   "resource_guard": {
     "max_expected_memory_mb": 512,
     "max_expected_runtime_seconds": 30,
@@ -313,6 +358,9 @@
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "input_provenance.telemetry_catalog_sha256",
+      "rerun_evidence_profile.command",
+      "rerun_evidence_profile.required_outputs",
+      "rerun_evidence_profile.resource_envelope",
       "workload.scenario",
       "workload.samples_per_channel",
       "workload.step_seconds",
@@ -337,7 +385,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 53.245,
+    "duration_ms": 52.975,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -348,7 +396,7 @@
   "stable_report_fingerprint": {
     "comparison_rule": "Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.",
     "digest_algorithm": "sha256",
-    "digest_sha256": "23a4ed5ee22b0cb1a130022c7724f12ceeaf894306ce9a1c89c2cb54fbc95d5b",
+    "digest_sha256": "3c110d6133f2f4af02f4e13666232740314a74d1b187104587a2bb13d1bef8e7",
     "excluded_run_variant_fields": [
       "generated_at",
       "metrics.p95_alert_latency_ms",
@@ -376,6 +424,9 @@
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "input_provenance.telemetry_catalog_sha256",
+      "rerun_evidence_profile.command",
+      "rerun_evidence_profile.required_outputs",
+      "rerun_evidence_profile.resource_envelope",
       "workload.scenario",
       "workload.samples_per_channel",
       "workload.step_seconds",
@@ -496,7 +547,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.509,
+        "observed": 3.082,
         "target": 50,
         "unit": "ms"
       },
@@ -504,7 +555,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.837,
+        "observed": 2.981,
         "target": 500,
         "unit": "ms"
       },
@@ -570,6 +621,7 @@
       "latency_budget_profile",
       "replay_query_profile",
       "dropped_event_profile",
+      "rerun_evidence_profile",
       "run_variant_policy",
       "input_provenance",
       "stable_report_fingerprint",

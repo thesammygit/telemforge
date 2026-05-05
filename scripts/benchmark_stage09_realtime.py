@@ -232,6 +232,7 @@ def run_stage09_realtime_baseline(
             "Dropped events are measured as bounded replay rows missing from the local synthetic workload.",
         ],
     }
+    summary["rerun_evidence_profile"] = _rerun_evidence_profile(summary)
     summary["stable_report_fingerprint"] = _stable_report_fingerprint(summary)
     return summary
 
@@ -460,6 +461,7 @@ def _comparison_profile() -> dict[str, Any]:
             "verification_contract",
             "measurement_boundary",
             "stream_contract_profile",
+            "rerun_evidence_profile",
             "run_variant_policy",
             "stable_report_fingerprint",
             "determinism_profile.workload_identity",
@@ -512,6 +514,11 @@ def _comparison_profile() -> dict[str, Any]:
                 "Preserve verification_contract.command and required_report_fields "
                 "so reruns regenerate both public baseline artifacts together."
             ),
+            (
+                "Preserve rerun_evidence_profile fields so baseline refreshes "
+                "and Rust candidates prove the same command, outputs, and "
+                "resource envelope before metrics are compared."
+            ),
         ],
     }
 
@@ -557,6 +564,7 @@ def _verification_contract() -> dict[str, Any]:
             "latency_budget_profile",
             "replay_query_profile",
             "dropped_event_profile",
+            "rerun_evidence_profile",
             "run_variant_policy",
             "input_provenance",
             "stable_report_fingerprint",
@@ -611,6 +619,9 @@ def _run_variant_policy() -> dict[str, Any]:
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "input_provenance.telemetry_catalog_sha256",
+            "rerun_evidence_profile.command",
+            "rerun_evidence_profile.required_outputs",
+            "rerun_evidence_profile.resource_envelope",
             "workload.scenario",
             "workload.samples_per_channel",
             "workload.step_seconds",
@@ -808,6 +819,51 @@ def _dropped_event_profile(
             "removing this bounded replay accounting field."
         ),
         "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
+    }
+
+
+def _rerun_evidence_profile(summary: dict[str, Any]) -> dict[str, Any]:
+    verification_contract = summary["verification_contract"]
+    resource_guard = summary["resource_guard"]
+    determinism_profile = summary["determinism_profile"]
+    return {
+        "schema": "telemforge.stage09_rerun_evidence_profile.v1",
+        "purpose": (
+            "Make the bounded baseline rerun evidence explicit before a "
+            "Python/FastAPI refresh or narrow Rust data-plane candidate is "
+            "compared."
+        ),
+        "command": verification_contract["command"],
+        "required_outputs": verification_contract["required_outputs"],
+        "resource_envelope": {
+            "worker_processes": resource_guard["worker_processes"],
+            "max_expected_runtime_seconds": resource_guard[
+                "max_expected_runtime_seconds"
+            ],
+            "max_expected_memory_mb": resource_guard["max_expected_memory_mb"],
+            "uses_network": resource_guard["uses_network"],
+            "uses_paid_services": resource_guard["uses_paid_services"],
+        },
+        "comparable_identity": {
+            "workload_identity": determinism_profile["workload_identity"],
+            "stable_inputs": determinism_profile["stable_inputs"],
+            "telemetry_catalog_sha256": summary["input_provenance"][
+                "telemetry_catalog_sha256"
+            ],
+            "stable_report_fingerprint_field": (
+                "stable_report_fingerprint.digest_sha256"
+            ),
+        },
+        "required_before_metric_comparison": [
+            "rerun command completed successfully",
+            "JSON report and Markdown summary were regenerated together",
+            "resource envelope stayed within the local automation guard",
+            "stable report fingerprint matched or a versioned workload change was documented",
+        ],
+        "candidate_scope": (
+            "Python/FastAPI baseline refresh or narrow Rust data-plane hot path; "
+            "not a whole-project rewrite"
+        ),
     }
 
 
@@ -1156,6 +1212,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     latency_budget_profile = summary["latency_budget_profile"]
     replay_query_profile = summary["replay_query_profile"]
     dropped_event_profile = summary["dropped_event_profile"]
+    rerun_evidence_profile = summary["rerun_evidence_profile"]
     input_provenance = summary["input_provenance"]
     run_variant_policy = summary["run_variant_policy"]
     stable_report_fingerprint = summary["stable_report_fingerprint"]
@@ -1173,6 +1230,11 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     verification_fields = ", ".join(verification_contract["required_report_fields"])
     allowed_run_variant_fields = ", ".join(
         verification_contract["allowed_run_variant_fields"]
+    )
+    rerun_evidence_command = " ".join(rerun_evidence_profile["command"])
+    rerun_required_outputs = ", ".join(rerun_evidence_profile["required_outputs"])
+    rerun_required_checks = ", ".join(
+        rerun_evidence_profile["required_before_metric_comparison"]
     )
     required_live_evidence = ", ".join(
         stream_contract_profile["required_live_evidence_before_runtime_claim"]
@@ -1292,6 +1354,20 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Stream claim status: `{dropped_event_profile['stream_claim_status']}`\n"
         f"- Comparison rule: `{dropped_event_profile['comparison_rule']}`\n"
         f"- Rust scope: `{dropped_event_profile['rust_scope']}`\n\n"
+        "## Rerun Evidence Profile\n\n"
+        f"- Command: `{rerun_evidence_command}`\n"
+        f"- Required outputs: `{rerun_required_outputs}`\n"
+        "- Resource envelope: "
+        f"`{rerun_evidence_profile['resource_envelope']['worker_processes']} worker, "
+        f"{rerun_evidence_profile['resource_envelope']['max_expected_runtime_seconds']} seconds, "
+        f"{rerun_evidence_profile['resource_envelope']['max_expected_memory_mb']} MB, "
+        f"network={rerun_evidence_profile['resource_envelope']['uses_network']}, "
+        f"paid_services={rerun_evidence_profile['resource_envelope']['uses_paid_services']}`\n"
+        "- Comparable identity: "
+        f"`{rerun_evidence_profile['comparable_identity']['workload_identity']}`\n"
+        "- Required before metric comparison: "
+        f"`{rerun_required_checks}`\n"
+        f"- Candidate scope: `{rerun_evidence_profile['candidate_scope']}`\n\n"
         "## Input Provenance\n\n"
         f"- Telemetry catalog: `{input_provenance['telemetry_catalog_path']}`\n"
         f"- Catalog schema: `{input_provenance['telemetry_catalog_schema']}`\n"

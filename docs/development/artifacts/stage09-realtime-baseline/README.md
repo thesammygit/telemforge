@@ -28,6 +28,9 @@ queries.
   bounded replay window, requested limit, returned samples, and latency
   iteration count, a dropped-event profile that records the telemetry query
   count, replay sample count, formula, and stream/backpressure comparison rule,
+  a rerun evidence profile that pins the refresh command, required outputs,
+  resource envelope, and comparable identity before runtime metrics are
+  compared,
   a runtime observation that confirms the
   bounded command stayed inside the expected local runtime envelope, input
   provenance for the exact telemetry catalog hash used to generate the workload,
@@ -139,6 +142,11 @@ fault injections with the bounded replay sample count, then floor missing rows
 at zero. Future websocket or Rust stream-fanout candidates must add
 `stream.backpressure` dropped-event evidence without removing this replay
 accounting field.
+
+The `rerun_evidence_profile` block records the exact safe refresh command,
+required JSON and Markdown outputs, local resource envelope, and stable workload
+identity that must be proven before a refreshed Python/FastAPI baseline or
+narrow Rust data-plane candidate compares metrics.
 
 The `input_provenance` block records the telemetry catalog path, schema, byte
 count, channel count, and SHA-256 hash. A future Rust data-plane candidate

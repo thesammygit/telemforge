@@ -144,6 +144,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "rerun_evidence_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "stable_report_fingerprint",
                 verification_contract["required_report_fields"],
             )
@@ -174,6 +178,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "input_provenance.telemetry_catalog_sha256",
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
+                "rerun_evidence_profile.command",
+                run_variant_policy["stable_identity_fields"],
+            )
+            self.assertIn(
+                "rerun_evidence_profile.resource_envelope",
                 run_variant_policy["stable_identity_fields"],
             )
             self.assertIn(
@@ -293,6 +305,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "stream_contract_profile",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "rerun_evidence_profile",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -471,6 +487,41 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "not a whole-project rewrite",
                 dropped_event_profile["rust_scope"],
+            )
+            rerun_evidence_profile = summary["rerun_evidence_profile"]
+            self.assertEqual(
+                rerun_evidence_profile["schema"],
+                "telemforge.stage09_rerun_evidence_profile.v1",
+            )
+            self.assertEqual(
+                rerun_evidence_profile["command"],
+                verification_contract["command"],
+            )
+            self.assertEqual(
+                rerun_evidence_profile["required_outputs"],
+                verification_contract["required_outputs"],
+            )
+            self.assertEqual(
+                rerun_evidence_profile["resource_envelope"],
+                verification_contract["resource_expectations"],
+            )
+            self.assertEqual(
+                rerun_evidence_profile["comparable_identity"]["workload_identity"],
+                determinism_profile["workload_identity"],
+            )
+            self.assertEqual(
+                rerun_evidence_profile["comparable_identity"][
+                    "telemetry_catalog_sha256"
+                ],
+                input_provenance["telemetry_catalog_sha256"],
+            )
+            self.assertIn(
+                "stable report fingerprint matched",
+                rerun_evidence_profile["required_before_metric_comparison"][3],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                rerun_evidence_profile["candidate_scope"],
             )
             target_profile = summary["target_profile"]
             self.assertEqual(
@@ -735,6 +786,9 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn("control_plane_replay_accounting_only", summary_text)
             self.assertIn("stream.backpressure", summary_text)
+            self.assertIn("## Rerun Evidence Profile", summary_text)
+            self.assertIn("stable report fingerprint matched", summary_text)
+            self.assertIn("not a whole-project rewrite", summary_text)
             self.assertIn("## Input Provenance", summary_text)
             self.assertIn(
                 "- Telemetry catalog: `fixtures/telemetry/channels.json`",
@@ -885,6 +939,24 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "dropped_event_profile",
                 report["verification_contract"]["required_report_fields"],
+            )
+            self.assertIn(
+                "rerun_evidence_profile",
+                report["verification_contract"]["required_report_fields"],
+            )
+            self.assertEqual(
+                report["rerun_evidence_profile"]["schema"],
+                "telemforge.stage09_rerun_evidence_profile.v1",
+            )
+            self.assertEqual(
+                report["rerun_evidence_profile"]["resource_envelope"],
+                report["verification_contract"]["resource_expectations"],
+            )
+            self.assertEqual(
+                report["rerun_evidence_profile"]["comparable_identity"][
+                    "workload_identity"
+                ],
+                report["determinism_profile"]["workload_identity"],
             )
             self.assertEqual(
                 report["stable_report_fingerprint"]["schema"],
