@@ -100,6 +100,17 @@ The boundary note
 keeps the first Rust spike constrained to one measured data-plane hot path and
 requires a compatible benchmark report before any Python path is replaced.
 
+The compatibility validator command:
+
+```text
+python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json
+```
+
+checks the report/contract gates for required fields, metric bindings, resource
+envelope, stream-claim evidence, and promotion targets. It is a contract
+validator only; it does not add runtime websocket fanout or approve a Rust
+whole-project rewrite.
+
 ## Test Preference
 
 Favor:

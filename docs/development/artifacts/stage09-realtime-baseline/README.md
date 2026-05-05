@@ -59,9 +59,11 @@ queries.
 
 ```text
 python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md
+python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
+python3 -m unittest tests/contracts/test_stage09_report_validator.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -189,3 +191,8 @@ Rust data-plane candidate must preserve the baseline report shape, metric
 bindings, local resource envelope, stable fingerprint gate, and stream evidence
 gate before its timing metrics can be compared or used to replace a Python hot
 path.
+
+The `scripts/validate_stage09_realtime_report.py` command is the lightweight
+compatibility gate for that contract. It validates the current baseline or a
+future candidate report without running load tests, adding websocket fanout, or
+approving a Rust whole-project rewrite.
