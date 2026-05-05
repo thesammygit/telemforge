@@ -71,12 +71,13 @@ queries.
   runtime websocket fanout, or approving a Rust whole-project rewrite.
 - `stage09-baseline-verification-manifest.json`: public verification manifest
   that pins the benchmark report, live telemetry contract, candidate report
-  contract, validation summary, safe commands, resource envelope, and Rust
-  data-plane-only scope using repo-relative paths.
+  contract, validation summary, first Rust hot-path slice note, safe commands,
+  resource envelope, and Rust data-plane-only scope using repo-relative paths.
 - `stage09-baseline-bundle-verification.json`: deterministic output from
   `scripts/verify_stage09_baseline_bundle.py` showing that the report, summary,
-  validation summary, manifest, public relative paths, and Rust data-plane-only
-  scope still agree as one reviewable baseline bundle.
+  validation summary, first Rust hot-path slice note, manifest, public relative
+  paths, and Rust data-plane-only scope still agree as one reviewable baseline
+  bundle.
 
 ## Inspect
 

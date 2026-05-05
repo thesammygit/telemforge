@@ -13,6 +13,7 @@ REPORT_PATH = ARTIFACT_ROOT / "stage09-baseline-report.json"
 LIVE_CONTRACT_PATH = ARTIFACT_ROOT / "stage09-live-telemetry-contract.json"
 CANDIDATE_CONTRACT_PATH = ARTIFACT_ROOT / "stage09-candidate-report-contract.json"
 VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-summary.json"
+FIRST_RUST_HOT_PATH_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -68,6 +69,14 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         self.assertEqual(
             contract_paths[repo_path(VALIDATION_SUMMARY_PATH)]["schema"],
             validation_summary["schema"],
+        )
+        self.assertEqual(
+            contract_paths[repo_path(FIRST_RUST_HOT_PATH_PATH)]["schema"],
+            "telemforge.stage09_first_rust_hot_path_slice_note.v1",
+        )
+        self.assertIn(
+            "first Rust data-plane experiment",
+            contract_paths[repo_path(FIRST_RUST_HOT_PATH_PATH)]["role"],
         )
         self.assertEqual(validation_summary["status"], "passed")
 

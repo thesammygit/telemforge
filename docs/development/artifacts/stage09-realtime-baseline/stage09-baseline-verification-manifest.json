@@ -2,7 +2,7 @@
   "schema": "telemforge.stage09_baseline_verification_manifest.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
-  "generated_at": "2026-05-05T11:32:08Z",
+  "generated_at": "2026-05-05T20:43:05Z",
   "purpose": "Pin the public Stage 09 baseline artifacts, safe verification commands, and candidate gates that make the current Python/FastAPI control-plane benchmark comparable with future narrow Rust data-plane candidates.",
   "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
   "benchmark": {
@@ -41,6 +41,11 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json",
       "schema": "telemforge.stage09_report_compatibility_validation.v1",
       "role": "public proof that the baseline report currently passes the candidate contract"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/first-rust-hot-path-slice.md",
+      "schema": "telemforge.stage09_first_rust_hot_path_slice_note.v1",
+      "role": "first Rust data-plane experiment scope note for stream fanout only"
     }
   ],
   "resource_envelope": {

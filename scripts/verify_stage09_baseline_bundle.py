@@ -32,6 +32,7 @@ ARTIFACT_ROOT = (
 DEFAULT_MANIFEST_PATH = ARTIFACT_ROOT / "stage09-baseline-verification-manifest.json"
 DEFAULT_VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-summary.json"
 DEFAULT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
+FIRST_RUST_HOT_PATH_SLICE_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 
 
 def verify_stage09_baseline_bundle(
@@ -86,6 +87,7 @@ def verify_stage09_baseline_bundle(
 
     _validate_public_paths(manifest, errors)
     _validate_manifest_artifacts(manifest, errors)
+    _validate_hot_path_slice_note(manifest, errors)
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -113,6 +115,7 @@ def verify_stage09_baseline_bundle(
             "validation_summary_matches",
             "manifest_artifacts_exist",
             "manifest_paths_are_public_relative",
+            "first_rust_hot_path_slice_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -226,6 +229,42 @@ def _validate_manifest_artifacts(manifest: dict[str, Any], errors: list[str]) ->
     for path in paths:
         if path and not (ROOT / path).exists():
             errors.append(f"manifest artifact does not exist: {path}")
+
+
+def _validate_hot_path_slice_note(
+    manifest: dict[str, Any],
+    errors: list[str],
+) -> None:
+    note_path = _display_path(FIRST_RUST_HOT_PATH_SLICE_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(note_path)
+    if artifact is None:
+        errors.append(f"manifest must pin first Rust hot-path note: {note_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_first_rust_hot_path_slice_note.v1",
+        "first Rust hot-path slice schema",
+        errors,
+    )
+    role = artifact.get("role", "")
+    if "first Rust data-plane experiment" not in role:
+        errors.append(
+            "first Rust hot-path slice role must describe the data-plane experiment"
+        )
+
+    note = FIRST_RUST_HOT_PATH_SLICE_PATH.read_text(encoding="utf-8")
+    for snippet in [
+        "stream fanout",
+        "not as a whole-project rewrite",
+        "Python/FastAPI control plane",
+        "dropped_event_count",
+    ]:
+        if snippet not in note:
+            errors.append(f"first Rust hot-path slice note missing snippet: {snippet}")
 
 
 def _validate_summary(
