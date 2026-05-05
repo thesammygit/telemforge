@@ -24,7 +24,9 @@ queries.
   stream contract profile that binds the report to the websocket contract
   without claiming runtime fanout,
   determinism profile with the stable workload identity, a latency budget
-  profile for alert/replay headroom, a runtime observation that confirms the
+  profile for alert/replay headroom, a replay query profile that records the
+  bounded replay window, requested limit, returned samples, and latency
+  iteration count, a runtime observation that confirms the
   bounded command stayed inside the expected local runtime envelope, input
   provenance for the exact telemetry catalog hash used to generate the workload,
   a target profile that binds the ADR-009 realtime hypotheses to stable report
@@ -122,6 +124,12 @@ The `latency_budget_profile` block records the Stage 09 p95 alert and replay
 budgets, the observed p95 latencies for the current run, and the remaining
 latency headroom. It keeps latency budget comparison explicit for future Rust
 data-plane candidates without promoting Rust to a whole-project rewrite.
+
+The `replay_query_profile` block records the exact bounded replay endpoint,
+window, requested limit, returned samples, marker/anomaly counts, and latency
+iteration count used for the p95 replay query measurement. Future Rust
+data-plane replay-index candidates should preserve this profile before their
+latency numbers are compared with the Python/FastAPI control-plane baseline.
 
 The `input_provenance` block records the telemetry catalog path, schema, byte
 count, channel count, and SHA-256 hash. A future Rust data-plane candidate

@@ -88,6 +88,8 @@
       "determinism_profile.workload_identity",
       "determinism_profile.stable_inputs",
       "latency_budget_profile.budgets",
+      "replay_query_profile.window",
+      "replay_query_profile.requested_limit",
       "input_provenance.telemetry_catalog_sha256",
       "workload.scenario",
       "workload.sample_window",
@@ -147,7 +149,7 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-05T00:23:12Z",
+  "generated_at": "2026-05-05T01:14:29Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
     "channel_count": 10,
@@ -165,13 +167,13 @@
     },
     "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
     "observed_p95_ms": {
-      "alert_evaluation": 2.956,
-      "bounded_replay_query": 2.927
+      "alert_evaluation": 3.013,
+      "bounded_replay_query": 3.048
     },
     "purpose": "Keep alert and replay latency headroom explicit before comparing the Python/FastAPI control plane with a future Rust data-plane candidate.",
     "remaining_budget_ms": {
-      "alert_evaluation": 47.044,
-      "bounded_replay_query": 497.073
+      "alert_evaluation": 46.987,
+      "bounded_replay_query": 496.952
     },
     "schema": "telemforge.stage09_latency_budget_profile.v1"
   },
@@ -196,8 +198,8 @@
   },
   "metrics": {
     "dropped_event_count": 0,
-    "p95_alert_latency_ms": 2.956,
-    "p95_replay_query_latency_ms": 2.927,
+    "p95_alert_latency_ms": 3.013,
+    "p95_replay_query_latency_ms": 3.048,
     "per_channel_sample_rate_hz": 1.0,
     "replay_sample_count": 107,
     "telemetry_sample_rate_hz": 10.0
@@ -233,6 +235,24 @@
     "It measures the current Python/FastAPI path to make future Rust migration evidence-driven.",
     "Dropped events are measured as bounded replay rows missing from the local synthetic workload."
   ],
+  "replay_query_profile": {
+    "anomaly_count": 7,
+    "comparison_rule": "Only compare replay-index candidates when the window, requested limit, and determinism_profile.workload_identity match.",
+    "endpoint_path": "/sessions/{session_id}/replay",
+    "latency_iteration_count": 5,
+    "latency_method": "nearest-rank p95 over bounded replay GET requests",
+    "marker_count": 29,
+    "purpose": "Make the bounded replay latency measurement explicit before Python/FastAPI and future Rust data-plane replay-index candidates are compared.",
+    "requested_limit": 500,
+    "returned_sample_count": 107,
+    "rust_scope": "data-plane replay-index candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_replay_query_profile.v1",
+    "window": {
+      "duration_seconds": 16,
+      "end_at": "2026-05-03T16:00:16Z",
+      "start_at": "2026-05-03T16:00:00Z"
+    }
+  },
   "resource_guard": {
     "max_expected_memory_mb": 512,
     "max_expected_runtime_seconds": 30,
@@ -300,7 +320,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 52.828,
+    "duration_ms": 52.247,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded benchmark duration so future runtime candidates do not compare against an unverified resource envelope.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -459,7 +479,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.956,
+        "observed": 3.013,
         "target": 50,
         "unit": "ms"
       },
@@ -467,7 +487,7 @@
         "comparison": "at_most",
         "gap_to_target": 0,
         "meets_target": true,
-        "observed": 2.927,
+        "observed": 3.048,
         "target": 500,
         "unit": "ms"
       },
@@ -531,6 +551,7 @@
       "stream_contract_profile",
       "determinism_profile",
       "latency_budget_profile",
+      "replay_query_profile",
       "run_variant_policy",
       "input_provenance",
       "stable_report_fingerprint",

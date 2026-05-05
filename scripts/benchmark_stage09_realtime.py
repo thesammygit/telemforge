@@ -193,6 +193,11 @@ def run_stage09_realtime_baseline(
         "comparison_profile": _comparison_profile(),
         "determinism_profile": _determinism_profile(channel_count),
         "latency_budget_profile": _latency_budget_profile(metrics),
+        "replay_query_profile": _replay_query_profile(
+            replay=replay,
+            replay_end_at=replay_end_at,
+            replay_latency_ms=replay_latency_ms,
+        ),
         "workload": workload,
         "metrics": metrics,
         "targets": BENCHMARK_TARGETS,
@@ -455,6 +460,8 @@ def _comparison_profile() -> dict[str, Any]:
             "determinism_profile.workload_identity",
             "determinism_profile.stable_inputs",
             "latency_budget_profile.budgets",
+            "replay_query_profile.window",
+            "replay_query_profile.requested_limit",
             "input_provenance.telemetry_catalog_sha256",
             "workload.scenario",
             "workload.sample_window",
@@ -541,6 +548,7 @@ def _verification_contract() -> dict[str, Any]:
             "stream_contract_profile",
             "determinism_profile",
             "latency_budget_profile",
+            "replay_query_profile",
             "run_variant_policy",
             "input_provenance",
             "stable_report_fingerprint",
@@ -725,6 +733,38 @@ def _latency_budget_profile(metrics: dict[str, Any]) -> dict[str, Any]:
             "Only compare latency headroom when determinism_profile.workload_identity "
             "matches; treat observed p95 values as run-specific."
         ),
+    }
+
+
+def _replay_query_profile(
+    replay: dict[str, Any],
+    replay_end_at: str,
+    replay_latency_ms: list[float],
+) -> dict[str, Any]:
+    return {
+        "schema": "telemforge.stage09_replay_query_profile.v1",
+        "purpose": (
+            "Make the bounded replay latency measurement explicit before "
+            "Python/FastAPI and future Rust data-plane replay-index candidates "
+            "are compared."
+        ),
+        "endpoint_path": "/sessions/{session_id}/replay",
+        "window": {
+            "start_at": BENCHMARK_START_AT,
+            "end_at": replay_end_at,
+            "duration_seconds": _seconds_between(BENCHMARK_START_AT, replay_end_at),
+        },
+        "requested_limit": int(replay["window"]["sample_limit"]),
+        "returned_sample_count": int(replay["summary"]["sample_count"]),
+        "marker_count": int(replay["summary"]["marker_count"]),
+        "anomaly_count": int(replay["summary"]["anomaly_count"]),
+        "latency_iteration_count": len(replay_latency_ms),
+        "latency_method": "nearest-rank p95 over bounded replay GET requests",
+        "comparison_rule": (
+            "Only compare replay-index candidates when the window, requested "
+            "limit, and determinism_profile.workload_identity match."
+        ),
+        "rust_scope": "data-plane replay-index candidate only; not a whole-project rewrite",
     }
 
 
@@ -1071,6 +1111,7 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
     comparison_profile = summary["comparison_profile"]
     determinism_profile = summary["determinism_profile"]
     latency_budget_profile = summary["latency_budget_profile"]
+    replay_query_profile = summary["replay_query_profile"]
     input_provenance = summary["input_provenance"]
     run_variant_policy = summary["run_variant_policy"]
     stable_report_fingerprint = summary["stable_report_fingerprint"]
@@ -1187,6 +1228,18 @@ def _stage09_markdown_summary(summary: dict[str, Any]) -> str:
         f"- Replay p95 budget: `{latency_budget_profile['budgets']['bounded_replay_query_p95_ms']} ms`\n"
         f"- Replay p95 remaining budget: `{latency_budget_profile['remaining_budget_ms']['bounded_replay_query']} ms`\n"
         f"- Comparison rule: `{latency_budget_profile['comparison_rule']}`\n\n"
+        "## Replay Query Profile\n\n"
+        f"- Endpoint: `{replay_query_profile['endpoint_path']}`\n"
+        f"- Window: `{replay_query_profile['window']['start_at']}` to "
+        f"`{replay_query_profile['window']['end_at']}` "
+        f"(`{replay_query_profile['window']['duration_seconds']} seconds`)\n"
+        f"- Requested limit: `{replay_query_profile['requested_limit']}`\n"
+        f"- Returned samples: `{replay_query_profile['returned_sample_count']}`\n"
+        f"- Markers: `{replay_query_profile['marker_count']}`\n"
+        f"- Anomalies: `{replay_query_profile['anomaly_count']}`\n"
+        f"- Latency iterations: `{replay_query_profile['latency_iteration_count']}`\n"
+        f"- Comparison rule: `{replay_query_profile['comparison_rule']}`\n"
+        f"- Rust scope: `{replay_query_profile['rust_scope']}`\n\n"
         "## Input Provenance\n\n"
         f"- Telemetry catalog: `{input_provenance['telemetry_catalog_path']}`\n"
         f"- Catalog schema: `{input_provenance['telemetry_catalog_schema']}`\n"
@@ -1297,6 +1350,12 @@ def _offset_timestamp(start_at: str, offset_seconds: int) -> str:
     return (
         start + timedelta(seconds=offset_seconds)
     ).astimezone(timezone.utc).isoformat().replace("+00:00", "Z")
+
+
+def _seconds_between(start_at: str, end_at: str) -> int:
+    start = datetime.fromisoformat(start_at.replace("Z", "+00:00"))
+    end = datetime.fromisoformat(end_at.replace("Z", "+00:00"))
+    return int((end - start).total_seconds())
 
 
 def _utc_now() -> str:

@@ -136,6 +136,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 verification_contract["required_report_fields"],
             )
             self.assertIn(
+                "replay_query_profile",
+                verification_contract["required_report_fields"],
+            )
+            self.assertIn(
                 "stable_report_fingerprint",
                 verification_contract["required_report_fields"],
             )
@@ -241,6 +245,14 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             )
             self.assertIn(
                 "latency_budget_profile.budgets",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "replay_query_profile.window",
+                comparison_profile["stable_fields"],
+            )
+            self.assertIn(
+                "replay_query_profile.requested_limit",
                 comparison_profile["stable_fields"],
             )
             self.assertIn(
@@ -383,6 +395,37 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn(
                 "workload_identity",
                 latency_budget_profile["comparison_rule"],
+            )
+            replay_query_profile = summary["replay_query_profile"]
+            self.assertEqual(
+                replay_query_profile["schema"],
+                "telemforge.stage09_replay_query_profile.v1",
+            )
+            self.assertEqual(
+                replay_query_profile["endpoint_path"],
+                "/sessions/{session_id}/replay",
+            )
+            self.assertEqual(
+                replay_query_profile["window"],
+                {
+                    "start_at": "2026-05-03T16:00:00Z",
+                    "end_at": "2026-05-03T16:00:14Z",
+                    "duration_seconds": 14,
+                },
+            )
+            self.assertEqual(replay_query_profile["requested_limit"], 500)
+            self.assertEqual(replay_query_profile["latency_iteration_count"], 3)
+            self.assertEqual(
+                replay_query_profile["returned_sample_count"],
+                summary["metrics"]["replay_sample_count"],
+            )
+            self.assertIn(
+                "replay-index candidates",
+                replay_query_profile["comparison_rule"],
+            )
+            self.assertIn(
+                "not a whole-project rewrite",
+                replay_query_profile["rust_scope"],
             )
             target_profile = summary["target_profile"]
             self.assertEqual(
@@ -636,6 +679,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
             self.assertIn("- Alert p95 budget: `50 ms`", summary_text)
             self.assertIn("- Replay p95 budget: `500 ms`", summary_text)
             self.assertIn("latency headroom", summary_text)
+            self.assertIn("## Replay Query Profile", summary_text)
+            self.assertIn("- Endpoint: `/sessions/{session_id}/replay`", summary_text)
+            self.assertIn("- Requested limit: `500`", summary_text)
+            self.assertIn("replay-index candidates", summary_text)
             self.assertIn("## Input Provenance", summary_text)
             self.assertIn(
                 "- Telemetry catalog: `fixtures/telemetry/channels.json`",
@@ -779,6 +826,10 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                 "stable_report_fingerprint",
                 report["verification_contract"]["required_report_fields"],
             )
+            self.assertIn(
+                "replay_query_profile",
+                report["verification_contract"]["required_report_fields"],
+            )
             self.assertEqual(
                 report["stable_report_fingerprint"]["schema"],
                 "telemforge.stage09_stable_report_fingerprint.v1",
@@ -832,6 +883,15 @@ class Stage09RealtimeBenchmarkTest(unittest.TestCase):
                     "gap_to_target"
                 ],
                 990.0,
+            )
+            self.assertEqual(
+                report["replay_query_profile"]["schema"],
+                "telemforge.stage09_replay_query_profile.v1",
+            )
+            self.assertEqual(report["replay_query_profile"]["requested_limit"], 500)
+            self.assertEqual(
+                report["replay_query_profile"]["latency_iteration_count"],
+                2,
             )
             self.assertIn("Python/FastAPI remains the measured control-plane", summary_text)
 
