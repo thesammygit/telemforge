@@ -1,0 +1,92 @@
+{
+  "schema": "telemforge.stage09_candidate_report_contract.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "purpose": "Define the minimum report compatibility contract for a future Python/FastAPI refresh or narrow Rust data-plane candidate before its metrics are compared with the Stage 09 baseline.",
+  "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "baseline_report_schema": "telemforge.stage09_realtime_baseline.v1",
+  "candidate_scope": {
+    "allowed": [
+      "Python/FastAPI baseline refresh using the same bounded command",
+      "narrow Rust data-plane candidate for one measured hot path"
+    ],
+    "forbidden": [
+      "whole-project rewrite",
+      "Python control-plane replacement",
+      "unbounded load test",
+      "multi-worker fanout outside the local resource guard",
+      "websocket runtime fanout claim without live evidence"
+    ],
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite"
+  },
+  "required_top_level_fields": [
+    "schema",
+    "stage",
+    "execution_profile",
+    "resource_guard",
+    "runtime_observation",
+    "measurement_boundary",
+    "stream_contract_profile",
+    "determinism_profile",
+    "latency_budget_profile",
+    "replay_query_profile",
+    "dropped_event_profile",
+    "rerun_evidence_profile",
+    "run_variant_policy",
+    "input_provenance",
+    "stable_report_fingerprint",
+    "workload",
+    "metrics",
+    "targets",
+    "target_results",
+    "baseline_verdict",
+    "next_hot_path_profile",
+    "runtime_boundary"
+  ],
+  "required_metric_bindings": {
+    "channel_count": "workload.channel_count",
+    "per_channel_sample_rate_hz": "workload.per_channel_sample_rate_hz",
+    "aggregate_sample_rate_hz": "metrics.telemetry_sample_rate_hz",
+    "p95_alert_latency_ms": "metrics.p95_alert_latency_ms",
+    "p95_replay_query_latency_ms": "metrics.p95_replay_query_latency_ms",
+    "dropped_event_count": "metrics.dropped_event_count"
+  },
+  "stable_identity_gate": {
+    "fingerprint_field": "stable_report_fingerprint.digest_sha256",
+    "stable_fields_field": "stable_report_fingerprint.stable_identity_fields",
+    "allowed_variant_fields_field": "stable_report_fingerprint.excluded_run_variant_fields",
+    "comparison_rule": "Compare timing metrics only after digest_sha256 matches or the candidate records a versioned workload change."
+  },
+  "resource_envelope": {
+    "worker_processes": 1,
+    "max_expected_runtime_seconds": 30,
+    "max_expected_memory_mb": 512,
+    "uses_network": false,
+    "uses_paid_services": false
+  },
+  "stream_claim_gate": {
+    "contract_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "current_implementation_status": "contract_only_no_runtime_fanout",
+    "required_before_runtime_claim": [
+      "websocket connection acceptance for an existing session",
+      "startup snapshot emitted before incremental telemetry samples",
+      "monotonic per-session stream sequence values",
+      "after_sequence reconnect resume behavior",
+      "drop_oldest_and_report backpressure behavior",
+      "dropped_event_count reported from stream.backpressure payloads"
+    ]
+  },
+  "promotion_gate": {
+    "required_evidence": [
+      "candidate report preserves required_top_level_fields",
+      "candidate report preserves required_metric_bindings",
+      "resource envelope stays within the local automation guard",
+      "dropped_event_count does not regress",
+      "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+    ],
+    "missed_baseline_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ]
+  }
+}

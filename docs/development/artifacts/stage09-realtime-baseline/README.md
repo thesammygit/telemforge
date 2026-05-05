@@ -49,6 +49,11 @@ queries.
 - `rust-data-plane-boundary.md`: narrow implementation note that separates the
   Python/FastAPI control plane from future Rust data-plane candidates, with
   promotion gates before any hot path can replace the Python baseline.
+- `stage09-candidate-report-contract.json`: static compatibility contract for a
+  future Python/FastAPI baseline refresh or narrow Rust data-plane candidate. It
+  pins the required report fields, metric bindings, stable fingerprint gate,
+  resource envelope, stream-claim gate, and promotion evidence before candidate
+  metrics can be compared with the baseline.
 
 ## Inspect
 
@@ -56,6 +61,7 @@ queries.
 python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
+python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -177,3 +183,9 @@ local load tests, or worker fanout outside the local resource guard.
 The Rust data-plane boundary note is also intentionally pre-implementation. It
 keeps the first Rust spike constrained to a measured hot path, with the existing
 benchmark report and live stream contract acting as promotion gates.
+
+The candidate report contract keeps future comparison work bounded. A future
+Rust data-plane candidate must preserve the baseline report shape, metric
+bindings, local resource envelope, stable fingerprint gate, and stream evidence
+gate before its timing metrics can be compared or used to replace a Python hot
+path.

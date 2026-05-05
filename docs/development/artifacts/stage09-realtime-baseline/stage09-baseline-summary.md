@@ -1,6 +1,6 @@
 # Stage 09 Realtime Baseline Summary
 
-Generated at: `2026-05-05T04:54:05Z`
+Generated at: `2026-05-05T05:43:06Z`
 
 Runtime direction: Rust data plane direction, not a whole-project rewrite. Python/FastAPI remains the measured control-plane baseline for this report.
 
@@ -29,7 +29,7 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 ## Runtime Observation
 
-- Duration: `49.174 ms`
+- Duration: `51.622 ms`
 - Max expected runtime: `30 seconds`
 - Within expected runtime: `True`
 - Worker processes observed: `1`
@@ -70,9 +70,9 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 ## Latency Budget Profile
 
 - Alert p95 budget: `50 ms`
-- Alert p95 remaining budget: `47.343 ms`
+- Alert p95 remaining budget: `47.464 ms`
 - Replay p95 budget: `500 ms`
-- Replay p95 remaining budget: `497.08 ms`
+- Replay p95 remaining budget: `497.053 ms`
 - Comparison rule: `Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.`
 
 ## Replay Query Profile
@@ -150,8 +150,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 
 - Aggregate sample rate: `10.0 Hz`
 - Per-channel sample rate: `1.0 Hz`
-- P95 alert latency: `2.657 ms`
-- P95 replay query latency: `2.92 ms`
+- P95 alert latency: `2.536 ms`
+- P95 replay query latency: `2.947 ms`
 - Dropped events: `0`
 
 ## Target Results
@@ -161,8 +161,8 @@ Runtime direction: Rust data plane direction, not a whole-project rewrite. Pytho
 | Channel count | 10 channels | >= 100 channels | 90 channels | MISS |
 | Per-channel sample rate | 1.0 Hz | >= 10 Hz | 9.0 Hz | MISS |
 | Aggregate sample rate | 10.0 Hz | >= 1000 Hz | 990.0 Hz | MISS |
-| P95 alert latency | 2.657 ms | <= 50 ms | 0 ms | PASS |
-| P95 replay query latency | 2.92 ms | <= 500 ms | 0 ms | PASS |
+| P95 alert latency | 2.536 ms | <= 50 ms | 0 ms | PASS |
+| P95 replay query latency | 2.947 ms | <= 500 ms | 0 ms | PASS |
 | Dropped events | 0 events | <= 0 events | 0 events | PASS |
 
 Missed targets: `channel_count, per_channel_sample_rate_hz, aggregate_sample_rate_hz`.
