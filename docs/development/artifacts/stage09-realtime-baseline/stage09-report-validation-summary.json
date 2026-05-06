@@ -8,6 +8,7 @@
   "validated_gates": [
     "required_top_level_fields",
     "required_metric_bindings",
+    "target_result_bindings",
     "stable_identity_gate",
     "resource_envelope",
     "stream_claim_gate",

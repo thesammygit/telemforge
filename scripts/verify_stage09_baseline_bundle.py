@@ -135,6 +135,7 @@ def verify_stage09_baseline_bundle(
         "rust_scope": rust_scope,
         "verified_gates": [
             "report_contract_validation",
+            "report_target_result_bindings",
             "validation_summary_matches",
             "manifest_artifacts_exist",
             "manifest_paths_are_public_relative",

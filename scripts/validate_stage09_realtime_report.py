@@ -69,6 +69,7 @@ def validate_stage09_report(
         if metric_name not in report.get("target_results", {}).get("checks", {}):
             errors.append(f"missing target_results.checks entry: {metric_name}")
 
+    _validate_target_result_bindings(report, metric_bindings, errors)
     _validate_stable_identity_gate(report, contract, errors)
     _validate_resource_envelope(report, contract, errors)
     _validate_stream_claim_gate(report, contract, errors)
@@ -88,6 +89,7 @@ def validate_stage09_report(
         "validated_gates": [
             "required_top_level_fields",
             "required_metric_bindings",
+            "target_result_bindings",
             "stable_identity_gate",
             "resource_envelope",
             "stream_claim_gate",
@@ -95,6 +97,91 @@ def validate_stage09_report(
             "promotion_gate",
         ],
     }
+
+
+def _validate_target_result_bindings(
+    report: dict[str, Any],
+    metric_bindings: dict[str, str],
+    errors: list[str],
+) -> None:
+    checks = report.get("target_results", {}).get("checks", {})
+    metric_targets = report.get("target_profile", {}).get("metric_targets", {})
+    for metric_name, binding in metric_bindings.items():
+        if metric_name not in checks:
+            continue
+        try:
+            observed = _path_value(report, binding)
+        except KeyError:
+            continue
+        check = checks.get(metric_name, {})
+        if not isinstance(check, dict):
+            errors.append(f"target_results.checks.{metric_name} must be an object")
+            continue
+        _expect_equal(
+            check.get("observed"),
+            observed,
+            f"target_results.checks.{metric_name}.observed",
+            errors,
+        )
+        target_profile = metric_targets.get(metric_name, {})
+        if not isinstance(target_profile, dict):
+            errors.append(f"target_profile.metric_targets.{metric_name} must be an object")
+            continue
+        _expect_equal(
+            target_profile.get("report_binding"),
+            binding,
+            f"target_profile.metric_targets.{metric_name}.report_binding",
+            errors,
+        )
+        _expect_equal(
+            check.get("target"),
+            target_profile.get("target"),
+            f"target_results.checks.{metric_name}.target",
+            errors,
+        )
+        _expect_equal(
+            check.get("comparison"),
+            target_profile.get("comparison"),
+            f"target_results.checks.{metric_name}.comparison",
+            errors,
+        )
+        _validate_target_check_math(metric_name, check, errors)
+
+
+def _validate_target_check_math(
+    metric_name: str,
+    check: dict[str, Any],
+    errors: list[str],
+) -> None:
+    observed = check.get("observed")
+    target = check.get("target")
+    comparison = check.get("comparison")
+    if not isinstance(observed, (int, float)) or not isinstance(target, (int, float)):
+        errors.append(f"target_results.checks.{metric_name} values must be numeric")
+        return
+    if comparison == "at_least":
+        expected_meets_target = observed >= target
+        expected_gap = max(target - observed, 0)
+    elif comparison == "at_most":
+        expected_meets_target = observed <= target
+        expected_gap = max(observed - target, 0)
+    else:
+        errors.append(
+            f"target_results.checks.{metric_name}.comparison must be at_least or at_most"
+        )
+        return
+    _expect_equal(
+        check.get("meets_target"),
+        expected_meets_target,
+        f"target_results.checks.{metric_name}.meets_target",
+        errors,
+    )
+    _expect_equal(
+        check.get("gap_to_target"),
+        expected_gap,
+        f"target_results.checks.{metric_name}.gap_to_target",
+        errors,
+    )
 
 
 def main() -> int:

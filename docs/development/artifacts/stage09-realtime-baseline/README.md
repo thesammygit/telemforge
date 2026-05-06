@@ -72,8 +72,10 @@ queries.
   metrics can be compared with the baseline.
 - `stage09-report-validation-summary.json`: deterministic output from the
   compatibility validator showing that the current public baseline report
-  satisfies the candidate report contract without running load tests, claiming
-  runtime websocket fanout, or approving a Rust whole-project rewrite.
+  satisfies the candidate report contract, including target-result bindings
+  between each headline metric and `target_results.checks`, without running load
+  tests, claiming runtime websocket fanout, or approving a Rust whole-project
+  rewrite.
 - `stage09-baseline-verification-manifest.json`: public verification manifest
   that pins the benchmark report, live telemetry contract, candidate report
   contract, validation summary, first Rust hot-path slice note, safe commands,

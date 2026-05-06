@@ -27,6 +27,7 @@ class Stage09ReportValidatorTest(unittest.TestCase):
         )
         self.assertEqual(result["status"], "passed")
         self.assertIn("resource_envelope", result["validated_gates"])
+        self.assertIn("target_result_bindings", result["validated_gates"])
         self.assertIn("stream_claim_gate", result["validated_gates"])
         self.assertIn("runtime_evidence_gate_binding", result["validated_gates"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
@@ -171,6 +172,34 @@ class Stage09ReportValidatorTest(unittest.TestCase):
 
         self.assertNotEqual(completed.returncode, 0)
         self.assertIn("stable identity fingerprint mismatch", completed.stderr)
+
+    def test_validator_rejects_report_with_stale_target_result_binding(self) -> None:
+        report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        report["target_results"]["checks"]["aggregate_sample_rate_hz"]["observed"] = 999
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_report = Path(tmpdir) / "bad-report.json"
+            bad_report.write_text(json.dumps(report), encoding="utf-8")
+
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    "scripts/validate_stage09_realtime_report.py",
+                    "--report",
+                    str(bad_report),
+                    "--contract",
+                    str(CONTRACT_PATH),
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+            )
+
+        self.assertNotEqual(completed.returncode, 0)
+        self.assertIn(
+            "target_results.checks.aggregate_sample_rate_hz.observed mismatch",
+            completed.stderr,
+        )
 
 
 if __name__ == "__main__":
