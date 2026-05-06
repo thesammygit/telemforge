@@ -1,0 +1,41 @@
+{
+  "schema": "telemforge.stage09_baseline_command_evidence.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "purpose": "Pin the bounded Stage 09 baseline command, required public outputs, and local resource envelope before comparing Python/FastAPI refreshes with narrow Rust data-plane candidates.",
+  "benchmark_command": [
+    "python3",
+    "scripts/benchmark_stage09_realtime.py",
+    "--output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "--summary-output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "required_outputs": [
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "resource_envelope": {
+    "worker_processes": 1,
+    "max_expected_runtime_seconds": 30,
+    "max_expected_memory_mb": 512,
+    "uses_network": false,
+    "uses_paid_services": false
+  },
+  "runtime_claim_status": "not_claimed",
+  "verification_scope": [
+    "bounded Python/FastAPI control-plane benchmark command",
+    "public JSON report output",
+    "public Markdown summary output",
+    "serial local execution with no worker fan-out",
+    "no websocket runtime fanout claim"
+  ],
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
+  "public_repo_safety": {
+    "paths_are_repo_relative": true,
+    "includes_docs_automation": false,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  }
+}

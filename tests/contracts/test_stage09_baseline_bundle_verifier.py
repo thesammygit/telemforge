@@ -43,6 +43,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
             result["verified_gates"],
         )
         self.assertIn(
+            "baseline_command_evidence_pinned",
+            result["verified_gates"],
+        )
+        self.assertIn(
             "live_contract_validation_summary_matches",
             result["verified_gates"],
         )

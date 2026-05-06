@@ -17,6 +17,7 @@ LIVE_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
 )
 FIRST_RUST_HOT_PATH_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
+COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -39,6 +40,7 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         candidate_contract = read_json(CANDIDATE_CONTRACT_PATH)
         validation_summary = read_json(VALIDATION_SUMMARY_PATH)
         live_validation_summary = read_json(LIVE_VALIDATION_SUMMARY_PATH)
+        command_evidence = read_json(COMMAND_EVIDENCE_PATH)
 
         self.assertEqual(
             manifest["schema"],
@@ -82,6 +84,28 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
             contract_paths[repo_path(FIRST_RUST_HOT_PATH_PATH)]["schema"],
             "telemforge.stage09_first_rust_hot_path_slice_note.v1",
         )
+        self.assertEqual(
+            contract_paths[repo_path(COMMAND_EVIDENCE_PATH)]["schema"],
+            command_evidence["schema"],
+        )
+        self.assertEqual(
+            command_evidence["benchmark_command"],
+            manifest["benchmark"]["command"],
+        )
+        self.assertEqual(
+            command_evidence["required_outputs"],
+            [
+                manifest["benchmark"]["report_path"],
+                manifest["benchmark"]["summary_path"],
+            ],
+        )
+        self.assertEqual(
+            command_evidence["resource_envelope"],
+            manifest["resource_envelope"],
+        )
+        self.assertEqual(command_evidence["runtime_claim_status"], "not_claimed")
+        self.assertIn("not a whole-project rewrite", command_evidence["rust_scope"])
+        self.assertFalse(command_evidence["public_repo_safety"]["includes_docs_automation"])
         self.assertIn(
             "first Rust data-plane experiment",
             contract_paths[repo_path(FIRST_RUST_HOT_PATH_PATH)]["role"],

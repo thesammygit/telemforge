@@ -38,6 +38,7 @@ DEFAULT_VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-sum
 DEFAULT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 FIRST_RUST_HOT_PATH_SLICE_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 REFRESH_CHECK_PATH = ARTIFACT_ROOT / "stage09-baseline-refresh-check.json"
+COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
 LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
 )
@@ -67,6 +68,7 @@ def verify_stage09_baseline_bundle(
         LIVE_CONTRACT_VALIDATION_SUMMARY_PATH
     )
     refresh_check = _read_json(REFRESH_CHECK_PATH)
+    command_evidence = _read_json(COMMAND_EVIDENCE_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
     live_contract_validation = validate_stage09_live_telemetry_contract(
         DEFAULT_LIVE_CONTRACT_PATH,
@@ -111,6 +113,7 @@ def verify_stage09_baseline_bundle(
     _validate_manifest_artifacts(manifest, errors)
     _validate_hot_path_slice_note(manifest, errors)
     _validate_refresh_check(report, manifest, refresh_check, errors)
+    _validate_command_evidence(report, manifest, command_evidence, errors)
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -142,6 +145,7 @@ def verify_stage09_baseline_bundle(
             "live_contract_validation_summary_matches",
             "first_rust_hot_path_slice_pinned",
             "refresh_check_stable_fingerprint_matches",
+            "baseline_command_evidence_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -346,6 +350,86 @@ def _validate_refresh_check(
         [],
     ):
         errors.append("refresh_check must verify fresh stable fingerprint matching")
+
+
+def _validate_command_evidence(
+    report: dict[str, Any],
+    manifest: dict[str, Any],
+    command_evidence: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(COMMAND_EVIDENCE_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(f"manifest must pin baseline command evidence: {artifact_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_baseline_command_evidence.v1",
+        "baseline command evidence schema",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("schema"),
+        "telemforge.stage09_baseline_command_evidence.v1",
+        "command_evidence.schema",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("benchmark_command"),
+        report.get("verification_contract", {}).get("command"),
+        "command_evidence benchmark command",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("benchmark_command"),
+        manifest.get("benchmark", {}).get("command"),
+        "manifest benchmark command evidence",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("required_outputs"),
+        report.get("verification_contract", {}).get("required_outputs"),
+        "command_evidence required outputs",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("resource_envelope"),
+        manifest.get("resource_envelope"),
+        "command_evidence resource envelope",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("runtime_claim_status"),
+        "not_claimed",
+        "command_evidence runtime claim status",
+        errors,
+    )
+    public_safety = command_evidence.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("paths_are_repo_relative"),
+        True,
+        "command_evidence paths_are_repo_relative",
+        errors,
+    )
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "command_evidence includes_docs_automation",
+        errors,
+    )
+    _expect_equal(
+        public_safety.get("uses_absolute_local_paths"),
+        False,
+        "command_evidence uses_absolute_local_paths",
+        errors,
+    )
+    if "not a whole-project rewrite" not in command_evidence.get("rust_scope", ""):
+        errors.append("command_evidence.rust_scope must keep Rust data-plane scoped")
 
 
 def _validate_summary(

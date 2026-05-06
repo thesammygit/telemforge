@@ -90,6 +90,10 @@ queries.
   benchmark run still preserves the public report's stable fingerprint,
   resource envelope, blocked runtime-stream claim, and Rust data-plane-only
   scope.
+- `stage09-baseline-command-evidence.json`: static public proof that pins the
+  safe baseline command, required JSON and Markdown outputs, local resource
+  envelope, public path hygiene, and Rust data-plane-only scope without claiming
+  websocket runtime fanout.
 
 ## Inspect
 
