@@ -28,6 +28,10 @@ from scripts.validate_stage09_live_telemetry_contract import (
     DEFAULT_CONTRACT_PATH as DEFAULT_LIVE_CONTRACT_PATH,
     validate_stage09_live_telemetry_contract,
 )
+from scripts.summarize_stage09_baseline_readiness import (
+    ReadinessSummaryError,
+    summarize_stage09_baseline_readiness,
+)
 
 
 ARTIFACT_ROOT = (
@@ -44,6 +48,9 @@ RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
 )
 TARGET_RESULT_BINDING_GATE_PATH = (
     ARTIFACT_ROOT / "stage09-target-result-binding-gate.json"
+)
+BASELINE_READINESS_SUMMARY_PATH = (
+    ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
 )
 LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
@@ -79,6 +86,7 @@ def verify_stage09_baseline_bundle(
         RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
     )
     target_result_binding_gate = _read_json(TARGET_RESULT_BINDING_GATE_PATH)
+    baseline_readiness_summary = _read_json(BASELINE_READINESS_SUMMARY_PATH)
     live_contract = _read_json(DEFAULT_LIVE_CONTRACT_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
     live_contract_validation = validate_stage09_live_telemetry_contract(
@@ -139,6 +147,11 @@ def verify_stage09_baseline_bundle(
         target_result_binding_gate,
         errors,
     )
+    _validate_baseline_readiness_summary(
+        manifest,
+        baseline_readiness_summary,
+        errors,
+    )
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -173,6 +186,7 @@ def verify_stage09_baseline_bundle(
             "baseline_command_evidence_pinned",
             "runtime_stream_evidence_checklist_pinned",
             "target_result_binding_gate_pinned",
+            "baseline_readiness_summary_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -718,6 +732,65 @@ def _validate_target_result_binding_gate(
         errors.append(
             "target_result_binding_gate.rust_scope must keep Rust data-plane scoped"
         )
+
+
+def _validate_baseline_readiness_summary(
+    manifest: dict[str, Any],
+    summary: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(BASELINE_READINESS_SUMMARY_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(f"manifest must pin baseline readiness summary: {artifact_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_baseline_readiness_summary.v1",
+        "baseline readiness summary schema",
+        errors,
+    )
+
+    try:
+        expected = summarize_stage09_baseline_readiness(
+            report_path=DEFAULT_REPORT_PATH,
+            manifest_path=DEFAULT_MANIFEST_PATH,
+            report_validation_path=DEFAULT_VALIDATION_SUMMARY_PATH,
+            live_validation_path=LIVE_CONTRACT_VALIDATION_SUMMARY_PATH,
+            refresh_check_path=REFRESH_CHECK_PATH,
+            command_evidence_path=COMMAND_EVIDENCE_PATH,
+            target_binding_path=TARGET_RESULT_BINDING_GATE_PATH,
+        )
+    except (OSError, json.JSONDecodeError, ReadinessSummaryError, KeyError) as error:
+        errors.append(f"baseline readiness summary could not be generated: {error}")
+        return
+
+    _expect_equal(summary, expected, "baseline readiness summary artifact", errors)
+    _expect_equal(
+        summary.get("runtime_stream_claim_status"),
+        "contract_only_blocked",
+        "baseline readiness runtime stream claim status",
+        errors,
+    )
+    _expect_equal(
+        summary.get("target_summary", {}).get("baseline_is_production_realtime_claim"),
+        False,
+        "baseline readiness production realtime claim",
+        errors,
+    )
+    public_safety = summary.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "baseline readiness docs/automation safety",
+        errors,
+    )
+    if "not a whole-project rewrite" not in summary.get("rust_scope", ""):
+        errors.append("baseline_readiness_summary.rust_scope must keep Rust scoped")
 
 
 def _validate_summary(

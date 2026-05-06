@@ -141,6 +141,18 @@ resource envelope, repo-relative paths, and Rust data-plane-only scope still
 agree. It is a deterministic review gate; it does not run a load test, add
 runtime websocket fanout, or approve a Rust whole-project rewrite.
 
+The baseline readiness summary command:
+
+```text
+python3 scripts/summarize_stage09_baseline_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json
+```
+
+reads the public Stage 09 artifacts and produces a compact review summary with
+the baseline verdict, target pass/miss status, stable fingerprint, blocked
+runtime stream claim, and next narrow Rust data-plane candidate. It does not
+rerun the benchmark, claim websocket fanout, or approve a Rust whole-project
+rewrite.
+
 The baseline refresh check command:
 
 ```text

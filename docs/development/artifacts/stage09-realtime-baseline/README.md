@@ -103,6 +103,10 @@ queries.
   headline metric binding in the candidate report contract matches the current
   baseline report's `target_results.checks` entry, including observed value,
   target, comparison, unit, pass/fail status, and gap-to-target.
+- `stage09-baseline-readiness-summary.json`: deterministic public review
+  summary that pins the baseline as comparison evidence only, confirms target
+  pass/miss status, keeps runtime stream claims blocked, and scopes Rust to a
+  future data-plane candidate rather than a whole-project rewrite.
 
 ## Inspect
 
@@ -114,6 +118,8 @@ python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage0
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-binding-gate.json
+python3 scripts/summarize_stage09_baseline_readiness.py
+python3 scripts/summarize_stage09_baseline_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json
 python3 scripts/validate_stage09_live_telemetry_contract.py
 python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
 python3 scripts/verify_stage09_baseline_bundle.py
@@ -185,6 +191,13 @@ observed value, target, comparison direction, unit, pass/fail status, and
 gap-to-target for every Stage 09 metric, so future Python/FastAPI refreshes or
 narrow Rust data-plane candidates cannot compare a latency or throughput number
 without preserving the matching `target_results.checks` entry.
+
+The `stage09-baseline-readiness-summary.json` artifact is a compact reviewer
+index over the existing baseline proof. It records the baseline verdict, passed
+and missed targets, stable fingerprint, local resource envelope, blocked runtime
+stream claim status, public repo safety flags, and the next comparable narrow
+Rust data-plane candidate without rerunning the benchmark or claiming websocket
+runtime fanout.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service
@@ -332,3 +345,9 @@ contract, confirms the public validation summary matches the validator output,
 verifies manifest artifacts and repo-relative paths, and confirms the Markdown
 summary records the baseline verdict while Rust remains scoped to future
 data-plane candidates only.
+
+The `scripts/summarize_stage09_baseline_readiness.py` command is a deterministic
+review summary gate. It reads only public Stage 09 artifacts, writes
+`stage09-baseline-readiness-summary.json` when requested, and keeps the current
+Python/FastAPI baseline labeled as comparison evidence while Rust remains a
+future data-plane direction, not a whole-project rewrite.

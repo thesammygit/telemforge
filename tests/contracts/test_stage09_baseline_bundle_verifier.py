@@ -21,6 +21,9 @@ BUNDLE_VERIFICATION_PATH = ARTIFACT_ROOT / "stage09-baseline-bundle-verification
 TARGET_RESULT_BINDING_GATE_PATH = (
     ARTIFACT_ROOT / "stage09-target-result-binding-gate.json"
 )
+BASELINE_READINESS_SUMMARY_PATH = (
+    ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
+)
 
 
 class Stage09BaselineBundleVerifierTest(unittest.TestCase):
@@ -55,6 +58,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
         )
         self.assertIn(
             "target_result_binding_gate_pinned",
+            result["verified_gates"],
+        )
+        self.assertIn(
+            "baseline_readiness_summary_pinned",
             result["verified_gates"],
         )
         self.assertIn(
@@ -130,6 +137,32 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
             self.assertEqual(binding["unit"], report_check["unit"])
             self.assertEqual(binding["meets_target"], report_check["meets_target"])
             self.assertEqual(binding["gap_to_target"], report_check["gap_to_target"])
+
+    def test_readiness_summary_keeps_baseline_comparison_scoped(self) -> None:
+        summary = json.loads(BASELINE_READINESS_SUMMARY_PATH.read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            summary["schema"],
+            "telemforge.stage09_baseline_readiness_summary.v1",
+        )
+        self.assertEqual(summary["status"], "baseline_ready_for_comparison")
+        self.assertEqual(
+            summary["baseline_verdict_status"],
+            "baseline_only_targets_not_met",
+        )
+        self.assertEqual(
+            summary["runtime_stream_claim_status"],
+            "contract_only_blocked",
+        )
+        self.assertEqual(
+            summary["next_comparable_candidate"],
+            "rust_stream_fanout_sample_rate_spike",
+        )
+        self.assertFalse(
+            summary["target_summary"]["baseline_is_production_realtime_claim"]
+        )
+        self.assertIn("not a whole-project rewrite", summary["rust_scope"])
+        self.assertFalse(summary["public_repo_safety"]["includes_docs_automation"])
 
     def test_bundle_verifier_rejects_docs_automation_manifest_path(self) -> None:
         manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))

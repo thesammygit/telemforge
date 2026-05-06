@@ -27,6 +27,7 @@
     "baseline_command_evidence_pinned",
     "runtime_stream_evidence_checklist_pinned",
     "target_result_binding_gate_pinned",
+    "baseline_readiness_summary_pinned",
     "summary_records_baseline_verdict",
     "rust_scope_data_plane_only"
   ]

@@ -21,6 +21,9 @@ COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
 RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
     ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 )
+BASELINE_READINESS_SUMMARY_PATH = (
+    ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
+)
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -47,6 +50,7 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         runtime_stream_evidence_checklist = read_json(
             RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
         )
+        baseline_readiness_summary = read_json(BASELINE_READINESS_SUMMARY_PATH)
 
         self.assertEqual(
             manifest["schema"],
@@ -101,6 +105,10 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
             runtime_stream_evidence_checklist["schema"],
         )
         self.assertEqual(
+            contract_paths[repo_path(BASELINE_READINESS_SUMMARY_PATH)]["schema"],
+            baseline_readiness_summary["schema"],
+        )
+        self.assertEqual(
             runtime_stream_evidence_checklist["source_contract"],
             repo_path(LIVE_CONTRACT_PATH),
         )
@@ -139,6 +147,24 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         self.assertEqual(command_evidence["runtime_claim_status"], "not_claimed")
         self.assertIn("not a whole-project rewrite", command_evidence["rust_scope"])
         self.assertFalse(command_evidence["public_repo_safety"]["includes_docs_automation"])
+        self.assertEqual(
+            baseline_readiness_summary["runtime_stream_claim_status"],
+            "contract_only_blocked",
+        )
+        self.assertFalse(
+            baseline_readiness_summary["target_summary"][
+                "baseline_is_production_realtime_claim"
+            ]
+        )
+        self.assertIn(
+            "not a whole-project rewrite",
+            baseline_readiness_summary["rust_scope"],
+        )
+        self.assertFalse(
+            baseline_readiness_summary["public_repo_safety"][
+                "includes_docs_automation"
+            ]
+        )
         self.assertIn(
             "first Rust data-plane experiment",
             contract_paths[repo_path(FIRST_RUST_HOT_PATH_PATH)]["role"],

@@ -1,0 +1,71 @@
+{
+  "baseline_verdict_status": "baseline_only_targets_not_met",
+  "manifest_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json",
+  "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "required_next_evidence": [
+    "candidate report preserves required_top_level_fields",
+    "candidate report preserves required_metric_bindings",
+    "candidate report preserves throughput_gap_profile candidate mapping",
+    "resource envelope stays within the local automation guard",
+    "dropped_event_count does not regress",
+    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+  ],
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "runtime_stream_claim_status": "contract_only_blocked",
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_readiness_summary.v1",
+  "stable_fingerprint": {
+    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "stable_identity_field_count": 21
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "baseline_ready_for_comparison",
+  "target_summary": {
+    "baseline_is_production_realtime_claim": false,
+    "missed_targets": [
+      "aggregate_sample_rate_hz",
+      "channel_count",
+      "per_channel_sample_rate_hz"
+    ],
+    "passed_targets": [
+      "dropped_event_count",
+      "p95_alert_latency_ms",
+      "p95_replay_query_latency_ms"
+    ]
+  },
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "public_baseline_report_present",
+    "candidate_report_contract_passed",
+    "live_contract_validation_passed",
+    "refresh_check_passed",
+    "target_result_binding_passed",
+    "runtime_stream_claim_blocked",
+    "baseline_is_comparison_evidence_only",
+    "rust_scope_data_plane_only",
+    "docs_automation_excluded"
+  ],
+  "verified_inputs": {
+    "command_evidence_runtime_claim_status": "not_claimed",
+    "live_contract_validation_status": "passed",
+    "manifest_schema": "telemforge.stage09_baseline_verification_manifest.v1",
+    "refresh_check_status": "passed",
+    "report_schema": "telemforge.stage09_realtime_baseline.v1",
+    "report_validation_status": "passed",
+    "target_result_binding_status": "passed"
+  }
+}
