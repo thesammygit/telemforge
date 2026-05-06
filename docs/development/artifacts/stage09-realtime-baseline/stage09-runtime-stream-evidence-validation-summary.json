@@ -1,0 +1,74 @@
+{
+  "checklist_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
+  "claim_status_counts": {
+    "not_claimed_until_runtime_test": 6
+  },
+  "contract_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+  "forbidden_without_evidence": [
+    "runtime websocket fanout",
+    "reconnect behavior is implemented",
+    "backpressure behavior is implemented",
+    "stream-based dropped-event count is measured",
+    "Rust has replaced a Python control-plane path"
+  ],
+  "implementation_status": "contract_only_no_runtime_fanout",
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "report_binding": {
+    "comparison_rule": "A runtime stream or Rust data-plane candidate must preserve the compatible report shape and bind stream.backpressure.payload.dropped_event_count before comparing metrics.",
+    "dropped_event_metric": "metrics.dropped_event_count",
+    "dropped_event_target_result": "target_results.checks.dropped_event_count",
+    "runtime_evidence_gate": "stream_contract_profile.runtime_evidence_gate"
+  },
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "required_evidence_count": 6,
+  "runtime_stream_claim_status": "contract_only_blocked",
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured stream hot paths; not a whole-project rewrite.",
+  "schema": "telemforge.stage09_runtime_stream_evidence_validation.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "validated_evidence": [
+    {
+      "claim_status": "not_claimed_until_runtime_test",
+      "evidence": "websocket connection acceptance for an existing session",
+      "minimum_probe": "connect to websocket /sessions/{session_id}/telemetry/live for a session created by POST /sessions",
+      "required_artifact": "tests/contracts/test_stage09_live_telemetry_contract.py"
+    },
+    {
+      "claim_status": "not_claimed_until_runtime_test",
+      "evidence": "startup snapshot emitted before incremental telemetry samples",
+      "minimum_probe": "assert first accepted stream message is stream.snapshot before telemetry.sample messages",
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json"
+    },
+    {
+      "claim_status": "not_claimed_until_runtime_test",
+      "evidence": "monotonic per-session stream sequence values",
+      "minimum_probe": "assert observed stream sequence values increase within one session stream",
+      "required_artifact": "tests/contracts/test_stage09_live_telemetry_contract.py"
+    },
+    {
+      "claim_status": "not_claimed_until_runtime_test",
+      "evidence": "after_sequence reconnect resume behavior",
+      "minimum_probe": "reconnect with after_sequence and assert resumed messages have greater sequence values or a snapshot fallback",
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json"
+    },
+    {
+      "claim_status": "not_claimed_until_runtime_test",
+      "evidence": "drop_oldest_and_report backpressure behavior",
+      "minimum_probe": "force a bounded slow-client queue and assert stream.backpressure reports drop_oldest_and_report",
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json"
+    },
+    {
+      "claim_status": "not_claimed_until_runtime_test",
+      "evidence": "dropped_event_count reported from stream.backpressure payloads",
+      "minimum_probe": "bind stream.backpressure.payload.dropped_event_count to metrics.dropped_event_count in a compatible report",
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
+    }
+  ]
+}

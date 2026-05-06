@@ -21,6 +21,9 @@ COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
 RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
     ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 )
+RUNTIME_STREAM_EVIDENCE_VALIDATION_SUMMARY_PATH = (
+    ARTIFACT_ROOT / "stage09-runtime-stream-evidence-validation-summary.json"
+)
 BASELINE_READINESS_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
 )
@@ -49,6 +52,9 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         command_evidence = read_json(COMMAND_EVIDENCE_PATH)
         runtime_stream_evidence_checklist = read_json(
             RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
+        )
+        runtime_stream_evidence_validation_summary = read_json(
+            RUNTIME_STREAM_EVIDENCE_VALIDATION_SUMMARY_PATH
         )
         baseline_readiness_summary = read_json(BASELINE_READINESS_SUMMARY_PATH)
 
@@ -105,6 +111,12 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
             runtime_stream_evidence_checklist["schema"],
         )
         self.assertEqual(
+            contract_paths[repo_path(RUNTIME_STREAM_EVIDENCE_VALIDATION_SUMMARY_PATH)][
+                "schema"
+            ],
+            runtime_stream_evidence_validation_summary["schema"],
+        )
+        self.assertEqual(
             contract_paths[repo_path(BASELINE_READINESS_SUMMARY_PATH)]["schema"],
             baseline_readiness_summary["schema"],
         )
@@ -126,6 +138,20 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         )
         self.assertFalse(
             runtime_stream_evidence_checklist["public_repo_safety"][
+                "includes_docs_automation"
+            ]
+        )
+        self.assertEqual(runtime_stream_evidence_validation_summary["status"], "passed")
+        self.assertEqual(
+            runtime_stream_evidence_validation_summary["runtime_stream_claim_status"],
+            "contract_only_blocked",
+        )
+        self.assertEqual(
+            runtime_stream_evidence_validation_summary["required_evidence_count"],
+            6,
+        )
+        self.assertFalse(
+            runtime_stream_evidence_validation_summary["public_repo_safety"][
                 "includes_docs_automation"
             ]
         )

@@ -99,6 +99,11 @@ queries.
   future probes required before TelemForge can claim websocket fanout,
   reconnect, backpressure, stream-based dropped-event evidence, or a narrow Rust
   data-plane stream candidate.
+- `stage09-runtime-stream-evidence-validation-summary.json`: deterministic
+  output from `scripts/validate_stage09_runtime_stream_evidence_checklist.py`
+  showing that the public runtime-stream evidence checklist matches the live
+  telemetry contract gate, required runtime probes, pinned proof artifacts,
+  report bindings, public repo safety rules, and Rust data-plane-only scope.
 - `stage09-target-result-binding-gate.json`: static public proof that each
   headline metric binding in the candidate report contract matches the current
   baseline report's `target_results.checks` entry, including observed value,
@@ -129,11 +134,14 @@ python3 scripts/summarize_stage09_target_gaps.py
 python3 scripts/summarize_stage09_target_gaps.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json
 python3 scripts/validate_stage09_live_telemetry_contract.py
 python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
+python3 scripts/validate_stage09_runtime_stream_evidence_checklist.py
+python3 scripts/validate_stage09_runtime_stream_evidence_checklist.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-validation-summary.json
 python3 scripts/verify_stage09_baseline_bundle.py
 python3 scripts/verify_stage09_baseline_bundle.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json
 python3 scripts/check_stage09_baseline_refresh.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
+PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -192,6 +200,12 @@ reviewable as a checklist. It preserves the contract-only status, pins the
 single-client local resource envelope, binds stream dropped-event proof back to
 `metrics.dropped_event_count`, and keeps Rust scoped to a future data-plane
 stream candidate rather than a whole-project rewrite.
+
+The `stage09-runtime-stream-evidence-validation-summary.json` artifact makes
+that checklist independently reviewable. It proves the checklist still matches
+the live contract gate, the minimum runtime probes, the pinned public proof
+artifacts, the baseline report bindings, and the public repo safety rules
+without claiming runtime websocket fanout.
 
 The `stage09-target-result-binding-gate.json` artifact keeps the headline
 target comparison independently reviewable. It pins the current report binding,
