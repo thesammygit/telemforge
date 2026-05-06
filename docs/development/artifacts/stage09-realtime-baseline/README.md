@@ -94,6 +94,11 @@ queries.
   safe baseline command, required JSON and Markdown outputs, local resource
   envelope, public path hygiene, and Rust data-plane-only scope without claiming
   websocket runtime fanout.
+- `stage09-runtime-stream-evidence-checklist.json`: static public checklist
+  that mirrors the live contract runtime evidence gate and names the exact
+  future probes required before TelemForge can claim websocket fanout,
+  reconnect, backpressure, stream-based dropped-event evidence, or a narrow Rust
+  data-plane stream candidate.
 
 ## Inspect
 
@@ -103,6 +108,7 @@ python3 scripts/validate_stage09_realtime_report.py --report docs/development/ar
 python3 scripts/validate_stage09_realtime_report.py --report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --contract docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
+python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json
 python3 scripts/validate_stage09_live_telemetry_contract.py
 python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
 python3 scripts/verify_stage09_baseline_bundle.py
@@ -161,6 +167,12 @@ that maps each future runtime-stream claim to its required proof artifact and
 runtime probe. Every item remains `not_claimed_until_runtime_test`, so the
 contract still does not claim websocket fanout, reconnect, backpressure, or
 stream-based dropped-event evidence.
+
+The `stage09-runtime-stream-evidence-checklist.json` artifact makes that gate
+reviewable as a checklist. It preserves the contract-only status, pins the
+single-client local resource envelope, binds stream dropped-event proof back to
+`metrics.dropped_event_count`, and keeps Rust scoped to a future data-plane
+stream candidate rather than a whole-project rewrite.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

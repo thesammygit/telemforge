@@ -18,6 +18,9 @@ LIVE_VALIDATION_SUMMARY_PATH = (
 )
 FIRST_RUST_HOT_PATH_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
+RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
+    ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
+)
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -41,6 +44,9 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         validation_summary = read_json(VALIDATION_SUMMARY_PATH)
         live_validation_summary = read_json(LIVE_VALIDATION_SUMMARY_PATH)
         command_evidence = read_json(COMMAND_EVIDENCE_PATH)
+        runtime_stream_evidence_checklist = read_json(
+            RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
+        )
 
         self.assertEqual(
             manifest["schema"],
@@ -87,6 +93,33 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         self.assertEqual(
             contract_paths[repo_path(COMMAND_EVIDENCE_PATH)]["schema"],
             command_evidence["schema"],
+        )
+        self.assertEqual(
+            contract_paths[repo_path(RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH)][
+                "schema"
+            ],
+            runtime_stream_evidence_checklist["schema"],
+        )
+        self.assertEqual(
+            runtime_stream_evidence_checklist["source_contract"],
+            repo_path(LIVE_CONTRACT_PATH),
+        )
+        self.assertEqual(
+            runtime_stream_evidence_checklist["required_evidence"],
+            live_contract["runtime_evidence_gate"]["required_before_runtime_claim"],
+        )
+        self.assertEqual(
+            runtime_stream_evidence_checklist["resource_envelope"],
+            manifest["resource_envelope"],
+        )
+        self.assertIn(
+            "not a whole-project rewrite",
+            runtime_stream_evidence_checklist["rust_scope"],
+        )
+        self.assertFalse(
+            runtime_stream_evidence_checklist["public_repo_safety"][
+                "includes_docs_automation"
+            ]
         )
         self.assertEqual(
             command_evidence["benchmark_command"],

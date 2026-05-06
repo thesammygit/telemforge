@@ -39,6 +39,9 @@ DEFAULT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 FIRST_RUST_HOT_PATH_SLICE_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 REFRESH_CHECK_PATH = ARTIFACT_ROOT / "stage09-baseline-refresh-check.json"
 COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
+RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
+    ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
+)
 LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
 )
@@ -69,6 +72,10 @@ def verify_stage09_baseline_bundle(
     )
     refresh_check = _read_json(REFRESH_CHECK_PATH)
     command_evidence = _read_json(COMMAND_EVIDENCE_PATH)
+    runtime_stream_evidence_checklist = _read_json(
+        RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
+    )
+    live_contract = _read_json(DEFAULT_LIVE_CONTRACT_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
     live_contract_validation = validate_stage09_live_telemetry_contract(
         DEFAULT_LIVE_CONTRACT_PATH,
@@ -114,6 +121,13 @@ def verify_stage09_baseline_bundle(
     _validate_hot_path_slice_note(manifest, errors)
     _validate_refresh_check(report, manifest, refresh_check, errors)
     _validate_command_evidence(report, manifest, command_evidence, errors)
+    _validate_runtime_stream_evidence_checklist(
+        report,
+        manifest,
+        live_contract,
+        runtime_stream_evidence_checklist,
+        errors,
+    )
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -146,6 +160,7 @@ def verify_stage09_baseline_bundle(
             "first_rust_hot_path_slice_pinned",
             "refresh_check_stable_fingerprint_matches",
             "baseline_command_evidence_pinned",
+            "runtime_stream_evidence_checklist_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -432,6 +447,148 @@ def _validate_command_evidence(
         errors.append("command_evidence.rust_scope must keep Rust data-plane scoped")
 
 
+def _validate_runtime_stream_evidence_checklist(
+    report: dict[str, Any],
+    manifest: dict[str, Any],
+    live_contract: dict[str, Any],
+    checklist: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(
+            f"manifest must pin runtime stream evidence checklist: {artifact_path}"
+        )
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_runtime_stream_evidence_checklist.v1",
+        "runtime stream evidence checklist schema",
+        errors,
+    )
+    _expect_equal(
+        checklist.get("schema"),
+        "telemforge.stage09_runtime_stream_evidence_checklist.v1",
+        "runtime_stream_evidence_checklist.schema",
+        errors,
+    )
+    _expect_equal(
+        checklist.get("implementation_status"),
+        live_contract.get("implementation_status"),
+        "runtime_stream_evidence_checklist implementation status",
+        errors,
+    )
+    _expect_equal(
+        checklist.get("source_contract"),
+        _display_path(DEFAULT_LIVE_CONTRACT_PATH),
+        "runtime_stream_evidence_checklist source contract",
+        errors,
+    )
+    _expect_equal(
+        checklist.get("baseline_report"),
+        _display_path(DEFAULT_REPORT_PATH),
+        "runtime_stream_evidence_checklist baseline report",
+        errors,
+    )
+    _expect_equal(
+        checklist.get("resource_envelope"),
+        manifest.get("resource_envelope"),
+        "runtime_stream_evidence_checklist resource envelope",
+        errors,
+    )
+
+    evidence_gate = live_contract.get("runtime_evidence_gate", {})
+    required_evidence = evidence_gate.get("required_before_runtime_claim", [])
+    _expect_equal(
+        checklist.get("required_evidence"),
+        required_evidence,
+        "runtime_stream_evidence_checklist required evidence",
+        errors,
+    )
+
+    report_binding = checklist.get("report_binding", {})
+    for binding_path in [
+        report_binding.get("dropped_event_metric", ""),
+        report_binding.get("dropped_event_target_result", ""),
+        report_binding.get("runtime_evidence_gate", ""),
+    ]:
+        if not _path_exists(report, binding_path):
+            errors.append(
+                f"runtime stream evidence report binding missing: {binding_path}"
+            )
+
+    proof_artifacts = set(evidence_gate.get("proof_artifacts", []))
+    checklist_items = checklist.get("probe_checklist", [])
+    _expect_equal(
+        [item.get("evidence") for item in checklist_items],
+        required_evidence,
+        "runtime stream evidence checklist order",
+        errors,
+    )
+    for item in checklist_items:
+        evidence_name = item.get("evidence", "")
+        contract_item = evidence_gate.get("evidence_items", {}).get(evidence_name, {})
+        _expect_equal(
+            item.get("source_contract_gate"),
+            "runtime_evidence_gate",
+            f"runtime evidence {evidence_name} source gate",
+            errors,
+        )
+        _expect_equal(
+            item.get("minimum_probe"),
+            contract_item.get("required_runtime_probe"),
+            f"runtime evidence {evidence_name} minimum probe",
+            errors,
+        )
+        _expect_equal(
+            item.get("claim_status"),
+            contract_item.get("claim_status"),
+            f"runtime evidence {evidence_name} claim status",
+            errors,
+        )
+        if item.get("required_artifact") not in proof_artifacts:
+            errors.append(
+                f"runtime evidence {evidence_name} artifact is not in the live "
+                "contract proof artifacts"
+            )
+        required_artifact = item.get("required_artifact", "")
+        if required_artifact.startswith("docs/automation") or Path(
+            required_artifact
+        ).is_absolute():
+            errors.append(
+                f"runtime evidence {evidence_name} artifact must be public relative"
+            )
+
+    _expect_equal(
+        checklist.get("forbidden_without_evidence"),
+        evidence_gate.get("forbidden_without_evidence"),
+        "runtime stream evidence forbidden claims",
+        errors,
+    )
+    public_safety = checklist.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "runtime stream evidence checklist docs/automation safety",
+        errors,
+    )
+    _expect_equal(
+        public_safety.get("uses_absolute_local_paths"),
+        False,
+        "runtime stream evidence checklist absolute path safety",
+        errors,
+    )
+    if "not a whole-project rewrite" not in checklist.get("rust_scope", ""):
+        errors.append(
+            "runtime_stream_evidence_checklist.rust_scope must keep Rust data-plane scoped"
+        )
+
+
 def _validate_summary(
     summary_text: str,
     report: dict[str, Any],
@@ -472,6 +629,17 @@ def _display_path(path: Path) -> str:
         return str(path.resolve().relative_to(ROOT))
     except ValueError:
         return str(path)
+
+
+def _path_exists(value: dict[str, Any], dotted_path: str) -> bool:
+    if not dotted_path:
+        return False
+    current: Any = value
+    for part in dotted_path.split("."):
+        if not isinstance(current, dict) or part not in current:
+            return False
+        current = current[part]
+    return True
 
 
 def _expect_equal(

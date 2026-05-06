@@ -25,6 +25,7 @@
     "first_rust_hot_path_slice_pinned",
     "refresh_check_stable_fingerprint_matches",
     "baseline_command_evidence_pinned",
+    "runtime_stream_evidence_checklist_pinned",
     "summary_records_baseline_verdict",
     "rust_scope_data_plane_only"
   ]
