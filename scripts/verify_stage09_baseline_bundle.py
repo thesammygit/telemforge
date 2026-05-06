@@ -42,6 +42,9 @@ COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
 RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
     ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 )
+TARGET_RESULT_BINDING_GATE_PATH = (
+    ARTIFACT_ROOT / "stage09-target-result-binding-gate.json"
+)
 LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
 )
@@ -75,6 +78,7 @@ def verify_stage09_baseline_bundle(
     runtime_stream_evidence_checklist = _read_json(
         RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
     )
+    target_result_binding_gate = _read_json(TARGET_RESULT_BINDING_GATE_PATH)
     live_contract = _read_json(DEFAULT_LIVE_CONTRACT_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
     live_contract_validation = validate_stage09_live_telemetry_contract(
@@ -128,6 +132,13 @@ def verify_stage09_baseline_bundle(
         runtime_stream_evidence_checklist,
         errors,
     )
+    _validate_target_result_binding_gate(
+        report,
+        contract,
+        manifest,
+        target_result_binding_gate,
+        errors,
+    )
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -161,6 +172,7 @@ def verify_stage09_baseline_bundle(
             "refresh_check_stable_fingerprint_matches",
             "baseline_command_evidence_pinned",
             "runtime_stream_evidence_checklist_pinned",
+            "target_result_binding_gate_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -589,6 +601,125 @@ def _validate_runtime_stream_evidence_checklist(
         )
 
 
+def _validate_target_result_binding_gate(
+    report: dict[str, Any],
+    contract: dict[str, Any],
+    manifest: dict[str, Any],
+    gate: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(TARGET_RESULT_BINDING_GATE_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(f"manifest must pin target-result binding gate: {artifact_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_target_result_binding_gate.v1",
+        "target result binding gate artifact schema",
+        errors,
+    )
+    _expect_equal(
+        gate.get("schema"),
+        "telemforge.stage09_target_result_binding_gate.v1",
+        "target_result_binding_gate.schema",
+        errors,
+    )
+    _expect_equal(
+        gate.get("status"),
+        "passed",
+        "target_result_binding_gate.status",
+        errors,
+    )
+    _expect_equal(
+        gate.get("report_path"),
+        _display_path(DEFAULT_REPORT_PATH),
+        "target_result_binding_gate.report_path",
+        errors,
+    )
+    _expect_equal(
+        gate.get("contract_path"),
+        _display_path(DEFAULT_CONTRACT_PATH),
+        "target_result_binding_gate.contract_path",
+        errors,
+    )
+    _expect_equal(
+        gate.get("baseline_verdict_status"),
+        report.get("baseline_verdict", {}).get("status"),
+        "target_result_binding_gate baseline verdict",
+        errors,
+    )
+    _expect_equal(
+        gate.get("resource_envelope"),
+        manifest.get("resource_envelope"),
+        "target_result_binding_gate resource envelope",
+        errors,
+    )
+
+    metric_bindings = contract.get("required_metric_bindings", {})
+    gate_bindings = gate.get("metric_bindings", {})
+    _expect_equal(
+        sorted(gate_bindings),
+        sorted(metric_bindings),
+        "target_result_binding_gate metric names",
+        errors,
+    )
+
+    checks = report.get("target_results", {}).get("checks", {})
+    for metric_name, binding_path in metric_bindings.items():
+        gate_binding = gate_bindings.get(metric_name, {})
+        report_check = checks.get(metric_name, {})
+        _expect_equal(
+            gate_binding.get("report_binding"),
+            binding_path,
+            f"target_result_binding_gate {metric_name} report binding",
+            errors,
+        )
+        try:
+            observed_value = _path_value(report, binding_path)
+        except KeyError:
+            errors.append(
+                f"target_result_binding_gate {metric_name} report binding missing: "
+                f"{binding_path}"
+            )
+            continue
+        _expect_equal(
+            gate_binding.get("observed"),
+            observed_value,
+            f"target_result_binding_gate {metric_name} observed",
+            errors,
+        )
+        for field in ["target", "comparison", "unit", "meets_target", "gap_to_target"]:
+            _expect_equal(
+                gate_binding.get(field),
+                report_check.get(field),
+                f"target_result_binding_gate {metric_name} {field}",
+                errors,
+            )
+
+    public_safety = gate.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "target_result_binding_gate docs/automation safety",
+        errors,
+    )
+    _expect_equal(
+        public_safety.get("uses_absolute_local_paths"),
+        False,
+        "target_result_binding_gate absolute path safety",
+        errors,
+    )
+    if "not a whole-project rewrite" not in gate.get("rust_scope", ""):
+        errors.append(
+            "target_result_binding_gate.rust_scope must keep Rust data-plane scoped"
+        )
+
+
 def _validate_summary(
     summary_text: str,
     report: dict[str, Any],
@@ -640,6 +771,15 @@ def _path_exists(value: dict[str, Any], dotted_path: str) -> bool:
             return False
         current = current[part]
     return True
+
+
+def _path_value(value: dict[str, Any], dotted_path: str) -> Any:
+    current: Any = value
+    for part in dotted_path.split("."):
+        if not isinstance(current, dict) or part not in current:
+            raise KeyError(dotted_path)
+        current = current[part]
+    return current
 
 
 def _expect_equal(

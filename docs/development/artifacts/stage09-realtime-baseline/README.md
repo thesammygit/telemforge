@@ -99,6 +99,10 @@ queries.
   future probes required before TelemForge can claim websocket fanout,
   reconnect, backpressure, stream-based dropped-event evidence, or a narrow Rust
   data-plane stream candidate.
+- `stage09-target-result-binding-gate.json`: static public proof that each
+  headline metric binding in the candidate report contract matches the current
+  baseline report's `target_results.checks` entry, including observed value,
+  target, comparison, unit, pass/fail status, and gap-to-target.
 
 ## Inspect
 
@@ -109,6 +113,7 @@ python3 scripts/validate_stage09_realtime_report.py --report docs/development/ar
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json
 python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json
+python3 -m json.tool docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-binding-gate.json
 python3 scripts/validate_stage09_live_telemetry_contract.py
 python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
 python3 scripts/verify_stage09_baseline_bundle.py
@@ -173,6 +178,13 @@ reviewable as a checklist. It preserves the contract-only status, pins the
 single-client local resource envelope, binds stream dropped-event proof back to
 `metrics.dropped_event_count`, and keeps Rust scoped to a future data-plane
 stream candidate rather than a whole-project rewrite.
+
+The `stage09-target-result-binding-gate.json` artifact keeps the headline
+target comparison independently reviewable. It pins the current report binding,
+observed value, target, comparison direction, unit, pass/fail status, and
+gap-to-target for every Stage 09 metric, so future Python/FastAPI refreshes or
+narrow Rust data-plane candidates cannot compare a latency or throughput number
+without preserving the matching `target_results.checks` entry.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

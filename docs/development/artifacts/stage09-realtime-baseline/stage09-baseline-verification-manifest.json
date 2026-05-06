@@ -66,6 +66,11 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
       "schema": "telemforge.stage09_runtime_stream_evidence_checklist.v1",
       "role": "contract-only runtime stream probe checklist before websocket fanout or a narrow Rust data-plane stream candidate can be claimed"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-binding-gate.json",
+      "schema": "telemforge.stage09_target_result_binding_gate.v1",
+      "role": "public proof that each headline metric binding matches target_results.checks before runtime candidates compare metrics"
     }
   ],
   "resource_envelope": {

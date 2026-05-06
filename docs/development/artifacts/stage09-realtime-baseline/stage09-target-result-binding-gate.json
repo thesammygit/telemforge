@@ -1,0 +1,88 @@
+{
+  "schema": "telemforge.stage09_target_result_binding_gate.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "status": "passed",
+  "purpose": "Pin each headline benchmark metric to its report binding and target_results.checks entry before comparing Python/FastAPI refreshes with narrow Rust data-plane candidates.",
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "contract_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json",
+  "baseline_verdict_status": "baseline_only_targets_not_met",
+  "metric_bindings": {
+    "channel_count": {
+      "report_binding": "workload.channel_count",
+      "observed": 10,
+      "target": 100,
+      "comparison": "at_least",
+      "unit": "channels",
+      "meets_target": false,
+      "gap_to_target": 90
+    },
+    "per_channel_sample_rate_hz": {
+      "report_binding": "workload.per_channel_sample_rate_hz",
+      "observed": 1.0,
+      "target": 10,
+      "comparison": "at_least",
+      "unit": "Hz",
+      "meets_target": false,
+      "gap_to_target": 9.0
+    },
+    "aggregate_sample_rate_hz": {
+      "report_binding": "metrics.telemetry_sample_rate_hz",
+      "observed": 10.0,
+      "target": 1000,
+      "comparison": "at_least",
+      "unit": "Hz",
+      "meets_target": false,
+      "gap_to_target": 990.0
+    },
+    "p95_alert_latency_ms": {
+      "report_binding": "metrics.p95_alert_latency_ms",
+      "observed": 4.079,
+      "target": 50,
+      "comparison": "at_most",
+      "unit": "ms",
+      "meets_target": true,
+      "gap_to_target": 0
+    },
+    "p95_replay_query_latency_ms": {
+      "report_binding": "metrics.p95_replay_query_latency_ms",
+      "observed": 3.861,
+      "target": 500,
+      "comparison": "at_most",
+      "unit": "ms",
+      "meets_target": true,
+      "gap_to_target": 0
+    },
+    "dropped_event_count": {
+      "report_binding": "metrics.dropped_event_count",
+      "observed": 0,
+      "target": 0,
+      "comparison": "at_most",
+      "unit": "events",
+      "meets_target": true,
+      "gap_to_target": 0
+    }
+  },
+  "required_gate": [
+    "each candidate report preserves the same required_metric_bindings",
+    "each metric has a matching target_results.checks entry",
+    "observed values in target_results.checks match the bound report fields",
+    "target, comparison, unit, meets_target, and gap_to_target remain explicit"
+  ],
+  "resource_envelope": {
+    "worker_processes": 1,
+    "max_expected_runtime_seconds": 30,
+    "max_expected_memory_mb": 512,
+    "uses_network": false,
+    "uses_paid_services": false
+  },
+  "runtime_claim_status": "not_claimed",
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
+  "public_repo_safety": {
+    "paths_are_repo_relative": true,
+    "includes_docs_automation": false,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  }
+}

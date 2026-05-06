@@ -18,6 +18,9 @@ MANIFEST_PATH = ARTIFACT_ROOT / "stage09-baseline-verification-manifest.json"
 VALIDATION_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-report-validation-summary.json"
 SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 BUNDLE_VERIFICATION_PATH = ARTIFACT_ROOT / "stage09-baseline-bundle-verification.json"
+TARGET_RESULT_BINDING_GATE_PATH = (
+    ARTIFACT_ROOT / "stage09-target-result-binding-gate.json"
+)
 
 
 class Stage09BaselineBundleVerifierTest(unittest.TestCase):
@@ -48,6 +51,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
         )
         self.assertIn(
             "runtime_stream_evidence_checklist_pinned",
+            result["verified_gates"],
+        )
+        self.assertIn(
+            "target_result_binding_gate_pinned",
             result["verified_gates"],
         )
         self.assertIn(
@@ -101,6 +108,28 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
             "manifest_paths_are_public_relative",
             output_payload["verified_gates"],
         )
+
+    def test_target_result_binding_gate_matches_current_report(self) -> None:
+        report = json.loads(REPORT_PATH.read_text(encoding="utf-8"))
+        gate = json.loads(TARGET_RESULT_BINDING_GATE_PATH.read_text(encoding="utf-8"))
+
+        self.assertEqual(
+            gate["schema"],
+            "telemforge.stage09_target_result_binding_gate.v1",
+        )
+        self.assertEqual(gate["status"], "passed")
+        self.assertEqual(
+            gate["baseline_verdict_status"],
+            report["baseline_verdict"]["status"],
+        )
+        for metric_name, binding in gate["metric_bindings"].items():
+            report_check = report["target_results"]["checks"][metric_name]
+            self.assertEqual(binding["observed"], report_check["observed"])
+            self.assertEqual(binding["target"], report_check["target"])
+            self.assertEqual(binding["comparison"], report_check["comparison"])
+            self.assertEqual(binding["unit"], report_check["unit"])
+            self.assertEqual(binding["meets_target"], report_check["meets_target"])
+            self.assertEqual(binding["gap_to_target"], report_check["gap_to_target"])
 
     def test_bundle_verifier_rejects_docs_automation_manifest_path(self) -> None:
         manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
