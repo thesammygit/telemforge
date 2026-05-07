@@ -165,6 +165,18 @@ baseline and future narrow Rust stream candidates blocked from promotion until
 runtime probe evidence exists and missed realtime targets are improved or
 explicitly versioned.
 
+The candidate metric-delta command:
+
+```text
+python3 scripts/compare_stage09_candidate_metrics.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json
+```
+
+compares a candidate report's target-result metrics against the public
+baseline. The checked-in artifact compares the baseline report to itself, so it
+records unchanged metrics and preserves the blocked runtime/promotion gates
+without rerunning the benchmark, claiming websocket fanout, or approving a Rust
+whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

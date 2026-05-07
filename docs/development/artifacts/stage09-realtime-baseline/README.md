@@ -123,6 +123,11 @@ queries.
   Python/FastAPI baseline and future narrow Rust stream candidates blocked from
   promotion until runtime probe evidence exists and missed realtime targets are
   improved or explicitly versioned.
+- `stage09-candidate-metric-delta.json`: deterministic public candidate
+  comparison scaffold that compares a candidate report's target-result metrics
+  against the current baseline report. The checked-in artifact compares the
+  baseline to itself, so every metric is unchanged and promotion remains blocked
+  by the existing runtime evidence and throughput gates.
 
 ## Inspect
 
@@ -140,6 +145,8 @@ python3 scripts/summarize_stage09_target_gaps.py
 python3 scripts/summarize_stage09_target_gaps.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json
 python3 scripts/check_stage09_candidate_promotion_readiness.py
 python3 scripts/check_stage09_candidate_promotion_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
+python3 scripts/compare_stage09_candidate_metrics.py
+python3 scripts/compare_stage09_candidate_metrics.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json
 python3 scripts/validate_stage09_live_telemetry_contract.py
 python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
 python3 scripts/validate_stage09_runtime_stream_evidence_checklist.py
@@ -240,6 +247,12 @@ indexes into an explicit promotion gate. It records that the current baseline is
 blocked by contract-only stream claims, remaining throughput misses, and missing
 runtime probe evidence; future candidates must clear those gates before their
 metrics can be treated as promotable.
+
+The `stage09-candidate-metric-delta.json` artifact makes the first candidate
+comparison step mechanical. It records per-target observed values, deltas,
+improved/regressed/unchanged status, stable identity status, promotion blockers,
+and Rust data-plane-only scope before any Python/FastAPI refresh or narrow Rust
+stream candidate can be reviewed as an improvement.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

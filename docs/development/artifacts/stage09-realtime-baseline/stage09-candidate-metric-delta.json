@@ -1,0 +1,118 @@
+{
+  "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "blocking_reasons": [
+    "runtime_stream_claim_blocked",
+    "missed_realtime_targets_remain",
+    "runtime_probe_evidence_missing"
+  ],
+  "candidate_can_be_promoted": false,
+  "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "comparison_rule": "Compare timing values only after stable identity is compatible. A candidate cannot be promoted if runtime stream claims remain contract-only, if realtime target misses are unaddressed, or if any target metric regresses without a versioned workload change.",
+  "improved_metrics": [],
+  "metric_deltas": {
+    "aggregate_sample_rate_hz": {
+      "baseline_meets_target": false,
+      "baseline_observed": 10.0,
+      "candidate_gap_to_target": 990.0,
+      "candidate_meets_target": false,
+      "candidate_observed": 10.0,
+      "change_status": "unchanged",
+      "comparison": "at_least",
+      "delta": 0.0,
+      "target": 1000,
+      "unit": "Hz"
+    },
+    "channel_count": {
+      "baseline_meets_target": false,
+      "baseline_observed": 10,
+      "candidate_gap_to_target": 90,
+      "candidate_meets_target": false,
+      "candidate_observed": 10,
+      "change_status": "unchanged",
+      "comparison": "at_least",
+      "delta": 0.0,
+      "target": 100,
+      "unit": "channels"
+    },
+    "dropped_event_count": {
+      "baseline_meets_target": true,
+      "baseline_observed": 0,
+      "candidate_gap_to_target": 0,
+      "candidate_meets_target": true,
+      "candidate_observed": 0,
+      "change_status": "unchanged",
+      "comparison": "at_most",
+      "delta": 0.0,
+      "target": 0,
+      "unit": "events"
+    },
+    "p95_alert_latency_ms": {
+      "baseline_meets_target": true,
+      "baseline_observed": 4.079,
+      "candidate_gap_to_target": 0,
+      "candidate_meets_target": true,
+      "candidate_observed": 4.079,
+      "change_status": "unchanged",
+      "comparison": "at_most",
+      "delta": 0.0,
+      "target": 50,
+      "unit": "ms"
+    },
+    "p95_replay_query_latency_ms": {
+      "baseline_meets_target": true,
+      "baseline_observed": 3.861,
+      "candidate_gap_to_target": 0,
+      "candidate_meets_target": true,
+      "candidate_observed": 3.861,
+      "change_status": "unchanged",
+      "comparison": "at_most",
+      "delta": 0.0,
+      "target": 500,
+      "unit": "ms"
+    },
+    "per_channel_sample_rate_hz": {
+      "baseline_meets_target": false,
+      "baseline_observed": 1.0,
+      "candidate_gap_to_target": 9.0,
+      "candidate_meets_target": false,
+      "candidate_observed": 1.0,
+      "change_status": "unchanged",
+      "comparison": "at_least",
+      "delta": 0.0,
+      "target": 10,
+      "unit": "Hz"
+    }
+  },
+  "newly_passing_metrics": [],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "regressed_metrics": [],
+  "runtime_stream_claim_status": "contract_only_blocked",
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "same_report_reference": true,
+  "schema": "telemforge.stage09_candidate_metric_delta.v1",
+  "source_artifacts": {
+    "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "promotion_readiness": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json"
+  },
+  "stable_identity_status": "matches",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "baseline_reference_no_candidate",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "baseline_report_loaded",
+    "candidate_report_loaded",
+    "target_result_metrics_comparable",
+    "stable_identity_checked",
+    "promotion_readiness_loaded",
+    "runtime_stream_claim_status_preserved",
+    "rust_scope_data_plane_only",
+    "docs_automation_excluded"
+  ]
+}
