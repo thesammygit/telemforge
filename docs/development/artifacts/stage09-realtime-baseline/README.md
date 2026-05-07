@@ -94,6 +94,11 @@ queries.
   safe baseline command, required JSON and Markdown outputs, local resource
   envelope, public path hygiene, and Rust data-plane-only scope without claiming
   websocket runtime fanout.
+- `stage09-baseline-command-evidence-validation.json`: deterministic output from
+  `scripts/validate_stage09_baseline_command_evidence.py` showing that the
+  pinned benchmark command, required outputs, local resource envelope, public
+  path hygiene, and Rust data-plane-only scope still agree without rerunning the
+  benchmark or claiming websocket runtime fanout.
 - `stage09-runtime-stream-evidence-checklist.json`: static public checklist
   that mirrors the live contract runtime evidence gate and names the exact
   future probes required before TelemForge can claim websocket fanout,
@@ -154,9 +159,12 @@ python3 scripts/validate_stage09_runtime_stream_evidence_checklist.py --output d
 python3 scripts/verify_stage09_baseline_bundle.py
 python3 scripts/verify_stage09_baseline_bundle.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json
 python3 scripts/check_stage09_baseline_refresh.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json
+python3 scripts/validate_stage09_baseline_command_evidence.py
+python3 scripts/validate_stage09_baseline_command_evidence.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence-validation.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
+python3 -m unittest tests/contracts/test_stage09_baseline_command_evidence.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py

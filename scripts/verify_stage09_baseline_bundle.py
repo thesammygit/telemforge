@@ -36,6 +36,10 @@ from scripts.check_stage09_candidate_promotion_readiness import (
     PromotionReadinessError,
     check_stage09_candidate_promotion_readiness,
 )
+from scripts.validate_stage09_baseline_command_evidence import (
+    CommandEvidenceValidationError,
+    validate_stage09_baseline_command_evidence,
+)
 
 
 ARTIFACT_ROOT = (
@@ -47,6 +51,9 @@ DEFAULT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 FIRST_RUST_HOT_PATH_SLICE_PATH = ARTIFACT_ROOT / "first-rust-hot-path-slice.md"
 REFRESH_CHECK_PATH = ARTIFACT_ROOT / "stage09-baseline-refresh-check.json"
 COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
+COMMAND_EVIDENCE_VALIDATION_PATH = (
+    ARTIFACT_ROOT / "stage09-baseline-command-evidence-validation.json"
+)
 RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH = (
     ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 )
@@ -89,6 +96,7 @@ def verify_stage09_baseline_bundle(
     )
     refresh_check = _read_json(REFRESH_CHECK_PATH)
     command_evidence = _read_json(COMMAND_EVIDENCE_PATH)
+    command_evidence_validation_summary = _read_json(COMMAND_EVIDENCE_VALIDATION_PATH)
     runtime_stream_evidence_checklist = _read_json(
         RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
     )
@@ -101,6 +109,11 @@ def verify_stage09_baseline_bundle(
         DEFAULT_LIVE_CONTRACT_PATH,
         report_path,
     )
+    command_evidence_validation = validate_stage09_baseline_command_evidence(
+        report_path=report_path,
+        manifest_path=manifest_path,
+        command_evidence_path=COMMAND_EVIDENCE_PATH,
+    )
 
     errors: list[str] = []
     _expect_equal(validation_summary, report_validation, "validation summary", errors)
@@ -108,6 +121,12 @@ def verify_stage09_baseline_bundle(
         live_contract_validation_summary,
         live_contract_validation,
         "live contract validation summary",
+        errors,
+    )
+    _expect_equal(
+        command_evidence_validation_summary,
+        command_evidence_validation,
+        "command evidence validation summary",
         errors,
     )
     _expect_equal(
@@ -197,6 +216,7 @@ def verify_stage09_baseline_bundle(
             "first_rust_hot_path_slice_pinned",
             "refresh_check_stable_fingerprint_matches",
             "baseline_command_evidence_pinned",
+            "baseline_command_evidence_validation_matches",
             "runtime_stream_evidence_checklist_pinned",
             "target_result_binding_gate_pinned",
             "baseline_readiness_summary_pinned",
@@ -256,6 +276,7 @@ def main() -> int:
         json.JSONDecodeError,
         ValidationError,
         PromotionReadinessError,
+        CommandEvidenceValidationError,
         KeyError,
     ) as error:
         print(f"Stage 09 baseline bundle verification failed:\n{error}", file=sys.stderr)

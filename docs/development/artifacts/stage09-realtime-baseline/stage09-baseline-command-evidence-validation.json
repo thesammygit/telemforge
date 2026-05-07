@@ -1,0 +1,48 @@
+{
+  "benchmark_command": [
+    "python3",
+    "scripts/benchmark_stage09_realtime.py",
+    "--output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "--summary-output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "command_evidence_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
+  "manifest_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json",
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "required_outputs": [
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "runtime_claim_status": "not_claimed",
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
+  "schema": "telemforge.stage09_baseline_command_evidence_validation.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "command_matches_report_verification_contract",
+    "command_matches_manifest",
+    "required_outputs_match_report",
+    "required_outputs_exist",
+    "resource_envelope_matches_manifest",
+    "runtime_claim_not_claimed",
+    "public_paths_are_repo_relative",
+    "docs_automation_excluded",
+    "rust_scope_data_plane_only"
+  ]
+}

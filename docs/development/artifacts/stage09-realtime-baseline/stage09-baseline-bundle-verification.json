@@ -25,6 +25,7 @@
     "first_rust_hot_path_slice_pinned",
     "refresh_check_stable_fingerprint_matches",
     "baseline_command_evidence_pinned",
+    "baseline_command_evidence_validation_matches",
     "runtime_stream_evidence_checklist_pinned",
     "target_result_binding_gate_pinned",
     "baseline_readiness_summary_pinned",

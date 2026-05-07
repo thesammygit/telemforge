@@ -63,6 +63,11 @@
       "role": "bounded benchmark command, required outputs, and local resource envelope evidence"
     },
     {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence-validation.json",
+      "schema": "telemforge.stage09_baseline_command_evidence_validation.v1",
+      "role": "public proof that the pinned baseline command, required outputs, resource envelope, public paths, and Rust data-plane-only scope still agree"
+    },
+    {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
       "schema": "telemforge.stage09_runtime_stream_evidence_checklist.v1",
       "role": "contract-only runtime stream probe checklist before websocket fanout or a narrow Rust data-plane stream candidate can be claimed"
