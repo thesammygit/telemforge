@@ -105,6 +105,11 @@ queries.
   catalog byte count, channel count, workload identity, and stable report
   fingerprint before Python/FastAPI refreshes or narrow Rust data-plane
   candidates compare metrics.
+- `stage09-baseline-metric-index.json`: deterministic output from
+  `scripts/summarize_stage09_baseline_metric_index.py` showing the headline
+  benchmark metric order, observed values, targets, pass/miss status,
+  stable fingerprint, measurement scope, blocked runtime stream claim, and
+  Rust data-plane-only scope without rerunning the benchmark.
 - `stage09-runtime-stream-evidence-checklist.json`: static public checklist
   that mirrors the live contract runtime evidence gate and names the exact
   future probes required before TelemForge can claim websocket fanout,
@@ -169,11 +174,14 @@ python3 scripts/validate_stage09_baseline_command_evidence.py
 python3 scripts/validate_stage09_baseline_command_evidence.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence-validation.json
 python3 scripts/validate_stage09_input_provenance.py
 python3 scripts/validate_stage09_input_provenance.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-input-provenance-validation.json
+python3 scripts/summarize_stage09_baseline_metric_index.py
+python3 scripts/summarize_stage09_baseline_metric_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
 python3 -m unittest tests/contracts/test_stage09_baseline_command_evidence.py
 python3 -m unittest tests/contracts/test_stage09_input_provenance.py
+python3 -m unittest tests/contracts/test_stage09_baseline_metric_index.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -270,6 +278,14 @@ comparison step mechanical. It records per-target observed values, deltas,
 improved/regressed/unchanged status, stable identity status, promotion blockers,
 and Rust data-plane-only scope before any Python/FastAPI refresh or narrow Rust
 stream candidate can be reviewed as an improvement.
+
+The `stage09-baseline-metric-index.json` artifact keeps the headline benchmark
+metrics easy to audit without rerunning the benchmark. It pins the observed
+source path for channel count, per-channel sample rate, aggregate sample rate,
+p95 alert latency, p95 replay latency, and dropped-event count, then carries
+the target result, stable fingerprint, blocked runtime stream claim, and Rust
+data-plane-only scope forward for future Python/FastAPI refreshes or narrow
+Rust data-plane candidates.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

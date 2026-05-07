@@ -44,6 +44,10 @@ from scripts.validate_stage09_input_provenance import (
     InputProvenanceValidationError,
     validate_stage09_input_provenance,
 )
+from scripts.summarize_stage09_baseline_metric_index import (
+    BaselineMetricIndexError,
+    summarize_stage09_baseline_metric_index,
+)
 
 
 ARTIFACT_ROOT = (
@@ -76,6 +80,7 @@ LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
 INPUT_PROVENANCE_VALIDATION_PATH = (
     ARTIFACT_ROOT / "stage09-input-provenance-validation.json"
 )
+BASELINE_METRIC_INDEX_PATH = ARTIFACT_ROOT / "stage09-baseline-metric-index.json"
 
 
 def verify_stage09_baseline_bundle(
@@ -105,6 +110,7 @@ def verify_stage09_baseline_bundle(
     command_evidence = _read_json(COMMAND_EVIDENCE_PATH)
     command_evidence_validation_summary = _read_json(COMMAND_EVIDENCE_VALIDATION_PATH)
     input_provenance_validation_summary = _read_json(INPUT_PROVENANCE_VALIDATION_PATH)
+    baseline_metric_index = _read_json(BASELINE_METRIC_INDEX_PATH)
     runtime_stream_evidence_checklist = _read_json(
         RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
     )
@@ -123,6 +129,10 @@ def verify_stage09_baseline_bundle(
         command_evidence_path=COMMAND_EVIDENCE_PATH,
     )
     input_provenance_validation = validate_stage09_input_provenance(
+        report_path=report_path,
+        manifest_path=manifest_path,
+    )
+    baseline_metric_index_expected = summarize_stage09_baseline_metric_index(
         report_path=report_path,
         manifest_path=manifest_path,
     )
@@ -145,6 +155,12 @@ def verify_stage09_baseline_bundle(
         input_provenance_validation_summary,
         input_provenance_validation,
         "input provenance validation summary",
+        errors,
+    )
+    _expect_equal(
+        baseline_metric_index,
+        baseline_metric_index_expected,
+        "baseline metric index",
         errors,
     )
     _expect_equal(
@@ -242,6 +258,7 @@ def verify_stage09_baseline_bundle(
             "baseline_command_evidence_pinned",
             "baseline_command_evidence_validation_matches",
             "input_provenance_validation_matches",
+            "baseline_metric_index_pinned",
             "runtime_stream_evidence_checklist_pinned",
             "target_result_binding_gate_pinned",
             "baseline_readiness_summary_pinned",
@@ -303,6 +320,7 @@ def main() -> int:
         PromotionReadinessError,
         CommandEvidenceValidationError,
         InputProvenanceValidationError,
+        BaselineMetricIndexError,
         KeyError,
     ) as error:
         print(f"Stage 09 baseline bundle verification failed:\n{error}", file=sys.stderr)

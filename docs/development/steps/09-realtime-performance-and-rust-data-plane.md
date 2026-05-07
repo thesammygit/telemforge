@@ -188,6 +188,18 @@ telemetry catalog hash, byte count, channel count, workload identity, and
 stable report fingerprint. It does not rerun the benchmark, claim websocket
 runtime fanout, or approve a Rust whole-project rewrite.
 
+The baseline metric-index command:
+
+```text
+python3 scripts/summarize_stage09_baseline_metric_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json
+```
+
+extracts the public baseline's headline channel count, sample-rate, p95 alert
+latency, p95 replay latency, and dropped-event metrics with their target
+bindings, stable fingerprint, blocked runtime stream claim, and Rust
+data-plane-only scope. It does not rerun the benchmark, claim websocket runtime
+fanout, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

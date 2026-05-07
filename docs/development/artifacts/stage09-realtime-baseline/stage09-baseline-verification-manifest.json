@@ -2,7 +2,7 @@
   "schema": "telemforge.stage09_baseline_verification_manifest.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
-  "generated_at": "2026-05-06T04:53:44Z",
+  "generated_at": "2026-05-07T12:04:22Z",
   "purpose": "Pin the public Stage 09 baseline artifacts, safe verification commands, and candidate gates that make the current Python/FastAPI control-plane benchmark comparable with future narrow Rust data-plane candidates.",
   "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
   "benchmark": {
@@ -73,6 +73,11 @@
       "role": "public proof that the baseline report remains bound to the checked-in telemetry catalog hash and stable workload identity"
     },
     {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json",
+      "schema": "telemforge.stage09_baseline_metric_index.v1",
+      "role": "public headline metric index for baseline sample-rate, latency, dropped-event, target binding, blocked runtime-stream claim, and Rust data-plane-only scope"
+    },
+    {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
       "schema": "telemforge.stage09_runtime_stream_evidence_checklist.v1",
       "role": "contract-only runtime stream probe checklist before websocket fanout or a narrow Rust data-plane stream candidate can be claimed"
@@ -116,6 +121,7 @@
       "runtime_evidence_gate_binding",
       "live_contract_validation",
       "refresh_check_stable_fingerprint",
+      "baseline_metric_index",
       "baseline_readiness_summary",
       "promotion_gate"
     ],
