@@ -40,6 +40,10 @@ from scripts.validate_stage09_baseline_command_evidence import (
     CommandEvidenceValidationError,
     validate_stage09_baseline_command_evidence,
 )
+from scripts.validate_stage09_input_provenance import (
+    InputProvenanceValidationError,
+    validate_stage09_input_provenance,
+)
 
 
 ARTIFACT_ROOT = (
@@ -69,6 +73,9 @@ PROMOTION_READINESS_PATH = (
 LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
 )
+INPUT_PROVENANCE_VALIDATION_PATH = (
+    ARTIFACT_ROOT / "stage09-input-provenance-validation.json"
+)
 
 
 def verify_stage09_baseline_bundle(
@@ -97,6 +104,7 @@ def verify_stage09_baseline_bundle(
     refresh_check = _read_json(REFRESH_CHECK_PATH)
     command_evidence = _read_json(COMMAND_EVIDENCE_PATH)
     command_evidence_validation_summary = _read_json(COMMAND_EVIDENCE_VALIDATION_PATH)
+    input_provenance_validation_summary = _read_json(INPUT_PROVENANCE_VALIDATION_PATH)
     runtime_stream_evidence_checklist = _read_json(
         RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
     )
@@ -114,6 +122,10 @@ def verify_stage09_baseline_bundle(
         manifest_path=manifest_path,
         command_evidence_path=COMMAND_EVIDENCE_PATH,
     )
+    input_provenance_validation = validate_stage09_input_provenance(
+        report_path=report_path,
+        manifest_path=manifest_path,
+    )
 
     errors: list[str] = []
     _expect_equal(validation_summary, report_validation, "validation summary", errors)
@@ -127,6 +139,12 @@ def verify_stage09_baseline_bundle(
         command_evidence_validation_summary,
         command_evidence_validation,
         "command evidence validation summary",
+        errors,
+    )
+    _expect_equal(
+        input_provenance_validation_summary,
+        input_provenance_validation,
+        "input provenance validation summary",
         errors,
     )
     _expect_equal(
@@ -160,6 +178,12 @@ def verify_stage09_baseline_bundle(
     _validate_hot_path_slice_note(manifest, errors)
     _validate_refresh_check(report, manifest, refresh_check, errors)
     _validate_command_evidence(report, manifest, command_evidence, errors)
+    _validate_input_provenance(
+        report,
+        manifest,
+        input_provenance_validation_summary,
+        errors,
+    )
     _validate_runtime_stream_evidence_checklist(
         report,
         manifest,
@@ -217,6 +241,7 @@ def verify_stage09_baseline_bundle(
             "refresh_check_stable_fingerprint_matches",
             "baseline_command_evidence_pinned",
             "baseline_command_evidence_validation_matches",
+            "input_provenance_validation_matches",
             "runtime_stream_evidence_checklist_pinned",
             "target_result_binding_gate_pinned",
             "baseline_readiness_summary_pinned",
@@ -277,6 +302,7 @@ def main() -> int:
         ValidationError,
         PromotionReadinessError,
         CommandEvidenceValidationError,
+        InputProvenanceValidationError,
         KeyError,
     ) as error:
         print(f"Stage 09 baseline bundle verification failed:\n{error}", file=sys.stderr)
@@ -512,6 +538,82 @@ def _validate_command_evidence(
     )
     if "not a whole-project rewrite" not in command_evidence.get("rust_scope", ""):
         errors.append("command_evidence.rust_scope must keep Rust data-plane scoped")
+
+
+def _validate_input_provenance(
+    report: dict[str, Any],
+    manifest: dict[str, Any],
+    validation: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(INPUT_PROVENANCE_VALIDATION_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(
+            f"manifest must pin input provenance validation: {artifact_path}"
+        )
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_input_provenance_validation.v1",
+        "input provenance validation schema",
+        errors,
+    )
+    _expect_equal(
+        validation.get("schema"),
+        "telemforge.stage09_input_provenance_validation.v1",
+        "input provenance validation artifact schema",
+        errors,
+    )
+    _expect_equal(
+        validation.get("status"),
+        "passed",
+        "input provenance validation status",
+        errors,
+    )
+    input_provenance = report.get("input_provenance", {})
+    _expect_equal(
+        validation.get("telemetry_catalog_path"),
+        input_provenance.get("telemetry_catalog_path"),
+        "input provenance catalog path",
+        errors,
+    )
+    _expect_equal(
+        validation.get("telemetry_catalog_sha256"),
+        input_provenance.get("telemetry_catalog_sha256"),
+        "input provenance catalog sha256",
+        errors,
+    )
+    _expect_equal(
+        validation.get("channel_count"),
+        input_provenance.get("channel_count"),
+        "input provenance channel count",
+        errors,
+    )
+    _expect_equal(
+        validation.get("workload_channel_count"),
+        report.get("workload", {}).get("channel_count"),
+        "input provenance workload channel count",
+        errors,
+    )
+    stable_fields = validation.get("stable_identity_fields", [])
+    if "input_provenance.telemetry_catalog_sha256" not in stable_fields:
+        errors.append(
+            "input provenance validation must pin catalog hash as a stable identity"
+        )
+    public_safety = validation.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "input provenance includes_docs_automation",
+        errors,
+    )
+    if "not a whole-project rewrite" not in validation.get("rust_scope", ""):
+        errors.append("input provenance validation must keep Rust data-plane scoped")
 
 
 def _validate_runtime_stream_evidence_checklist(

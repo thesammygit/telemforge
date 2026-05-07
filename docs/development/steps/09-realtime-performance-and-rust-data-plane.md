@@ -177,6 +177,17 @@ records unchanged metrics and preserves the blocked runtime/promotion gates
 without rerunning the benchmark, claiming websocket fanout, or approving a Rust
 whole-project rewrite.
 
+The input-provenance validation command:
+
+```text
+python3 scripts/validate_stage09_input_provenance.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-input-provenance-validation.json
+```
+
+checks that the public baseline report is still bound to the checked-in
+telemetry catalog hash, byte count, channel count, workload identity, and
+stable report fingerprint. It does not rerun the benchmark, claim websocket
+runtime fanout, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text
