@@ -48,6 +48,10 @@ from scripts.summarize_stage09_baseline_metric_index import (
     BaselineMetricIndexError,
     summarize_stage09_baseline_metric_index,
 )
+from scripts.compare_stage09_candidate_metrics import (
+    CandidateMetricComparisonError,
+    compare_stage09_candidate_metrics,
+)
 
 
 ARTIFACT_ROOT = (
@@ -81,6 +85,7 @@ INPUT_PROVENANCE_VALIDATION_PATH = (
     ARTIFACT_ROOT / "stage09-input-provenance-validation.json"
 )
 BASELINE_METRIC_INDEX_PATH = ARTIFACT_ROOT / "stage09-baseline-metric-index.json"
+CANDIDATE_METRIC_DELTA_PATH = ARTIFACT_ROOT / "stage09-candidate-metric-delta.json"
 
 
 def verify_stage09_baseline_bundle(
@@ -117,6 +122,7 @@ def verify_stage09_baseline_bundle(
     target_result_binding_gate = _read_json(TARGET_RESULT_BINDING_GATE_PATH)
     baseline_readiness_summary = _read_json(BASELINE_READINESS_SUMMARY_PATH)
     promotion_readiness = _read_json(PROMOTION_READINESS_PATH)
+    candidate_metric_delta = _read_json(CANDIDATE_METRIC_DELTA_PATH)
     live_contract = _read_json(DEFAULT_LIVE_CONTRACT_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
     live_contract_validation = validate_stage09_live_telemetry_contract(
@@ -135,6 +141,11 @@ def verify_stage09_baseline_bundle(
     baseline_metric_index_expected = summarize_stage09_baseline_metric_index(
         report_path=report_path,
         manifest_path=manifest_path,
+    )
+    candidate_metric_delta_expected = compare_stage09_candidate_metrics(
+        baseline_report_path=report_path,
+        candidate_report_path=report_path,
+        promotion_readiness_path=PROMOTION_READINESS_PATH,
     )
 
     errors: list[str] = []
@@ -161,6 +172,12 @@ def verify_stage09_baseline_bundle(
         baseline_metric_index,
         baseline_metric_index_expected,
         "baseline metric index",
+        errors,
+    )
+    _expect_equal(
+        candidate_metric_delta,
+        candidate_metric_delta_expected,
+        "candidate metric delta",
         errors,
     )
     _expect_equal(
@@ -224,6 +241,11 @@ def verify_stage09_baseline_bundle(
         promotion_readiness,
         errors,
     )
+    _validate_candidate_metric_delta(
+        manifest,
+        candidate_metric_delta,
+        errors,
+    )
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -263,6 +285,7 @@ def verify_stage09_baseline_bundle(
             "target_result_binding_gate_pinned",
             "baseline_readiness_summary_pinned",
             "candidate_promotion_readiness_pinned",
+            "candidate_metric_delta_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -321,6 +344,7 @@ def main() -> int:
         CommandEvidenceValidationError,
         InputProvenanceValidationError,
         BaselineMetricIndexError,
+        CandidateMetricComparisonError,
         KeyError,
     ) as error:
         print(f"Stage 09 baseline bundle verification failed:\n{error}", file=sys.stderr)
@@ -1021,6 +1045,72 @@ def _validate_promotion_readiness(
     if "not a whole-project rewrite" not in promotion_readiness.get("rust_scope", ""):
         errors.append(
             "candidate_promotion_readiness.rust_scope must keep Rust data-plane scoped"
+        )
+
+
+def _validate_candidate_metric_delta(
+    manifest: dict[str, Any],
+    candidate_metric_delta: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(CANDIDATE_METRIC_DELTA_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(f"manifest must pin candidate metric delta: {artifact_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_candidate_metric_delta.v1",
+        "candidate metric delta schema",
+        errors,
+    )
+    _expect_equal(
+        candidate_metric_delta.get("schema"),
+        "telemforge.stage09_candidate_metric_delta.v1",
+        "candidate_metric_delta.schema",
+        errors,
+    )
+    _expect_equal(
+        candidate_metric_delta.get("status"),
+        "baseline_reference_no_candidate",
+        "candidate_metric_delta.status",
+        errors,
+    )
+    _expect_equal(
+        candidate_metric_delta.get("runtime_stream_claim_status"),
+        "contract_only_blocked",
+        "candidate_metric_delta.runtime_stream_claim_status",
+        errors,
+    )
+    _expect_equal(
+        candidate_metric_delta.get("candidate_can_be_promoted"),
+        False,
+        "candidate_metric_delta.candidate_can_be_promoted",
+        errors,
+    )
+    _expect_equal(
+        candidate_metric_delta.get("same_report_reference"),
+        True,
+        "candidate_metric_delta.same_report_reference",
+        errors,
+    )
+    public_safety = candidate_metric_delta.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "candidate metric delta docs/automation safety",
+        errors,
+    )
+    if "not a whole-project rewrite" not in candidate_metric_delta.get(
+        "rust_scope",
+        "",
+    ):
+        errors.append(
+            "candidate_metric_delta.rust_scope must keep Rust data-plane scoped"
         )
 
 

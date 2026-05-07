@@ -2,7 +2,7 @@
   "schema": "telemforge.stage09_baseline_verification_manifest.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
-  "generated_at": "2026-05-07T12:04:22Z",
+  "generated_at": "2026-05-07T19:41:38Z",
   "purpose": "Pin the public Stage 09 baseline artifacts, safe verification commands, and candidate gates that make the current Python/FastAPI control-plane benchmark comparable with future narrow Rust data-plane candidates.",
   "rust_scope": "Rust is tracked as a future data-plane candidate for measured hot paths; not a whole-project rewrite.",
   "benchmark": {
@@ -101,6 +101,11 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json",
       "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
       "role": "promotion-readiness gate that keeps Python/FastAPI refreshes and narrow Rust stream candidates blocked until runtime probe evidence and target improvements exist"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json",
+      "schema": "telemforge.stage09_candidate_metric_delta.v1",
+      "role": "candidate metric-delta scaffold that compares target-result metrics against the public baseline and keeps baseline-as-candidate promotion blocked"
     }
   ],
   "resource_envelope": {
@@ -123,7 +128,8 @@
       "refresh_check_stable_fingerprint",
       "baseline_metric_index",
       "baseline_readiness_summary",
-      "promotion_gate"
+      "promotion_gate",
+      "candidate_metric_delta"
     ],
     "required_evidence": [
       "candidate report preserves required_top_level_fields",

@@ -27,6 +27,7 @@ RUNTIME_STREAM_EVIDENCE_VALIDATION_SUMMARY_PATH = (
 BASELINE_READINESS_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
 )
+CANDIDATE_METRIC_DELTA_PATH = ARTIFACT_ROOT / "stage09-candidate-metric-delta.json"
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -57,6 +58,7 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
             RUNTIME_STREAM_EVIDENCE_VALIDATION_SUMMARY_PATH
         )
         baseline_readiness_summary = read_json(BASELINE_READINESS_SUMMARY_PATH)
+        candidate_metric_delta = read_json(CANDIDATE_METRIC_DELTA_PATH)
 
         self.assertEqual(
             manifest["schema"],
@@ -119,6 +121,10 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
         self.assertEqual(
             contract_paths[repo_path(BASELINE_READINESS_SUMMARY_PATH)]["schema"],
             baseline_readiness_summary["schema"],
+        )
+        self.assertEqual(
+            contract_paths[repo_path(CANDIDATE_METRIC_DELTA_PATH)]["schema"],
+            candidate_metric_delta["schema"],
         )
         self.assertEqual(
             runtime_stream_evidence_checklist["source_contract"],
@@ -190,6 +196,22 @@ class Stage09BaselineVerificationManifestTest(unittest.TestCase):
             baseline_readiness_summary["public_repo_safety"][
                 "includes_docs_automation"
             ]
+        )
+        self.assertEqual(
+            candidate_metric_delta["status"],
+            "baseline_reference_no_candidate",
+        )
+        self.assertEqual(
+            candidate_metric_delta["runtime_stream_claim_status"],
+            "contract_only_blocked",
+        )
+        self.assertFalse(candidate_metric_delta["candidate_can_be_promoted"])
+        self.assertIn(
+            "not a whole-project rewrite",
+            candidate_metric_delta["rust_scope"],
+        )
+        self.assertFalse(
+            candidate_metric_delta["public_repo_safety"]["includes_docs_automation"]
         )
         self.assertIn(
             "first Rust data-plane experiment",

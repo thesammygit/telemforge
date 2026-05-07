@@ -32,6 +32,7 @@
     "target_result_binding_gate_pinned",
     "baseline_readiness_summary_pinned",
     "candidate_promotion_readiness_pinned",
+    "candidate_metric_delta_pinned",
     "summary_records_baseline_verdict",
     "rust_scope_data_plane_only"
   ]
