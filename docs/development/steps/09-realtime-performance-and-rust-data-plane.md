@@ -211,6 +211,17 @@ promotion-readiness gate into one compact public baseline snapshot. It does not
 rerun the benchmark, claim websocket runtime fanout, or approve a Rust
 whole-project rewrite.
 
+The baseline digest-index command:
+
+```text
+python3 scripts/summarize_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-index.json
+```
+
+pins the committed public Stage 09 report, summary, contracts, validation
+outputs, gates, and Rust data-plane boundary note by repo-relative path, byte
+size, SHA-256, and aggregate digest. It does not rerun the benchmark, claim
+websocket runtime fanout, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

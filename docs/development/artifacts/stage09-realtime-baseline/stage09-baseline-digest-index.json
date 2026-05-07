@@ -1,0 +1,163 @@
+{
+  "aggregate_digest": {
+    "algorithm": "sha256",
+    "digest_sha256": "0d4a081ae7dcfead10f96f2c976b7344c7ba5cf33ba5c70c66b48b3f4c9dcd99"
+  },
+  "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "runtime_claims": {
+    "benchmark_runtime_claim_status": "not_claimed",
+    "candidate_can_be_promoted": false,
+    "stream_runtime_claim_status": "contract_only_blocked"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_digest_index.v1",
+  "source_artifact_count": 23,
+  "source_artifacts": [
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "sha256": "a08b9d6e5ba1f3553224ef6b8149522908033f6a891bcee7f990bfa039543f61",
+      "size_bytes": 34063
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+      "sha256": "781bcec437b0d0ce6b8b77406b756ba7d364aaf702224e5b2f41294121934fea",
+      "size_bytes": 18734
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "sha256": "f07ff8196a7d41b5fe8c0577092dd7f1404725832fa537105de98c9782b00431",
+      "size_bytes": 11056
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json",
+      "sha256": "6550c4eb0a4079e206b6ff20747394bb685b1fe5e731a3214702246d5ee3715c",
+      "size_bytes": 1535
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md",
+      "sha256": "251520823e0258859231ab7a57a34734f5a857a3671e30044b94502f76bad065",
+      "size_bytes": 2902
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/first-rust-hot-path-slice.md",
+      "sha256": "25776b710103fcd2d690a6ac6e6361278f2b2975aa4a599d1b3dce854229e512",
+      "size_bytes": 2437
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json",
+      "sha256": "43256daaa1e5fa8c60cd12bc85c3ea229b9dce527315ed01625ee5f154f6c1fe",
+      "size_bytes": 4644
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json",
+      "sha256": "3bb674aafa8da1a48b0068045188e3af163410f5a4755b125833f17e0988444a",
+      "size_bytes": 714
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-verification-manifest.json",
+      "sha256": "6eca94b12b172b7f2b20c9e27e85c16916f7874ee491faf7065855ca8e34c73c",
+      "size_bytes": 8636
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json",
+      "sha256": "e697b45d5f1a06b959fe5403073f56a1185c37aa13153897f6e49396fcdb4d42",
+      "size_bytes": 1807
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json",
+      "sha256": "2966030126b605428e10101f98139bf496dbe6350fbf27c9a831d448dfe36648",
+      "size_bytes": 895
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
+      "sha256": "ab40f8b8c3b296b382fdd955d366625256a6a71ff505a1f114777215515ded6d",
+      "size_bytes": 1721
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence-validation.json",
+      "sha256": "8b7238fe5296a431196b9c6571f149b5bb44499feed00e604c549c40ca0a340e",
+      "size_bytes": 2002
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-input-provenance-validation.json",
+      "sha256": "e4bb2c433155481bbab1c497c2689a215f1cd66974e887497bcc96fed1afa6f4",
+      "size_bytes": 2381
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json",
+      "sha256": "f68a7f1b05a741d0f8ed0e6aea24f04298f5b9ccd0dec0f2aa7b61d16a7dc7a8",
+      "size_bytes": 4056
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
+      "sha256": "1433619f749ca5dfcdeef192a0d89f86686629b076472811a409b24d4afe6fc9",
+      "size_bytes": 4878
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-validation-summary.json",
+      "sha256": "1ea281fcbaa8a6398db568b27602fb534caf19a70adb4af6fef77be4c809faf8",
+      "size_bytes": 4077
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-binding-gate.json",
+      "sha256": "b6004c737e54dfb0dc316e434c407653b312a0fb97a9dc67b76b0f9809827786",
+      "size_bytes": 3081
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json",
+      "sha256": "ac38e3235c55a7db088ecd2e4d01b5004e78cbe3d2b9fc8ce5ec7613d336aeea",
+      "size_bytes": 2834
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json",
+      "sha256": "8948fd7f97744ca514ca5243db8780251ce59217e7dabda2da4063f39070f7cb",
+      "size_bytes": 2951
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json",
+      "sha256": "d61755e9a95aabd4927b9d953b525a2a66eabae0e90db552e9626af31409bc87",
+      "size_bytes": 3181
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json",
+      "sha256": "2a7620d4ee5ceba39ca878344de9a4406f1412e442cf9d7cdcd1a59920c0dcda",
+      "size_bytes": 4189
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json",
+      "sha256": "bd2eabdfdde57ac74097261300086bb74d9141892e588b22af082bcd8d8c7fda",
+      "size_bytes": 3811
+    }
+  ],
+  "stable_fingerprint": {
+    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "stable_identity_field_count": 21
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "baseline_digest_index_ready",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "source_artifacts_exist",
+    "source_artifacts_have_sha256",
+    "aggregate_digest_computed",
+    "public_paths_are_repo_relative",
+    "docs_automation_excluded",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "rust_scope_data_plane_only"
+  ]
+}

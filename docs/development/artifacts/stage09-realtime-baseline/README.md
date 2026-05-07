@@ -148,6 +148,10 @@ queries.
   that joins the metric index, command-evidence validation, readiness summary,
   and promotion-readiness gate into one reviewable baseline snapshot without
   rerunning the benchmark or claiming runtime websocket fanout.
+- `stage09-baseline-digest-index.json`: deterministic digest index that pins
+  the committed public Stage 09 report, summary, contracts, validation outputs,
+  gates, and Rust data-plane boundary note by repo-relative path, byte size, and
+  SHA-256 without rerunning the benchmark or claiming runtime websocket fanout.
 
 ## Inspect
 
@@ -182,6 +186,8 @@ python3 scripts/summarize_stage09_baseline_metric_index.py
 python3 scripts/summarize_stage09_baseline_metric_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json
 python3 scripts/summarize_stage09_baseline_evidence_index.py
 python3 scripts/summarize_stage09_baseline_evidence_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json
+python3 scripts/summarize_stage09_baseline_digest_index.py
+python3 scripts/summarize_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-index.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
@@ -189,6 +195,7 @@ python3 -m unittest tests/contracts/test_stage09_baseline_command_evidence.py
 python3 -m unittest tests/contracts/test_stage09_input_provenance.py
 python3 -m unittest tests/contracts/test_stage09_baseline_metric_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_evidence_index.py
+python3 -m unittest tests/contracts/test_stage09_baseline_digest_index.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -297,8 +304,12 @@ Rust data-plane candidates.
 The `stage09-baseline-evidence-index.json` artifact joins that metric index
 with the command-evidence validation, baseline readiness summary, and
 promotion-readiness gate. It gives reviewers one compact public baseline
-snapshot while still refusing runtime websocket fanout claims and keeping Rust
-limited to a future measured data-plane candidate.
+snapshot before a Python/FastAPI refresh or narrow Rust candidate is compared.
+
+The `stage09-baseline-digest-index.json` artifact pins the public Stage 09
+baseline files by repo-relative path, byte size, SHA-256, and aggregate digest.
+It is an integrity scaffold for future refreshes and Rust data-plane candidates,
+not runtime websocket fanout evidence and not a Rust whole-project rewrite.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service
