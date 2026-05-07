@@ -152,6 +152,10 @@ queries.
   the committed public Stage 09 report, summary, contracts, validation outputs,
   gates, and Rust data-plane boundary note by repo-relative path, byte size, and
   SHA-256 without rerunning the benchmark or claiming runtime websocket fanout.
+- `stage09-baseline-digest-validation.json`: deterministic validation summary
+  that recomputes the digest index from current public artifact bytes and keeps
+  `docs/automation`, runtime stream claims, and Rust whole-project rewrite scope
+  out of the baseline integrity proof.
 
 ## Inspect
 
@@ -188,6 +192,8 @@ python3 scripts/summarize_stage09_baseline_evidence_index.py
 python3 scripts/summarize_stage09_baseline_evidence_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json
 python3 scripts/summarize_stage09_baseline_digest_index.py
 python3 scripts/summarize_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-index.json
+python3 scripts/validate_stage09_baseline_digest_index.py
+python3 scripts/validate_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-validation.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
@@ -196,6 +202,7 @@ python3 -m unittest tests/contracts/test_stage09_input_provenance.py
 python3 -m unittest tests/contracts/test_stage09_baseline_metric_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_evidence_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_digest_index.py
+python3 -m unittest tests/contracts/test_stage09_baseline_digest_validation.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -310,6 +317,12 @@ The `stage09-baseline-digest-index.json` artifact pins the public Stage 09
 baseline files by repo-relative path, byte size, SHA-256, and aggregate digest.
 It is an integrity scaffold for future refreshes and Rust data-plane candidates,
 not runtime websocket fanout evidence and not a Rust whole-project rewrite.
+
+The `stage09-baseline-digest-validation.json` artifact makes that digest index
+auditable as a gate. It recomputes the current digest index from public file
+bytes, rejects `docs/automation` paths, preserves the blocked runtime stream
+claim, and keeps Rust scoped to a future data-plane candidate instead of a
+whole-project rewrite.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

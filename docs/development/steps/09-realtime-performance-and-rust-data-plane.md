@@ -222,6 +222,17 @@ outputs, gates, and Rust data-plane boundary note by repo-relative path, byte
 size, SHA-256, and aggregate digest. It does not rerun the benchmark, claim
 websocket runtime fanout, or approve a Rust whole-project rewrite.
 
+The baseline digest-validation command:
+
+```text
+python3 scripts/validate_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-validation.json
+```
+
+recomputes the digest index from current public artifact bytes and checks that
+the checked-in digest index has not drifted, does not reference
+`docs/automation`, keeps runtime stream claims blocked, and keeps Rust scoped to
+a future data-plane candidate rather than a whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text
