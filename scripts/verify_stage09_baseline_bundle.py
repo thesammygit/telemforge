@@ -48,6 +48,10 @@ from scripts.summarize_stage09_baseline_metric_index import (
     BaselineMetricIndexError,
     summarize_stage09_baseline_metric_index,
 )
+from scripts.summarize_stage09_baseline_evidence_index import (
+    BaselineEvidenceIndexError,
+    summarize_stage09_baseline_evidence_index,
+)
 from scripts.compare_stage09_candidate_metrics import (
     CandidateMetricComparisonError,
     compare_stage09_candidate_metrics,
@@ -85,6 +89,7 @@ INPUT_PROVENANCE_VALIDATION_PATH = (
     ARTIFACT_ROOT / "stage09-input-provenance-validation.json"
 )
 BASELINE_METRIC_INDEX_PATH = ARTIFACT_ROOT / "stage09-baseline-metric-index.json"
+BASELINE_EVIDENCE_INDEX_PATH = ARTIFACT_ROOT / "stage09-baseline-evidence-index.json"
 CANDIDATE_METRIC_DELTA_PATH = ARTIFACT_ROOT / "stage09-candidate-metric-delta.json"
 
 
@@ -116,6 +121,7 @@ def verify_stage09_baseline_bundle(
     command_evidence_validation_summary = _read_json(COMMAND_EVIDENCE_VALIDATION_PATH)
     input_provenance_validation_summary = _read_json(INPUT_PROVENANCE_VALIDATION_PATH)
     baseline_metric_index = _read_json(BASELINE_METRIC_INDEX_PATH)
+    baseline_evidence_index = _read_json(BASELINE_EVIDENCE_INDEX_PATH)
     runtime_stream_evidence_checklist = _read_json(
         RUNTIME_STREAM_EVIDENCE_CHECKLIST_PATH
     )
@@ -142,6 +148,7 @@ def verify_stage09_baseline_bundle(
         report_path=report_path,
         manifest_path=manifest_path,
     )
+    baseline_evidence_index_expected = summarize_stage09_baseline_evidence_index()
     candidate_metric_delta_expected = compare_stage09_candidate_metrics(
         baseline_report_path=report_path,
         candidate_report_path=report_path,
@@ -172,6 +179,12 @@ def verify_stage09_baseline_bundle(
         baseline_metric_index,
         baseline_metric_index_expected,
         "baseline metric index",
+        errors,
+    )
+    _expect_equal(
+        baseline_evidence_index,
+        baseline_evidence_index_expected,
+        "baseline evidence index",
         errors,
     )
     _expect_equal(
@@ -281,6 +294,7 @@ def verify_stage09_baseline_bundle(
             "baseline_command_evidence_validation_matches",
             "input_provenance_validation_matches",
             "baseline_metric_index_pinned",
+            "baseline_evidence_index_pinned",
             "runtime_stream_evidence_checklist_pinned",
             "target_result_binding_gate_pinned",
             "baseline_readiness_summary_pinned",
@@ -344,6 +358,7 @@ def main() -> int:
         CommandEvidenceValidationError,
         InputProvenanceValidationError,
         BaselineMetricIndexError,
+        BaselineEvidenceIndexError,
         CandidateMetricComparisonError,
         KeyError,
     ) as error:

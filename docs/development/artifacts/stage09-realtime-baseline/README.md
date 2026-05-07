@@ -144,6 +144,10 @@ queries.
   against the current baseline report. The checked-in artifact compares the
   baseline to itself, so every metric is unchanged and promotion remains blocked
   by the existing runtime evidence and throughput gates.
+- `stage09-baseline-evidence-index.json`: deterministic public evidence index
+  that joins the metric index, command-evidence validation, readiness summary,
+  and promotion-readiness gate into one reviewable baseline snapshot without
+  rerunning the benchmark or claiming runtime websocket fanout.
 
 ## Inspect
 
@@ -176,12 +180,15 @@ python3 scripts/validate_stage09_input_provenance.py
 python3 scripts/validate_stage09_input_provenance.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-input-provenance-validation.json
 python3 scripts/summarize_stage09_baseline_metric_index.py
 python3 scripts/summarize_stage09_baseline_metric_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json
+python3 scripts/summarize_stage09_baseline_evidence_index.py
+python3 scripts/summarize_stage09_baseline_evidence_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
 python3 -m unittest tests/contracts/test_stage09_baseline_command_evidence.py
 python3 -m unittest tests/contracts/test_stage09_input_provenance.py
 python3 -m unittest tests/contracts/test_stage09_baseline_metric_index.py
+python3 -m unittest tests/contracts/test_stage09_baseline_evidence_index.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -286,6 +293,12 @@ p95 alert latency, p95 replay latency, and dropped-event count, then carries
 the target result, stable fingerprint, blocked runtime stream claim, and Rust
 data-plane-only scope forward for future Python/FastAPI refreshes or narrow
 Rust data-plane candidates.
+
+The `stage09-baseline-evidence-index.json` artifact joins that metric index
+with the command-evidence validation, baseline readiness summary, and
+promotion-readiness gate. It gives reviewers one compact public baseline
+snapshot while still refusing runtime websocket fanout claims and keeping Rust
+limited to a future measured data-plane candidate.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service
@@ -432,7 +445,9 @@ bundle gate for the current baseline evidence. It checks the candidate report
 contract, confirms the public validation summary matches the validator output,
 verifies manifest artifacts and repo-relative paths, and confirms the Markdown
 summary records the baseline verdict while Rust remains scoped to future
-data-plane candidates only.
+data-plane candidates only. It also confirms the baseline evidence index still
+matches the metric index, command-evidence validation, readiness summary, and
+promotion-readiness gate.
 
 The `scripts/summarize_stage09_baseline_readiness.py` command is a deterministic
 review summary gate. It reads only public Stage 09 artifacts, writes

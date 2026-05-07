@@ -28,6 +28,7 @@
     "baseline_command_evidence_validation_matches",
     "input_provenance_validation_matches",
     "baseline_metric_index_pinned",
+    "baseline_evidence_index_pinned",
     "runtime_stream_evidence_checklist_pinned",
     "target_result_binding_gate_pinned",
     "baseline_readiness_summary_pinned",

@@ -65,6 +65,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
             result["verified_gates"],
         )
         self.assertIn(
+            "baseline_evidence_index_pinned",
+            result["verified_gates"],
+        )
+        self.assertIn(
             "runtime_stream_evidence_checklist_pinned",
             result["verified_gates"],
         )

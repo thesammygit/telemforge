@@ -200,6 +200,17 @@ bindings, stable fingerprint, blocked runtime stream claim, and Rust
 data-plane-only scope. It does not rerun the benchmark, claim websocket runtime
 fanout, or approve a Rust whole-project rewrite.
 
+The baseline evidence-index command:
+
+```text
+python3 scripts/summarize_stage09_baseline_evidence_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json
+```
+
+joins the metric index, command-evidence validation, readiness summary, and
+promotion-readiness gate into one compact public baseline snapshot. It does not
+rerun the benchmark, claim websocket runtime fanout, or approve a Rust
+whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

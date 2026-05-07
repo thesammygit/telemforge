@@ -78,6 +78,11 @@
       "role": "public headline metric index for baseline sample-rate, latency, dropped-event, target binding, blocked runtime-stream claim, and Rust data-plane-only scope"
     },
     {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json",
+      "schema": "telemforge.stage09_baseline_evidence_index.v1",
+      "role": "public evidence index joining baseline metric, command validation, readiness, and promotion gates without runtime fanout claims"
+    },
+    {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
       "schema": "telemforge.stage09_runtime_stream_evidence_checklist.v1",
       "role": "contract-only runtime stream probe checklist before websocket fanout or a narrow Rust data-plane stream candidate can be claimed"
@@ -127,6 +132,7 @@
       "live_contract_validation",
       "refresh_check_stable_fingerprint",
       "baseline_metric_index",
+      "baseline_evidence_index",
       "baseline_readiness_summary",
       "promotion_gate",
       "candidate_metric_delta"
