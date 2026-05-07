@@ -81,6 +81,11 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json",
       "schema": "telemforge.stage09_baseline_readiness_summary.v1",
       "role": "review summary that confirms the baseline is comparison evidence only, keeps runtime stream claims blocked, and scopes Rust to a future data-plane candidate"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json",
+      "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
+      "role": "promotion-readiness gate that keeps Python/FastAPI refreshes and narrow Rust stream candidates blocked until runtime probe evidence and target improvements exist"
     }
   ],
   "resource_envelope": {

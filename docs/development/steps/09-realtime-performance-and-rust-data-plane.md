@@ -153,6 +153,18 @@ runtime stream claim, and next narrow Rust data-plane candidate. It does not
 rerun the benchmark, claim websocket fanout, or approve a Rust whole-project
 rewrite.
 
+The candidate promotion-readiness command:
+
+```text
+python3 scripts/check_stage09_candidate_promotion_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
+```
+
+combines the readiness summary, target-gap summary, and runtime stream evidence
+checklist into a deterministic gate. It keeps the current Python/FastAPI
+baseline and future narrow Rust stream candidates blocked from promotion until
+runtime probe evidence exists and missed realtime targets are improved or
+explicitly versioned.
+
 The baseline refresh check command:
 
 ```text

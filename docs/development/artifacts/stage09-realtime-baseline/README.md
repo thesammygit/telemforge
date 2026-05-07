@@ -117,6 +117,12 @@ queries.
   passed and missed realtime targets, keeps runtime stream claims blocked, and
   points at the next narrow Rust data-plane candidate without rerunning the
   benchmark.
+- `stage09-candidate-promotion-readiness.json`: deterministic public
+  promotion-readiness gate that reads the baseline readiness summary, target-gap
+  summary, and runtime stream evidence checklist. It keeps the current
+  Python/FastAPI baseline and future narrow Rust stream candidates blocked from
+  promotion until runtime probe evidence exists and missed realtime targets are
+  improved or explicitly versioned.
 
 ## Inspect
 
@@ -132,6 +138,8 @@ python3 scripts/summarize_stage09_baseline_readiness.py
 python3 scripts/summarize_stage09_baseline_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json
 python3 scripts/summarize_stage09_target_gaps.py
 python3 scripts/summarize_stage09_target_gaps.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json
+python3 scripts/check_stage09_candidate_promotion_readiness.py
+python3 scripts/check_stage09_candidate_promotion_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
 python3 scripts/validate_stage09_live_telemetry_contract.py
 python3 scripts/validate_stage09_live_telemetry_contract.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json
 python3 scripts/validate_stage09_runtime_stream_evidence_checklist.py
@@ -148,6 +156,7 @@ python3 -m unittest tests/contracts/test_stage09_report_validator.py
 python3 -m unittest tests/contracts/test_stage09_baseline_verification_manifest.py
 python3 -m unittest tests/contracts/test_stage09_baseline_bundle_verifier.py
 python3 -m unittest tests/contracts/test_stage09_target_gap_summary.py
+python3 -m unittest tests/contracts/test_stage09_candidate_promotion_readiness.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -225,6 +234,12 @@ The `stage09-target-gap-summary.json` artifact is a deterministic target-gap
 index over `target_results.checks`. It makes the missed throughput targets and
 passed latency/dropped-event targets easy to inspect before any Python/FastAPI
 refresh or narrow Rust data-plane candidate is compared.
+
+The `stage09-candidate-promotion-readiness.json` artifact turns those baseline
+indexes into an explicit promotion gate. It records that the current baseline is
+blocked by contract-only stream claims, remaining throughput misses, and missing
+runtime probe evidence; future candidates must clear those gates before their
+metrics can be treated as promotable.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

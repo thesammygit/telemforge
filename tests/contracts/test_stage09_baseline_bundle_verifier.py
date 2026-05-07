@@ -65,6 +65,10 @@ class Stage09BaselineBundleVerifierTest(unittest.TestCase):
             result["verified_gates"],
         )
         self.assertIn(
+            "candidate_promotion_readiness_pinned",
+            result["verified_gates"],
+        )
+        self.assertIn(
             "live_contract_validation_summary_matches",
             result["verified_gates"],
         )

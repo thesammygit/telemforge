@@ -32,6 +32,10 @@ from scripts.summarize_stage09_baseline_readiness import (
     ReadinessSummaryError,
     summarize_stage09_baseline_readiness,
 )
+from scripts.check_stage09_candidate_promotion_readiness import (
+    PromotionReadinessError,
+    check_stage09_candidate_promotion_readiness,
+)
 
 
 ARTIFACT_ROOT = (
@@ -51,6 +55,9 @@ TARGET_RESULT_BINDING_GATE_PATH = (
 )
 BASELINE_READINESS_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
+)
+PROMOTION_READINESS_PATH = (
+    ARTIFACT_ROOT / "stage09-candidate-promotion-readiness.json"
 )
 LIVE_CONTRACT_VALIDATION_SUMMARY_PATH = (
     ARTIFACT_ROOT / "stage09-live-contract-validation-summary.json"
@@ -87,6 +94,7 @@ def verify_stage09_baseline_bundle(
     )
     target_result_binding_gate = _read_json(TARGET_RESULT_BINDING_GATE_PATH)
     baseline_readiness_summary = _read_json(BASELINE_READINESS_SUMMARY_PATH)
+    promotion_readiness = _read_json(PROMOTION_READINESS_PATH)
     live_contract = _read_json(DEFAULT_LIVE_CONTRACT_PATH)
     summary_text = summary_path.read_text(encoding="utf-8")
     live_contract_validation = validate_stage09_live_telemetry_contract(
@@ -152,6 +160,11 @@ def verify_stage09_baseline_bundle(
         baseline_readiness_summary,
         errors,
     )
+    _validate_promotion_readiness(
+        manifest,
+        promotion_readiness,
+        errors,
+    )
     _validate_summary(summary_text, report, errors)
 
     rust_scope = manifest.get("rust_scope", "")
@@ -187,6 +200,7 @@ def verify_stage09_baseline_bundle(
             "runtime_stream_evidence_checklist_pinned",
             "target_result_binding_gate_pinned",
             "baseline_readiness_summary_pinned",
+            "candidate_promotion_readiness_pinned",
             "summary_records_baseline_verdict",
             "rust_scope_data_plane_only",
         ],
@@ -237,7 +251,13 @@ def main() -> int:
             validation_summary_path=args.validation_summary,
             summary_path=args.summary,
         )
-    except (OSError, json.JSONDecodeError, ValidationError, KeyError) as error:
+    except (
+        OSError,
+        json.JSONDecodeError,
+        ValidationError,
+        PromotionReadinessError,
+        KeyError,
+    ) as error:
         print(f"Stage 09 baseline bundle verification failed:\n{error}", file=sys.stderr)
         return 1
 
@@ -791,6 +811,76 @@ def _validate_baseline_readiness_summary(
     )
     if "not a whole-project rewrite" not in summary.get("rust_scope", ""):
         errors.append("baseline_readiness_summary.rust_scope must keep Rust scoped")
+
+
+def _validate_promotion_readiness(
+    manifest: dict[str, Any],
+    promotion_readiness: dict[str, Any],
+    errors: list[str],
+) -> None:
+    artifact_path = _display_path(PROMOTION_READINESS_PATH)
+    artifacts = {
+        artifact.get("path", ""): artifact
+        for artifact in manifest.get("contract_artifacts", [])
+    }
+    artifact = artifacts.get(artifact_path)
+    if artifact is None:
+        errors.append(f"manifest must pin candidate promotion readiness: {artifact_path}")
+        return
+    _expect_equal(
+        artifact.get("schema"),
+        "telemforge.stage09_candidate_promotion_readiness.v1",
+        "candidate promotion readiness schema",
+        errors,
+    )
+
+    try:
+        expected = check_stage09_candidate_promotion_readiness()
+    except (OSError, json.JSONDecodeError, PromotionReadinessError, KeyError) as error:
+        errors.append(f"candidate promotion readiness could not be generated: {error}")
+        return
+
+    _expect_equal(
+        promotion_readiness,
+        expected,
+        "candidate promotion readiness artifact",
+        errors,
+    )
+    _expect_equal(
+        promotion_readiness.get("status"),
+        "blocked_pending_runtime_evidence",
+        "candidate promotion readiness status",
+        errors,
+    )
+    _expect_equal(
+        promotion_readiness.get("candidate_can_be_promoted"),
+        False,
+        "candidate promotion readiness promoted flag",
+        errors,
+    )
+    _expect_equal(
+        promotion_readiness.get("runtime_stream_claim_status"),
+        "contract_only_blocked",
+        "candidate promotion readiness runtime stream claim",
+        errors,
+    )
+    _expect_equal(
+        promotion_readiness.get("resource_envelope"),
+        manifest.get("resource_envelope"),
+        "candidate promotion readiness resource envelope",
+        errors,
+    )
+    public_safety = promotion_readiness.get("public_repo_safety", {})
+    _expect_equal(
+        public_safety.get("includes_docs_automation"),
+        False,
+        "candidate promotion readiness docs/automation safety",
+        errors,
+    )
+    if "not a whole-project rewrite" not in promotion_readiness.get("rust_scope", ""):
+        errors.append(
+            "candidate_promotion_readiness.rust_scope must keep Rust data-plane scoped"
+        )
 
 
 def _validate_summary(
