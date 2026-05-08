@@ -257,6 +257,17 @@ evidence, local resource envelope, and Rust data-plane-only scope. It does not
 rerun the benchmark, claim websocket runtime fanout, or approve a Rust
 whole-project rewrite.
 
+The target-result artifact-gate command:
+
+```text
+python3 scripts/check_stage09_target_result_artifact_gate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-artifact-gate.json
+```
+
+cross-checks each headline metric across the baseline report, metric index,
+target-gap summary, target-result binding gate, and closeout gate. It does not
+rerun the benchmark, claim websocket runtime fanout, or approve a Rust
+whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

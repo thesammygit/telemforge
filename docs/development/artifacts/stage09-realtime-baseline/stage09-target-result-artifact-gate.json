@@ -1,0 +1,173 @@
+{
+  "metric_artifacts": [
+    {
+      "artifact_presence": [
+        "stage09-baseline-report.json",
+        "stage09-baseline-metric-index.json",
+        "stage09-target-gap-summary.json",
+        "stage09-target-result-binding-gate.json"
+      ],
+      "comparison": "at_least",
+      "gap_to_target": 90,
+      "meets_target": false,
+      "metric": "channel_count",
+      "observed": 10,
+      "observed_source": "workload.channel_count",
+      "report_binding": "workload.channel_count",
+      "target": 100,
+      "unit": "channels"
+    },
+    {
+      "artifact_presence": [
+        "stage09-baseline-report.json",
+        "stage09-baseline-metric-index.json",
+        "stage09-target-gap-summary.json",
+        "stage09-target-result-binding-gate.json"
+      ],
+      "comparison": "at_least",
+      "gap_to_target": 9.0,
+      "meets_target": false,
+      "metric": "per_channel_sample_rate_hz",
+      "observed": 1.0,
+      "observed_source": "workload.per_channel_sample_rate_hz",
+      "report_binding": "workload.per_channel_sample_rate_hz",
+      "target": 10,
+      "unit": "Hz"
+    },
+    {
+      "artifact_presence": [
+        "stage09-baseline-report.json",
+        "stage09-baseline-metric-index.json",
+        "stage09-target-gap-summary.json",
+        "stage09-target-result-binding-gate.json"
+      ],
+      "comparison": "at_least",
+      "gap_to_target": 990.0,
+      "meets_target": false,
+      "metric": "aggregate_sample_rate_hz",
+      "observed": 10.0,
+      "observed_source": "metrics.telemetry_sample_rate_hz",
+      "report_binding": "metrics.telemetry_sample_rate_hz",
+      "target": 1000,
+      "unit": "Hz"
+    },
+    {
+      "artifact_presence": [
+        "stage09-baseline-report.json",
+        "stage09-baseline-metric-index.json",
+        "stage09-target-gap-summary.json",
+        "stage09-target-result-binding-gate.json"
+      ],
+      "comparison": "at_most",
+      "gap_to_target": 0,
+      "meets_target": true,
+      "metric": "p95_alert_latency_ms",
+      "observed": 4.079,
+      "observed_source": "metrics.p95_alert_latency_ms",
+      "report_binding": "metrics.p95_alert_latency_ms",
+      "target": 50,
+      "unit": "ms"
+    },
+    {
+      "artifact_presence": [
+        "stage09-baseline-report.json",
+        "stage09-baseline-metric-index.json",
+        "stage09-target-gap-summary.json",
+        "stage09-target-result-binding-gate.json"
+      ],
+      "comparison": "at_most",
+      "gap_to_target": 0,
+      "meets_target": true,
+      "metric": "p95_replay_query_latency_ms",
+      "observed": 3.861,
+      "observed_source": "metrics.p95_replay_query_latency_ms",
+      "report_binding": "metrics.p95_replay_query_latency_ms",
+      "target": 500,
+      "unit": "ms"
+    },
+    {
+      "artifact_presence": [
+        "stage09-baseline-report.json",
+        "stage09-baseline-metric-index.json",
+        "stage09-target-gap-summary.json",
+        "stage09-target-result-binding-gate.json"
+      ],
+      "comparison": "at_most",
+      "gap_to_target": 0,
+      "meets_target": true,
+      "metric": "dropped_event_count",
+      "observed": 0,
+      "observed_source": "metrics.dropped_event_count",
+      "report_binding": "metrics.dropped_event_count",
+      "target": 0,
+      "unit": "events"
+    }
+  ],
+  "metric_count": 6,
+  "missed_metrics": [
+    "channel_count",
+    "per_channel_sample_rate_hz",
+    "aggregate_sample_rate_hz"
+  ],
+  "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
+  "passed_metrics": [
+    "p95_alert_latency_ms",
+    "p95_replay_query_latency_ms",
+    "dropped_event_count"
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "purpose": "Pin every Stage 09 headline metric across the report, metric index, target-gap summary, binding gate, and closeout gate before comparing future Python/FastAPI refreshes or narrow Rust data-plane candidates.",
+  "required_next_evidence": [
+    "candidate report preserves required_top_level_fields",
+    "candidate report preserves required_metric_bindings",
+    "candidate report preserves throughput_gap_profile candidate mapping",
+    "resource envelope stays within the local automation guard",
+    "dropped_event_count does not regress",
+    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+  ],
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "runtime_claims": {
+    "candidate_can_be_promoted": false,
+    "stream_runtime_claim_status": "contract_only_blocked"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_target_result_artifact_gate.v1",
+  "source_artifacts": {
+    "baseline_closeout_gate": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-gate.json",
+    "baseline_metric_index": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json",
+    "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "target_gap_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json",
+    "target_result_binding_gate": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-binding-gate.json"
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "target_counts": {
+    "missed": 3,
+    "passed": 3,
+    "total": 6
+  },
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "target_result_metric_sets_match",
+    "observed_values_match_across_artifacts",
+    "target_values_match_across_artifacts",
+    "pass_fail_status_matches_closeout_gate",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "public_paths_are_repo_relative",
+    "docs_automation_excluded",
+    "rust_scope_data_plane_only"
+  ]
+}
