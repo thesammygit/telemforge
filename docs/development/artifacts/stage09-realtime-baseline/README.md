@@ -161,6 +161,11 @@ queries.
   evidence validation, and candidate promotion readiness into one final
   reviewable Stage 09 baseline verdict. It keeps the current baseline verified
   but blocked from promotion until runtime probe evidence exists.
+- `stage09-baseline-closeout-summary.md`: deterministic human-readable summary
+  generated from the closeout gate. It lists the verified baseline digest,
+  passed/missed metrics, blocked runtime claims, required next evidence, local
+  resource envelope, and Rust data-plane-only scope without rerunning the
+  benchmark or claiming websocket runtime fanout.
 
 ## Inspect
 
@@ -201,6 +206,8 @@ python3 scripts/validate_stage09_baseline_digest_index.py
 python3 scripts/validate_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-validation.json
 python3 scripts/check_stage09_baseline_closeout_gate.py
 python3 scripts/check_stage09_baseline_closeout_gate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-gate.json
+python3 scripts/summarize_stage09_baseline_closeout.py
+python3 scripts/summarize_stage09_baseline_closeout.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-summary.md
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
@@ -211,6 +218,7 @@ python3 -m unittest tests/contracts/test_stage09_baseline_evidence_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_digest_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_digest_validation.py
 python3 -m unittest tests/contracts/test_stage09_baseline_closeout_gate.py
+python3 -m unittest tests/contracts/test_stage09_baseline_closeout_summary.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py

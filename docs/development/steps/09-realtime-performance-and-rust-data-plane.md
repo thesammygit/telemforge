@@ -245,6 +245,18 @@ keeps the baseline verified but blocked from promotion until runtime stream
 probe evidence exists and missed throughput targets improve or are explicitly
 versioned.
 
+The baseline closeout-summary command:
+
+```text
+python3 scripts/summarize_stage09_baseline_closeout.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-summary.md
+```
+
+renders the closeout gate into a human-readable report with the verified
+baseline digest, passed/missed metrics, blocked runtime claims, required next
+evidence, local resource envelope, and Rust data-plane-only scope. It does not
+rerun the benchmark, claim websocket runtime fanout, or approve a Rust
+whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text
