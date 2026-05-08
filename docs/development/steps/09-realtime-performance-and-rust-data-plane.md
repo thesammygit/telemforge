@@ -291,6 +291,17 @@ runtime blocker, and next narrow Rust data-plane candidate into one public-safe
 handoff artifact. It does not rerun the benchmark, claim websocket runtime
 fanout, or approve a Rust whole-project rewrite.
 
+The baseline review-packet validation command:
+
+```text
+python3 scripts/validate_stage09_baseline_review_packet.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-review-packet-validation.json
+```
+
+checks that the checked-in review packet still matches the current acceptance
+matrix, closeout gate, command evidence, public path hygiene, blocked runtime
+claims, and Rust data-plane-only scope. It does not rerun the benchmark, claim
+websocket runtime fanout, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

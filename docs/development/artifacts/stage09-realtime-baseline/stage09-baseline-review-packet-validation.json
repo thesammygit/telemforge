@@ -1,0 +1,61 @@
+{
+  "aggregate_digest": {
+    "algorithm": "sha256",
+    "digest_sha256": "0d4a081ae7dcfead10f96f2c976b7344c7ba5cf33ba5c70c66b48b3f4c9dcd99"
+  },
+  "blocking_reasons": [
+    "runtime_stream_claim_blocked",
+    "missed_realtime_targets_remain",
+    "runtime_probe_evidence_missing"
+  ],
+  "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "required_next_evidence": [
+    "candidate report preserves required_top_level_fields",
+    "candidate report preserves required_metric_bindings",
+    "candidate report preserves throughput_gap_profile candidate mapping",
+    "resource envelope stays within the local automation guard",
+    "dropped_event_count does not regress",
+    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+  ],
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "review_packet_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-review-packet.json",
+  "runtime_claims": {
+    "candidate_can_be_promoted": false,
+    "stream_runtime_claim_status": "contract_only_blocked"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_review_packet_validation.v1",
+  "stable_fingerprint": {
+    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "stable_identity_field_count": 21
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "target_counts": {
+    "missed": 3,
+    "passed": 3,
+    "total": 6
+  },
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "review_packet_matches_current_source_artifacts",
+    "public_paths_are_repo_relative",
+    "docs_automation_excluded",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "rust_scope_data_plane_only"
+  ]
+}
