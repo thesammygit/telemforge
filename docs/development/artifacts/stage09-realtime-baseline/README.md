@@ -156,6 +156,11 @@ queries.
   that recomputes the digest index from current public artifact bytes and keeps
   `docs/automation`, runtime stream claims, and Rust whole-project rewrite scope
   out of the baseline integrity proof.
+- `stage09-baseline-closeout-gate.json`: deterministic closeout gate that
+  combines digest validation, the baseline evidence index, runtime-stream
+  evidence validation, and candidate promotion readiness into one final
+  reviewable Stage 09 baseline verdict. It keeps the current baseline verified
+  but blocked from promotion until runtime probe evidence exists.
 
 ## Inspect
 
@@ -194,6 +199,8 @@ python3 scripts/summarize_stage09_baseline_digest_index.py
 python3 scripts/summarize_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-index.json
 python3 scripts/validate_stage09_baseline_digest_index.py
 python3 scripts/validate_stage09_baseline_digest_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-digest-validation.json
+python3 scripts/check_stage09_baseline_closeout_gate.py
+python3 scripts/check_stage09_baseline_closeout_gate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-gate.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
@@ -203,6 +210,7 @@ python3 -m unittest tests/contracts/test_stage09_baseline_metric_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_evidence_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_digest_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_digest_validation.py
+python3 -m unittest tests/contracts/test_stage09_baseline_closeout_gate.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py
@@ -323,6 +331,13 @@ auditable as a gate. It recomputes the current digest index from public file
 bytes, rejects `docs/automation` paths, preserves the blocked runtime stream
 claim, and keeps Rust scoped to a future data-plane candidate instead of a
 whole-project rewrite.
+
+The `stage09-baseline-closeout-gate.json` artifact is a deterministic closeout
+view over the existing public proof chain. It verifies the digest validation,
+baseline evidence index, runtime-stream evidence validation, and candidate
+promotion-readiness gate agree that the Python/FastAPI baseline is auditable but
+not promotable until runtime stream probes exist and missed throughput targets
+improve or are explicitly versioned.
 
 The `resource_guard` block in the baseline report is part of the comparison
 contract. It records that the run is serial, local, network-free, paid-service

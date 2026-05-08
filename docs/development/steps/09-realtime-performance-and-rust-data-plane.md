@@ -233,6 +233,18 @@ the checked-in digest index has not drifted, does not reference
 `docs/automation`, keeps runtime stream claims blocked, and keeps Rust scoped to
 a future data-plane candidate rather than a whole-project rewrite.
 
+The baseline closeout-gate command:
+
+```text
+python3 scripts/check_stage09_baseline_closeout_gate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-gate.json
+```
+
+combines digest validation, the baseline evidence index, runtime-stream evidence
+validation, and promotion readiness into one deterministic closeout verdict. It
+keeps the baseline verified but blocked from promotion until runtime stream
+probe evidence exists and missed throughput targets improve or are explicitly
+versioned.
+
 The baseline refresh check command:
 
 ```text
