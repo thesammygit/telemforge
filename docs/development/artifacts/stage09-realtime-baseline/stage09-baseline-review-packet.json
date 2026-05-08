@@ -1,0 +1,91 @@
+{
+  "aggregate_digest": {
+    "algorithm": "sha256",
+    "digest_sha256": "0d4a081ae7dcfead10f96f2c976b7344c7ba5cf33ba5c70c66b48b3f4c9dcd99"
+  },
+  "benchmark_command": [
+    "python3",
+    "scripts/benchmark_stage09_realtime.py",
+    "--output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "--summary-output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "blocking_reasons": [
+    "runtime_stream_claim_blocked",
+    "missed_realtime_targets_remain",
+    "runtime_probe_evidence_missing"
+  ],
+  "missed_metrics": [
+    "channel_count",
+    "per_channel_sample_rate_hz",
+    "aggregate_sample_rate_hz"
+  ],
+  "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
+  "passed_metrics": [
+    "p95_alert_latency_ms",
+    "p95_replay_query_latency_ms",
+    "dropped_event_count"
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "purpose": "Give reviewers a single public-safe handoff packet for the Stage 09 Python/FastAPI realtime baseline before a future narrow Rust data-plane candidate is compared.",
+  "required_next_evidence": [
+    "candidate report preserves required_top_level_fields",
+    "candidate report preserves required_metric_bindings",
+    "candidate report preserves throughput_gap_profile candidate mapping",
+    "resource envelope stays within the local automation guard",
+    "dropped_event_count does not regress",
+    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+  ],
+  "required_outputs": [
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "reviewer_checks": [
+    "baseline benchmark command and required outputs are pinned",
+    "acceptance matrix passed with runtime claims blocked",
+    "closeout gate is blocked pending runtime probe evidence",
+    "runtime websocket fanout is not claimed",
+    "Rust remains scoped to one future data-plane candidate"
+  ],
+  "runtime_claims": {
+    "candidate_can_be_promoted": false,
+    "stream_runtime_claim_status": "contract_only_blocked"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_review_packet.v1",
+  "source_artifacts": {
+    "acceptance_matrix": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-acceptance-matrix.json",
+    "baseline_closeout_gate": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-gate.json",
+    "baseline_command_evidence": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
+    "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "baseline_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+    "runtime_stream_evidence_validation": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-validation-summary.json",
+    "rust_data_plane_boundary": "docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md"
+  },
+  "stable_fingerprint": {
+    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "stable_identity_field_count": 21
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "baseline_verified_runtime_blocked",
+  "target_counts": {
+    "missed": 3,
+    "passed": 3,
+    "total": 6
+  },
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03"
+}

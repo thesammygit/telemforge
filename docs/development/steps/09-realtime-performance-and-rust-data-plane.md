@@ -280,6 +280,17 @@ repo hygiene into one deterministic review artifact. It does not rerun the
 benchmark, claim websocket runtime fanout, or approve a Rust whole-project
 rewrite.
 
+The baseline review-packet command:
+
+```text
+python3 scripts/summarize_stage09_baseline_review_packet.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-review-packet.json
+```
+
+ties the acceptance matrix, closeout gate, command evidence, stable fingerprint,
+runtime blocker, and next narrow Rust data-plane candidate into one public-safe
+handoff artifact. It does not rerun the benchmark, claim websocket runtime
+fanout, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text
