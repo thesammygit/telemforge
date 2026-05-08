@@ -172,6 +172,11 @@ queries.
   closeout gate. It keeps runtime stream claims blocked, keeps paths public and
   repo-relative, and preserves Rust as a future data-plane candidate rather
   than a whole-project rewrite.
+- `stage09-baseline-acceptance-matrix.json`: deterministic public acceptance
+  matrix that condenses the benchmark command/report, headline target bindings,
+  live stream contract, runtime-stream evidence blocker, Rust data-plane
+  boundary, and public repo hygiene into one review artifact without rerunning
+  the benchmark or claiming websocket runtime fanout.
 
 ## Inspect
 
@@ -216,6 +221,8 @@ python3 scripts/summarize_stage09_baseline_closeout.py
 python3 scripts/summarize_stage09_baseline_closeout.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-closeout-summary.md
 python3 scripts/check_stage09_target_result_artifact_gate.py
 python3 scripts/check_stage09_target_result_artifact_gate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-target-result-artifact-gate.json
+python3 scripts/summarize_stage09_baseline_acceptance_matrix.py
+python3 scripts/summarize_stage09_baseline_acceptance_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-acceptance-matrix.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
@@ -228,6 +235,7 @@ python3 -m unittest tests/contracts/test_stage09_baseline_digest_validation.py
 python3 -m unittest tests/contracts/test_stage09_baseline_closeout_gate.py
 python3 -m unittest tests/contracts/test_stage09_baseline_closeout_summary.py
 python3 -m unittest tests/contracts/test_stage09_target_result_artifact_gate.py
+python3 -m unittest tests/contracts/test_stage09_baseline_acceptance_matrix.py
 python3 -m unittest tests/contracts/test_stage09_live_contract_validator.py
 python3 -m unittest tests/contracts/test_stage09_candidate_report_contract.py
 python3 -m unittest tests/contracts/test_stage09_report_validator.py

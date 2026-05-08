@@ -268,6 +268,18 @@ target-gap summary, target-result binding gate, and closeout gate. It does not
 rerun the benchmark, claim websocket runtime fanout, or approve a Rust
 whole-project rewrite.
 
+The baseline acceptance-matrix command:
+
+```text
+python3 scripts/summarize_stage09_baseline_acceptance_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-acceptance-matrix.json
+```
+
+condenses the benchmark command/report, headline target bindings, live stream
+contract, runtime-stream evidence blocker, Rust data-plane boundary, and public
+repo hygiene into one deterministic review artifact. It does not rerun the
+benchmark, claim websocket runtime fanout, or approve a Rust whole-project
+rewrite.
+
 The baseline refresh check command:
 
 ```text
