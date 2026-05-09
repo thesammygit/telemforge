@@ -314,6 +314,18 @@ Python/FastAPI baseline ready for review while blocking runtime promotion until
 runtime probe evidence exists, and it preserves Rust as a future data-plane
 candidate rather than a whole-project rewrite.
 
+The baseline handoff-summary command:
+
+```text
+python3 scripts/summarize_stage09_baseline_handoff.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-handoff-summary.md
+```
+
+renders the handoff gate into a human-readable report with the review verdict,
+stable fingerprint, passed/missed metrics, runtime promotion blocker, required
+next evidence, local resource envelope, and Rust data-plane-only scope. It does
+not rerun the benchmark, claim websocket runtime fanout, or approve a Rust
+whole-project rewrite.
+
 The baseline artifact-index command:
 
 ```text
