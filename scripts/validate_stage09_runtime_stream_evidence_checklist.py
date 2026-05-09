@@ -175,6 +175,12 @@ def validate_stage09_runtime_stream_evidence_checklist(
             errors,
         )
         required_artifact = str(item.get("required_artifact", ""))
+        _expect_equal(
+            required_artifact,
+            contract_item.get("proof_artifact"),
+            f"{evidence_name} required artifact must match contract proof artifact",
+            errors,
+        )
         if required_artifact not in proof_artifacts:
             errors.append(
                 f"{evidence_name} required artifact is not pinned by the live contract"

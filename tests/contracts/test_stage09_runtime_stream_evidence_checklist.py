@@ -146,6 +146,29 @@ class Stage09RuntimeStreamEvidenceChecklistValidationTest(unittest.TestCase):
 
         self.assertIn("required artifact must exist", str(ctx.exception))
 
+    def test_rejects_required_artifact_that_does_not_match_contract_item(self) -> None:
+        checklist = json.loads(CHECKLIST_PATH.read_text(encoding="utf-8"))
+        checklist["probe_checklist"][0]["required_artifact"] = (
+            "docs/development/artifacts/stage09-realtime-baseline/"
+            "stage09-live-telemetry-contract.json"
+        )
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            bad_checklist = Path(tmpdir) / "bad-checklist.json"
+            bad_checklist.write_text(
+                json.dumps(checklist, indent=2, sort_keys=True),
+                encoding="utf-8",
+            )
+
+            with self.assertRaises(RuntimeStreamEvidenceChecklistValidationError) as ctx:
+                validate_stage09_runtime_stream_evidence_checklist(
+                    checklist_path=bad_checklist,
+                    contract_path=CONTRACT_PATH,
+                    report_path=REPORT_PATH,
+                )
+
+        self.assertIn("must match contract proof artifact", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()
