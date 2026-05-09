@@ -302,6 +302,18 @@ matrix, closeout gate, command evidence, public path hygiene, blocked runtime
 claims, and Rust data-plane-only scope. It does not rerun the benchmark, claim
 websocket runtime fanout, or approve a Rust whole-project rewrite.
 
+The baseline handoff-gate command:
+
+```text
+python3 scripts/check_stage09_baseline_handoff_gate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-handoff-gate.json
+```
+
+ties the public review packet, review-packet validation, refresh check, and
+command evidence into one deterministic review signal. It keeps the
+Python/FastAPI baseline ready for review while blocking runtime promotion until
+runtime probe evidence exists, and it preserves Rust as a future data-plane
+candidate rather than a whole-project rewrite.
+
 The baseline artifact-index command:
 
 ```text

@@ -11,7 +11,7 @@
     "safe_to_run_locally": true
   },
   "generated_output_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json",
-  "indexed_artifact_count": 31,
+  "indexed_artifact_count": 32,
   "indexed_artifacts": [
     {
       "indexed_in_readme": true,
@@ -78,6 +78,12 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json",
       "sha256": "bd2eabdfdde57ac74097261300086bb74d9141892e588b22af082bcd8d8c7fda",
       "size_bytes": 3811
+    },
+    {
+      "indexed_in_readme": true,
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-handoff-gate.json",
+      "sha256": "5460e4b762f5cca193b8e44e94a2504ecf46c91d2e00a4fc255891fac28384e2",
+      "size_bytes": 3864
     },
     {
       "indexed_in_readme": true,

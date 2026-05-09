@@ -1,0 +1,92 @@
+{
+  "benchmark_command": [
+    "python3",
+    "scripts/benchmark_stage09_realtime.py",
+    "--output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "--summary-output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "blocking_reasons": [
+    "runtime_stream_claim_blocked",
+    "missed_realtime_targets_remain",
+    "runtime_probe_evidence_missing"
+  ],
+  "handoff_verdict": "public_baseline_is_ready_for_review_but_not_runtime_promotion",
+  "missed_metrics": [
+    "channel_count",
+    "per_channel_sample_rate_hz",
+    "aggregate_sample_rate_hz"
+  ],
+  "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
+  "passed_metrics": [
+    "p95_alert_latency_ms",
+    "p95_replay_query_latency_ms",
+    "dropped_event_count"
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "required_next_evidence": [
+    "candidate report preserves required_top_level_fields",
+    "candidate report preserves required_metric_bindings",
+    "candidate report preserves throughput_gap_profile candidate mapping",
+    "resource envelope stays within the local automation guard",
+    "dropped_event_count does not regress",
+    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+  ],
+  "required_outputs": [
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "resource_envelope": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1
+  },
+  "runtime_claims": {
+    "candidate_can_be_promoted": false,
+    "stream_runtime_claim_status": "contract_only_blocked"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_handoff_gate.v1",
+  "source_artifacts": {
+    "baseline_command_evidence": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
+    "baseline_refresh_check": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json",
+    "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "baseline_review_packet": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-review-packet.json",
+    "baseline_review_packet_validation": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-review-packet-validation.json",
+    "baseline_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+    "rust_data_plane_boundary": "docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md"
+  },
+  "stable_fingerprint": {
+    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "stable_identity_field_count": 21
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "baseline_handoff_ready_runtime_blocked",
+  "target_counts": {
+    "missed": 3,
+    "passed": 3,
+    "total": 6
+  },
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "review_packet_validation_passed",
+    "baseline_refresh_check_passed",
+    "benchmark_command_matches_command_evidence",
+    "required_outputs_match_command_evidence",
+    "resource_envelope_preserved",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "public_paths_are_repo_relative",
+    "docs_automation_excluded",
+    "rust_scope_data_plane_only"
+  ]
+}
