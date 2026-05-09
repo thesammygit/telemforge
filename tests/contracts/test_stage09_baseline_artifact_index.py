@@ -27,6 +27,24 @@ class Stage09BaselineArtifactIndexTest(unittest.TestCase):
         self.assertEqual(summary["status"], "passed")
         self.assertGreaterEqual(summary["indexed_artifact_count"], 20)
         self.assertFalse(summary["public_repo_safety"]["includes_docs_automation"])
+        self.assertEqual(
+            summary["benchmark_scaffold"]["command"],
+            "python3 scripts/benchmark_stage09_realtime.py "
+            "--output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json "
+            "--summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+        )
+        self.assertEqual(
+            summary["benchmark_scaffold"]["required_outputs"],
+            [
+                "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+                "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+            ],
+        )
+        self.assertTrue(summary["benchmark_scaffold"]["outputs_indexed_in_readme"])
+        self.assertEqual(
+            summary["benchmark_scaffold"]["rerun_status"],
+            "not_run_by_artifact_index",
+        )
         self.assertEqual(summary["runtime_claims"]["benchmark_rerun"], "not_run")
         self.assertEqual(
             summary["runtime_claims"]["runtime_stream_claim_status"],

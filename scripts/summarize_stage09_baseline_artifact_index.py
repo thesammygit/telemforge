@@ -22,6 +22,8 @@ ARTIFACT_ROOT = (
 README_PATH = ARTIFACT_ROOT / "README.md"
 OUTPUT_ARTIFACT_NAME = "stage09-baseline-artifact-index.json"
 EXCLUDED_ARTIFACT_NAMES = {"README.md", OUTPUT_ARTIFACT_NAME}
+BASELINE_REPORT_PATH = ARTIFACT_ROOT / "stage09-baseline-report.json"
+BASELINE_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
 
 
 class Stage09BaselineArtifactIndexError(Exception):
@@ -49,6 +51,24 @@ def summarize_stage09_baseline_artifact_index(
         errors.append(
             f"{_display_path(readme_path)} must mention `{OUTPUT_ARTIFACT_NAME}`"
         )
+
+    baseline_report_path = _display_path(BASELINE_REPORT_PATH)
+    baseline_summary_path = _display_path(BASELINE_SUMMARY_PATH)
+    baseline_benchmark_command = (
+        "python3 scripts/benchmark_stage09_realtime.py "
+        f"--output {baseline_report_path} "
+        f"--summary-output {baseline_summary_path}"
+    )
+    if baseline_benchmark_command not in readme_text:
+        errors.append(
+            f"{_display_path(readme_path)} must include the baseline benchmark command"
+        )
+    for required_output_path in [baseline_report_path, baseline_summary_path]:
+        _validate_public_path(required_output_path, errors)
+        if f"`{Path(required_output_path).name}`" not in readme_text:
+            errors.append(
+                f"{_display_path(readme_path)} must index `{Path(required_output_path).name}`"
+            )
 
     indexed_artifacts = []
     for path in artifact_paths:
@@ -84,6 +104,13 @@ def summarize_stage09_baseline_artifact_index(
         "artifact_root": _display_path(artifact_root),
         "readme_path": readme_display_path,
         "generated_output_path": _display_path(ARTIFACT_ROOT / OUTPUT_ARTIFACT_NAME),
+        "benchmark_scaffold": {
+            "command": baseline_benchmark_command,
+            "required_outputs": [baseline_report_path, baseline_summary_path],
+            "outputs_indexed_in_readme": True,
+            "safe_to_run_locally": True,
+            "rerun_status": "not_run_by_artifact_index",
+        },
         "indexed_artifact_count": len(indexed_artifacts),
         "indexed_artifacts": indexed_artifacts,
         "runtime_claims": {
@@ -104,6 +131,8 @@ def summarize_stage09_baseline_artifact_index(
             "artifact_files_exist",
             "artifact_files_have_sha256",
             "baseline_readme_indexes_artifacts",
+            "baseline_benchmark_command_indexed",
+            "baseline_report_outputs_indexed",
             "public_paths_are_repo_relative",
             "docs_automation_excluded",
             "benchmark_not_rerun",
