@@ -302,6 +302,18 @@ matrix, closeout gate, command evidence, public path hygiene, blocked runtime
 claims, and Rust data-plane-only scope. It does not rerun the benchmark, claim
 websocket runtime fanout, or approve a Rust whole-project rewrite.
 
+The baseline artifact-index command:
+
+```text
+python3 scripts/summarize_stage09_baseline_artifact_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json
+```
+
+checks that the public Stage 09 baseline README still indexes every checked-in
+artifact in the baseline bundle, records each artifact hash, excludes
+`docs/automation`, and preserves the blocked runtime-stream claim and Rust
+data-plane-only scope. It does not rerun the benchmark, claim websocket runtime
+fanout, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text
