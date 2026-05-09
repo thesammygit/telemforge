@@ -183,6 +183,10 @@ def validate_stage09_runtime_stream_evidence_checklist(
             errors.append(
                 f"{evidence_name} required artifact must be public and repo-relative"
             )
+        elif not (ROOT / required_artifact).is_file():
+            errors.append(
+                f"{evidence_name} required artifact must exist: {required_artifact}"
+            )
 
         claim_status = str(item.get("claim_status", ""))
         claim_status_counts[claim_status] = claim_status_counts.get(claim_status, 0) + 1

@@ -114,6 +114,38 @@ class Stage09RuntimeStreamEvidenceChecklistValidationTest(unittest.TestCase):
 
         self.assertIn("must be public and repo-relative", str(ctx.exception))
 
+    def test_rejects_missing_required_artifact_paths(self) -> None:
+        checklist = json.loads(CHECKLIST_PATH.read_text(encoding="utf-8"))
+        contract = json.loads(CONTRACT_PATH.read_text(encoding="utf-8"))
+        missing_artifact = (
+            "docs/development/artifacts/stage09-realtime-baseline/"
+            "missing-runtime-proof.json"
+        )
+        checklist["probe_checklist"][0]["required_artifact"] = missing_artifact
+        contract["runtime_evidence_gate"]["proof_artifacts"].append(missing_artifact)
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmpdir_path = Path(tmpdir)
+            bad_checklist = tmpdir_path / "bad-checklist.json"
+            bad_contract = tmpdir_path / "bad-contract.json"
+            bad_checklist.write_text(
+                json.dumps(checklist, indent=2, sort_keys=True),
+                encoding="utf-8",
+            )
+            bad_contract.write_text(
+                json.dumps(contract, indent=2, sort_keys=True),
+                encoding="utf-8",
+            )
+
+            with self.assertRaises(RuntimeStreamEvidenceChecklistValidationError) as ctx:
+                validate_stage09_runtime_stream_evidence_checklist(
+                    checklist_path=bad_checklist,
+                    contract_path=bad_contract,
+                    report_path=REPORT_PATH,
+                )
+
+        self.assertIn("required artifact must exist", str(ctx.exception))
+
 
 if __name__ == "__main__":
     unittest.main()
