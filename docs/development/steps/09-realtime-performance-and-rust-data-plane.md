@@ -333,7 +333,8 @@ python3 scripts/summarize_stage09_baseline_artifact_index.py --output docs/devel
 ```
 
 checks that the public Stage 09 baseline README still indexes every checked-in
-artifact in the baseline bundle, records each artifact hash, excludes
+artifact in the baseline bundle, records each artifact hash, binds the
+benchmark scaffold to the command-evidence resource envelope, excludes
 `docs/automation`, and preserves the blocked runtime-stream claim and Rust
 data-plane-only scope. It does not rerun the benchmark, claim websocket runtime
 fanout, or approve a Rust whole-project rewrite.

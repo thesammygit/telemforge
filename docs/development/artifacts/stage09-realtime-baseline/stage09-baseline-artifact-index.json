@@ -2,12 +2,21 @@
   "artifact_root": "docs/development/artifacts/stage09-realtime-baseline",
   "benchmark_scaffold": {
     "command": "python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --summary-output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
+    "command_evidence_bound": true,
+    "command_evidence_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
     "outputs_indexed_in_readme": true,
     "required_outputs": [
       "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
       "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
     ],
     "rerun_status": "not_run_by_artifact_index",
+    "resource_envelope": {
+      "max_expected_memory_mb": 512,
+      "max_expected_runtime_seconds": 30,
+      "uses_network": false,
+      "uses_paid_services": false,
+      "worker_processes": 1
+    },
     "safe_to_run_locally": true
   },
   "generated_output_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json",
@@ -236,6 +245,8 @@
     "artifact_files_have_sha256",
     "baseline_readme_indexes_artifacts",
     "baseline_benchmark_command_indexed",
+    "baseline_command_evidence_bound",
+    "baseline_resource_envelope_bound",
     "baseline_report_outputs_indexed",
     "public_paths_are_repo_relative",
     "docs_automation_excluded",

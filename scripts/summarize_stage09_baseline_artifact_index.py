@@ -24,6 +24,7 @@ OUTPUT_ARTIFACT_NAME = "stage09-baseline-artifact-index.json"
 EXCLUDED_ARTIFACT_NAMES = {"README.md", OUTPUT_ARTIFACT_NAME}
 BASELINE_REPORT_PATH = ARTIFACT_ROOT / "stage09-baseline-report.json"
 BASELINE_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-summary.md"
+COMMAND_EVIDENCE_PATH = ARTIFACT_ROOT / "stage09-baseline-command-evidence.json"
 
 
 class Stage09BaselineArtifactIndexError(Exception):
@@ -39,6 +40,7 @@ def summarize_stage09_baseline_artifact_index(
     artifact_root = Path(artifact_root)
     readme_path = Path(readme_path)
     readme_text = readme_path.read_text(encoding="utf-8")
+    command_evidence = _read_json(COMMAND_EVIDENCE_PATH)
 
     artifact_paths = [
         path
@@ -59,6 +61,57 @@ def summarize_stage09_baseline_artifact_index(
         f"--output {baseline_report_path} "
         f"--summary-output {baseline_summary_path}"
     )
+    command_evidence_command = _format_command(
+        command_evidence.get("benchmark_command"),
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("schema"),
+        "telemforge.stage09_baseline_command_evidence.v1",
+        "command_evidence.schema",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("runtime_claim_status"),
+        "not_claimed",
+        "command_evidence.runtime_claim_status",
+        errors,
+    )
+    _expect_equal(
+        command_evidence_command,
+        baseline_benchmark_command,
+        "benchmark command evidence",
+        errors,
+    )
+    _expect_equal(
+        command_evidence.get("required_outputs"),
+        [baseline_report_path, baseline_summary_path],
+        "command evidence required outputs",
+        errors,
+    )
+    command_resource_envelope = command_evidence.get("resource_envelope")
+    if not isinstance(command_resource_envelope, dict):
+        errors.append("command_evidence.resource_envelope must be a JSON object")
+        command_resource_envelope = {}
+    else:
+        _expect_equal(
+            command_resource_envelope.get("worker_processes"),
+            1,
+            "command_evidence.resource_envelope.worker_processes",
+            errors,
+        )
+        _expect_equal(
+            command_resource_envelope.get("uses_network"),
+            False,
+            "command_evidence.resource_envelope.uses_network",
+            errors,
+        )
+        _expect_equal(
+            command_resource_envelope.get("uses_paid_services"),
+            False,
+            "command_evidence.resource_envelope.uses_paid_services",
+            errors,
+        )
     if baseline_benchmark_command not in readme_text:
         errors.append(
             f"{_display_path(readme_path)} must include the baseline benchmark command"
@@ -107,7 +160,10 @@ def summarize_stage09_baseline_artifact_index(
         "benchmark_scaffold": {
             "command": baseline_benchmark_command,
             "required_outputs": [baseline_report_path, baseline_summary_path],
+            "command_evidence_path": _display_path(COMMAND_EVIDENCE_PATH),
+            "resource_envelope": command_resource_envelope,
             "outputs_indexed_in_readme": True,
+            "command_evidence_bound": True,
             "safe_to_run_locally": True,
             "rerun_status": "not_run_by_artifact_index",
         },
@@ -132,6 +188,8 @@ def summarize_stage09_baseline_artifact_index(
             "artifact_files_have_sha256",
             "baseline_readme_indexes_artifacts",
             "baseline_benchmark_command_indexed",
+            "baseline_command_evidence_bound",
+            "baseline_resource_envelope_bound",
             "baseline_report_outputs_indexed",
             "public_paths_are_repo_relative",
             "docs_automation_excluded",
@@ -170,6 +228,34 @@ def main() -> int:
 def _write_json(path: Path, data: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+
+def _read_json(path: Path) -> dict[str, Any]:
+    data = json.loads(path.read_text(encoding="utf-8"))
+    if not isinstance(data, dict):
+        raise Stage09BaselineArtifactIndexError(
+            f"{_display_path(path)} must be a JSON object"
+        )
+    return data
+
+
+def _format_command(command: Any, errors: list[str]) -> str:
+    if not isinstance(command, list) or not all(
+        isinstance(part, str) for part in command
+    ):
+        errors.append("command_evidence.benchmark_command must be a string list")
+        return ""
+    return " ".join(command)
+
+
+def _expect_equal(
+    actual: Any,
+    expected: Any,
+    label: str,
+    errors: list[str],
+) -> None:
+    if actual != expected:
+        errors.append(f"{label} expected {expected!r}, got {actual!r}")
 
 
 def _validate_public_path(path: str, errors: list[str]) -> None:

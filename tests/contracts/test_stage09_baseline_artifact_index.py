@@ -40,7 +40,22 @@ class Stage09BaselineArtifactIndexTest(unittest.TestCase):
                 "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md",
             ],
         )
+        self.assertEqual(
+            summary["benchmark_scaffold"]["command_evidence_path"],
+            "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
+        )
+        self.assertEqual(
+            summary["benchmark_scaffold"]["resource_envelope"],
+            {
+                "max_expected_memory_mb": 512,
+                "max_expected_runtime_seconds": 30,
+                "uses_network": False,
+                "uses_paid_services": False,
+                "worker_processes": 1,
+            },
+        )
         self.assertTrue(summary["benchmark_scaffold"]["outputs_indexed_in_readme"])
+        self.assertTrue(summary["benchmark_scaffold"]["command_evidence_bound"])
         self.assertEqual(
             summary["benchmark_scaffold"]["rerun_status"],
             "not_run_by_artifact_index",

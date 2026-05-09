@@ -200,9 +200,10 @@ queries.
   rerunning the benchmark or claiming websocket runtime fanout.
 - `stage09-baseline-artifact-index.json`: deterministic public artifact index
   that checks this README still names every checked-in Stage 09 baseline
-  artifact file, hashes each indexed public artifact, keeps `docs/automation`
-  excluded, and preserves the blocked runtime-stream and Rust data-plane-only
-  scope without rerunning the benchmark.
+  artifact file, hashes each indexed public artifact, binds the benchmark
+  scaffold to command evidence and its local resource envelope, keeps
+  `docs/automation` excluded, and preserves the blocked runtime-stream and
+  Rust data-plane-only scope without rerunning the benchmark.
 
 ## Inspect
 
