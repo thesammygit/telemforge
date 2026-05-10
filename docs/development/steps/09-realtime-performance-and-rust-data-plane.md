@@ -339,6 +339,18 @@ benchmark scaffold to the command-evidence resource envelope, excludes
 data-plane-only scope. It does not rerun the benchmark, claim websocket runtime
 fanout, or approve a Rust whole-project rewrite.
 
+The runtime-stream proof-artifact gate command:
+
+```text
+python3 scripts/check_stage09_runtime_stream_proof_artifacts.py
+```
+
+checks that the live telemetry contract and runtime-stream evidence checklist
+still point at existing public, repo-relative proof artifacts before websocket
+fanout, reconnect, backpressure, stream dropped-event reporting, or a narrow
+Rust stream candidate can be claimed. It does not open a websocket, rerun the
+benchmark, or approve a Rust whole-project rewrite.
+
 The baseline refresh check command:
 
 ```text

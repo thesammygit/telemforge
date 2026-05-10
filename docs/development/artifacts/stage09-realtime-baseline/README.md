@@ -260,6 +260,7 @@ python3 scripts/summarize_stage09_baseline_handoff.py
 python3 scripts/summarize_stage09_baseline_handoff.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-handoff-summary.md
 python3 scripts/summarize_stage09_baseline_artifact_index.py
 python3 scripts/summarize_stage09_baseline_artifact_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json
+python3 scripts/check_stage09_runtime_stream_proof_artifacts.py
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
@@ -284,6 +285,7 @@ python3 -m unittest tests/contracts/test_stage09_baseline_verification_manifest.
 python3 -m unittest tests/contracts/test_stage09_baseline_bundle_verifier.py
 python3 -m unittest tests/contracts/test_stage09_target_gap_summary.py
 python3 -m unittest tests/contracts/test_stage09_candidate_promotion_readiness.py
+python3 -m unittest tests/contracts/test_stage09_runtime_stream_proof_artifacts.py
 ```
 
 This report tracks Rust as the future data-plane direction, not a whole-project
@@ -342,6 +344,13 @@ that checklist independently reviewable. It proves the checklist still matches
 the live contract gate, the minimum runtime probes, the pinned public proof
 artifacts, the baseline report bindings, and the public repo safety rules
 without claiming runtime websocket fanout.
+
+The `scripts/check_stage09_runtime_stream_proof_artifacts.py` command gives
+that proof-artifact binding a direct gate. It verifies the checklist-required
+artifacts match the live contract proof-artifact list, exist in public
+repo-relative paths, exclude `docs/automation`, keep every stream claim blocked
+until runtime tests exist, and keep Rust scoped to a future data-plane
+candidate rather than a whole-project rewrite.
 
 The `stage09-target-result-binding-gate.json` artifact keeps the headline
 target comparison independently reviewable. It pins the current report binding,
