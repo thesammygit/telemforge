@@ -17,6 +17,7 @@ ARTIFACT_ROOT = (
 CHECKLIST_PATH = ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 CONTRACT_PATH = ARTIFACT_ROOT / "stage09-live-telemetry-contract.json"
 REPORT_PATH = ARTIFACT_ROOT / "stage09-baseline-report.json"
+ARTIFACT_PATH = ARTIFACT_ROOT / "stage09-runtime-stream-proof-artifact-gate.json"
 
 
 class Stage09RuntimeStreamProofArtifactGateTest(unittest.TestCase):
@@ -80,6 +81,21 @@ class Stage09RuntimeStreamProofArtifactGateTest(unittest.TestCase):
         self.assertEqual(
             output_payload["status"],
             "runtime_stream_proof_artifacts_ready_runtime_blocked",
+        )
+
+    def test_public_gate_artifact_matches_current_result(self) -> None:
+        result = check_stage09_runtime_stream_proof_artifacts(
+            checklist_path=CHECKLIST_PATH,
+            contract_path=CONTRACT_PATH,
+            report_path=REPORT_PATH,
+        )
+        artifact = json.loads(ARTIFACT_PATH.read_text(encoding="utf-8"))
+
+        self.assertEqual(artifact, result)
+        self.assertFalse(artifact["public_repo_safety"]["includes_docs_automation"])
+        self.assertEqual(
+            artifact["runtime_stream_claim_status"],
+            "contract_only_blocked",
         )
 
     def test_rejects_docs_automation_required_artifact(self) -> None:

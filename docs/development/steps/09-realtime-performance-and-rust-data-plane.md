@@ -342,14 +342,15 @@ fanout, or approve a Rust whole-project rewrite.
 The runtime-stream proof-artifact gate command:
 
 ```text
-python3 scripts/check_stage09_runtime_stream_proof_artifacts.py
+python3 scripts/check_stage09_runtime_stream_proof_artifacts.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-proof-artifact-gate.json
 ```
 
 checks that the live telemetry contract and runtime-stream evidence checklist
-still point at existing public, repo-relative proof artifacts before websocket
-fanout, reconnect, backpressure, stream dropped-event reporting, or a narrow
-Rust stream candidate can be claimed. It does not open a websocket, rerun the
-benchmark, or approve a Rust whole-project rewrite.
+still point at existing public, repo-relative proof artifacts and writes the
+reviewable gate artifact before websocket fanout, reconnect, backpressure,
+stream dropped-event reporting, or a narrow Rust stream candidate can be
+claimed. It does not open a websocket, rerun the benchmark, or approve a Rust
+whole-project rewrite.
 
 The baseline refresh check command:
 

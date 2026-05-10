@@ -1,0 +1,41 @@
+{
+  "checklist_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
+  "claim_status_counts": {
+    "not_claimed_until_runtime_test": 6
+  },
+  "contract_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+  "extra_contract_proof_artifacts": [
+    "scripts/validate_stage09_live_telemetry_contract.py"
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "required_artifact_count": 6,
+  "required_evidence_count": 6,
+  "runtime_stream_claim_status": "contract_only_blocked",
+  "rust_scope": "Rust is tracked as a future data-plane candidate for measured stream hot paths; not a whole-project rewrite.",
+  "schema": "telemforge.stage09_runtime_stream_proof_artifact_gate.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "runtime_stream_proof_artifacts_ready_runtime_blocked",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "unique_required_artifact_count": 3,
+  "unique_required_artifacts": [
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "tests/contracts/test_stage09_live_telemetry_contract.py"
+  ],
+  "verified_gates": [
+    "runtime_stream_evidence_validation_passed",
+    "required_artifacts_are_pinned_by_contract",
+    "required_artifacts_exist",
+    "required_artifacts_are_repo_relative",
+    "docs_automation_excluded",
+    "runtime_stream_claim_blocked",
+    "rust_scope_data_plane_only"
+  ]
+}

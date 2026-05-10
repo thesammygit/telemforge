@@ -120,6 +120,12 @@ queries.
   showing that the public runtime-stream evidence checklist matches the live
   telemetry contract gate, required runtime probes, pinned proof artifacts,
   report bindings, public repo safety rules, and Rust data-plane-only scope.
+- `stage09-runtime-stream-proof-artifact-gate.json`: deterministic output from
+  `scripts/check_stage09_runtime_stream_proof_artifacts.py` showing that the
+  runtime-stream evidence checklist and live telemetry contract still point at
+  existing public, repo-relative proof artifacts before websocket fanout,
+  reconnect, backpressure, stream dropped-event reporting, or a narrow Rust
+  stream candidate can be claimed.
 - `stage09-target-result-binding-gate.json`: static public proof that each
   headline metric binding in the candidate report contract matches the current
   baseline report's `target_results.checks` entry, including observed value,
@@ -261,6 +267,7 @@ python3 scripts/summarize_stage09_baseline_handoff.py --output docs/development/
 python3 scripts/summarize_stage09_baseline_artifact_index.py
 python3 scripts/summarize_stage09_baseline_artifact_index.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json
 python3 scripts/check_stage09_runtime_stream_proof_artifacts.py
+python3 scripts/check_stage09_runtime_stream_proof_artifacts.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-proof-artifact-gate.json
 python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py

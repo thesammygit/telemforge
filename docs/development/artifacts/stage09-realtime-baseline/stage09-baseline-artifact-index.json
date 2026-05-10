@@ -20,7 +20,7 @@
     "safe_to_run_locally": true
   },
   "generated_output_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json",
-  "indexed_artifact_count": 33,
+  "indexed_artifact_count": 34,
   "indexed_artifacts": [
     {
       "indexed_in_readme": true,
@@ -201,6 +201,12 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-validation-summary.json",
       "sha256": "1ea281fcbaa8a6398db568b27602fb534caf19a70adb4af6fef77be4c809faf8",
       "size_bytes": 4077
+    },
+    {
+      "indexed_in_readme": true,
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-proof-artifact-gate.json",
+      "sha256": "27e4c7287d0066617b5265a9f47c52d4d22f66f0f742b5a154aec5758b560e17",
+      "size_bytes": 1870
     },
     {
       "indexed_in_readme": true,
