@@ -363,6 +363,18 @@ validation summary artifact. It uses repo-relative public artifact outputs,
 excludes `docs/automation`, keeps runtime stream claims blocked, and keeps Rust
 scoped to a future data-plane candidate rather than a whole-project rewrite.
 
+The artifact-index command-evidence binding command:
+
+```text
+python3 scripts/summarize_stage09_artifact_index_command_evidence_binding.py --output docs/development/artifacts/stage09-baseline-command-evidence-binding/stage09-baseline-artifact-index-command-evidence-binding.json
+```
+
+checks that the public Stage 09 baseline artifact index and command-evidence
+scaffold still describe the same bounded benchmark command, required outputs,
+resource envelope, blocked runtime-stream claim, and Rust data-plane-only
+scope. It does not rerun the benchmark, claim websocket runtime fanout, or
+approve a Rust whole-project rewrite.
+
 The runtime-stream proof-artifact gate command:
 
 ```text
