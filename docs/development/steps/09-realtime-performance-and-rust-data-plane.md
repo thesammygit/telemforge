@@ -399,6 +399,18 @@ metric bindings, excludes `docs/automation`, keeps runtime stream claims
 blocked, and keeps Rust scoped to a future data-plane candidate rather than a
 whole-project rewrite.
 
+The realtime target-command binding command:
+
+```text
+python3 scripts/summarize_stage09_realtime_target_command_binding.py --output docs/development/artifacts/stage09-realtime-target-contract/stage09-realtime-target-command-binding.json
+```
+
+checks that the realtime target contract and baseline command-evidence artifact
+still describe the same bounded benchmark command, required report outputs,
+resource envelope, four headline metrics, blocked runtime-stream claim, and
+Rust data-plane-only scope. It does not rerun the benchmark, claim websocket
+runtime fanout, or approve a Rust whole-project rewrite.
+
 The runtime-stream proof-artifact gate command:
 
 ```text

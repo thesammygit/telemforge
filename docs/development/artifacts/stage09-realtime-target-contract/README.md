@@ -21,5 +21,12 @@ Validate the checked-in contract against the current public baseline with:
 python3 scripts/validate_stage09_realtime_target_contract.py --output docs/development/artifacts/stage09-realtime-target-contract/stage09-realtime-target-contract-validation.json
 ```
 
-The contract is review evidence only. It does not rerun the benchmark, claim
-websocket runtime fanout, or approve Rust as a whole-project rewrite.
+Bind the checked-in contract to the baseline command-evidence scaffold with:
+
+```text
+python3 scripts/summarize_stage09_realtime_target_command_binding.py --output docs/development/artifacts/stage09-realtime-target-contract/stage09-realtime-target-command-binding.json
+```
+
+The contract and command-binding artifacts are review evidence only. They do
+not rerun the benchmark, claim websocket runtime fanout, or approve Rust as a
+whole-project rewrite.
