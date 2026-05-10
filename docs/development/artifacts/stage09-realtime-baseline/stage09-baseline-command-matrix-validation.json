@@ -1,0 +1,44 @@
+{
+  "command_count": 6,
+  "matrix_matches_regenerated_result": true,
+  "matrix_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix.json",
+  "matrix_sha256": "22fd82ff5dc604d7070094259ba197bfffad8d0b4e819705d6442aebcbb541d2",
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "regenerated_matrix_sha256": "22fd82ff5dc604d7070094259ba197bfffad8d0b4e819705d6442aebcbb541d2",
+  "runtime_claims": {
+    "benchmark_rerun": "not_run",
+    "candidate_can_be_promoted": false,
+    "runtime_stream_claim_status": "contract_only_blocked",
+    "websocket_runtime_fanout": "not_claimed"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_command_matrix_validation.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "validated_command_ids": [
+    "baseline_benchmark_report",
+    "candidate_report_validator",
+    "live_contract_validator",
+    "baseline_bundle_verifier",
+    "runtime_stream_proof_artifact_gate",
+    "baseline_artifact_index"
+  ],
+  "verified_gates": [
+    "committed_matrix_matches_regenerated_result",
+    "committed_matrix_bytes_are_deterministic",
+    "command_ids_are_expected",
+    "command_outputs_exist",
+    "commands_are_repo_relative",
+    "docs_automation_excluded",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "rust_scope_data_plane_only"
+  ]
+}

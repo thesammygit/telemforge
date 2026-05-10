@@ -106,6 +106,11 @@ queries.
   artifacts, the single-worker/no-network resource envelope remains explicit,
   runtime stream claims stay blocked, and Rust remains a future data-plane
   candidate rather than a whole-project rewrite.
+- `stage09-baseline-command-matrix-validation.json`: deterministic validation
+  summary proving the checked-in command matrix still matches the regenerated
+  result byte-for-byte, keeps command outputs public and repo-relative, excludes
+  `docs/automation`, blocks runtime stream promotion, and keeps Rust scoped to a
+  future data-plane candidate rather than a whole-project rewrite.
 - `stage09-input-provenance-validation.json`: deterministic output from
   `scripts/validate_stage09_input_provenance.py` showing that the public
   baseline report remains bound to the checked-in telemetry catalog hash,
@@ -247,6 +252,8 @@ python3 scripts/validate_stage09_baseline_command_evidence.py
 python3 scripts/validate_stage09_baseline_command_evidence.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence-validation.json
 python3 scripts/summarize_stage09_baseline_command_matrix.py
 python3 scripts/summarize_stage09_baseline_command_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix.json
+python3 scripts/validate_stage09_baseline_command_matrix.py
+python3 scripts/validate_stage09_baseline_command_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix-validation.json
 python3 scripts/validate_stage09_input_provenance.py
 python3 scripts/validate_stage09_input_provenance.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-input-provenance-validation.json
 python3 scripts/summarize_stage09_baseline_metric_index.py

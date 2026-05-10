@@ -354,14 +354,14 @@ claiming websocket runtime fanout, or approving a Rust whole-project rewrite.
 The baseline command-matrix validation command:
 
 ```text
-python3 scripts/validate_stage09_baseline_command_matrix.py
+python3 scripts/validate_stage09_baseline_command_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix-validation.json
 ```
 
 recomputes the command matrix from current public Stage 09 sources and checks
-that the committed matrix still matches byte-for-byte, uses repo-relative
-public artifact outputs, excludes `docs/automation`, keeps runtime stream
-claims blocked, and keeps Rust scoped to a future data-plane candidate rather
-than a whole-project rewrite.
+that the committed matrix still matches byte-for-byte, then leaves a public
+validation summary artifact. It uses repo-relative public artifact outputs,
+excludes `docs/automation`, keeps runtime stream claims blocked, and keeps Rust
+scoped to a future data-plane candidate rather than a whole-project rewrite.
 
 The runtime-stream proof-artifact gate command:
 

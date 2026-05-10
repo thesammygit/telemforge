@@ -12,6 +12,12 @@ from scripts.validate_stage09_baseline_command_matrix import (
 
 
 ROOT = Path(__file__).resolve().parents[2]
+ARTIFACT_ROOT = (
+    ROOT / "docs" / "development" / "artifacts" / "stage09-realtime-baseline"
+)
+VALIDATION_ARTIFACT_PATH = (
+    ARTIFACT_ROOT / "stage09-baseline-command-matrix-validation.json"
+)
 
 
 class Stage09BaselineCommandMatrixValidationTest(unittest.TestCase):
@@ -42,6 +48,17 @@ class Stage09BaselineCommandMatrixValidationTest(unittest.TestCase):
         )
         self.assertFalse(result["public_repo_safety"]["includes_docs_automation"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
+
+    def test_public_validation_artifact_matches_current_result(self) -> None:
+        result = validate_stage09_baseline_command_matrix()
+        artifact = json.loads(VALIDATION_ARTIFACT_PATH.read_text(encoding="utf-8"))
+
+        self.assertEqual(artifact, result)
+        self.assertEqual(
+            artifact["matrix_path"],
+            "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix.json",
+        )
+        self.assertFalse(artifact["public_repo_safety"]["includes_docs_automation"])
 
     def test_cli_emits_same_validation_payload(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

@@ -20,7 +20,7 @@
     "safe_to_run_locally": true
   },
   "generated_output_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json",
-  "indexed_artifact_count": 35,
+  "indexed_artifact_count": 36,
   "indexed_artifacts": [
     {
       "indexed_in_readme": true,
@@ -69,6 +69,12 @@
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
       "sha256": "ab40f8b8c3b296b382fdd955d366625256a6a71ff505a1f114777215515ded6d",
       "size_bytes": 1721
+    },
+    {
+      "indexed_in_readme": true,
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix-validation.json",
+      "sha256": "c5c1418ad5f7473a2eaa5a1c1c06ee5f25e1813d8863e7ad2dbdcd3de4e0dd30",
+      "size_bytes": 1679
     },
     {
       "indexed_in_readme": true,
