@@ -1,0 +1,102 @@
+{
+  "benchmark_scaffold": {
+    "command": [
+      "python3",
+      "scripts/benchmark_stage09_realtime.py",
+      "--output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "--summary-output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "required_outputs": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "rerun_status": "not_run_by_target_contract",
+    "resource_envelope": {
+      "max_expected_memory_mb": 512,
+      "max_expected_runtime_seconds": 30,
+      "uses_network": false,
+      "uses_paid_services": false,
+      "worker_processes": 1
+    }
+  },
+  "headline_metric_count": 4,
+  "headline_metric_targets": [
+    {
+      "comparison": "at_least",
+      "gap_to_target": 990.0,
+      "meets_target": false,
+      "metric": "telemetry_sample_rate_hz",
+      "observed": 10.0,
+      "report_binding": "metrics.telemetry_sample_rate_hz",
+      "target": 1000,
+      "target_check": "aggregate_sample_rate_hz",
+      "unit": "Hz"
+    },
+    {
+      "comparison": "at_most",
+      "gap_to_target": 0,
+      "meets_target": true,
+      "metric": "p95_alert_latency_ms",
+      "observed": 4.079,
+      "report_binding": "metrics.p95_alert_latency_ms",
+      "target": 50,
+      "target_check": "p95_alert_latency_ms",
+      "unit": "ms"
+    },
+    {
+      "comparison": "at_most",
+      "gap_to_target": 0,
+      "meets_target": true,
+      "metric": "p95_replay_query_latency_ms",
+      "observed": 3.861,
+      "report_binding": "metrics.p95_replay_query_latency_ms",
+      "target": 500,
+      "target_check": "p95_replay_query_latency_ms",
+      "unit": "ms"
+    },
+    {
+      "comparison": "at_most",
+      "gap_to_target": 0,
+      "meets_target": true,
+      "metric": "dropped_event_count",
+      "observed": 0,
+      "report_binding": "metrics.dropped_event_count",
+      "target": 0,
+      "target_check": "dropped_event_count",
+      "unit": "events"
+    }
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "runtime_claims": {
+    "benchmark_rerun": "not_run",
+    "candidate_can_be_promoted": false,
+    "runtime_stream_claim_status": "contract_only_blocked",
+    "websocket_runtime_fanout": "not_claimed"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_realtime_target_contract.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "headline_metrics_bound_to_report_fields",
+    "headline_metrics_bound_to_target_results",
+    "benchmark_command_pinned",
+    "benchmark_required_outputs_pinned",
+    "single_worker_no_network_resource_envelope",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "public_paths_are_repo_relative",
+    "docs_automation_excluded",
+    "rust_scope_data_plane_only"
+  ]
+}

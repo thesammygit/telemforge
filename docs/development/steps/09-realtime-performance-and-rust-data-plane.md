@@ -375,6 +375,18 @@ resource envelope, blocked runtime-stream claim, and Rust data-plane-only
 scope. It does not rerun the benchmark, claim websocket runtime fanout, or
 approve a Rust whole-project rewrite.
 
+The realtime target-contract command:
+
+```text
+python3 scripts/summarize_stage09_realtime_target_contract.py --output docs/development/artifacts/stage09-realtime-target-contract/stage09-realtime-target-contract.json
+```
+
+binds the safe benchmark command/report scaffold to the four headline Stage 09
+metrics: telemetry sample rate, p95 alert latency, p95 replay query latency,
+and dropped-event count. It keeps runtime stream claims blocked, requires
+public repo-relative paths, and preserves Rust as a future data-plane candidate
+rather than a whole-project rewrite.
+
 The runtime-stream proof-artifact gate command:
 
 ```text
