@@ -339,6 +339,18 @@ benchmark scaffold to the command-evidence resource envelope, excludes
 data-plane-only scope. It does not rerun the benchmark, claim websocket runtime
 fanout, or approve a Rust whole-project rewrite.
 
+The baseline command-matrix command:
+
+```text
+python3 scripts/summarize_stage09_baseline_command_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix.json
+```
+
+binds the safe Stage 09 benchmark command to its report outputs and key
+validation commands. It checks headline metric bindings, public repo-relative
+outputs, the single-worker/no-network resource envelope, blocked runtime stream
+claims, and Rust data-plane-only scope without rerunning the benchmark,
+claiming websocket runtime fanout, or approving a Rust whole-project rewrite.
+
 The runtime-stream proof-artifact gate command:
 
 ```text

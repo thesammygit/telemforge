@@ -99,6 +99,13 @@ queries.
   pinned benchmark command, required outputs, local resource envelope, public
   path hygiene, and Rust data-plane-only scope still agree without rerunning the
   benchmark or claiming websocket runtime fanout.
+- `stage09-baseline-command-matrix.json`: deterministic command/report matrix
+  that binds the safe benchmark command to its report outputs and key Stage 09
+  validation commands. It confirms headline metrics remain bound to
+  `target_results.checks`, all command outputs are public repo-relative
+  artifacts, the single-worker/no-network resource envelope remains explicit,
+  runtime stream claims stay blocked, and Rust remains a future data-plane
+  candidate rather than a whole-project rewrite.
 - `stage09-input-provenance-validation.json`: deterministic output from
   `scripts/validate_stage09_input_provenance.py` showing that the public
   baseline report remains bound to the checked-in telemetry catalog hash,
@@ -238,6 +245,8 @@ python3 scripts/verify_stage09_baseline_bundle.py --output docs/development/arti
 python3 scripts/check_stage09_baseline_refresh.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-refresh-check.json
 python3 scripts/validate_stage09_baseline_command_evidence.py
 python3 scripts/validate_stage09_baseline_command_evidence.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence-validation.json
+python3 scripts/summarize_stage09_baseline_command_matrix.py
+python3 scripts/summarize_stage09_baseline_command_matrix.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-matrix.json
 python3 scripts/validate_stage09_input_provenance.py
 python3 scripts/validate_stage09_input_provenance.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-input-provenance-validation.json
 python3 scripts/summarize_stage09_baseline_metric_index.py
@@ -272,6 +281,7 @@ python3 -m unittest tests/backend/test_stage09_baseline_refresh_check.py
 python3 -m unittest tests/contracts/test_stage09_live_telemetry_contract.py
 PYTHONPATH=. python3 tests/contracts/test_stage09_runtime_stream_evidence_checklist.py
 python3 -m unittest tests/contracts/test_stage09_baseline_command_evidence.py
+python3 -m unittest tests/contracts/test_stage09_baseline_command_matrix.py
 python3 -m unittest tests/contracts/test_stage09_input_provenance.py
 python3 -m unittest tests/contracts/test_stage09_baseline_metric_index.py
 python3 -m unittest tests/contracts/test_stage09_baseline_evidence_index.py

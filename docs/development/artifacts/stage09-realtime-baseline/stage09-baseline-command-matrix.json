@@ -1,0 +1,178 @@
+{
+  "benchmark_scaffold": {
+    "command": [
+      "python3",
+      "scripts/benchmark_stage09_realtime.py",
+      "--output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "--summary-output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "command_evidence_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-command-evidence.json",
+    "required_outputs": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+    ],
+    "rerun_status": "not_run_by_command_matrix",
+    "resource_envelope": {
+      "max_expected_memory_mb": 512,
+      "max_expected_runtime_seconds": 30,
+      "uses_network": false,
+      "uses_paid_services": false,
+      "worker_processes": 1
+    }
+  },
+  "command_count": 6,
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/benchmark_stage09_realtime.py",
+        "--output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+        "--summary-output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+      ],
+      "execution_status": "not_run_by_command_matrix",
+      "id": "baseline_benchmark_report",
+      "output_paths": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/validate_stage09_realtime_report.py",
+        "--report",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+        "--contract",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json",
+        "--output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json"
+      ],
+      "execution_status": "public_artifact_exists",
+      "id": "candidate_report_validator",
+      "output_paths": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-report-validation-summary.json"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/validate_stage09_live_telemetry_contract.py",
+        "--output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json"
+      ],
+      "execution_status": "public_artifact_exists",
+      "id": "live_contract_validator",
+      "output_paths": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/verify_stage09_baseline_bundle.py",
+        "--output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json"
+      ],
+      "execution_status": "public_artifact_exists",
+      "id": "baseline_bundle_verifier",
+      "output_paths": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-bundle-verification.json"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/check_stage09_runtime_stream_proof_artifacts.py",
+        "--output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-proof-artifact-gate.json"
+      ],
+      "execution_status": "public_artifact_exists",
+      "id": "runtime_stream_proof_artifact_gate",
+      "output_paths": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-proof-artifact-gate.json"
+      ]
+    },
+    {
+      "command": [
+        "python3",
+        "scripts/summarize_stage09_baseline_artifact_index.py",
+        "--output",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json"
+      ],
+      "execution_status": "public_artifact_exists",
+      "id": "baseline_artifact_index",
+      "output_paths": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-artifact-index.json"
+      ]
+    }
+  ],
+  "headline_metric_bindings": [
+    {
+      "metric": "telemetry_sample_rate_hz",
+      "observed": 10.0,
+      "passed": false,
+      "target": 1000,
+      "target_result_key": "aggregate_sample_rate_hz",
+      "unit": "Hz"
+    },
+    {
+      "metric": "p95_alert_latency_ms",
+      "observed": 4.079,
+      "passed": true,
+      "target": 50,
+      "target_result_key": "p95_alert_latency_ms",
+      "unit": "ms"
+    },
+    {
+      "metric": "p95_replay_query_latency_ms",
+      "observed": 3.861,
+      "passed": true,
+      "target": 500,
+      "target_result_key": "p95_replay_query_latency_ms",
+      "unit": "ms"
+    },
+    {
+      "metric": "dropped_event_count",
+      "observed": 0,
+      "passed": true,
+      "target": 0,
+      "target_result_key": "dropped_event_count",
+      "unit": "events"
+    }
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "purpose": "Pin the safe benchmark and validation commands that define the public Stage 09 realtime baseline scaffold.",
+  "runtime_claims": {
+    "benchmark_rerun": "not_run",
+    "candidate_can_be_promoted": false,
+    "runtime_stream_claim_status": "contract_only_blocked",
+    "websocket_runtime_fanout": "not_claimed"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_baseline_command_matrix.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "verified_gates": [
+    "benchmark_command_bound_to_command_evidence",
+    "benchmark_required_outputs_exist",
+    "headline_metrics_bound_to_target_results",
+    "validation_commands_have_public_outputs",
+    "commands_are_repo_relative",
+    "docs_automation_excluded",
+    "resource_envelope_single_worker_no_network",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "rust_scope_data_plane_only"
+  ]
+}
