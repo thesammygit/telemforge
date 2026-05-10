@@ -387,6 +387,18 @@ and dropped-event count. It keeps runtime stream claims blocked, requires
 public repo-relative paths, and preserves Rust as a future data-plane candidate
 rather than a whole-project rewrite.
 
+The realtime target-contract validation command:
+
+```text
+python3 scripts/validate_stage09_realtime_target_contract.py --output docs/development/artifacts/stage09-realtime-target-contract/stage09-realtime-target-contract-validation.json
+```
+
+recomputes the target contract from the current public baseline and checks that
+the checked-in artifact still matches byte-for-byte, pins the four headline
+metric bindings, excludes `docs/automation`, keeps runtime stream claims
+blocked, and keeps Rust scoped to a future data-plane candidate rather than a
+whole-project rewrite.
+
 The runtime-stream proof-artifact gate command:
 
 ```text

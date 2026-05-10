@@ -1,0 +1,52 @@
+{
+  "benchmark_command": [
+    "python3",
+    "scripts/benchmark_stage09_realtime.py",
+    "--output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "--summary-output",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
+  ],
+  "contract_matches_regenerated_result": true,
+  "contract_path": "docs/development/artifacts/stage09-realtime-target-contract/stage09-realtime-target-contract.json",
+  "contract_sha256": "fe29459d3b1473707f138b2e0eb28f01ef543f9634aa95685e3a8bd0ec6fcd29",
+  "headline_metric_count": 4,
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false
+  },
+  "regenerated_contract_sha256": "fe29459d3b1473707f138b2e0eb28f01ef543f9634aa95685e3a8bd0ec6fcd29",
+  "runtime_claims": {
+    "benchmark_rerun": "not_run",
+    "candidate_can_be_promoted": false,
+    "runtime_stream_claim_status": "contract_only_blocked",
+    "websocket_runtime_fanout": "not_claimed"
+  },
+  "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
+  "schema": "telemforge.stage09_realtime_target_contract_validation.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "status": "passed",
+  "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
+  "validated_metrics": [
+    "telemetry_sample_rate_hz",
+    "p95_alert_latency_ms",
+    "p95_replay_query_latency_ms",
+    "dropped_event_count"
+  ],
+  "verified_gates": [
+    "committed_contract_matches_regenerated_result",
+    "committed_contract_bytes_are_deterministic",
+    "headline_metrics_are_expected",
+    "headline_metrics_bind_report_fields",
+    "benchmark_command_pinned",
+    "benchmark_required_outputs_exist",
+    "single_worker_no_network_resource_envelope",
+    "runtime_stream_claim_blocked",
+    "candidate_promotion_blocked",
+    "docs_automation_excluded",
+    "rust_scope_data_plane_only"
+  ]
+}
