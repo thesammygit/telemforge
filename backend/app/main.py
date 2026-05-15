@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, WebSocket, status
 from pydantic import BaseModel, Field
 
 from backend.app.domain.incidents import build_manual_fault_incident
@@ -21,6 +22,7 @@ from backend.app.storage.sqlite_store import TelemetryStore
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATABASE_PATH = ROOT / "backend" / "data" / "telemforge-stage04.sqlite"
 DEFAULT_CHANNEL_CATALOG_PATH = ROOT / "fixtures" / "telemetry" / "channels.json"
+LIVE_STREAM_HISTORY_LIMIT = 5000
 
 
 class CreateSessionRequest(BaseModel):
@@ -122,6 +124,25 @@ def create_app(
                 limit=limit,
             ),
         }
+
+    @app.websocket("/sessions/{session_id}/telemetry/live")
+    async def stream_live_telemetry(websocket: WebSocket, session_id: str) -> None:
+        store.initialize()
+        if store.get_session(session_id) is None:
+            await websocket.close(
+                code=status.WS_1008_POLICY_VIOLATION,
+                reason="session not found",
+            )
+            return
+
+        await websocket.accept()
+        await websocket.send_json(
+            _build_live_stream_snapshot(
+                session_id=session_id,
+                channels=app.state.channels,
+                store=store,
+            )
+        )
 
     @app.post("/sessions/{session_id}/faults", status_code=201)
     def inject_fault(
@@ -243,3 +264,49 @@ def create_app(
 
 
 app = create_app()
+
+
+def _build_live_stream_snapshot(
+    session_id: str,
+    channels: list[Any],
+    store: TelemetryStore,
+) -> dict[str, Any]:
+    channel_ids = [channel.channel_id for channel in channels]
+    return {
+        "type": "stream.snapshot",
+        "session_id": session_id,
+        "sequence": 1,
+        "emitted_at": _utc_now(),
+        "payload": {
+            "channels": channel_ids,
+            "latest_points": _latest_points_by_channel(
+                session_id=session_id,
+                channel_ids=channel_ids,
+                store=store,
+            ),
+            "active_alerts": store.list_alerts(session_id=session_id, state="active"),
+        },
+    }
+
+
+def _latest_points_by_channel(
+    session_id: str,
+    channel_ids: list[str],
+    store: TelemetryStore,
+) -> list[dict[str, Any]]:
+    latest_points: dict[str, dict[str, Any]] = {}
+    for row in store.list_telemetry(
+        session_id=session_id,
+        limit=LIVE_STREAM_HISTORY_LIMIT,
+    ):
+        latest_points[row["channel_id"]] = row
+
+    return [
+        latest_points[channel_id]
+        for channel_id in channel_ids
+        if channel_id in latest_points
+    ]
+
+
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")

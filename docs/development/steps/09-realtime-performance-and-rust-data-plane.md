@@ -106,6 +106,16 @@ vector, baseline metric binding, runtime evidence gate, and public proof paths.
 It does not open a websocket, claim runtime fanout, or approve a Rust
 whole-project rewrite.
 
+The first runtime websocket probe artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json`
+records the narrow acceptance proof for
+`python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'`.
+That probe proves only existing-session connection acceptance, a first
+`stream.snapshot` envelope, and a first per-session sequence value of `1`.
+Reconnect resume, backpressure, dropped-event stream reporting, sustained
+fanout, and Rust promotion claims remain blocked until later Stage 09 runtime
+probes land.
+
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
 keeps the first Rust spike constrained to one measured data-plane hot path and

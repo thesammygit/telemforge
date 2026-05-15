@@ -58,6 +58,11 @@ queries.
   telemetry contract envelope, reconnect vector, backpressure vector, baseline
   metric binding, runtime evidence gate, and public proof-artifact paths agree
   without claiming runtime websocket fanout.
+- `stage09-live-stream-first-snapshot.json`: deterministic summary of the first
+  narrow runtime websocket probe. It pins the focused unittest command,
+  existing-session setup, first `stream.snapshot` envelope assertions, and the
+  claims that remain blocked until later reconnect/backpressure/fanout probes
+  land.
 - `rust-data-plane-boundary.md`: narrow implementation note that separates the
   Python/FastAPI control plane from future Rust data-plane candidates, with
   promotion gates before any hot path can replace the Python baseline.
