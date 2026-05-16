@@ -143,6 +143,12 @@ def create_app(
                 store=store,
             )
         )
+        follow_on_sample = _build_live_stream_follow_on_sample(
+            session_id=session_id,
+            store=store,
+        )
+        if follow_on_sample is not None:
+            await websocket.send_json(follow_on_sample)
 
     @app.post("/sessions/{session_id}/faults", status_code=201)
     def inject_fault(
@@ -306,6 +312,50 @@ def _latest_points_by_channel(
         for channel_id in channel_ids
         if channel_id in latest_points
     ]
+
+
+def _build_live_stream_follow_on_sample(
+    session_id: str,
+    store: TelemetryStore,
+) -> dict[str, Any] | None:
+    sample_row = _select_follow_on_sample_row(
+        store.list_telemetry(
+            session_id=session_id,
+            limit=LIVE_STREAM_HISTORY_LIMIT,
+        )
+    )
+    if sample_row is None:
+        return None
+
+    return {
+        "type": "telemetry.sample",
+        "session_id": session_id,
+        "sequence": 2,
+        "emitted_at": _utc_now(),
+        "payload": {
+            "channel_id": sample_row["channel_id"],
+            "timestamp": sample_row["timestamp"],
+            "value": sample_row["value"],
+            "unit": sample_row["unit"],
+            "status": sample_row["status"],
+            "quality": sample_row["quality"],
+            "sequence": sample_row["sample"],
+        },
+    }
+
+
+def _select_follow_on_sample_row(
+    telemetry_rows: list[dict[str, Any]],
+) -> dict[str, Any] | None:
+    if not telemetry_rows:
+        return None
+
+    latest_timestamp = telemetry_rows[-1]["timestamp"]
+    latest_sample = telemetry_rows[-1]["sample"]
+    for row in telemetry_rows:
+        if row["timestamp"] == latest_timestamp and row["sample"] == latest_sample:
+            return row
+    return telemetry_rows[-1]
 
 
 def _utc_now() -> str:

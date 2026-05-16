@@ -1,5 +1,6 @@
 import re
 import tempfile
+import threading
 import unittest
 from pathlib import Path
 
@@ -22,8 +23,26 @@ class Stage09LiveStreamTest(unittest.TestCase):
         if tmpdir is not None:
             tmpdir.cleanup()
 
-    def test_live_stream_emits_first_snapshot_for_existing_session(self) -> None:
-        client = self.make_client()
+    def receive_json_with_timeout(self, websocket, timeout_seconds: float = 0.5):
+        result: dict[str, object] = {}
+        error: list[BaseException] = []
+
+        def receive() -> None:
+            try:
+                result["message"] = websocket.receive_json()
+            except BaseException as exc:  # pragma: no cover - exercised in failure cases
+                error.append(exc)
+
+        thread = threading.Thread(target=receive, daemon=True)
+        thread.start()
+        thread.join(timeout_seconds)
+        if thread.is_alive():
+            self.fail(f"expected websocket JSON message within {timeout_seconds} seconds")
+        if error:
+            raise error[0]
+        return result["message"]
+
+    def create_seeded_session(self, client: TestClient) -> dict[str, str]:
         session = client.post(
             "/sessions",
             json={
@@ -53,6 +72,11 @@ class Stage09LiveStreamTest(unittest.TestCase):
             },
         )
         self.assertEqual(fault_response.status_code, 201)
+        return session
+
+    def test_live_stream_emits_first_snapshot_for_existing_session(self) -> None:
+        client = self.make_client()
+        session = self.create_seeded_session(client)
 
         with client.websocket_connect(
             f"/sessions/{session['session_id']}/telemetry/live"
@@ -96,6 +120,31 @@ class Stage09LiveStreamTest(unittest.TestCase):
         self.assertEqual({alert["state"] for alert in active_alerts}, {"active"})
         for alert in active_alerts:
             self.assertRegex(alert["timestamp"], UTC_TIMESTAMP_PATTERN)
+
+    def test_live_stream_emits_monotonic_follow_on_message_for_existing_session(self) -> None:
+        client = self.make_client()
+        session = self.create_seeded_session(client)
+
+        with client.websocket_connect(
+            f"/sessions/{session['session_id']}/telemetry/live"
+        ) as websocket:
+            first_message = websocket.receive_json()
+            second_message = self.receive_json_with_timeout(websocket)
+
+        self.assertEqual(first_message["type"], "stream.snapshot")
+        self.assertEqual(first_message["sequence"], 1)
+        self.assertEqual(second_message["type"], "telemetry.sample")
+        self.assertEqual(second_message["session_id"], session["session_id"])
+        self.assertGreater(second_message["sequence"], first_message["sequence"])
+        self.assertRegex(second_message["emitted_at"], UTC_TIMESTAMP_PATTERN)
+
+        payload = second_message["payload"]
+        self.assertEqual(payload["channel_id"], "comms.downlink_snr_db")
+        self.assertEqual(payload["timestamp"], "2026-05-15T00:10:00Z")
+        self.assertEqual(payload["status"], "critical")
+        self.assertEqual(payload["quality"], "suspect")
+        self.assertEqual(payload["unit"], "dB")
+        self.assertEqual(payload["sequence"], 0)
 
 
 if __name__ == "__main__":

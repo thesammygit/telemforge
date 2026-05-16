@@ -1,0 +1,74 @@
+{
+  "schema": "telemforge.stage09_live_stream_monotonic_sequence.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-monotonic-stream-sequence-2026-05-16",
+  "implementation_status": "monotonic_sequence_runtime_probe_only",
+  "purpose": "Pin the next narrow runtime evidence slice for the Stage 09 live telemetry contract without claiming reconnect resume, backpressure reporting, stream-based dropped-event measurement, runtime websocket fanout, or a Rust whole-project rewrite.",
+  "endpoint": {
+    "protocol": "websocket",
+    "path": "/sessions/{session_id}/telemetry/live",
+    "session_id_source": "existing session created through POST /sessions"
+  },
+  "verification": {
+    "command": "python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'",
+    "test_file": "tests/backend/test_stage09_live_stream.py",
+    "supporting_contract": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "supporting_first_snapshot_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json",
+    "supporting_checklist": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
+    "proved_claims": [
+      "websocket connection acceptance for an existing session",
+      "startup snapshot emitted as the first accepted stream message",
+      "first per-session stream sequence value starts at 1",
+      "same-session follow-on telemetry.sample emitted with a strictly greater stream sequence value"
+    ]
+  },
+  "deterministic_probe_inputs": {
+    "simulation_route": "/sessions/{session_id}/simulations",
+    "fault_route": "/sessions/{session_id}/faults",
+    "scenario": "nominal-orbit-daylight",
+    "simulation_start_at": "2026-05-15T00:00:00Z",
+    "samples": 2,
+    "step_seconds": 10,
+    "seed": 4404,
+    "fault_type": "comms_downlink_fade",
+    "fault_requested_at": "2026-05-15T00:10:00Z"
+  },
+  "expected_ordered_messages": [
+    {
+      "type": "stream.snapshot",
+      "sequence": 1,
+      "payload_assertions": {
+        "channels_source": "fixtures/telemetry/channels.json",
+        "active_alert_channel_ids": [
+          "comms.downlink_snr_db",
+          "comms.packet_error_rate_pct"
+        ]
+      }
+    },
+    {
+      "type": "telemetry.sample",
+      "sequence": 2,
+      "payload_assertions": {
+        "channel_id": "comms.downlink_snr_db",
+        "timestamp": "2026-05-15T00:10:00Z",
+        "status": "critical",
+        "quality": "suspect",
+        "unit": "dB",
+        "sequence": 0
+      }
+    }
+  ],
+  "blocked_claims": [
+    "after_sequence reconnect resume behavior",
+    "drop_oldest_and_report backpressure behavior",
+    "stream-based dropped_event_count reporting",
+    "runtime websocket fanout or promotion readiness"
+  ],
+  "public_repo_safety": {
+    "paths_are_repo_relative": true,
+    "includes_docs_automation": false,
+    "includes_private_runtime_state": false,
+    "includes_absolute_local_paths": false
+  },
+  "rust_scope": "Rust remains the tracked data-plane direction for future measured stream hot paths, not a whole-project rewrite."
+}

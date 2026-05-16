@@ -63,6 +63,11 @@ queries.
   existing-session setup, first `stream.snapshot` envelope assertions, and the
   claims that remain blocked until later reconnect/backpressure/fanout probes
   land.
+- `stage09-live-stream-monotonic-sequence.json`: deterministic summary of the
+  next narrow runtime websocket probe. It pins the same focused unittest
+  command, the ordered snapshot-plus-sample assertions for one accepted
+  session stream, and the claims that remain blocked until later
+  reconnect/backpressure/fanout probes land.
 - `rust-data-plane-boundary.md`: narrow implementation note that separates the
   Python/FastAPI control plane from future Rust data-plane candidates, with
   promotion gates before any hot path can replace the Python baseline.
@@ -361,6 +366,11 @@ that maps each future runtime-stream claim to its required proof artifact and
 runtime probe. Every item remains `not_claimed_until_runtime_test`, so the
 contract still does not claim websocket fanout, reconnect, backpressure, or
 stream-based dropped-event evidence.
+
+The `stage09-live-stream-monotonic-sequence.json` artifact records the first
+same-session ordered-message probe beyond the startup snapshot. It keeps the
+global runtime evidence gate blocked while making the monotonic stream
+sequence slice reviewable as committed public evidence.
 
 The `stage09-runtime-stream-evidence-checklist.json` artifact makes that gate
 reviewable as a checklist. It preserves the contract-only status, pins the

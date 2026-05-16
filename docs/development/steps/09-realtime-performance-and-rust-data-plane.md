@@ -116,6 +116,14 @@ Reconnect resume, backpressure, dropped-event stream reporting, sustained
 fanout, and Rust promotion claims remain blocked until later Stage 09 runtime
 probes land.
 
+The follow-on runtime websocket probe artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-monotonic-sequence.json`
+records the next narrow acceptance proof for the same focused backend test. It
+proves a same-session `telemetry.sample` arrives after the startup snapshot
+with a strictly greater stream `sequence` value while reconnect resume,
+backpressure, dropped-event stream reporting, sustained fanout, and Rust
+promotion claims remain blocked.
+
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
 keeps the first Rust spike constrained to one measured data-plane hot path and
