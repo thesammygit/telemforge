@@ -74,6 +74,33 @@ class Stage09LiveStreamTest(unittest.TestCase):
         self.assertEqual(fault_response.status_code, 201)
         return session
 
+    def create_backpressure_session(self, client: TestClient) -> dict[str, str]:
+        session = client.post(
+            "/sessions",
+            json={
+                "spacecraft_id": "tf-sat-01",
+                "name": "Stage 09 live stream backpressure probe",
+            },
+        ).json()
+
+        for start_at in [
+            "2026-05-17T00:00:00Z",
+            "2026-05-17T00:10:00Z",
+        ]:
+            simulation_response = client.post(
+                f"/sessions/{session['session_id']}/simulations",
+                json={
+                    "scenario": "nominal-orbit-daylight",
+                    "start_at": start_at,
+                    "samples": 24,
+                    "step_seconds": 1,
+                    "seed": 4404,
+                },
+            )
+            self.assertEqual(simulation_response.status_code, 201)
+
+        return session
+
     def test_live_stream_emits_first_snapshot_for_existing_session(self) -> None:
         client = self.make_client()
         session = self.create_seeded_session(client)
@@ -184,6 +211,40 @@ class Stage09LiveStreamTest(unittest.TestCase):
         self.assertEqual(second_message["type"], "telemetry.sample")
         self.assertEqual(second_message["session_id"], session["session_id"])
         self.assertGreater(second_message["sequence"], first_message["sequence"])
+
+    def test_live_stream_slow_client_emits_backpressure_with_dropped_event_count(self) -> None:
+        client = self.make_client()
+        session = self.create_backpressure_session(client)
+
+        with client.websocket_connect(
+            f"/sessions/{session['session_id']}/telemetry/live"
+        ) as websocket:
+            first_message = websocket.receive_json()
+            backpressure_message = self.receive_json_with_timeout(websocket)
+
+        self.assertEqual(first_message["type"], "stream.snapshot")
+        self.assertEqual(first_message["sequence"], 1)
+
+        self.assertEqual(backpressure_message["type"], "stream.backpressure")
+        self.assertEqual(backpressure_message["session_id"], session["session_id"])
+        self.assertGreater(backpressure_message["sequence"], first_message["sequence"])
+        self.assertRegex(backpressure_message["emitted_at"], UTC_TIMESTAMP_PATTERN)
+
+        payload = backpressure_message["payload"]
+        self.assertEqual(payload["policy"], "drop_oldest_and_report")
+        self.assertEqual(payload["client_queue_depth"], 250)
+        self.assertGreater(payload["dropped_event_count"], 0)
+
+        with client.websocket_connect(
+            f"/sessions/{session['session_id']}/telemetry/live"
+        ) as websocket:
+            websocket.receive_json()
+            websocket.receive_json()
+            retained_sample = self.receive_json_with_timeout(websocket)
+
+        self.assertEqual(retained_sample["type"], "telemetry.sample")
+        self.assertEqual(retained_sample["session_id"], session["session_id"])
+        self.assertGreater(retained_sample["sequence"], backpressure_message["sequence"])
 
 
 if __name__ == "__main__":

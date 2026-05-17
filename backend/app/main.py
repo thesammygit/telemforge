@@ -23,6 +23,8 @@ ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_DATABASE_PATH = ROOT / "backend" / "data" / "telemforge-stage04.sqlite"
 DEFAULT_CHANNEL_CATALOG_PATH = ROOT / "fixtures" / "telemetry" / "channels.json"
 LIVE_STREAM_HISTORY_LIMIT = 5000
+LIVE_STREAM_CLIENT_QUEUE_LIMIT = 250
+LIVE_STREAM_BACKPRESSURE_POLICY = "drop_oldest_and_report"
 
 
 class CreateSessionRequest(BaseModel):
@@ -275,6 +277,10 @@ def _build_live_stream_messages(
     channels: list[Any],
     store: TelemetryStore,
 ) -> list[dict[str, Any]]:
+    telemetry_rows = store.list_telemetry(
+        session_id=session_id,
+        limit=LIVE_STREAM_HISTORY_LIMIT,
+    )
     messages = [
         _build_live_stream_snapshot(
             session_id=session_id,
@@ -282,9 +288,23 @@ def _build_live_stream_messages(
             store=store,
         )
     ]
+    queued_sample_messages = _build_live_stream_sample_messages(
+        session_id=session_id,
+        telemetry_rows=telemetry_rows,
+        starting_sequence=2,
+    )
+    if len(queued_sample_messages) > LIVE_STREAM_CLIENT_QUEUE_LIMIT:
+        messages.extend(
+            _build_backpressure_queue_messages(
+                session_id=session_id,
+                queued_sample_messages=queued_sample_messages,
+            )
+        )
+        return messages
+
     follow_on_sample = _build_live_stream_follow_on_sample(
         session_id=session_id,
-        store=store,
+        telemetry_rows=telemetry_rows,
     )
     if follow_on_sample is not None:
         messages.append(follow_on_sample)
@@ -335,13 +355,10 @@ def _latest_points_by_channel(
 
 def _build_live_stream_follow_on_sample(
     session_id: str,
-    store: TelemetryStore,
+    telemetry_rows: list[dict[str, Any]],
 ) -> dict[str, Any] | None:
     sample_row = _select_follow_on_sample_row(
-        store.list_telemetry(
-            session_id=session_id,
-            limit=LIVE_STREAM_HISTORY_LIMIT,
-        )
+        telemetry_rows,
     )
     if sample_row is None:
         return None
@@ -361,6 +378,78 @@ def _build_live_stream_follow_on_sample(
             "sequence": sample_row["sample"],
         },
     }
+
+
+def _build_live_stream_sample_messages(
+    session_id: str,
+    telemetry_rows: list[dict[str, Any]],
+    starting_sequence: int,
+) -> list[dict[str, Any]]:
+    return [
+        _build_live_stream_sample_message(
+            session_id=session_id,
+            telemetry_row=row,
+            sequence=sequence,
+        )
+        for sequence, row in enumerate(telemetry_rows, start=starting_sequence)
+    ]
+
+
+def _build_live_stream_sample_message(
+    session_id: str,
+    telemetry_row: dict[str, Any],
+    sequence: int,
+) -> dict[str, Any]:
+    return {
+        "type": "telemetry.sample",
+        "session_id": session_id,
+        "sequence": sequence,
+        "emitted_at": _utc_now(),
+        "payload": {
+            "channel_id": telemetry_row["channel_id"],
+            "timestamp": telemetry_row["timestamp"],
+            "value": telemetry_row["value"],
+            "unit": telemetry_row["unit"],
+            "status": telemetry_row["status"],
+            "quality": telemetry_row["quality"],
+            "sequence": telemetry_row["sample"],
+        },
+    }
+
+
+def _build_backpressure_queue_messages(
+    session_id: str,
+    queued_sample_messages: list[dict[str, Any]],
+) -> list[dict[str, Any]]:
+    dropped_event_count = len(queued_sample_messages) - LIVE_STREAM_CLIENT_QUEUE_LIMIT
+    retained_messages = queued_sample_messages[dropped_event_count:]
+    return [
+        {
+            "type": "stream.backpressure",
+            "session_id": session_id,
+            "sequence": 2,
+            "emitted_at": _utc_now(),
+            "payload": {
+                "policy": LIVE_STREAM_BACKPRESSURE_POLICY,
+                "client_queue_depth": LIVE_STREAM_CLIENT_QUEUE_LIMIT,
+                "dropped_event_count": dropped_event_count,
+            },
+        },
+        *_renumber_live_stream_messages(retained_messages, starting_sequence=3),
+    ]
+
+
+def _renumber_live_stream_messages(
+    messages: list[dict[str, Any]],
+    starting_sequence: int,
+) -> list[dict[str, Any]]:
+    return [
+        {
+            **message,
+            "sequence": sequence,
+        }
+        for sequence, message in enumerate(messages, start=starting_sequence)
+    ]
 
 
 def _select_follow_on_sample_row(

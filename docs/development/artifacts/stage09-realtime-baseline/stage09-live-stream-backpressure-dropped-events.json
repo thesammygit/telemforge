@@ -1,0 +1,78 @@
+{
+  "schema": "telemforge.stage09_live_stream_backpressure_dropped_events.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-backpressure-dropped-event-tranche-2026-05-17",
+  "implementation_status": "single_client_backpressure_runtime_probe_only",
+  "purpose": "Pin the bounded slow-client runtime evidence slice for Stage 09 live telemetry without claiming sustained fanout, broad load behavior, promotion readiness, or a Rust whole-project rewrite.",
+  "endpoint": {
+    "protocol": "websocket",
+    "path": "/sessions/{session_id}/telemetry/live",
+    "session_id_source": "existing session created through POST /sessions"
+  },
+  "verification": {
+    "command": "python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'",
+    "test_file": "tests/backend/test_stage09_live_stream.py",
+    "runtime_source": "backend/app/main.py",
+    "supporting_contract": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "verified_at_utc": "2026-05-17T17:14:46Z",
+    "proved_claims": [
+      "drop_oldest_and_report backpressure behavior",
+      "stream.backpressure payload reports the contract queue depth",
+      "stream.backpressure payload reports positive dropped_event_count from runtime queued telemetry rows",
+      "delivered stream sequences remain monotonic after the backpressure envelope"
+    ]
+  },
+  "deterministic_probe_inputs": {
+    "simulation_route": "/sessions/{session_id}/simulations",
+    "scenario": "nominal-orbit-daylight",
+    "simulation_start_at_values": [
+      "2026-05-17T00:00:00Z",
+      "2026-05-17T00:10:00Z"
+    ],
+    "samples_per_run": 24,
+    "step_seconds": 1,
+    "seed": 4404,
+    "channel_count": 10,
+    "queued_sample_count": 480
+  },
+  "backpressure_policy": {
+    "policy": "drop_oldest_and_report",
+    "client_queue_depth": 250,
+    "dropped_event_count": 230,
+    "dropped_event_count_formula": "queued_sample_count - client_queue_depth"
+  },
+  "expected_ordered_messages": [
+    {
+      "type": "stream.snapshot",
+      "sequence": 1
+    },
+    {
+      "type": "stream.backpressure",
+      "sequence": 2,
+      "payload_assertions": {
+        "policy": "drop_oldest_and_report",
+        "client_queue_depth": 250,
+        "dropped_event_count_min": 1
+      }
+    },
+    {
+      "type": "telemetry.sample",
+      "sequence": 3,
+      "sequence_rule": "greater than stream.backpressure.sequence"
+    }
+  ],
+  "blocked_claims": [
+    "sustained multi-client websocket fanout",
+    "broad load-test behavior",
+    "candidate promotion readiness",
+    "Rust has replaced a Python control-plane path"
+  ],
+  "public_repo_safety": {
+    "paths_are_repo_relative": true,
+    "includes_docs_automation": false,
+    "includes_private_runtime_state": false,
+    "includes_absolute_local_paths": false,
+    "uses_credentials": false
+  },
+  "rust_scope": "Rust remains the tracked data-plane direction for future measured stream hot paths, not a whole-project rewrite."
+}

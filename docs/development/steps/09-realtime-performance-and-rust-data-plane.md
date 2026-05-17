@@ -133,6 +133,16 @@ requested value, and that reconnecting outside the retained window falls back
 to `stream.snapshot` before follow-on delivery. Backpressure, dropped-event
 stream reporting, sustained fanout, and Rust promotion claims remain blocked.
 
+The backpressure and dropped-event runtime websocket probe artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-backpressure-dropped-events.json`
+records the follow-on bounded slow-client proof for the same focused backend
+test. It proves the single-client runtime path emits `stream.backpressure` with
+`drop_oldest_and_report`, the contract queue depth of `250`, a positive
+`dropped_event_count` sourced from queued telemetry rows, and monotonic
+delivered stream `sequence` values. Sustained multi-client fanout, broad load
+behavior, candidate promotion readiness, and Rust replacement claims remain
+blocked until separate evidence lands.
+
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
 keeps the first Rust spike constrained to one measured data-plane hot path and
