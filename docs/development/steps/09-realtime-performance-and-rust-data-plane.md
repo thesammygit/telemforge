@@ -124,6 +124,15 @@ with a strictly greater stream `sequence` value while reconnect resume,
 backpressure, dropped-event stream reporting, sustained fanout, and Rust
 promotion claims remain blocked.
 
+The reconnect-resume runtime websocket probe artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-reconnect-resume.json`
+records the next narrow acceptance proof for the same focused backend test. It
+proves reconnecting with `after_sequence=1` resumes with a contract-compatible
+`telemetry.sample` whose per-session stream `sequence` is greater than the
+requested value, and that reconnecting outside the retained window falls back
+to `stream.snapshot` before follow-on delivery. Backpressure, dropped-event
+stream reporting, sustained fanout, and Rust promotion claims remain blocked.
+
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
 keeps the first Rust spike constrained to one measured data-plane hot path and

@@ -136,19 +136,17 @@ def create_app(
             return
 
         await websocket.accept()
-        await websocket.send_json(
-            _build_live_stream_snapshot(
-                session_id=session_id,
-                channels=app.state.channels,
-                store=store,
-            )
-        )
-        follow_on_sample = _build_live_stream_follow_on_sample(
+        live_stream_messages = _build_live_stream_messages(
             session_id=session_id,
+            channels=app.state.channels,
             store=store,
         )
-        if follow_on_sample is not None:
-            await websocket.send_json(follow_on_sample)
+        after_sequence = _parse_after_sequence(websocket)
+        for message in _select_live_stream_messages(
+            live_stream_messages,
+            after_sequence=after_sequence,
+        ):
+            await websocket.send_json(message)
 
     @app.post("/sessions/{session_id}/faults", status_code=201)
     def inject_fault(
@@ -272,6 +270,27 @@ def create_app(
 app = create_app()
 
 
+def _build_live_stream_messages(
+    session_id: str,
+    channels: list[Any],
+    store: TelemetryStore,
+) -> list[dict[str, Any]]:
+    messages = [
+        _build_live_stream_snapshot(
+            session_id=session_id,
+            channels=channels,
+            store=store,
+        )
+    ]
+    follow_on_sample = _build_live_stream_follow_on_sample(
+        session_id=session_id,
+        store=store,
+    )
+    if follow_on_sample is not None:
+        messages.append(follow_on_sample)
+    return messages
+
+
 def _build_live_stream_snapshot(
     session_id: str,
     channels: list[Any],
@@ -356,6 +375,33 @@ def _select_follow_on_sample_row(
         if row["timestamp"] == latest_timestamp and row["sample"] == latest_sample:
             return row
     return telemetry_rows[-1]
+
+
+def _parse_after_sequence(websocket: WebSocket) -> int | None:
+    raw_after_sequence = websocket.query_params.get("after_sequence")
+    if raw_after_sequence in {None, ""}:
+        return None
+
+    try:
+        after_sequence = int(raw_after_sequence)
+    except ValueError:
+        return None
+    return after_sequence if after_sequence >= 0 else None
+
+
+def _select_live_stream_messages(
+    live_stream_messages: list[dict[str, Any]],
+    after_sequence: int | None,
+) -> list[dict[str, Any]]:
+    if after_sequence is None:
+        return live_stream_messages
+
+    resumed_messages = [
+        message
+        for message in live_stream_messages
+        if int(message["sequence"]) > after_sequence
+    ]
+    return resumed_messages or live_stream_messages
 
 
 def _utc_now() -> str:

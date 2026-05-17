@@ -146,6 +146,45 @@ class Stage09LiveStreamTest(unittest.TestCase):
         self.assertEqual(payload["unit"], "dB")
         self.assertEqual(payload["sequence"], 0)
 
+    def test_live_stream_reconnect_after_sequence_replays_follow_on_message(self) -> None:
+        client = self.make_client()
+        session = self.create_seeded_session(client)
+
+        with client.websocket_connect(
+            f"/sessions/{session['session_id']}/telemetry/live?after_sequence=1"
+        ) as websocket:
+            message = websocket.receive_json()
+
+        self.assertEqual(message["type"], "telemetry.sample")
+        self.assertEqual(message["session_id"], session["session_id"])
+        self.assertGreater(message["sequence"], 1)
+        self.assertRegex(message["emitted_at"], UTC_TIMESTAMP_PATTERN)
+
+        payload = message["payload"]
+        self.assertEqual(payload["channel_id"], "comms.downlink_snr_db")
+        self.assertEqual(payload["timestamp"], "2026-05-15T00:10:00Z")
+        self.assertEqual(payload["status"], "critical")
+        self.assertEqual(payload["quality"], "suspect")
+        self.assertEqual(payload["unit"], "dB")
+        self.assertEqual(payload["sequence"], 0)
+
+    def test_live_stream_reconnect_outside_retained_window_falls_back_to_snapshot(self) -> None:
+        client = self.make_client()
+        session = self.create_seeded_session(client)
+
+        with client.websocket_connect(
+            f"/sessions/{session['session_id']}/telemetry/live?after_sequence=99"
+        ) as websocket:
+            first_message = websocket.receive_json()
+            second_message = self.receive_json_with_timeout(websocket)
+
+        self.assertEqual(first_message["type"], "stream.snapshot")
+        self.assertEqual(first_message["session_id"], session["session_id"])
+        self.assertEqual(first_message["sequence"], 1)
+        self.assertEqual(second_message["type"], "telemetry.sample")
+        self.assertEqual(second_message["session_id"], session["session_id"])
+        self.assertGreater(second_message["sequence"], first_message["sequence"])
+
 
 if __name__ == "__main__":
     unittest.main()
