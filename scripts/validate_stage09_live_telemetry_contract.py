@@ -1,8 +1,8 @@
 """Validate the Stage 09 live telemetry contract artifact.
 
 This is a deterministic contract gate. It checks the websocket envelope,
-reconnect, backpressure, benchmark binding, and runtime evidence gate without
-opening a websocket or claiming runtime fanout.
+reconnect, backpressure, benchmark binding, and runtime evidence gate against
+the landed bounded runtime websocket probes.
 """
 
 from __future__ import annotations
@@ -48,7 +48,7 @@ def validate_stage09_live_telemetry_contract(
     )
     _expect_equal(
         contract.get("implementation_status"),
-        "contract_only_no_runtime_fanout",
+        "runtime_stream_probes_verified_bounded_fanout",
         "contract.implementation_status",
         errors,
     )
@@ -87,7 +87,7 @@ def validate_stage09_live_telemetry_contract(
         "contract_path": _display_path(contract_path),
         "baseline_report_path": _display_path(report_path),
         "implementation_status": contract["implementation_status"],
-        "runtime_fanout_claim": "not_claimed_until_runtime_test",
+        "runtime_fanout_claim": evidence_gate["status"],
         "rust_scope": contract["runtime_boundary"]["tracked_direction"],
         "validated_gates": [
             "websocket_endpoint_contract",
@@ -317,7 +317,7 @@ def _validate_runtime_evidence_gate(
     )
     _expect_equal(
         gate.get("status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime_evidence_gate.status",
         errors,
     )
@@ -328,7 +328,7 @@ def _validate_runtime_evidence_gate(
     for evidence_name, item in items.items():
         _expect_equal(
             item.get("claim_status"),
-            "not_claimed_until_runtime_test",
+            "runtime_verified",
             f"runtime evidence {evidence_name} claim_status",
             errors,
         )
@@ -341,8 +341,8 @@ def _validate_runtime_evidence_gate(
         if item.get("proof_artifact") not in gate.get("proof_artifacts", []):
             errors.append(f"runtime evidence proof artifact is not listed: {evidence_name}")
     for forbidden in [
-        "runtime websocket fanout",
-        "stream-based dropped-event count is measured",
+        "sustained multi-client websocket fanout",
+        "candidate promotion readiness",
         "Rust has replaced a Python control-plane path",
     ]:
         if forbidden not in gate.get("forbidden_without_evidence", []):

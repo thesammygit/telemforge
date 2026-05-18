@@ -34,7 +34,7 @@
     "throughput_gap_profile",
     "runtime_boundary"
   ],
-  "stable_report_fingerprint_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+  "stable_report_fingerprint_sha256": "e266b878ee90920280e803e7818e73f61203ca7e11c23cd15bff377f2dad2e01",
   "stage": "09-realtime-performance-and-rust-data-plane",
   "status": "passed",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",

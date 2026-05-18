@@ -1,9 +1,7 @@
 {
   "baseline_verdict_status": "baseline_only_targets_not_met",
   "blocking_reasons": [
-    "runtime_stream_claim_blocked",
-    "missed_realtime_targets_remain",
-    "runtime_probe_evidence_missing"
+    "missed_realtime_targets_remain"
   ],
   "candidate_can_be_promoted": false,
   "missed_targets": [
@@ -11,21 +9,14 @@
     "channel_count",
     "per_channel_sample_rate_hz"
   ],
-  "missing_runtime_probe_evidence": [
-    "websocket connection acceptance for an existing session",
-    "startup snapshot emitted before incremental telemetry samples",
-    "monotonic per-session stream sequence values",
-    "after_sequence reconnect resume behavior",
-    "drop_oldest_and_report backpressure behavior",
-    "dropped_event_count reported from stream.backpressure payloads"
-  ],
+  "missing_runtime_probe_evidence": [],
   "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
   "passed_targets": [
     "dropped_event_count",
     "p95_alert_latency_ms",
     "p95_replay_query_latency_ms"
   ],
-  "promotion_rule": "Do not promote a Python/FastAPI refresh or narrow Rust stream fanout candidate until runtime stream claims are backed by probe evidence, missed realtime targets are improved or explicitly versioned, and the compatible report contract remains intact.",
+  "promotion_rule": "Do not promote a Python/FastAPI refresh or narrow Rust stream fanout candidate until missed realtime targets are improved or explicitly versioned and the compatible report contract remains intact.",
   "public_repo_safety": {
     "includes_docs_automation": false,
     "paths_are_repo_relative": true,
@@ -48,7 +39,7 @@
     "uses_paid_services": false,
     "worker_processes": 1
   },
-  "runtime_stream_claim_status": "contract_only_blocked",
+  "runtime_stream_claim_status": "runtime_verified_bounded_fanout",
   "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
   "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
   "source_artifacts": {
@@ -57,13 +48,13 @@
     "target_gap_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json"
   },
   "stage": "09-realtime-performance-and-rust-data-plane",
-  "status": "blocked_pending_runtime_evidence",
+  "status": "blocked_pending_target_misses",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
   "verified_gates": [
     "baseline_readiness_summary_loaded",
     "target_gap_summary_loaded",
     "runtime_stream_evidence_checklist_loaded",
-    "runtime_stream_claim_blocked_until_probe_evidence",
+    "runtime_stream_claim_verified_by_probe_evidence",
     "missed_targets_must_improve_or_be_versioned",
     "rust_scope_data_plane_only",
     "docs_automation_excluded"

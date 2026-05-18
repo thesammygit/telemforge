@@ -246,6 +246,45 @@ class Stage09LiveStreamTest(unittest.TestCase):
         self.assertEqual(retained_sample["session_id"], session["session_id"])
         self.assertGreater(retained_sample["sequence"], backpressure_message["sequence"])
 
+    def test_live_stream_two_clients_have_independent_bounded_fanout_queues(self) -> None:
+        client = self.make_client()
+        session = self.create_backpressure_session(client)
+        stream_path = f"/sessions/{session['session_id']}/telemetry/live"
+
+        with client.websocket_connect(stream_path) as first_websocket:
+            with client.websocket_connect(stream_path) as second_websocket:
+                first_snapshot = first_websocket.receive_json()
+                second_snapshot = second_websocket.receive_json()
+                first_backpressure = self.receive_json_with_timeout(first_websocket)
+                second_backpressure = self.receive_json_with_timeout(second_websocket)
+                first_sample = self.receive_json_with_timeout(first_websocket)
+                second_sample = self.receive_json_with_timeout(second_websocket)
+
+        for snapshot in [first_snapshot, second_snapshot]:
+            self.assertEqual(snapshot["type"], "stream.snapshot")
+            self.assertEqual(snapshot["session_id"], session["session_id"])
+            self.assertEqual(snapshot["sequence"], 1)
+            self.assertEqual(snapshot["payload"]["stream_scope"], "per_connection")
+            self.assertEqual(snapshot["payload"]["client_queue_depth"], 250)
+
+        dropped_event_counts = []
+        for backpressure in [first_backpressure, second_backpressure]:
+            self.assertEqual(backpressure["type"], "stream.backpressure")
+            self.assertEqual(backpressure["session_id"], session["session_id"])
+            self.assertEqual(backpressure["sequence"], 2)
+            self.assertEqual(backpressure["payload"]["policy"], "drop_oldest_and_report")
+            self.assertEqual(backpressure["payload"]["queue_scope"], "per_connection")
+            self.assertEqual(backpressure["payload"]["client_queue_depth"], 250)
+            self.assertGreater(backpressure["payload"]["dropped_event_count"], 0)
+            dropped_event_counts.append(backpressure["payload"]["dropped_event_count"])
+
+        self.assertEqual(len(set(dropped_event_counts)), 1)
+        for sample in [first_sample, second_sample]:
+            self.assertEqual(sample["type"], "telemetry.sample")
+            self.assertEqual(sample["session_id"], session["session_id"])
+            self.assertEqual(sample["sequence"], 3)
+            self.assertNotIn("dropped_event_count", sample["payload"])
+
 
 if __name__ == "__main__":
     unittest.main()

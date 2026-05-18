@@ -1,9 +1,9 @@
 """Verify the public Stage 09 realtime baseline artifact bundle.
 
-This command ties the existing benchmark report, validation summary, and
-verification manifest together without running a load test or claiming
-websocket runtime fanout. It is a deterministic review gate for the current
-Python/FastAPI control-plane baseline and future narrow Rust data-plane
+This command ties the existing benchmark report, validation summary, runtime
+proof artifacts, and verification manifest together without running a load test
+or claiming promotion readiness. It is a deterministic review gate for the
+current Python/FastAPI control-plane baseline and future narrow Rust data-plane
 candidates.
 """
 
@@ -504,7 +504,7 @@ def _validate_refresh_check(
     )
     _expect_equal(
         refresh_check.get("runtime_evidence_gate_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "refresh_check.runtime_evidence_gate_status",
         errors,
     )
@@ -972,7 +972,7 @@ def _validate_baseline_readiness_summary(
     _expect_equal(summary, expected, "baseline readiness summary artifact", errors)
     _expect_equal(
         summary.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "baseline readiness runtime stream claim status",
         errors,
     )
@@ -1028,7 +1028,7 @@ def _validate_promotion_readiness(
     )
     _expect_equal(
         promotion_readiness.get("status"),
-        "blocked_pending_runtime_evidence",
+        "blocked_pending_target_misses",
         "candidate promotion readiness status",
         errors,
     )
@@ -1040,7 +1040,7 @@ def _validate_promotion_readiness(
     )
     _expect_equal(
         promotion_readiness.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "candidate promotion readiness runtime stream claim",
         errors,
     )
@@ -1097,7 +1097,7 @@ def _validate_candidate_metric_delta(
     )
     _expect_equal(
         candidate_metric_delta.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "candidate_metric_delta.runtime_stream_claim_status",
         errors,
     )

@@ -2,7 +2,7 @@
 
 This command reads committed Stage 09 baseline artifacts and emits a compact
 JSON index over the headline benchmark metrics. It does not rerun the
-benchmark, open a websocket, or approve Rust as a whole-project rewrite.
+benchmark or approve Rust as a whole-project rewrite.
 """
 
 from __future__ import annotations
@@ -73,7 +73,7 @@ def summarize_stage09_baseline_metric_index(
     )
     _expect_equal(
         runtime_gate_status,
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime stream evidence gate",
         errors,
     )

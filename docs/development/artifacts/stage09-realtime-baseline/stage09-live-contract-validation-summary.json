@@ -1,11 +1,16 @@
 {
   "baseline_report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
   "contract_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
-  "implementation_status": "contract_only_no_runtime_fanout",
+  "implementation_status": "runtime_stream_probes_verified_bounded_fanout",
   "proof_artifacts": [
     "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
     "scripts/validate_stage09_live_telemetry_contract.py",
-    "tests/contracts/test_stage09_live_telemetry_contract.py",
+    "tests/backend/test_stage09_live_stream.py",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-monotonic-sequence.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-reconnect-resume.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-backpressure-dropped-events.json",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json",
     "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
   ],
   "required_runtime_evidence": [
@@ -14,9 +19,10 @@
     "monotonic per-session stream sequence values",
     "after_sequence reconnect resume behavior",
     "drop_oldest_and_report backpressure behavior",
-    "dropped_event_count reported from stream.backpressure payloads"
+    "dropped_event_count reported from stream.backpressure payloads",
+    "bounded two-client fanout keeps per-connection queues independent"
   ],
-  "runtime_fanout_claim": "not_claimed_until_runtime_test",
+  "runtime_fanout_claim": "runtime_verified_bounded_fanout",
   "rust_scope": "Rust data plane direction, not a whole-project rewrite.",
   "schema": "telemforge.stage09_live_contract_validation.v1",
   "status": "passed",

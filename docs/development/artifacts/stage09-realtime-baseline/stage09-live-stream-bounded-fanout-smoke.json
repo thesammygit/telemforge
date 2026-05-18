@@ -1,0 +1,89 @@
+{
+  "schema": "telemforge.stage09_live_stream_bounded_fanout_smoke.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-runtime-evidence-fanout-closeout-2026-05-18",
+  "implementation_status": "bounded_two_client_fanout_runtime_probe",
+  "purpose": "Pin the bounded two-client runtime evidence slice for Stage 09 live telemetry without claiming sustained load behavior, promotion readiness, or a Rust whole-project rewrite.",
+  "endpoint": {
+    "protocol": "websocket",
+    "path": "/sessions/{session_id}/telemetry/live",
+    "session_id_source": "existing session created through POST /sessions"
+  },
+  "verification": {
+    "command": "python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'",
+    "test_file": "tests/backend/test_stage09_live_stream.py",
+    "runtime_source": "backend/app/main.py",
+    "supporting_contract": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "verified_at_utc": "2026-05-18T04:35:00Z",
+    "proved_claims": [
+      "bounded two-client fanout keeps per-connection queues independent",
+      "each simultaneous client receives its own stream.snapshot with sequence 1",
+      "each simultaneous client receives its own stream.backpressure envelope with sequence 2",
+      "each simultaneous client receives a retained telemetry.sample with sequence 3",
+      "dropped_event_count remains scoped to stream.backpressure payloads and does not leak into telemetry.sample payloads"
+    ]
+  },
+  "deterministic_probe_inputs": {
+    "simulation_route": "/sessions/{session_id}/simulations",
+    "scenario": "nominal-orbit-daylight",
+    "simulation_start_at_values": [
+      "2026-05-17T00:00:00Z",
+      "2026-05-17T00:10:00Z"
+    ],
+    "samples_per_run": 24,
+    "step_seconds": 1,
+    "seed": 4404,
+    "channel_count": 10,
+    "queued_sample_count": 480,
+    "simultaneous_client_count": 2
+  },
+  "fanout_policy": {
+    "stream_scope": "per_connection",
+    "queue_scope": "per_connection",
+    "client_queue_depth": 250,
+    "dropped_event_count": 230,
+    "dropped_event_count_formula": "queued_sample_count - client_queue_depth"
+  },
+  "expected_per_client_messages": [
+    {
+      "type": "stream.snapshot",
+      "sequence": 1,
+      "payload_assertions": {
+        "stream_scope": "per_connection",
+        "client_queue_depth": 250
+      }
+    },
+    {
+      "type": "stream.backpressure",
+      "sequence": 2,
+      "payload_assertions": {
+        "policy": "drop_oldest_and_report",
+        "queue_scope": "per_connection",
+        "client_queue_depth": 250,
+        "dropped_event_count_min": 1
+      }
+    },
+    {
+      "type": "telemetry.sample",
+      "sequence": 3,
+      "sequence_rule": "greater than stream.backpressure.sequence",
+      "payload_forbidden_fields": [
+        "dropped_event_count"
+      ]
+    }
+  ],
+  "blocked_claims": [
+    "sustained multi-client websocket fanout",
+    "broad load-test behavior",
+    "candidate promotion readiness",
+    "Rust has replaced a Python control-plane path"
+  ],
+  "public_repo_safety": {
+    "paths_are_repo_relative": true,
+    "includes_docs_automation": false,
+    "includes_private_runtime_state": false,
+    "includes_absolute_local_paths": false,
+    "uses_credentials": false
+  },
+  "rust_scope": "Rust remains the tracked data-plane direction for future measured stream hot paths, not a whole-project rewrite."
+}

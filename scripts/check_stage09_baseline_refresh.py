@@ -2,8 +2,8 @@
 
 This command reruns the bounded Python/FastAPI benchmark in a temporary SQLite
 database and compares the stable report fingerprint with the committed public
-baseline report. It is a lightweight refresh gate, not a load test and not a
-runtime websocket fanout claim.
+baseline report. It is a lightweight refresh gate, not a load test or promotion
+readiness claim.
 """
 
 from __future__ import annotations
@@ -85,7 +85,7 @@ def check_stage09_baseline_refresh(
     )
     _expect_equal(
         runtime_gate,
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "stream_contract_profile.runtime_evidence_gate.status",
         errors,
     )
@@ -130,7 +130,7 @@ def check_stage09_baseline_refresh(
         "verified_gates": [
             "fresh_run_stable_fingerprint_matches",
             "resource_envelope_preserved",
-            "runtime_stream_claim_remains_blocked",
+            "runtime_stream_claim_verified",
             "rust_scope_data_plane_only",
         ],
     }

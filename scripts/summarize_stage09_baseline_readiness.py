@@ -1,8 +1,8 @@
 """Summarize the public Stage 09 realtime baseline readiness gates.
 
 This command reads the committed Stage 09 baseline artifacts and emits a small
-deterministic JSON summary for reviewers. It does not run the benchmark, open a
-websocket, or approve Rust as a whole-project rewrite.
+deterministic JSON summary for reviewers. It does not run the benchmark or
+approve Rust as a whole-project rewrite.
 """
 
 from __future__ import annotations
@@ -101,7 +101,7 @@ def summarize_stage09_baseline_readiness(
     )
     _expect_equal(
         runtime_gate_status,
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime stream evidence gate",
         errors,
     )
@@ -174,7 +174,7 @@ def summarize_stage09_baseline_readiness(
             "live_contract_validation_passed",
             "refresh_check_passed",
             "target_result_binding_passed",
-            "runtime_stream_claim_blocked",
+            "runtime_stream_claim_verified",
             "baseline_is_comparison_evidence_only",
             "rust_scope_data_plane_only",
             "docs_automation_excluded",

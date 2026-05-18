@@ -9,9 +9,7 @@
     "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-summary.md"
   ],
   "blocking_reasons": [
-    "runtime_stream_claim_blocked",
-    "missed_realtime_targets_remain",
-    "runtime_probe_evidence_missing"
+    "missed_realtime_targets_remain"
   ],
   "headline_metric_order": [
     "channel_count",
@@ -26,7 +24,7 @@
     "per_channel_sample_rate_hz",
     "aggregate_sample_rate_hz"
   ],
-  "missing_runtime_probe_evidence_count": 6,
+  "missing_runtime_probe_evidence_count": 0,
   "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
   "passed_metrics": [
     "p95_alert_latency_ms",
@@ -62,7 +60,7 @@
   "runtime_claims": {
     "benchmark_runtime_claim_status": "not_claimed",
     "candidate_can_be_promoted": false,
-    "stream_runtime_claim_status": "contract_only_blocked"
+    "stream_runtime_claim_status": "runtime_verified_bounded_fanout"
   },
   "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
   "schema": "telemforge.stage09_baseline_evidence_index.v1",
@@ -73,7 +71,7 @@
     "metric_index": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json"
   },
   "stable_fingerprint": {
-    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "digest_sha256": "e266b878ee90920280e803e7818e73f61203ca7e11c23cd15bff377f2dad2e01",
     "stable_identity_field_count": 21
   },
   "stage": "09-realtime-performance-and-rust-data-plane",
@@ -87,7 +85,7 @@
   "verified_gates": [
     "metric_index_loaded",
     "baseline_command_evidence_validation_passed",
-    "promotion_readiness_blocks_runtime_claims",
+    "promotion_readiness_blocks_target_misses",
     "baseline_readiness_keeps_comparison_scope",
     "target_counts_match_passed_and_missed_metrics",
     "resource_envelope_matches_across_artifacts",

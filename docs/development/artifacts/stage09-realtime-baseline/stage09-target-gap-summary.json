@@ -28,7 +28,7 @@
     "dropped_event_count does not regress",
     "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
   ],
-  "runtime_stream_claim_status": "contract_only_blocked",
+  "runtime_stream_claim_status": "runtime_verified_bounded_fanout",
   "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
   "schema": "telemforge.stage09_target_gap_summary.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
@@ -71,7 +71,7 @@
       "gap_to_target": 0,
       "meets_target": true,
       "metric": "p95_alert_latency_ms",
-      "observed": 4.079,
+      "observed": 3.328,
       "target": 50,
       "unit": "ms"
     },
@@ -80,7 +80,7 @@
       "gap_to_target": 0,
       "meets_target": true,
       "metric": "p95_replay_query_latency_ms",
-      "observed": 3.861,
+      "observed": 4.258,
       "target": 500,
       "unit": "ms"
     },

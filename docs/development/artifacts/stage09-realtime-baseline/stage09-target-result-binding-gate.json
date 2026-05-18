@@ -37,7 +37,7 @@
     },
     "p95_alert_latency_ms": {
       "report_binding": "metrics.p95_alert_latency_ms",
-      "observed": 4.079,
+      "observed": 3.328,
       "target": 50,
       "comparison": "at_most",
       "unit": "ms",
@@ -46,7 +46,7 @@
     },
     "p95_replay_query_latency_ms": {
       "report_binding": "metrics.p95_replay_query_latency_ms",
-      "observed": 3.861,
+      "observed": 4.258,
       "target": 500,
       "comparison": "at_most",
       "unit": "ms",

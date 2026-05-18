@@ -91,9 +91,9 @@ direction for hot paths, not as a whole-project rewrite.
 
 The companion contract artifact
 `docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json`
-defines the websocket/live telemetry envelope, reconnect token, backpressure
-policy, dropped-event reporting shape, and deterministic contract validation
-vectors before runtime fanout is implemented.
+defines the websocket/live telemetry envelope, reconnect token, per-connection
+backpressure policy, dropped-event reporting shape, bounded two-client fanout
+proof, and deterministic contract validation vectors.
 
 The live contract validator command:
 
@@ -139,9 +139,16 @@ records the follow-on bounded slow-client proof for the same focused backend
 test. It proves the single-client runtime path emits `stream.backpressure` with
 `drop_oldest_and_report`, the contract queue depth of `250`, a positive
 `dropped_event_count` sourced from queued telemetry rows, and monotonic
-delivered stream `sequence` values. Sustained multi-client fanout, broad load
-behavior, candidate promotion readiness, and Rust replacement claims remain
-blocked until separate evidence lands.
+delivered stream `sequence` values.
+
+The bounded fanout runtime websocket probe artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json`
+records the two-client proof for the focused backend test. It proves two
+simultaneous clients on one session each receive independent per-connection
+`stream.snapshot`, `stream.backpressure`, and retained `telemetry.sample`
+messages without shared queue state or dropped-event leakage. Sustained
+multi-client load, candidate promotion readiness, and Rust replacement claims
+remain blocked until target evidence improves.
 
 The boundary note
 `docs/development/artifacts/stage09-realtime-baseline/rust-data-plane-boundary.md`
@@ -185,10 +192,10 @@ python3 scripts/summarize_stage09_baseline_readiness.py --output docs/developmen
 ```
 
 reads the public Stage 09 artifacts and produces a compact review summary with
-the baseline verdict, target pass/miss status, stable fingerprint, blocked
-runtime stream claim, and next narrow Rust data-plane candidate. It does not
-rerun the benchmark, claim websocket fanout, or approve a Rust whole-project
-rewrite.
+the baseline verdict, target pass/miss status, stable fingerprint, bounded
+runtime stream proof status, and next narrow Rust data-plane candidate. It does
+not rerun the benchmark, claim sustained websocket fanout, or approve a Rust
+whole-project rewrite.
 
 The candidate promotion-readiness command:
 
@@ -199,8 +206,7 @@ python3 scripts/check_stage09_candidate_promotion_readiness.py --output docs/dev
 combines the readiness summary, target-gap summary, and runtime stream evidence
 checklist into a deterministic gate. It keeps the current Python/FastAPI
 baseline and future narrow Rust stream candidates blocked from promotion until
-runtime probe evidence exists and missed realtime targets are improved or
-explicitly versioned.
+missed realtime targets are improved or explicitly versioned.
 
 The candidate metric-delta command:
 
@@ -267,8 +273,8 @@ python3 scripts/validate_stage09_baseline_digest_index.py --output docs/developm
 
 recomputes the digest index from current public artifact bytes and checks that
 the checked-in digest index has not drifted, does not reference
-`docs/automation`, keeps runtime stream claims blocked, and keeps Rust scoped to
-a future data-plane candidate rather than a whole-project rewrite.
+`docs/automation`, preserves bounded runtime stream proof status, and keeps Rust
+scoped to a future data-plane candidate rather than a whole-project rewrite.
 
 The baseline closeout-gate command:
 
@@ -347,9 +353,9 @@ python3 scripts/check_stage09_baseline_handoff_gate.py --output docs/development
 
 ties the public review packet, review-packet validation, refresh check, and
 command evidence into one deterministic review signal. It keeps the
-Python/FastAPI baseline ready for review while blocking runtime promotion until
-runtime probe evidence exists, and it preserves Rust as a future data-plane
-candidate rather than a whole-project rewrite.
+Python/FastAPI baseline ready for review while blocking promotion until target
+evidence improves, and it preserves Rust as a future data-plane candidate rather
+than a whole-project rewrite.
 
 The baseline handoff-summary command:
 
@@ -397,8 +403,9 @@ python3 scripts/validate_stage09_baseline_command_matrix.py --output docs/develo
 recomputes the command matrix from current public Stage 09 sources and checks
 that the committed matrix still matches byte-for-byte, then leaves a public
 validation summary artifact. It uses repo-relative public artifact outputs,
-excludes `docs/automation`, keeps runtime stream claims blocked, and keeps Rust
-scoped to a future data-plane candidate rather than a whole-project rewrite.
+excludes `docs/automation`, keeps sustained runtime stream claims target-gated,
+and keeps Rust scoped to a future data-plane candidate rather than a
+whole-project rewrite.
 
 The artifact-index command-evidence binding command:
 
@@ -408,7 +415,7 @@ python3 scripts/summarize_stage09_artifact_index_command_evidence_binding.py --o
 
 checks that the public Stage 09 baseline artifact index and command-evidence
 scaffold still describe the same bounded benchmark command, required outputs,
-resource envelope, blocked runtime-stream claim, and Rust data-plane-only
+resource envelope, bounded runtime-stream proof status, and Rust data-plane-only
 scope. It does not rerun the benchmark, claim websocket runtime fanout, or
 approve a Rust whole-project rewrite.
 
@@ -420,7 +427,7 @@ python3 scripts/summarize_stage09_realtime_target_contract.py --output docs/deve
 
 binds the safe benchmark command/report scaffold to the four headline Stage 09
 metrics: telemetry sample rate, p95 alert latency, p95 replay query latency,
-and dropped-event count. It keeps runtime stream claims blocked, requires
+and dropped-event count. It keeps promotion blocked on target evidence, requires
 public repo-relative paths, and preserves Rust as a future data-plane candidate
 rather than a whole-project rewrite.
 

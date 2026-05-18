@@ -130,13 +130,15 @@ queries.
 - `stage09-baseline-metric-index.json`: deterministic output from
   `scripts/summarize_stage09_baseline_metric_index.py` showing the headline
   benchmark metric order, observed values, targets, pass/miss status,
-  stable fingerprint, measurement scope, blocked runtime stream claim, and
+  stable fingerprint, measurement scope, bounded runtime stream evidence, and
   Rust data-plane-only scope without rerunning the benchmark.
 - `stage09-runtime-stream-evidence-checklist.json`: static public checklist
   that mirrors the live contract runtime evidence gate and names the exact
-  future probes required before TelemForge can claim websocket fanout,
-  reconnect, backpressure, stream-based dropped-event evidence, or a narrow Rust
-  data-plane stream candidate.
+  landed probes for websocket connection, reconnect, backpressure, stream-based
+  dropped-event evidence, and bounded two-client per-connection fanout.
+- `stage09-live-stream-bounded-fanout-smoke.json`: bounded two-client runtime
+  websocket probe showing simultaneous clients receive independent
+  per-connection snapshot, backpressure, and retained sample messages.
 - `stage09-runtime-stream-evidence-validation-summary.json`: deterministic
   output from `scripts/validate_stage09_runtime_stream_evidence_checklist.py`
   showing that the public runtime-stream evidence checklist matches the live
@@ -145,37 +147,35 @@ queries.
 - `stage09-runtime-stream-proof-artifact-gate.json`: deterministic output from
   `scripts/check_stage09_runtime_stream_proof_artifacts.py` showing that the
   runtime-stream evidence checklist and live telemetry contract still point at
-  existing public, repo-relative proof artifacts before websocket fanout,
-  reconnect, backpressure, stream dropped-event reporting, or a narrow Rust
-  stream candidate can be claimed.
+  existing public, repo-relative proof artifacts for bounded websocket fanout,
+  reconnect, backpressure, and stream dropped-event reporting.
 - `stage09-target-result-binding-gate.json`: static public proof that each
   headline metric binding in the candidate report contract matches the current
   baseline report's `target_results.checks` entry, including observed value,
   target, comparison, unit, pass/fail status, and gap-to-target.
 - `stage09-baseline-readiness-summary.json`: deterministic public review
   summary that pins the baseline as comparison evidence only, confirms target
-  pass/miss status, keeps runtime stream claims blocked, and scopes Rust to a
+  pass/miss status, binds bounded runtime stream proof, and scopes Rust to a
   future data-plane candidate rather than a whole-project rewrite.
 - `stage09-target-gap-summary.json`: deterministic public target-gap summary
   that extracts each Stage 09 target result from the baseline report, records
-  passed and missed realtime targets, keeps runtime stream claims blocked, and
+  passed and missed realtime targets, preserves bounded runtime stream proof, and
   points at the next narrow Rust data-plane candidate without rerunning the
   benchmark.
 - `stage09-candidate-promotion-readiness.json`: deterministic public
   promotion-readiness gate that reads the baseline readiness summary, target-gap
   summary, and runtime stream evidence checklist. It keeps the current
   Python/FastAPI baseline and future narrow Rust stream candidates blocked from
-  promotion until runtime probe evidence exists and missed realtime targets are
-  improved or explicitly versioned.
+  promotion until missed realtime targets are improved or explicitly versioned.
 - `stage09-candidate-metric-delta.json`: deterministic public candidate
   comparison scaffold that compares a candidate report's target-result metrics
   against the current baseline report. The checked-in artifact compares the
   baseline to itself, so every metric is unchanged and promotion remains blocked
-  by the existing runtime evidence and throughput gates.
+  by the existing throughput gates.
 - `stage09-baseline-evidence-index.json`: deterministic public evidence index
   that joins the metric index, command-evidence validation, readiness summary,
   and promotion-readiness gate into one reviewable baseline snapshot without
-  rerunning the benchmark or claiming runtime websocket fanout.
+  rerunning the benchmark or claiming sustained runtime websocket fanout.
 - `stage09-baseline-digest-index.json`: deterministic digest index that pins
   the committed public Stage 09 report, summary, contracts, validation outputs,
   gates, and Rust data-plane boundary note by repo-relative path, byte size, and
@@ -188,18 +188,18 @@ queries.
   combines digest validation, the baseline evidence index, runtime-stream
   evidence validation, and candidate promotion readiness into one final
   reviewable Stage 09 baseline verdict. It keeps the current baseline verified
-  but blocked from promotion until runtime probe evidence exists.
+  but blocked from promotion until target evidence improves.
 - `stage09-baseline-closeout-summary.md`: deterministic human-readable summary
   generated from the closeout gate. It lists the verified baseline digest,
-  passed/missed metrics, blocked runtime claims, required next evidence, local
-  resource envelope, and Rust data-plane-only scope without rerunning the
-  benchmark or claiming websocket runtime fanout.
+  passed/missed metrics, bounded runtime proof status, required next evidence,
+  local resource envelope, and Rust data-plane-only scope without rerunning the
+  benchmark or claiming sustained websocket runtime fanout.
 - `stage09-target-result-artifact-gate.json`: deterministic target-result
   artifact gate that cross-checks each headline metric across the baseline
   report, metric index, target-gap summary, target-result binding gate, and
-  closeout gate. It keeps runtime stream claims blocked, keeps paths public and
-  repo-relative, and preserves Rust as a future data-plane candidate rather
-  than a whole-project rewrite.
+  closeout gate. It keeps sustained runtime stream claims target-gated, keeps
+  paths public and repo-relative, and preserves Rust as a future data-plane
+  candidate rather than a whole-project rewrite.
 - `stage09-baseline-acceptance-matrix.json`: deterministic public acceptance
   matrix that condenses the benchmark command/report, headline target bindings,
   live stream contract, runtime-stream evidence blocker, Rust data-plane
@@ -359,13 +359,12 @@ startup snapshot delivery, monotonic stream sequence values, reconnect resume,
 backpressure reporting, and dropped-event accounting from stream messages.
 It also mirrors the runtime evidence gate status and proof-artifact list from
 the live telemetry contract so candidate reports cannot silently turn a
-contract-only stream profile into a runtime claim.
+bounded local stream proof into sustained load or promotion readiness.
 
 The live telemetry contract also includes a `runtime_evidence_gate` section
-that maps each future runtime-stream claim to its required proof artifact and
-runtime probe. Every item remains `not_claimed_until_runtime_test`, so the
-contract still does not claim websocket fanout, reconnect, backpressure, or
-stream-based dropped-event evidence.
+that maps each bounded runtime-stream claim to its required proof artifact and
+runtime probe. The landed probes now mark those items `runtime_verified`, while
+sustained load, promotion readiness, and Rust replacement remain target-gated.
 
 The `stage09-live-stream-monotonic-sequence.json` artifact records the first
 same-session ordered-message probe beyond the startup snapshot. It keeps the

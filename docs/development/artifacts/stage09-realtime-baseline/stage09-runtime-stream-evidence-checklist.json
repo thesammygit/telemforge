@@ -2,8 +2,8 @@
   "schema": "telemforge.stage09_runtime_stream_evidence_checklist.v1",
   "stage": "09-realtime-performance-and-rust-data-plane",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
-  "implementation_status": "contract_only_no_runtime_fanout",
-  "purpose": "Pin the runtime probes required before TelemForge can claim websocket fanout, reconnect, backpressure, stream-based dropped-event evidence, or a narrow Rust data-plane stream candidate.",
+  "implementation_status": "runtime_stream_probes_verified_bounded_fanout",
+  "purpose": "Pin the bounded runtime probes that verify websocket connection, reconnect, backpressure, dropped-event, and two-client per-connection fanout behavior while keeping sustained load and promotion claims blocked by targets.",
   "source_contract": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
   "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
   "rust_scope": "Rust is tracked as a future data-plane candidate for measured stream hot paths; not a whole-project rewrite.",
@@ -26,57 +26,64 @@
     "monotonic per-session stream sequence values",
     "after_sequence reconnect resume behavior",
     "drop_oldest_and_report backpressure behavior",
-    "dropped_event_count reported from stream.backpressure payloads"
+    "dropped_event_count reported from stream.backpressure payloads",
+    "bounded two-client fanout keeps per-connection queues independent"
   ],
   "probe_checklist": [
     {
       "evidence": "websocket connection acceptance for an existing session",
       "source_contract_gate": "runtime_evidence_gate",
       "minimum_probe": "connect to websocket /sessions/{session_id}/telemetry/live for a session created by POST /sessions",
-      "required_artifact": "tests/contracts/test_stage09_live_telemetry_contract.py",
-      "claim_status": "not_claimed_until_runtime_test"
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json",
+      "claim_status": "runtime_verified"
     },
     {
       "evidence": "startup snapshot emitted before incremental telemetry samples",
       "source_contract_gate": "runtime_evidence_gate",
       "minimum_probe": "assert first accepted stream message is stream.snapshot before telemetry.sample messages",
-      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
-      "claim_status": "not_claimed_until_runtime_test"
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json",
+      "claim_status": "runtime_verified"
     },
     {
       "evidence": "monotonic per-session stream sequence values",
       "source_contract_gate": "runtime_evidence_gate",
       "minimum_probe": "assert observed stream sequence values increase within one session stream",
-      "required_artifact": "tests/contracts/test_stage09_live_telemetry_contract.py",
-      "claim_status": "not_claimed_until_runtime_test"
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-monotonic-sequence.json",
+      "claim_status": "runtime_verified"
     },
     {
       "evidence": "after_sequence reconnect resume behavior",
       "source_contract_gate": "runtime_evidence_gate",
       "minimum_probe": "reconnect with after_sequence and assert resumed messages have greater sequence values or a snapshot fallback",
-      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
-      "claim_status": "not_claimed_until_runtime_test"
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-reconnect-resume.json",
+      "claim_status": "runtime_verified"
     },
     {
       "evidence": "drop_oldest_and_report backpressure behavior",
       "source_contract_gate": "runtime_evidence_gate",
       "minimum_probe": "force a bounded slow-client queue and assert stream.backpressure reports drop_oldest_and_report",
-      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
-      "claim_status": "not_claimed_until_runtime_test"
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-backpressure-dropped-events.json",
+      "claim_status": "runtime_verified"
     },
     {
       "evidence": "dropped_event_count reported from stream.backpressure payloads",
       "source_contract_gate": "runtime_evidence_gate",
       "minimum_probe": "bind stream.backpressure.payload.dropped_event_count to metrics.dropped_event_count in a compatible report",
-      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
-      "claim_status": "not_claimed_until_runtime_test"
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-backpressure-dropped-events.json",
+      "claim_status": "runtime_verified"
+    },
+    {
+      "evidence": "bounded two-client fanout keeps per-connection queues independent",
+      "source_contract_gate": "runtime_evidence_gate",
+      "minimum_probe": "open two simultaneous websocket clients for one session and assert each receives independent per-connection snapshot, backpressure, and monotonic retained sample messages",
+      "required_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json",
+      "claim_status": "runtime_verified"
     }
   ],
   "forbidden_without_evidence": [
-    "runtime websocket fanout",
-    "reconnect behavior is implemented",
-    "backpressure behavior is implemented",
-    "stream-based dropped-event count is measured",
+    "sustained multi-client websocket fanout",
+    "broad load-test behavior",
+    "candidate promotion readiness",
     "Rust has replaced a Python control-plane path"
   ],
   "public_repo_safety": {

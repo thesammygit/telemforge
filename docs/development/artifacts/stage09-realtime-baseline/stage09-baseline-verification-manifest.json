@@ -30,7 +30,7 @@
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
       "schema": "telemforge.stage09_live_telemetry_contract.v1",
-      "role": "websocket/live telemetry contract before runtime fanout"
+      "role": "websocket/live telemetry contract with bounded runtime proof bindings"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-report-contract.json",
@@ -45,7 +45,7 @@
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-contract-validation-summary.json",
       "schema": "telemforge.stage09_live_contract_validation.v1",
-      "role": "public proof that the live telemetry contract envelope, reconnect, backpressure, and runtime evidence gates are internally consistent without runtime fanout"
+      "role": "public proof that the live telemetry contract envelope, reconnect, backpressure, and runtime evidence gates are internally consistent with bounded runtime probes"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/first-rust-hot-path-slice.md",
@@ -75,17 +75,22 @@
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-metric-index.json",
       "schema": "telemforge.stage09_baseline_metric_index.v1",
-      "role": "public headline metric index for baseline sample-rate, latency, dropped-event, target binding, blocked runtime-stream claim, and Rust data-plane-only scope"
+      "role": "public headline metric index for baseline sample-rate, latency, dropped-event, target binding, bounded runtime-stream evidence, and Rust data-plane-only scope"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-evidence-index.json",
       "schema": "telemforge.stage09_baseline_evidence_index.v1",
-      "role": "public evidence index joining baseline metric, command validation, readiness, and promotion gates without runtime fanout claims"
+      "role": "public evidence index joining baseline metric, command validation, readiness, and promotion gates with bounded runtime proof claims"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
       "schema": "telemforge.stage09_runtime_stream_evidence_checklist.v1",
-      "role": "contract-only runtime stream probe checklist before websocket fanout or a narrow Rust data-plane stream candidate can be claimed"
+      "role": "runtime stream probe checklist binding bounded websocket evidence before sustained-load or promotion claims"
+    },
+    {
+      "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json",
+      "schema": "telemforge.stage09_live_stream_bounded_fanout_smoke.v1",
+      "role": "bounded two-client websocket fanout smoke proving per-connection queue scope"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-validation-summary.json",
@@ -100,12 +105,12 @@
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json",
       "schema": "telemforge.stage09_baseline_readiness_summary.v1",
-      "role": "review summary that confirms the baseline is comparison evidence only, keeps runtime stream claims blocked, and scopes Rust to a future data-plane candidate"
+      "role": "review summary that confirms the baseline is comparison evidence only, binds bounded runtime stream proof, and scopes Rust to a future data-plane candidate"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json",
       "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
-      "role": "promotion-readiness gate that keeps Python/FastAPI refreshes and narrow Rust stream candidates blocked until runtime probe evidence and target improvements exist"
+      "role": "promotion-readiness gate that keeps Python/FastAPI refreshes and narrow Rust stream candidates blocked until target improvements exist"
     },
     {
       "path": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json",
@@ -145,7 +150,7 @@
       "dropped_event_count does not regress",
       "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
     ],
-    "runtime_claim_rule": "Do not claim websocket runtime fanout until the live telemetry contract has connection, startup snapshot, monotonic sequence, reconnect, backpressure, and stream dropped-event evidence."
+    "runtime_claim_rule": "Bounded websocket runtime claims require connection, startup snapshot, monotonic sequence, reconnect, backpressure, stream dropped-event, and two-client per-connection fanout evidence. Sustained load, promotion readiness, and Rust replacement remain blocked until target evidence improves."
   },
   "public_repo_safety": {
     "paths_are_repo_relative": true,

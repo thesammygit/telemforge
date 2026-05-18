@@ -2,8 +2,8 @@
 
 This command reads committed Stage 09 review artifacts and emits a deterministic
 JSON gate for future Python/FastAPI refreshes or narrow Rust data-plane
-candidates. It does not rerun the benchmark, open a websocket, or approve a
-Rust whole-project rewrite.
+candidates. It does not rerun the benchmark or approve a Rust whole-project
+rewrite.
 """
 
 from __future__ import annotations
@@ -65,19 +65,19 @@ def check_stage09_candidate_promotion_readiness(
     )
     _expect_equal(
         readiness.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime stream claim status",
         errors,
     )
     _expect_equal(
         target_gap.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "target gap runtime stream claim status",
         errors,
     )
     _expect_equal(
         runtime_checklist.get("implementation_status"),
-        "contract_only_no_runtime_fanout",
+        "runtime_stream_probes_verified_bounded_fanout",
         "runtime checklist implementation status",
         errors,
     )
@@ -141,20 +141,21 @@ def check_stage09_candidate_promotion_readiness(
     ]
 
     blocking_reasons: list[str] = []
-    if readiness.get("runtime_stream_claim_status") == "contract_only_blocked":
-        blocking_reasons.append("runtime_stream_claim_blocked")
     if missed_targets:
         blocking_reasons.append("missed_realtime_targets_remain")
     if missing_runtime_probe_evidence:
         blocking_reasons.append("runtime_probe_evidence_missing")
 
+    if missing_runtime_probe_evidence:
+        status = "blocked_pending_runtime_evidence"
+    elif missed_targets:
+        status = "blocked_pending_target_misses"
+    else:
+        status = "ready_for_candidate_comparison"
+
     return {
         "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
-        "status": (
-            "ready_for_candidate_comparison"
-            if not blocking_reasons
-            else "blocked_pending_runtime_evidence"
-        ),
+        "status": status,
         "stage": readiness.get("stage"),
         "task_id": readiness.get("task_id"),
         "candidate_can_be_promoted": not blocking_reasons,
@@ -168,9 +169,8 @@ def check_stage09_candidate_promotion_readiness(
         "required_next_evidence": readiness.get("required_next_evidence", []),
         "promotion_rule": (
             "Do not promote a Python/FastAPI refresh or narrow Rust stream fanout "
-            "candidate until runtime stream claims are backed by probe evidence, "
-            "missed realtime targets are improved or explicitly versioned, and "
-            "the compatible report contract remains intact."
+            "candidate until missed realtime targets are improved or explicitly "
+            "versioned and the compatible report contract remains intact."
         ),
         "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
         "resource_envelope": readiness.get("resource_envelope"),
@@ -184,7 +184,7 @@ def check_stage09_candidate_promotion_readiness(
             "baseline_readiness_summary_loaded",
             "target_gap_summary_loaded",
             "runtime_stream_evidence_checklist_loaded",
-            "runtime_stream_claim_blocked_until_probe_evidence",
+            "runtime_stream_claim_verified_by_probe_evidence",
             "missed_targets_must_improve_or_be_versioned",
             "rust_scope_data_plane_only",
             "docs_automation_excluded",

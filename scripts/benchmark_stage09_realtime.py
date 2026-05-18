@@ -541,7 +541,8 @@ def _comparison_profile() -> dict[str, Any]:
             ),
             (
                 "Preserve stream_contract_profile.runtime_evidence_gate so "
-                "runtime stream claims stay blocked until live evidence exists."
+                "bounded runtime stream evidence stays explicit while sustained "
+                "load and promotion claims remain target-gated."
             ),
         ],
     }
@@ -720,13 +721,13 @@ def _stream_contract_profile() -> dict[str, Any]:
         "schema": "telemforge.stage09_stream_contract_profile.v1",
         "purpose": (
             "Bind the bounded Python/FastAPI baseline to the live telemetry "
-            "contract without claiming websocket runtime fanout is implemented."
+            "contract and the verified bounded runtime websocket probes."
         ),
         "contract_artifact": (
             "docs/development/artifacts/stage09-realtime-baseline/"
             "stage09-live-telemetry-contract.json"
         ),
-        "implementation_status": "contract_only_no_runtime_fanout",
+        "implementation_status": "runtime_stream_probes_verified_bounded_fanout",
         "endpoint": {
             "protocol": "websocket",
             "path": "/sessions/{session_id}/telemetry/live",
@@ -739,6 +740,7 @@ def _stream_contract_profile() -> dict[str, Any]:
             "after_sequence reconnect resume behavior",
             "drop_oldest_and_report backpressure behavior",
             "dropped_event_count reported from stream.backpressure payloads",
+            "bounded two-client fanout keeps per-connection queues independent",
         ],
         "baseline_binding": {
             "report_schema": "telemforge.stage09_realtime_baseline.v1",
@@ -749,32 +751,44 @@ def _stream_contract_profile() -> dict[str, Any]:
                 "dropped_event_count",
             ],
             "current_evidence": (
-                "The current benchmark measures control-plane simulation, "
-                "alert, replay, and dropped-event accounting only."
+                "The current benchmark measures control-plane simulation, alert, "
+                "replay, and dropped-event accounting. Runtime websocket probes "
+                "separately verify bounded connection, reconnect, backpressure, "
+                "dropped-event, and two-client fanout behavior."
             ),
         },
         "runtime_evidence_gate": {
             "schema": "telemforge.stage09_runtime_stream_evidence_gate_binding.v1",
             "contract_field": "runtime_evidence_gate",
-            "status": "contract_only_blocked",
-            "claim_status": "not_claimed_until_runtime_test",
+            "status": "runtime_verified_bounded_fanout",
+            "claim_status": "runtime_verified",
             "proof_artifacts": [
                 "docs/development/artifacts/stage09-realtime-baseline/"
                 "stage09-live-telemetry-contract.json",
-                "tests/contracts/test_stage09_live_telemetry_contract.py",
+                "tests/backend/test_stage09_live_stream.py",
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-live-stream-first-snapshot.json",
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-live-stream-monotonic-sequence.json",
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-live-stream-reconnect-resume.json",
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-live-stream-backpressure-dropped-events.json",
+                "docs/development/artifacts/stage09-realtime-baseline/"
+                "stage09-live-stream-bounded-fanout-smoke.json",
                 "docs/development/artifacts/stage09-realtime-baseline/"
                 "stage09-baseline-report.json",
             ],
             "forbidden_without_evidence": [
-                "runtime websocket fanout",
-                "reconnect behavior is implemented",
-                "backpressure behavior is implemented",
-                "stream-based dropped-event count is measured",
+                "sustained multi-client websocket fanout",
+                "broad load-test behavior",
+                "candidate promotion readiness",
                 "Rust has replaced a Python control-plane path",
             ],
             "comparison_gate": (
-                "Keep runtime stream claims contract-only until a runtime probe "
-                "proves each required live evidence item."
+                "Bounded local runtime stream claims are allowed only for the "
+                "listed probe artifacts. Sustained load, promotion readiness, "
+                "and Rust replacement remain blocked by target evidence."
             ),
             "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
         },
@@ -1078,9 +1092,9 @@ def _execution_profile(
             "bounded replay query",
         ],
         "deferred_paths": [
-            "websocket stream fanout",
-            "client reconnect behavior",
-            "backpressure under multi-client load",
+            "sustained websocket stream fanout",
+            "broad multi-client load behavior",
+            "Rust data-plane replacement",
         ],
     }
 
@@ -1090,7 +1104,7 @@ def _measurement_boundary() -> dict[str, Any]:
         "schema": "telemforge.stage09_measurement_boundary.v1",
         "purpose": (
             "Prevent the Python/FastAPI baseline from being treated as "
-            "evidence for realtime stream paths that are still contract-only."
+            "evidence for sustained realtime stream load or Rust replacement."
         ),
         "baseline_claim": "bounded Python/FastAPI control-plane comparison baseline",
         "measured_now": [
@@ -1100,15 +1114,14 @@ def _measurement_boundary() -> dict[str, Any]:
             "dropped-event accounting from bounded replay coverage",
         ],
         "not_measured_yet": [
-            "websocket stream fanout",
-            "client reconnect resume",
-            "backpressure behavior under slow-client queues",
-            "multi-client delivery",
+            "sustained websocket stream fanout",
+            "broad multi-client load behavior",
+            "Rust data-plane replacement",
         ],
         "future_evidence_required": (
             "A Rust data-plane candidate must emit a compatible benchmark "
-            "report and separately prove any websocket, reconnect, or "
-            "backpressure claim before replacing a Python hot path."
+            "report and improve missed realtime targets before replacing a "
+            "Python hot path."
         ),
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }

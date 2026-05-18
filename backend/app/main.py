@@ -25,6 +25,7 @@ DEFAULT_CHANNEL_CATALOG_PATH = ROOT / "fixtures" / "telemetry" / "channels.json"
 LIVE_STREAM_HISTORY_LIMIT = 5000
 LIVE_STREAM_CLIENT_QUEUE_LIMIT = 250
 LIVE_STREAM_BACKPRESSURE_POLICY = "drop_oldest_and_report"
+LIVE_STREAM_SCOPE = "per_connection"
 
 
 class CreateSessionRequest(BaseModel):
@@ -324,6 +325,9 @@ def _build_live_stream_snapshot(
         "emitted_at": _utc_now(),
         "payload": {
             "channels": channel_ids,
+            "stream_scope": LIVE_STREAM_SCOPE,
+            "history_limit": LIVE_STREAM_HISTORY_LIMIT,
+            "client_queue_depth": LIVE_STREAM_CLIENT_QUEUE_LIMIT,
             "latest_points": _latest_points_by_channel(
                 session_id=session_id,
                 channel_ids=channel_ids,
@@ -431,6 +435,7 @@ def _build_backpressure_queue_messages(
             "emitted_at": _utc_now(),
             "payload": {
                 "policy": LIVE_STREAM_BACKPRESSURE_POLICY,
+                "queue_scope": LIVE_STREAM_SCOPE,
                 "client_queue_depth": LIVE_STREAM_CLIENT_QUEUE_LIMIT,
                 "dropped_event_count": dropped_event_count,
             },

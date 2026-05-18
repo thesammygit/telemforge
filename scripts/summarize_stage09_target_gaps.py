@@ -1,8 +1,8 @@
 """Summarize Stage 09 realtime target gaps from the public baseline report.
 
 This command reads committed Stage 09 artifacts and emits a deterministic JSON
-summary for reviewers. It does not rerun the benchmark, open a websocket, or
-approve Rust as a whole-project rewrite.
+summary for reviewers. It does not rerun the benchmark or approve Rust as a
+whole-project rewrite.
 """
 
 from __future__ import annotations
@@ -61,7 +61,7 @@ def summarize_stage09_target_gaps(
         report.get("stream_contract_profile", {})
         .get("runtime_evidence_gate", {})
         .get("status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime stream evidence gate",
         errors,
     )
@@ -110,7 +110,7 @@ def summarize_stage09_target_gaps(
             "required_evidence",
             [],
         ),
-        "runtime_stream_claim_status": "contract_only_blocked",
+        "runtime_stream_claim_status": "runtime_verified_bounded_fanout",
         "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
         "public_repo_safety": manifest.get("public_repo_safety"),
     }

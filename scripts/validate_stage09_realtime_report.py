@@ -348,7 +348,7 @@ def _validate_runtime_evidence_gate_binding(
     )
     _expect_equal(
         report_gate.get("claim_status"),
-        "not_claimed_until_runtime_test",
+        gate.get("runtime_evidence_claim_status"),
         "runtime evidence claim status",
         errors,
     )

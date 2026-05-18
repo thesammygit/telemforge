@@ -25,11 +25,11 @@
     "uses_paid_services": false,
     "worker_processes": 1
   },
-  "runtime_stream_claim_status": "contract_only_blocked",
+  "runtime_stream_claim_status": "runtime_verified_bounded_fanout",
   "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
   "schema": "telemforge.stage09_baseline_readiness_summary.v1",
   "stable_fingerprint": {
-    "digest_sha256": "b7f1732dec3b7f0de33090af6112d1136b6d2a81ec96dc774a65e6d8da606440",
+    "digest_sha256": "e266b878ee90920280e803e7818e73f61203ca7e11c23cd15bff377f2dad2e01",
     "stable_identity_field_count": 21
   },
   "stage": "09-realtime-performance-and-rust-data-plane",
@@ -54,7 +54,7 @@
     "live_contract_validation_passed",
     "refresh_check_passed",
     "target_result_binding_passed",
-    "runtime_stream_claim_blocked",
+    "runtime_stream_claim_verified",
     "baseline_is_comparison_evidence_only",
     "rust_scope_data_plane_only",
     "docs_automation_excluded"

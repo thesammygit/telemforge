@@ -2,9 +2,8 @@
 
 This command reads the committed live telemetry contract and runtime-stream
 evidence checklist, then emits a deterministic summary of the proof artifacts
-that must exist before runtime websocket fanout can be claimed. It does not
-open a websocket, rerun the benchmark, or approve Rust as a whole-project
-rewrite.
+that support bounded runtime websocket claims. It does not rerun the benchmark
+or approve Rust as a whole-project rewrite.
 """
 
 from __future__ import annotations
@@ -79,10 +78,10 @@ def check_stage09_runtime_stream_proof_artifacts(
     for proof_artifact in extra_contract_proof_artifacts:
         _validate_public_path(proof_artifact, errors)
 
-    if validation.get("runtime_stream_claim_status") != "contract_only_blocked":
-        errors.append("runtime stream claim must remain contract_only_blocked")
-    if validation.get("claim_status_counts") != {"not_claimed_until_runtime_test": 6}:
-        errors.append("runtime proof artifacts must remain unclaimed until runtime tests")
+    if validation.get("runtime_stream_claim_status") != "runtime_verified_bounded_fanout":
+        errors.append("runtime stream claim must be runtime_verified_bounded_fanout")
+    if validation.get("claim_status_counts") != {"runtime_verified": 7}:
+        errors.append("runtime proof artifacts must be verified by landed runtime probes")
 
     public_repo_safety = _require_mapping(
         validation.get("public_repo_safety"),
@@ -101,7 +100,7 @@ def check_stage09_runtime_stream_proof_artifacts(
 
     return {
         "schema": "telemforge.stage09_runtime_stream_proof_artifact_gate.v1",
-        "status": "runtime_stream_proof_artifacts_ready_runtime_blocked",
+        "status": "runtime_stream_proof_artifacts_verified_bounded_fanout",
         "stage": validation.get("stage"),
         "task_id": validation.get("task_id"),
         "checklist_path": validation.get("checklist_path"),
@@ -122,7 +121,7 @@ def check_stage09_runtime_stream_proof_artifacts(
             "required_artifacts_exist",
             "required_artifacts_are_repo_relative",
             "docs_automation_excluded",
-            "runtime_stream_claim_blocked",
+            "bounded_runtime_stream_claim_verified",
             "rust_scope_data_plane_only",
         ],
     }

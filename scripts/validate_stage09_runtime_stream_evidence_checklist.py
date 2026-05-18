@@ -1,8 +1,8 @@
 """Validate the Stage 09 runtime-stream evidence checklist artifact.
 
 This command reads committed Stage 09 artifacts and emits a deterministic JSON
-validation summary. It does not open a websocket, rerun the benchmark, or
-approve Rust as a whole-project rewrite.
+validation summary for the landed bounded runtime websocket probes. It does not
+rerun the benchmark or approve Rust as a whole-project rewrite.
 """
 
 from __future__ import annotations
@@ -86,7 +86,7 @@ def validate_stage09_runtime_stream_evidence_checklist(
     )
     _expect_equal(
         evidence_gate.get("status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "contract runtime evidence gate status",
         errors,
     )

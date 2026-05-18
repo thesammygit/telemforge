@@ -100,19 +100,19 @@ def summarize_stage09_baseline_evidence_index(
     )
     _expect_equal(
         metric_index.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "metric_index.runtime_stream_claim_status",
         errors,
     )
     _expect_equal(
         promotion_readiness.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "promotion_readiness.runtime_stream_claim_status",
         errors,
     )
     _expect_equal(
         readiness.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "readiness.runtime_stream_claim_status",
         errors,
     )
@@ -197,10 +197,10 @@ def summarize_stage09_baseline_evidence_index(
         promotion_readiness.get("missing_runtime_probe_evidence"),
         "promotion_readiness.missing_runtime_probe_evidence",
     )
-    if "runtime_stream_claim_blocked" not in blocking_reasons:
-        errors.append("promotion_readiness must block runtime stream claims")
-    if not missing_runtime_probe_evidence:
-        errors.append("promotion_readiness must require runtime probe evidence")
+    if "missed_realtime_targets_remain" not in blocking_reasons:
+        errors.append("promotion_readiness must block on missed realtime targets")
+    if missing_runtime_probe_evidence:
+        errors.append("promotion_readiness must not report missing runtime probe evidence")
 
     if errors:
         raise BaselineEvidenceIndexError("\n".join(errors))
@@ -247,7 +247,7 @@ def summarize_stage09_baseline_evidence_index(
         "verified_gates": [
             "metric_index_loaded",
             "baseline_command_evidence_validation_passed",
-            "promotion_readiness_blocks_runtime_claims",
+            "promotion_readiness_blocks_target_misses",
             "baseline_readiness_keeps_comparison_scope",
             "target_counts_match_passed_and_missed_metrics",
             "resource_envelope_matches_across_artifacts",

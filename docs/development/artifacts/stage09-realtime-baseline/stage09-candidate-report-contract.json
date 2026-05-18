@@ -14,7 +14,7 @@
       "Python control-plane replacement",
       "unbounded load test",
       "multi-worker fanout outside the local resource guard",
-      "websocket runtime fanout claim without live evidence"
+      "sustained websocket runtime fanout claim without load evidence"
     ],
     "rust_scope": "data-plane candidate only; not a whole-project rewrite"
   },
@@ -70,18 +70,23 @@
   },
   "stream_claim_gate": {
     "contract_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
-    "current_implementation_status": "contract_only_no_runtime_fanout",
-    "runtime_evidence_gate_status": "contract_only_blocked",
+    "current_implementation_status": "runtime_stream_probes_verified_bounded_fanout",
+    "runtime_evidence_gate_status": "runtime_verified_bounded_fanout",
+    "runtime_evidence_claim_status": "runtime_verified",
     "runtime_evidence_proof_artifacts": [
       "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
-      "tests/contracts/test_stage09_live_telemetry_contract.py",
+      "tests/backend/test_stage09_live_stream.py",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-monotonic-sequence.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-reconnect-resume.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-backpressure-dropped-events.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json",
       "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
     ],
     "runtime_forbidden_without_evidence": [
-      "runtime websocket fanout",
-      "reconnect behavior is implemented",
-      "backpressure behavior is implemented",
-      "stream-based dropped-event count is measured",
+      "sustained multi-client websocket fanout",
+      "broad load-test behavior",
+      "candidate promotion readiness",
       "Rust has replaced a Python control-plane path"
     ],
     "required_before_runtime_claim": [
@@ -90,7 +95,8 @@
       "monotonic per-session stream sequence values",
       "after_sequence reconnect resume behavior",
       "drop_oldest_and_report backpressure behavior",
-      "dropped_event_count reported from stream.backpressure payloads"
+      "dropped_event_count reported from stream.backpressure payloads",
+      "bounded two-client fanout keeps per-connection queues independent"
     ]
   },
   "promotion_gate": {

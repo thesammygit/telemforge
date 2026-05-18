@@ -162,8 +162,8 @@ def compare_stage09_candidate_metrics(
         "newly_passing_metrics": newly_passing_metrics,
         "comparison_rule": (
             "Compare timing values only after stable identity is compatible. "
-            "A candidate cannot be promoted if runtime stream claims remain "
-            "contract-only, if realtime target misses are unaddressed, or if "
+            "A candidate cannot be promoted if realtime target misses are "
+            "unaddressed, if required runtime proof artifacts regress, or if "
             "any target metric regresses without a versioned workload change."
         ),
         "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
