@@ -220,6 +220,19 @@ records unchanged metrics and preserves the blocked runtime/promotion gates
 without rerunning the benchmark, claiming websocket fanout, or approving a Rust
 whole-project rewrite.
 
+The first bounded Rust stream fanout/sample-rate candidate command:
+
+```text
+python3 scripts/run_stage09_rust_stream_fanout_candidate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json
+```
+
+runs the standard-library-only Rust spike under
+`rust/stage09_stream_fanout_sample_rate/` and writes a Stage 09-compatible
+candidate report. The candidate records a versioned workload change from the
+Python/FastAPI baseline, improves channel count, per-channel sample rate, and
+aggregate sample rate, and keeps promotion blocked because the target-scale
+throughput and sustained-load proof are still not met.
+
 The input-provenance validation command:
 
 ```text

@@ -4,31 +4,35 @@
     "missed_realtime_targets_remain"
   ],
   "candidate_can_be_promoted": false,
-  "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+  "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
   "comparison_rule": "Compare timing values only after stable identity is compatible. A candidate cannot be promoted if realtime target misses are unaddressed, if required runtime proof artifacts regress, or if any target metric regresses without a versioned workload change.",
-  "improved_metrics": [],
+  "improved_metrics": [
+    "aggregate_sample_rate_hz",
+    "channel_count",
+    "per_channel_sample_rate_hz"
+  ],
   "metric_deltas": {
     "aggregate_sample_rate_hz": {
       "baseline_meets_target": false,
       "baseline_observed": 10.0,
-      "candidate_gap_to_target": 990.0,
+      "candidate_gap_to_target": 900.0,
       "candidate_meets_target": false,
-      "candidate_observed": 10.0,
-      "change_status": "unchanged",
+      "candidate_observed": 100.0,
+      "change_status": "improved",
       "comparison": "at_least",
-      "delta": 0.0,
+      "delta": 90.0,
       "target": 1000,
       "unit": "Hz"
     },
     "channel_count": {
       "baseline_meets_target": false,
       "baseline_observed": 10,
-      "candidate_gap_to_target": 90,
+      "candidate_gap_to_target": 80,
       "candidate_meets_target": false,
-      "candidate_observed": 10,
-      "change_status": "unchanged",
+      "candidate_observed": 20,
+      "change_status": "improved",
       "comparison": "at_least",
-      "delta": 0.0,
+      "delta": 10.0,
       "target": 100,
       "unit": "channels"
     },
@@ -71,12 +75,12 @@
     "per_channel_sample_rate_hz": {
       "baseline_meets_target": false,
       "baseline_observed": 1.0,
-      "candidate_gap_to_target": 9.0,
+      "candidate_gap_to_target": 5.0,
       "candidate_meets_target": false,
-      "candidate_observed": 1.0,
-      "change_status": "unchanged",
+      "candidate_observed": 5.0,
+      "change_status": "improved",
       "comparison": "at_least",
-      "delta": 0.0,
+      "delta": 4.0,
       "target": 10,
       "unit": "Hz"
     }
@@ -92,16 +96,16 @@
   "regressed_metrics": [],
   "runtime_stream_claim_status": "runtime_verified_bounded_fanout",
   "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
-  "same_report_reference": true,
+  "same_report_reference": false,
   "schema": "telemforge.stage09_candidate_metric_delta.v1",
   "source_artifacts": {
     "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
-    "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+    "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
     "promotion_readiness": "docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json"
   },
-  "stable_identity_status": "matches",
+  "stable_identity_status": "versioned_workload_change",
   "stage": "09-realtime-performance-and-rust-data-plane",
-  "status": "baseline_reference_no_candidate",
+  "status": "candidate_blocked_pending_promotion_gates",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
   "verified_gates": [
     "baseline_report_loaded",

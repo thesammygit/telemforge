@@ -91,6 +91,9 @@ INPUT_PROVENANCE_VALIDATION_PATH = (
 BASELINE_METRIC_INDEX_PATH = ARTIFACT_ROOT / "stage09-baseline-metric-index.json"
 BASELINE_EVIDENCE_INDEX_PATH = ARTIFACT_ROOT / "stage09-baseline-evidence-index.json"
 CANDIDATE_METRIC_DELTA_PATH = ARTIFACT_ROOT / "stage09-candidate-metric-delta.json"
+RUST_STREAM_FANOUT_CANDIDATE_REPORT_PATH = (
+    ARTIFACT_ROOT / "stage09-rust-stream-fanout-sample-rate-report.json"
+)
 
 
 def verify_stage09_baseline_bundle(
@@ -149,9 +152,13 @@ def verify_stage09_baseline_bundle(
         manifest_path=manifest_path,
     )
     baseline_evidence_index_expected = summarize_stage09_baseline_evidence_index()
+    candidate_report_for_delta = _candidate_delta_report_path(
+        candidate_metric_delta,
+        report_path,
+    )
     candidate_metric_delta_expected = compare_stage09_candidate_metrics(
         baseline_report_path=report_path,
-        candidate_report_path=report_path,
+        candidate_report_path=candidate_report_for_delta,
         promotion_readiness_path=PROMOTION_READINESS_PATH,
     )
 
@@ -1089,12 +1096,16 @@ def _validate_candidate_metric_delta(
         "candidate_metric_delta.schema",
         errors,
     )
-    _expect_equal(
-        candidate_metric_delta.get("status"),
+    status = candidate_metric_delta.get("status")
+    allowed_statuses = {
         "baseline_reference_no_candidate",
-        "candidate_metric_delta.status",
-        errors,
-    )
+        "candidate_blocked_pending_promotion_gates",
+    }
+    if status not in allowed_statuses:
+        errors.append(
+            "candidate_metric_delta.status mismatch: expected one of "
+            f"{sorted(allowed_statuses)!r}, got {status!r}"
+        )
     _expect_equal(
         candidate_metric_delta.get("runtime_stream_claim_status"),
         "runtime_verified_bounded_fanout",
@@ -1107,12 +1118,38 @@ def _validate_candidate_metric_delta(
         "candidate_metric_delta.candidate_can_be_promoted",
         errors,
     )
-    _expect_equal(
-        candidate_metric_delta.get("same_report_reference"),
-        True,
-        "candidate_metric_delta.same_report_reference",
-        errors,
-    )
+    same_report_reference = candidate_metric_delta.get("same_report_reference")
+    if status == "baseline_reference_no_candidate":
+        _expect_equal(
+            same_report_reference,
+            True,
+            "candidate_metric_delta.same_report_reference",
+            errors,
+        )
+    else:
+        _expect_equal(
+            same_report_reference,
+            False,
+            "candidate_metric_delta.same_report_reference",
+            errors,
+        )
+        _expect_equal(
+            candidate_metric_delta.get("stable_identity_status"),
+            "versioned_workload_change",
+            "candidate_metric_delta.stable_identity_status",
+            errors,
+        )
+        if not candidate_metric_delta.get("improved_metrics"):
+            errors.append(
+                "candidate_metric_delta.improved_metrics must name at least one "
+                "improved throughput metric for a versioned Rust candidate"
+            )
+        _expect_equal(
+            candidate_metric_delta.get("regressed_metrics"),
+            [],
+            "candidate_metric_delta.regressed_metrics",
+            errors,
+        )
     public_safety = candidate_metric_delta.get("public_repo_safety", {})
     _expect_equal(
         public_safety.get("includes_docs_automation"),
@@ -1127,6 +1164,19 @@ def _validate_candidate_metric_delta(
         errors.append(
             "candidate_metric_delta.rust_scope must keep Rust data-plane scoped"
         )
+
+
+def _candidate_delta_report_path(
+    candidate_metric_delta: dict[str, Any],
+    fallback_report_path: Path,
+) -> Path:
+    candidate_report = (
+        candidate_metric_delta.get("source_artifacts", {}).get("candidate_report")
+        or candidate_metric_delta.get("candidate_report")
+    )
+    if candidate_report == _display_path(RUST_STREAM_FANOUT_CANDIDATE_REPORT_PATH):
+        return RUST_STREAM_FANOUT_CANDIDATE_REPORT_PATH
+    return Path(fallback_report_path)
 
 
 def _validate_summary(

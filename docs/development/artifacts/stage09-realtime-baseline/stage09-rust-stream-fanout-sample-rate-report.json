@@ -1,0 +1,801 @@
+{
+  "alert_latency_profile": {
+    "comparison_rule": "Only compare alert hot-path candidates when the fault mix, iteration count, and determinism_profile.workload_identity match.",
+    "endpoint_path": "/sessions/{session_id}/faults",
+    "fault_types": [
+      "comms_downlink_fade",
+      "thermal_avionics_overheat"
+    ],
+    "latency_iteration_count": 5,
+    "latency_method": "nearest-rank p95 over manual fault POST requests",
+    "observed_p95_ms": 3.328,
+    "purpose": "Alert latency remains owned by the Python/FastAPI baseline in this stream fanout candidate.",
+    "rust_scope": "data-plane alert-evaluation candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_alert_latency_profile.v1",
+    "trigger_source": "manual fault POST requests through FastAPI TestClient"
+  },
+  "baseline_verdict": {
+    "missed_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ],
+    "next_comparable_candidate": "Rust stream fanout candidate with target-scale channel/sample-rate and sustained-load runtime evidence",
+    "passed_targets": [
+      "p95_alert_latency_ms",
+      "p95_replay_query_latency_ms",
+      "dropped_event_count"
+    ],
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_baseline_verdict.v1",
+    "status": "rust_candidate_targets_not_met",
+    "summary": "Bounded Rust candidate improves throughput over the Python/FastAPI baseline but remains below Stage 09 realtime targets."
+  },
+  "benchmark_contract": {
+    "comparability_rules": [
+      "Compare directly only when stable_report_fingerprint.digest_sha256 matches.",
+      "Allow comparison against the Python/FastAPI baseline only when run_variant_policy.versioned_workload_change is present.",
+      "Treat generated_at and bounded local duration values as run-specific.",
+      "Keep execution_profile and resource_guard explicit so candidate runs stay inside the local automation safety envelope."
+    ],
+    "measurement_method": {
+      "alert_latency": "elapsed wall-clock time around manual fault POST requests, summarized as nearest-rank p95",
+      "dropped_events": "expected telemetry query rows minus bounded replay sample count, floored at zero",
+      "replay_latency": "elapsed wall-clock time around bounded replay GET requests, summarized as nearest-rank p95",
+      "sample_rate": "catalog channel count multiplied by 1 / step_seconds"
+    },
+    "purpose": "Comparable candidate contract for a narrow Rust stream fanout/sample-rate data-plane hot path.",
+    "schema": "telemforge.stage09_realtime_benchmark_contract.v1",
+    "workload_generation": {
+      "channel_count": 20,
+      "database": "none; in-memory deterministic candidate",
+      "samples_per_channel": 10,
+      "scenario": "rust-stream-fanout-sample-rate",
+      "seed": 9090,
+      "source": "Rust stdlib deterministic stream fanout candidate",
+      "start_at": "2026-05-03T16:00:00Z",
+      "step_seconds": 0.2
+    }
+  },
+  "candidate_profile": {
+    "bounded_local_smoke": true,
+    "candidate_id": "rust_stream_fanout_sample_rate_spike",
+    "candidate_scope": "stream fanout and sample-rate throughput behind the live telemetry contract; Python/FastAPI remains the control plane",
+    "measurement_schema": "telemforge.stage09_rust_stream_fanout_measurement.v1",
+    "public_repo_safety": {
+      "includes_docs_automation": false,
+      "paths_are_repo_relative": true,
+      "uses_absolute_local_paths": false,
+      "uses_credentials": false,
+      "uses_private_runtime_state": false
+    },
+    "report_path": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
+    "runner": "scripts/run_stage09_rust_stream_fanout_candidate.py",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_rust_stream_fanout_candidate.v1",
+    "source_crate": "rust/stage09_stream_fanout_sample_rate",
+    "sustained_load_claimed": false
+  },
+  "comparison_profile": {
+    "compatibility_requirements": [
+      "Use the same workload scenario, seed, sample count, and step interval.",
+      "Keep execution_profile and resource_guard visible in every report.",
+      "Report dropped_event_count explicitly for stream/backpressure comparisons.",
+      "Keep determinism_profile.workload_identity unchanged for comparable runs.",
+      "Preserve the benchmark metric names before replacing any Python control-plane hot path with a Rust data-plane candidate.",
+      "Preserve latency_budget_profile fields so alert and replay headroom remain visible across runtime candidates.",
+      "Preserve input_provenance.telemetry_catalog_sha256 so runtime candidates do not compare against a different channel catalog.",
+      "Preserve verification_contract.command and required_report_fields so reruns regenerate both public baseline artifacts together.",
+      "Preserve rerun_evidence_profile fields so baseline refreshes and Rust candidates prove the same command, outputs, and resource envelope before metrics are compared.",
+      "Preserve throughput_gap_profile fields so missed sample-rate targets map to the same narrow data-plane candidate.",
+      "Preserve stream_contract_profile.runtime_evidence_gate so bounded runtime stream evidence stays explicit while sustained load and promotion claims remain target-gated."
+    ],
+    "purpose": "Separate stable report fields from run-specific timing and provenance before comparing Python/FastAPI and future Rust data-plane candidates.",
+    "run_specific_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed",
+      "latency_budget_profile.observed_p95_ms.alert_evaluation",
+      "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "schema": "telemforge.stage09_realtime_comparison_profile.v1",
+    "stable_fields": [
+      "schema",
+      "stage",
+      "health_stage",
+      "execution_profile.process_model",
+      "execution_profile.client_count",
+      "execution_profile.resource_scope",
+      "execution_profile.load_shape",
+      "resource_guard.worker_processes",
+      "resource_guard.uses_network",
+      "resource_guard.uses_paid_services",
+      "benchmark_contract",
+      "verification_contract",
+      "measurement_boundary",
+      "timing_source_profile",
+      "stream_contract_profile",
+      "stream_contract_profile.runtime_evidence_gate",
+      "rerun_evidence_profile",
+      "run_variant_policy",
+      "stable_report_fingerprint",
+      "determinism_profile.workload_identity",
+      "determinism_profile.stable_inputs",
+      "latency_budget_profile.budgets",
+      "alert_latency_profile.endpoint_path",
+      "alert_latency_profile.trigger_source",
+      "alert_latency_profile.latency_method",
+      "replay_query_profile.window",
+      "replay_query_profile.requested_limit",
+      "dropped_event_profile.accounting_source",
+      "dropped_event_profile.comparison_rule",
+      "input_provenance.telemetry_catalog_sha256",
+      "workload.scenario",
+      "workload.sample_window",
+      "workload.samples_per_channel",
+      "workload.step_seconds",
+      "targets",
+      "target_profile",
+      "baseline_verdict",
+      "throughput_gap_profile",
+      "next_hot_path_profile",
+      "runtime_boundary"
+    ]
+  },
+  "determinism_profile": {
+    "comparison_rule": "Only compare directly when workload_identity and stable_inputs match; compare against the Python/FastAPI baseline through run_variant_policy.versioned_workload_change.",
+    "purpose": "Declare which inputs define the versioned Rust candidate workload identity.",
+    "run_variant_fields": [
+      "generated_at",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "schema": "telemforge.stage09_determinism_profile.v1",
+    "stable_inputs": {
+      "channel_count": 20,
+      "samples_per_channel": 10,
+      "scenario": "rust-stream-fanout-sample-rate",
+      "seed": 9090,
+      "start_at": "2026-05-03T16:00:00Z",
+      "step_seconds": 0.2
+    },
+    "workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s"
+  },
+  "dropped_event_profile": {
+    "accounting_source": {
+      "expected_rows": "Rust deterministic stream fanout telemetry_event_count",
+      "formula": "count per-client queue overflows under drop_oldest_and_report semantics",
+      "observed_rows": "bounded per-client queue simulation"
+    },
+    "comparison_rule": "Do not treat zero drops in this bounded candidate as sustained websocket load evidence.",
+    "dropped_event_count": 0,
+    "expected_telemetry_rows": 200,
+    "purpose": "Make bounded Rust fanout dropped-event accounting explicit before sustained load claims.",
+    "replay_sample_count": 200,
+    "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_dropped_event_profile.v1",
+    "stream_claim_status": "rust_candidate_bounded_queue_accounting"
+  },
+  "execution_profile": {
+    "client_count": 2,
+    "database": "none; deterministic in-memory Rust candidate",
+    "deferred_paths": [
+      "sustained websocket stream fanout",
+      "broad multi-client load behavior",
+      "Python/FastAPI control-plane replacement"
+    ],
+    "load_shape": {
+      "aggregate_sample_rate_hz": 100.0,
+      "channel_count": 20,
+      "per_channel_sample_rate_hz": 5.0,
+      "samples_per_channel": 10,
+      "scenario": "rust-stream-fanout-sample-rate",
+      "step_seconds": 0.2
+    },
+    "measured_paths": [
+      "Rust stdlib deterministic stream sequencing",
+      "bounded per-client fanout queue accounting",
+      "sample-rate workload generation"
+    ],
+    "process_model": "single-process Rust stdlib stream fanout candidate",
+    "purpose": "Declare the bounded Rust data-plane candidate shape before comparing runtimes.",
+    "resource_scope": "bounded local smoke, no worker fan-out",
+    "schema": "telemforge.stage09_execution_profile.v1"
+  },
+  "generated_at": "2026-05-19T04:35:45Z",
+  "health_stage": "08-hardening-docker-and-release",
+  "input_provenance": {
+    "candidate_virtual_channel_count": 20,
+    "channel_count": 20,
+    "purpose": "Bind the Rust candidate to the existing telemetry catalog provenance while recording its versioned virtual channel fanout workload.",
+    "schema": "telemforge.stage09_input_provenance.v1",
+    "source_channel_catalog_path": "fixtures/telemetry/channels.json",
+    "telemetry_catalog_bytes": 5543,
+    "telemetry_catalog_path": "fixtures/telemetry/channels.json",
+    "telemetry_catalog_schema": "telemforge.telemetry.channels.v1",
+    "telemetry_catalog_sha256": "fe0a09191f4b04677025887035ad0156627ef73bf6cca5692c8eb775f6dc3daf"
+  },
+  "latency_budget_profile": {
+    "budgets": {
+      "alert_evaluation_p95_ms": 50,
+      "bounded_replay_query_p95_ms": 500
+    },
+    "comparison_rule": "Only compare latency headroom when determinism_profile.workload_identity matches; treat observed p95 values as run-specific.",
+    "observed_p95_ms": {
+      "alert_evaluation": 3.328,
+      "bounded_replay_query": 4.258
+    },
+    "purpose": "Carry forward Python/FastAPI alert and replay latency budgets while the Rust candidate measures stream fanout/sample-rate throughput only.",
+    "remaining_budget_ms": {
+      "alert_evaluation": 46.672,
+      "bounded_replay_query": 495.742
+    },
+    "schema": "telemforge.stage09_latency_budget_profile.v1"
+  },
+  "measurement_boundary": {
+    "baseline_claim": "bounded Rust stream fanout/sample-rate comparison candidate",
+    "future_evidence_required": "A promoted Rust data-plane path must bind this candidate to live websocket runtime evidence and sustained-load proof before replacing Python.",
+    "measured_now": [
+      "deterministic Rust stream sequencing",
+      "bounded per-client fanout queue accounting",
+      "sample-rate workload generation"
+    ],
+    "not_measured_yet": [
+      "sustained websocket stream fanout",
+      "broad multi-client load behavior",
+      "Python/FastAPI control-plane replacement"
+    ],
+    "purpose": "Prevent the Rust candidate from being treated as Python control-plane replacement or sustained realtime stream load.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_measurement_boundary.v1"
+  },
+  "metrics": {
+    "dropped_event_count": 0,
+    "p95_alert_latency_ms": 3.328,
+    "p95_replay_query_latency_ms": 4.258,
+    "per_channel_sample_rate_hz": 5.0,
+    "replay_sample_count": 200,
+    "telemetry_sample_rate_hz": 100.0
+  },
+  "next_hot_path_profile": {
+    "addresses_missed_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ],
+    "candidate_scope": "stream fanout and sample-rate throughput behind the live telemetry contract; Python/FastAPI remains the control plane",
+    "forbidden_scope": [
+      "whole-project rewrite",
+      "Python control-plane replacement",
+      "unbounded local load test",
+      "multi-worker fanout outside the local resource guard"
+    ],
+    "must_preserve_contracts": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
+      "execution_profile",
+      "resource_guard",
+      "benchmark_contract"
+    ],
+    "promotion_signal": "This bounded candidate improves missed throughput metrics but remains blocked until target misses and sustained-load evidence are resolved.",
+    "purpose": "Translate the current baseline misses into the next narrow data-plane candidate without approving a whole-project rewrite.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_next_hot_path_profile.v1",
+    "selected_candidate": "rust_stream_fanout_sample_rate_spike"
+  },
+  "notes": [
+    "Rust stream fanout/sample-rate candidate is a bounded local smoke, not sustained production load.",
+    "Candidate uses 2 clients and queue depth 250 with zero dropped events in this workload.",
+    "Python/FastAPI remains the control plane for API orchestration, alert latency, and replay latency."
+  ],
+  "replay_query_profile": {
+    "anomaly_count": 7,
+    "comparison_rule": "Only compare replay-index candidates when the window, requested limit, and determinism_profile.workload_identity match.",
+    "endpoint_path": "/sessions/{session_id}/replay",
+    "latency_iteration_count": 5,
+    "latency_method": "nearest-rank p95 over bounded replay GET requests",
+    "marker_count": 29,
+    "purpose": "Replay latency remains owned by the Python/FastAPI baseline in this stream fanout candidate.",
+    "requested_limit": 500,
+    "returned_sample_count": 107,
+    "rust_scope": "data-plane replay-index candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_replay_query_profile.v1",
+    "window": {
+      "duration_seconds": 16,
+      "end_at": "2026-05-03T16:00:16Z",
+      "start_at": "2026-05-03T16:00:00Z"
+    }
+  },
+  "rerun_evidence_profile": {
+    "candidate_scope": "narrow Rust data-plane stream fanout hot path; not a whole-project rewrite",
+    "command": [
+      "python3",
+      "scripts/run_stage09_rust_stream_fanout_candidate.py",
+      "--output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json"
+    ],
+    "comparable_identity": {
+      "stable_inputs": {
+        "channel_count": 20,
+        "samples_per_channel": 10,
+        "scenario": "rust-stream-fanout-sample-rate",
+        "seed": 9090,
+        "start_at": "2026-05-03T16:00:00Z",
+        "step_seconds": 0.2
+      },
+      "stable_report_fingerprint_field": "stable_report_fingerprint.digest_sha256",
+      "telemetry_catalog_sha256": "fe0a09191f4b04677025887035ad0156627ef73bf6cca5692c8eb775f6dc3daf",
+      "workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s"
+    },
+    "purpose": "Make the bounded Rust candidate rerun evidence explicit before metric comparison.",
+    "required_before_metric_comparison": [
+      "Rust candidate command completed successfully",
+      "JSON candidate report was regenerated",
+      "resource envelope stayed within the local automation guard",
+      "stable report fingerprint matched or a versioned workload change was documented"
+    ],
+    "required_outputs": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json"
+    ],
+    "resource_envelope": {
+      "max_expected_memory_mb": 512,
+      "max_expected_runtime_seconds": 30,
+      "uses_network": false,
+      "uses_paid_services": false,
+      "worker_processes": 1
+    },
+    "schema": "telemforge.stage09_rerun_evidence_profile.v1"
+  },
+  "resource_guard": {
+    "max_expected_memory_mb": 512,
+    "max_expected_runtime_seconds": 30,
+    "policy": "bounded local smoke under the TelemForge automation resource guard",
+    "schema": "telemforge.stage09_resource_guard.v1",
+    "uses_network": false,
+    "uses_paid_services": false,
+    "worker_processes": 1,
+    "writes": [
+      "optional JSON candidate report when --output is provided"
+    ]
+  },
+  "run_variant_policy": {
+    "allowed_variant_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed",
+      "latency_budget_profile.observed_p95_ms.alert_evaluation",
+      "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "latency_budget_profile.remaining_budget_ms.alert_evaluation",
+      "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "comparison_gate": "Do not compare runtime candidates unless stable_identity_fields match or the candidate explicitly documents this versioned workload change.",
+    "purpose": "Separate repeatable benchmark identity from expected local timing variance before comparing the Python/FastAPI baseline with future Rust data-plane candidates.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_run_variant_policy.v1",
+    "stable_identity_fields": [
+      "schema",
+      "stage",
+      "execution_profile.process_model",
+      "execution_profile.client_count",
+      "resource_guard.worker_processes",
+      "resource_guard.uses_network",
+      "resource_guard.uses_paid_services",
+      "determinism_profile.workload_identity",
+      "determinism_profile.stable_inputs",
+      "input_provenance.telemetry_catalog_sha256",
+      "rerun_evidence_profile.command",
+      "rerun_evidence_profile.required_outputs",
+      "rerun_evidence_profile.resource_envelope",
+      "timing_source_profile",
+      "stream_contract_profile.runtime_evidence_gate.status",
+      "workload.scenario",
+      "workload.samples_per_channel",
+      "workload.step_seconds",
+      "targets",
+      "throughput_gap_profile",
+      "runtime_boundary"
+    ],
+    "versioned_workload_change": {
+      "baseline_workload_identity": "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
+      "candidate_workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s",
+      "changed_fields": [
+        "execution_profile.process_model",
+        "execution_profile.client_count",
+        "workload.scenario",
+        "workload.channel_count",
+        "workload.samples_per_channel",
+        "workload.step_seconds",
+        "workload.per_channel_sample_rate_hz",
+        "metrics.telemetry_sample_rate_hz",
+        "rerun_evidence_profile.command"
+      ],
+      "comparison_note": "Compare target deltas as a bounded candidate signal only; this does not prove sustained production websocket fanout.",
+      "reason": "rust_stream_fanout_sample_rate_candidate",
+      "schema": "telemforge.stage09_versioned_workload_change.v1"
+    }
+  },
+  "runtime_boundary": {
+    "python_control_plane": [
+      "API orchestration",
+      "local review workflows",
+      "configuration",
+      "fixture generation",
+      "product-shaping behavior",
+      "alert and replay latency paths for this candidate tranche"
+    ],
+    "rust_data_plane_candidates": [
+      "telemetry ingest and validation",
+      "stream fanout, reconnect, and backpressure",
+      "replay indexing and bounded replay queries",
+      "alert and anomaly hot-path evaluation"
+    ],
+    "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
+  },
+  "runtime_observation": {
+    "duration_ms": 0.007,
+    "max_expected_runtime_seconds": 30,
+    "purpose": "Record the observed bounded Rust candidate duration without claiming sustained production load.",
+    "schema": "telemforge.stage09_runtime_observation.v1",
+    "within_expected_runtime": true,
+    "worker_processes_observed": 1
+  },
+  "schema": "telemforge.stage09_realtime_baseline.v1",
+  "stable_report_fingerprint": {
+    "comparison_rule": "Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.",
+    "digest_algorithm": "sha256",
+    "digest_sha256": "c18cd0dab46505060f3267ee495b74a7939659c237378700a23132134c261bac",
+    "excluded_run_variant_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed",
+      "latency_budget_profile.observed_p95_ms.alert_evaluation",
+      "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "latency_budget_profile.remaining_budget_ms.alert_evaluation",
+      "latency_budget_profile.remaining_budget_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "purpose": "Hash the stable Rust candidate identity fields before metric comparison.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_stable_report_fingerprint.v1",
+    "stable_identity_fields": [
+      "schema",
+      "stage",
+      "execution_profile.process_model",
+      "execution_profile.client_count",
+      "resource_guard.worker_processes",
+      "resource_guard.uses_network",
+      "resource_guard.uses_paid_services",
+      "determinism_profile.workload_identity",
+      "determinism_profile.stable_inputs",
+      "input_provenance.telemetry_catalog_sha256",
+      "rerun_evidence_profile.command",
+      "rerun_evidence_profile.required_outputs",
+      "rerun_evidence_profile.resource_envelope",
+      "timing_source_profile",
+      "stream_contract_profile.runtime_evidence_gate.status",
+      "workload.scenario",
+      "workload.samples_per_channel",
+      "workload.step_seconds",
+      "targets",
+      "throughput_gap_profile",
+      "runtime_boundary"
+    ]
+  },
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "stream_contract_profile": {
+    "baseline_binding": {
+      "current_evidence": "The current benchmark measures control-plane simulation, alert, replay, and dropped-event accounting. Runtime websocket probes separately verify bounded connection, reconnect, backpressure, dropped-event, and two-client fanout behavior.",
+      "report_schema": "telemforge.stage09_realtime_baseline.v1",
+      "required_metrics": [
+        "telemetry_sample_rate_hz",
+        "p95_alert_latency_ms",
+        "p95_replay_query_latency_ms",
+        "dropped_event_count"
+      ]
+    },
+    "contract_artifact": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "endpoint": {
+      "path": "/sessions/{session_id}/telemetry/live",
+      "protocol": "websocket",
+      "startup_snapshot_required": true
+    },
+    "implementation_status": "runtime_stream_probes_verified_bounded_fanout",
+    "purpose": "Bind the bounded Python/FastAPI baseline to the live telemetry contract and the verified bounded runtime websocket probes.",
+    "required_live_evidence_before_runtime_claim": [
+      "websocket connection acceptance for an existing session",
+      "startup snapshot emitted before incremental telemetry samples",
+      "monotonic per-session stream sequence values",
+      "after_sequence reconnect resume behavior",
+      "drop_oldest_and_report backpressure behavior",
+      "dropped_event_count reported from stream.backpressure payloads",
+      "bounded two-client fanout keeps per-connection queues independent"
+    ],
+    "runtime_evidence_gate": {
+      "claim_status": "runtime_verified",
+      "comparison_gate": "Bounded local runtime stream claims are allowed only for the listed probe artifacts. Sustained load, promotion readiness, and Rust replacement remain blocked by target evidence.",
+      "contract_field": "runtime_evidence_gate",
+      "forbidden_without_evidence": [
+        "sustained multi-client websocket fanout",
+        "broad load-test behavior",
+        "candidate promotion readiness",
+        "Rust has replaced a Python control-plane path"
+      ],
+      "proof_artifacts": [
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+        "tests/backend/test_stage09_live_stream.py",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-first-snapshot.json",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-monotonic-sequence.json",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-reconnect-resume.json",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-backpressure-dropped-events.json",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json",
+        "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json"
+      ],
+      "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
+      "schema": "telemforge.stage09_runtime_stream_evidence_gate_binding.v1",
+      "status": "runtime_verified_bounded_fanout"
+    },
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_stream_contract_profile.v1"
+  },
+  "target_profile": {
+    "baseline_status": "comparison_baseline_not_realtime_claim",
+    "metric_targets": {
+      "aggregate_sample_rate_hz": {
+        "comparison": "at_least",
+        "report_binding": "metrics.telemetry_sample_rate_hz",
+        "target": 1000,
+        "unit": "Hz"
+      },
+      "channel_count": {
+        "comparison": "at_least",
+        "report_binding": "workload.channel_count",
+        "target": 100,
+        "unit": "channels"
+      },
+      "dropped_event_count": {
+        "comparison": "at_most",
+        "report_binding": "metrics.dropped_event_count",
+        "target": 0,
+        "unit": "events"
+      },
+      "p95_alert_latency_ms": {
+        "comparison": "at_most",
+        "report_binding": "metrics.p95_alert_latency_ms",
+        "target": 50,
+        "unit": "ms"
+      },
+      "p95_replay_query_latency_ms": {
+        "comparison": "at_most",
+        "report_binding": "metrics.p95_replay_query_latency_ms",
+        "target": 500,
+        "unit": "ms"
+      },
+      "per_channel_sample_rate_hz": {
+        "comparison": "at_least",
+        "report_binding": "workload.per_channel_sample_rate_hz",
+        "target": 10,
+        "unit": "Hz"
+      }
+    },
+    "promotion_rule": "A future runtime candidate must preserve these report bindings and emit target_results.checks before replacing a Python hot path.",
+    "purpose": "Keep the realtime target envelope explicit before Python/FastAPI and future Rust data-plane candidates are compared.",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_target_profile.v1",
+    "source": "ADR-009 initial benchmark hypotheses",
+    "workload_hypothesis": {
+      "aggregate_sample_rate_hz": 1000,
+      "channel_count": 100,
+      "client_scope": "single local client smoke before multi-client fanout",
+      "per_channel_sample_rate_hz": 10
+    }
+  },
+  "target_results": {
+    "checks": {
+      "aggregate_sample_rate_hz": {
+        "comparison": "at_least",
+        "gap_to_target": 900.0,
+        "meets_target": false,
+        "observed": 100.0,
+        "target": 1000,
+        "unit": "Hz"
+      },
+      "channel_count": {
+        "comparison": "at_least",
+        "gap_to_target": 80,
+        "meets_target": false,
+        "observed": 20,
+        "target": 100,
+        "unit": "channels"
+      },
+      "dropped_event_count": {
+        "comparison": "at_most",
+        "gap_to_target": 0,
+        "meets_target": true,
+        "observed": 0,
+        "target": 0,
+        "unit": "events"
+      },
+      "p95_alert_latency_ms": {
+        "comparison": "at_most",
+        "gap_to_target": 0,
+        "meets_target": true,
+        "observed": 3.328,
+        "target": 50,
+        "unit": "ms"
+      },
+      "p95_replay_query_latency_ms": {
+        "comparison": "at_most",
+        "gap_to_target": 0,
+        "meets_target": true,
+        "observed": 4.258,
+        "target": 500,
+        "unit": "ms"
+      },
+      "per_channel_sample_rate_hz": {
+        "comparison": "at_least",
+        "gap_to_target": 5.0,
+        "meets_target": false,
+        "observed": 5.0,
+        "target": 10,
+        "unit": "Hz"
+      }
+    },
+    "meets_all_targets": false,
+    "missed_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ]
+  },
+  "targets": {
+    "aggregate_sample_rate_hz": 1000,
+    "channel_count": 100,
+    "dropped_event_count": 0,
+    "p95_alert_latency_ms": 50,
+    "per_channel_sample_rate_hz": 10,
+    "replay_query_latency_ms": 500
+  },
+  "throughput_gap_profile": {
+    "baseline_workload_identity": "nominal-orbit-daylight:channels-10:samples-10:step-1s",
+    "candidate_mapping": {
+      "candidate_scope": "stream fanout and sample-rate throughput behind the live telemetry contract; Python/FastAPI remains the control plane",
+      "promotion_rule": "Improve at least one throughput gap without regressing dropped_event_count, resource_guard, or stream contract evidence.",
+      "selected_candidate": "rust_stream_fanout_sample_rate_spike"
+    },
+    "candidate_workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s",
+    "gaps": {
+      "aggregate_sample_rate_hz": {
+        "gap_to_target": 900.0,
+        "observed": 100.0,
+        "observed_to_target_ratio": 0.1,
+        "target": 1000,
+        "unit": "Hz"
+      },
+      "channel_count": {
+        "gap_to_target": 80,
+        "observed": 20,
+        "observed_to_target_ratio": 0.2,
+        "target": 100,
+        "unit": "channels"
+      },
+      "per_channel_sample_rate_hz": {
+        "gap_to_target": 5.0,
+        "observed": 5.0,
+        "observed_to_target_ratio": 0.5,
+        "target": 10,
+        "unit": "Hz"
+      }
+    },
+    "missed_throughput_targets": [
+      "channel_count",
+      "per_channel_sample_rate_hz",
+      "aggregate_sample_rate_hz"
+    ],
+    "purpose": "Record the versioned Rust candidate's improved but still target-missing channel and sample-rate evidence.",
+    "rust_scope": "data-plane throughput candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_throughput_gap_profile.v1"
+  },
+  "timing_source_profile": {
+    "duration_clock": "std::time::Instant monotonic process clock",
+    "purpose": "Make the Rust candidate timing source explicit before metric comparison.",
+    "report_timestamp_clock": "datetime.now(timezone.utc)",
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_timing_source_profile.v1",
+    "synthetic_sample_clock": "deterministic candidate start_at plus fixed step_seconds"
+  },
+  "verification_contract": {
+    "allowed_run_variant_fields": [
+      "generated_at",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "target_results.checks.p95_alert_latency_ms.observed",
+      "target_results.checks.p95_replay_query_latency_ms.observed",
+      "latency_budget_profile.observed_p95_ms.alert_evaluation",
+      "latency_budget_profile.observed_p95_ms.bounded_replay_query",
+      "alert_latency_profile.observed_p95_ms",
+      "runtime_observation.duration_ms",
+      "runtime_observation.within_expected_runtime"
+    ],
+    "command": [
+      "python3",
+      "scripts/run_stage09_rust_stream_fanout_candidate.py",
+      "--output",
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json"
+    ],
+    "purpose": "Pin the bounded Rust candidate command and report fields before any Python control-plane path is replaced.",
+    "required_outputs": [
+      "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json"
+    ],
+    "required_report_fields": [
+      "schema",
+      "execution_profile",
+      "resource_guard",
+      "runtime_observation",
+      "timing_source_profile",
+      "benchmark_contract",
+      "verification_contract",
+      "measurement_boundary",
+      "stream_contract_profile",
+      "stream_contract_profile.runtime_evidence_gate",
+      "determinism_profile",
+      "latency_budget_profile",
+      "alert_latency_profile",
+      "replay_query_profile",
+      "dropped_event_profile",
+      "rerun_evidence_profile",
+      "run_variant_policy",
+      "input_provenance",
+      "stable_report_fingerprint",
+      "metrics.telemetry_sample_rate_hz",
+      "metrics.p95_alert_latency_ms",
+      "metrics.p95_replay_query_latency_ms",
+      "metrics.dropped_event_count",
+      "target_profile",
+      "target_results.checks",
+      "baseline_verdict",
+      "throughput_gap_profile",
+      "next_hot_path_profile",
+      "runtime_boundary"
+    ],
+    "resource_expectations": {
+      "max_expected_memory_mb": 512,
+      "max_expected_runtime_seconds": 30,
+      "uses_network": false,
+      "uses_paid_services": false,
+      "worker_processes": 1
+    },
+    "rust_scope": "data-plane candidate only; not a whole-project rewrite",
+    "schema": "telemforge.stage09_baseline_verification_contract.v1"
+  },
+  "workload": {
+    "aggregate_sample_rate_hz": 100.0,
+    "alert_iterations": 0,
+    "channel_count": 20,
+    "per_channel_sample_rate_hz": 5.0,
+    "replay_iterations": 0,
+    "sample_window": {
+      "last_sample_at": "2026-05-03T16:00:01.800000Z",
+      "sample_interval_seconds": 0.2,
+      "sample_span_seconds": 1.8,
+      "start_at": "2026-05-03T16:00:00Z"
+    },
+    "samples_per_channel": 10,
+    "scenario": "rust-stream-fanout-sample-rate",
+    "step_seconds": 0.2,
+    "telemetry_rows_written": 200
+  }
+}
