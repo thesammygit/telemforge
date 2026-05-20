@@ -8,6 +8,9 @@ from pathlib import Path
 from scripts.check_stage09_candidate_promotion_readiness import (
     check_stage09_candidate_promotion_readiness,
 )
+from scripts.run_stage09_rust_stream_fanout_candidate import (
+    run_stage09_rust_stream_fanout_candidate,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -21,18 +24,19 @@ PROMOTION_READINESS_PATH = ARTIFACT_ROOT / "stage09-candidate-promotion-readines
 
 
 class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
-    def test_current_baseline_is_blocked_until_runtime_evidence_exists(self) -> None:
+    def test_current_baseline_is_blocked_until_target_misses_clear(self) -> None:
         result = check_stage09_candidate_promotion_readiness(
             readiness_path=READINESS_PATH,
             target_gap_path=TARGET_GAP_PATH,
             runtime_checklist_path=RUNTIME_CHECKLIST_PATH,
+            candidate_report_path=None,
         )
 
         self.assertEqual(
             result["schema"],
             "telemforge.stage09_candidate_promotion_readiness.v1",
         )
-        self.assertEqual(result["status"], "blocked_pending_runtime_evidence")
+        self.assertEqual(result["status"], "blocked_pending_target_misses")
         self.assertFalse(result["candidate_can_be_promoted"])
         self.assertEqual(
             result["next_comparable_candidate"],
@@ -40,14 +44,12 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
         )
         self.assertEqual(
             result["runtime_stream_claim_status"],
-            "contract_only_blocked",
+            "runtime_verified_bounded_fanout",
         )
         self.assertEqual(
             result["blocking_reasons"],
             [
-                "runtime_stream_claim_blocked",
                 "missed_realtime_targets_remain",
-                "runtime_probe_evidence_missing",
             ],
         )
         self.assertEqual(
@@ -61,6 +63,45 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
         self.assertIn("stream fanout", result["promotion_rule"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
         self.assertFalse(result["public_repo_safety"]["includes_docs_automation"])
+
+    def test_target_scale_candidate_is_blocked_only_by_sustained_load(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            candidate_path = Path(tmpdir) / "target-scale-candidate.json"
+            run_stage09_rust_stream_fanout_candidate(output_path=candidate_path)
+
+            result = check_stage09_candidate_promotion_readiness(
+                readiness_path=READINESS_PATH,
+                target_gap_path=TARGET_GAP_PATH,
+                runtime_checklist_path=RUNTIME_CHECKLIST_PATH,
+                candidate_report_path=candidate_path,
+            )
+
+        self.assertFalse(result["candidate_can_be_promoted"])
+        self.assertEqual(result["missed_targets"], [])
+        self.assertEqual(
+            result["passed_targets"],
+            [
+                "aggregate_sample_rate_hz",
+                "channel_count",
+                "dropped_event_count",
+                "p95_alert_latency_ms",
+                "p95_replay_query_latency_ms",
+                "per_channel_sample_rate_hz",
+            ],
+        )
+        self.assertEqual(result["blocking_reasons"], ["sustained_load_evidence_missing"])
+        self.assertEqual(
+            result["candidate_status_detail"],
+            "target_scale_metrics_passed_blocked_pending_sustained_load_evidence",
+        )
+        self.assertEqual(
+            result["runtime_stream_claim_status"],
+            "runtime_verified_bounded_fanout",
+        )
+        self.assertEqual(
+            result["candidate_report"],
+            "target-scale-candidate.json",
+        )
 
     def test_public_promotion_readiness_artifact_matches_current_result(self) -> None:
         result = check_stage09_candidate_promotion_readiness(
@@ -101,7 +142,7 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
         self.assertEqual(output_payload, stdout_payload)
         self.assertEqual(
             output_payload["status"],
-            "blocked_pending_runtime_evidence",
+            "blocked_pending_target_misses",
         )
 
     def test_rejects_runtime_claim_without_probe_checklist(self) -> None:

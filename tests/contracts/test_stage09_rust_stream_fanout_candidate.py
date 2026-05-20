@@ -52,18 +52,18 @@ class Stage09RustStreamFanoutCandidateTest(unittest.TestCase):
         self.assertEqual(report["resource_guard"]["worker_processes"], 1)
         self.assertFalse(report["resource_guard"]["uses_network"])
         self.assertFalse(report["resource_guard"]["uses_paid_services"])
-        self.assertGreater(report["workload"]["channel_count"], 10)
-        self.assertGreater(report["workload"]["per_channel_sample_rate_hz"], 1.0)
-        self.assertGreater(report["metrics"]["telemetry_sample_rate_hz"], 10.0)
+        self.assertEqual(report["workload"]["channel_count"], 100)
+        self.assertEqual(report["workload"]["per_channel_sample_rate_hz"], 10.0)
+        self.assertEqual(report["metrics"]["telemetry_sample_rate_hz"], 1000.0)
         self.assertEqual(report["metrics"]["dropped_event_count"], 0)
+        self.assertEqual(report["target_results"]["missed_targets"], [])
+        self.assertTrue(report["target_results"]["meets_all_targets"])
+        self.assertEqual(report["candidate_profile"]["workload_preset"], "target_scale")
         self.assertEqual(
-            report["target_results"]["missed_targets"],
-            [
-                "channel_count",
-                "per_channel_sample_rate_hz",
-                "aggregate_sample_rate_hz",
-            ],
+            report["candidate_profile"]["target_scale_status"],
+            "target_scale_metrics_passed_bounded_smoke",
         )
+        self.assertFalse(report["candidate_profile"]["sustained_load_claimed"])
         self.assertFalse(report["candidate_profile"]["report_path"].startswith("/"))
         self.assertIn("stage09-rust", report["candidate_profile"]["report_path"])
         self.assertFalse(_contains_private_path(report))
@@ -77,6 +77,7 @@ class Stage09RustStreamFanoutCandidateTest(unittest.TestCase):
                 [
                     sys.executable,
                     "scripts/run_stage09_rust_stream_fanout_candidate.py",
+                    "--target-scale",
                     "--output",
                     str(output_path),
                 ],
@@ -112,7 +113,14 @@ class Stage09RustStreamFanoutCandidateTest(unittest.TestCase):
         self.assertIn("per_channel_sample_rate_hz", result["improved_metrics"])
         self.assertIn("aggregate_sample_rate_hz", result["improved_metrics"])
         self.assertEqual(result["regressed_metrics"], [])
-        self.assertEqual(result["newly_passing_metrics"], [])
+        self.assertEqual(
+            result["newly_passing_metrics"],
+            [
+                "aggregate_sample_rate_hz",
+                "channel_count",
+                "per_channel_sample_rate_hz",
+            ],
+        )
         self.assertFalse(result["candidate_can_be_promoted"])
 
     def test_candidate_comparison_rejects_unversioned_stable_identity_change(self) -> None:

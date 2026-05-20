@@ -42,6 +42,19 @@ impl Default for Config {
     }
 }
 
+impl Config {
+    fn target_scale() -> Self {
+        Self {
+            channels: 100,
+            samples_per_channel: 10,
+            per_channel_hz: 10.0,
+            clients: 2,
+            queue_depth: 1000,
+            output: None,
+        }
+    }
+}
+
 fn main() {
     let config = match parse_args(env::args().skip(1)) {
         Ok(config) => config,
@@ -79,6 +92,11 @@ where
     let mut iter = args.into_iter();
     while let Some(arg) = iter.next() {
         match arg.as_str() {
+            "--target-scale" => {
+                let output = config.output.take();
+                config = Config::target_scale();
+                config.output = output;
+            }
             "--channels" => config.channels = parse_next_u32(&mut iter, "--channels")?,
             "--samples-per-channel" => {
                 config.samples_per_channel = parse_next_u32(&mut iter, "--samples-per-channel")?
@@ -96,7 +114,7 @@ where
             }
             "--help" | "-h" => {
                 return Err(
-                    "usage: stage09_stream_fanout_sample_rate [--channels N] \
+                    "usage: stage09_stream_fanout_sample_rate [--target-scale] [--channels N] \
                      [--samples-per-channel N] [--per-channel-hz HZ] \
                      [--clients N] [--queue-depth N] [--output PATH]"
                         .to_string(),
@@ -244,6 +262,23 @@ mod tests {
         assert_eq!(measurement.max_queue_depth_observed, 200);
         assert_eq!(measurement.per_channel_hz, 5.0);
         assert_eq!(measurement.aggregate_sample_rate_hz, 100.0);
+        assert!(measurement.monotonic_sequence_verified);
+    }
+
+    #[test]
+    fn target_scale_preset_reaches_stage09_throughput_without_drops() {
+        let config = parse_args(["--target-scale".to_string()]).expect("target preset");
+        let measurement = run_measurement(&config);
+
+        assert_eq!(measurement.channels, 100);
+        assert_eq!(measurement.samples_per_channel, 10);
+        assert_eq!(measurement.clients, 2);
+        assert_eq!(measurement.queue_depth, 1000);
+        assert_eq!(measurement.telemetry_events, 1000);
+        assert_eq!(measurement.delivered_events, 2000);
+        assert_eq!(measurement.dropped_events, 0);
+        assert_eq!(measurement.per_channel_hz, 10.0);
+        assert_eq!(measurement.aggregate_sample_rate_hz, 1000.0);
         assert!(measurement.monotonic_sequence_verified);
     }
 

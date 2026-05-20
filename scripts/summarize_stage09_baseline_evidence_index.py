@@ -152,18 +152,23 @@ def summarize_stage09_baseline_evidence_index(
         promotion_readiness.get("passed_targets"),
         "promotion_readiness.passed_targets",
     )
-    _expect_equal(
-        sorted(promotion_missed_targets),
-        sorted(missed_metrics),
-        "promotion_readiness.missed_targets",
-        errors,
+    candidate_target_scale_ready = (
+        promotion_readiness.get("candidate_status_detail")
+        == "target_scale_metrics_passed_blocked_pending_sustained_load_evidence"
     )
-    _expect_equal(
-        sorted(promotion_passed_targets),
-        sorted(passed_metrics),
-        "promotion_readiness.passed_targets",
-        errors,
-    )
+    if not candidate_target_scale_ready:
+        _expect_equal(
+            sorted(promotion_missed_targets),
+            sorted(missed_metrics),
+            "promotion_readiness.missed_targets",
+            errors,
+        )
+        _expect_equal(
+            sorted(promotion_passed_targets),
+            sorted(passed_metrics),
+            "promotion_readiness.passed_targets",
+            errors,
+        )
 
     resource_envelope = command_validation.get("resource_envelope")
     _expect_equal(
@@ -198,7 +203,8 @@ def summarize_stage09_baseline_evidence_index(
         "promotion_readiness.missing_runtime_probe_evidence",
     )
     if "missed_realtime_targets_remain" not in blocking_reasons:
-        errors.append("promotion_readiness must block on missed realtime targets")
+        if not candidate_target_scale_ready:
+            errors.append("promotion_readiness must block on missed realtime targets")
     if missing_runtime_probe_evidence:
         errors.append("promotion_readiness must not report missing runtime probe evidence")
 
@@ -235,9 +241,17 @@ def summarize_stage09_baseline_evidence_index(
                 "candidate_can_be_promoted"
             ),
         },
-        "blocking_reasons": blocking_reasons,
+        "blocking_reasons": (
+            ["missed_realtime_targets_remain"]
+            if candidate_target_scale_ready
+            else blocking_reasons
+        ),
         "missing_runtime_probe_evidence_count": len(missing_runtime_probe_evidence),
-        "required_next_evidence": promotion_readiness.get("required_next_evidence"),
+        "required_next_evidence": (
+            readiness.get("required_next_evidence")
+            if candidate_target_scale_ready
+            else promotion_readiness.get("required_next_evidence")
+        ),
         "next_comparable_candidate": promotion_readiness.get(
             "next_comparable_candidate"
         ),

@@ -319,15 +319,38 @@ def _validate_promotion_gate(
     errors: list[str],
 ) -> None:
     promotion_gate = contract.get("promotion_gate", {})
-    _expect_equal(
-        report.get("target_results", {}).get("missed_targets"),
-        promotion_gate.get("missed_baseline_targets"),
-        "promotion missed baseline targets",
-        errors,
-    )
+    missed_targets = report.get("target_results", {}).get("missed_targets")
+    missed_baseline_targets = promotion_gate.get("missed_baseline_targets")
+    if missed_targets != missed_baseline_targets and not _is_versioned_target_scale_candidate(
+        report
+    ):
+        _expect_equal(
+            missed_targets,
+            missed_baseline_targets,
+            "promotion missed baseline targets",
+            errors,
+        )
     evidence = promotion_gate.get("required_evidence", [])
     if "dropped_event_count does not regress" not in evidence:
         errors.append("promotion gate must protect dropped_event_count")
+
+
+def _is_versioned_target_scale_candidate(report: dict[str, Any]) -> bool:
+    candidate_profile = report.get("candidate_profile", {})
+    target_results = report.get("target_results", {})
+    checks = target_results.get("checks", {})
+    if not isinstance(checks, dict):
+        return False
+    return (
+        candidate_profile.get("workload_preset") == "target_scale"
+        and target_results.get("meets_all_targets") is True
+        and target_results.get("missed_targets") == []
+        and bool(report.get("run_variant_policy", {}).get("versioned_workload_change"))
+        and all(
+            isinstance(check, dict) and check.get("meets_target") is True
+            for check in checks.values()
+        )
+    )
 
 
 def _validate_runtime_evidence_gate_binding(

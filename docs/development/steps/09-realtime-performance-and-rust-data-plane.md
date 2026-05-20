@@ -200,38 +200,43 @@ whole-project rewrite.
 The candidate promotion-readiness command:
 
 ```text
-python3 scripts/check_stage09_candidate_promotion_readiness.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
+python3 scripts/check_stage09_candidate_promotion_readiness.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
 ```
 
 combines the readiness summary, target-gap summary, and runtime stream evidence
-checklist into a deterministic gate. It keeps the current Python/FastAPI
-baseline and future narrow Rust stream candidates blocked from promotion until
-missed realtime targets are improved or explicitly versioned.
+checklist with the explicit Rust candidate report into a deterministic gate. It
+keeps the current Python/FastAPI baseline and narrow Rust stream candidates
+blocked from promotion until missed realtime targets are improved or explicitly
+versioned, sustained-load evidence is present, and the compatible report
+contract remains intact.
 
 The candidate metric-delta command:
 
 ```text
-python3 scripts/compare_stage09_candidate_metrics.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json
+python3 scripts/compare_stage09_candidate_metrics.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json --promotion-readiness docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-metric-delta.json
 ```
 
 compares a candidate report's target-result metrics against the public
-baseline. The checked-in artifact compares the baseline report to itself, so it
-records unchanged metrics and preserves the blocked runtime/promotion gates
-without rerunning the benchmark, claiming websocket fanout, or approving a Rust
-whole-project rewrite.
+baseline. The checked-in artifact now compares the target-scale Rust stream
+fanout report against the Python/FastAPI baseline: channel count,
+per-channel sample rate, and aggregate sample rate are newly passing, while
+promotion remains blocked because sustained live websocket load evidence is not
+claimed.
 
-The first bounded Rust stream fanout/sample-rate candidate command:
+The target-scale bounded Rust stream fanout/sample-rate candidate command:
 
 ```text
-python3 scripts/run_stage09_rust_stream_fanout_candidate.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json
+python3 scripts/run_stage09_rust_stream_fanout_candidate.py --target-scale --output docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json
 ```
 
 runs the standard-library-only Rust spike under
 `rust/stage09_stream_fanout_sample_rate/` and writes a Stage 09-compatible
 candidate report. The candidate records a versioned workload change from the
-Python/FastAPI baseline, improves channel count, per-channel sample rate, and
-aggregate sample rate, and keeps promotion blocked because the target-scale
-throughput and sustained-load proof are still not met.
+Python/FastAPI baseline, reaches 100 channels, 10 Hz per channel, 1000 Hz
+aggregate sample rate, and zero dropped events inside the bounded local
+resource envelope. It is still a deterministic smoke, not a production fanout
+claim, so promotion remains blocked until sustained-load runtime evidence binds
+the target-scale candidate to live websocket behavior.
 
 The input-provenance validation command:
 

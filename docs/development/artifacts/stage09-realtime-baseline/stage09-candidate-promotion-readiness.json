@@ -1,22 +1,23 @@
 {
   "baseline_verdict_status": "baseline_only_targets_not_met",
   "blocking_reasons": [
-    "missed_realtime_targets_remain"
+    "sustained_load_evidence_missing"
   ],
   "candidate_can_be_promoted": false,
-  "missed_targets": [
-    "aggregate_sample_rate_hz",
-    "channel_count",
-    "per_channel_sample_rate_hz"
-  ],
+  "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
+  "candidate_status_detail": "target_scale_metrics_passed_blocked_pending_sustained_load_evidence",
+  "missed_targets": [],
   "missing_runtime_probe_evidence": [],
   "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
   "passed_targets": [
+    "aggregate_sample_rate_hz",
+    "channel_count",
     "dropped_event_count",
     "p95_alert_latency_ms",
-    "p95_replay_query_latency_ms"
+    "p95_replay_query_latency_ms",
+    "per_channel_sample_rate_hz"
   ],
-  "promotion_rule": "Do not promote a Python/FastAPI refresh or narrow Rust stream fanout candidate until missed realtime targets are improved or explicitly versioned and the compatible report contract remains intact.",
+  "promotion_rule": "Do not promote a Python/FastAPI refresh or narrow Rust stream fanout candidate until missed realtime targets are improved or explicitly versioned, sustained-load evidence is present, and the compatible report contract remains intact.",
   "public_repo_safety": {
     "includes_docs_automation": false,
     "paths_are_repo_relative": true,
@@ -30,7 +31,8 @@
     "candidate report preserves throughput_gap_profile candidate mapping",
     "resource envelope stays within the local automation guard",
     "dropped_event_count does not regress",
-    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared"
+    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared",
+    "sustained-load runtime evidence binds the target-scale Rust candidate to live websocket fanout before promotion"
   ],
   "resource_envelope": {
     "max_expected_memory_mb": 512,
@@ -43,6 +45,7 @@
   "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
   "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
   "source_artifacts": {
+    "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
     "readiness_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json",
     "runtime_stream_evidence_checklist": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
     "target_gap_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json"
@@ -57,6 +60,7 @@
     "runtime_stream_claim_verified_by_probe_evidence",
     "missed_targets_must_improve_or_be_versioned",
     "rust_scope_data_plane_only",
-    "docs_automation_excluded"
+    "docs_automation_excluded",
+    "candidate_report_loaded"
   ]
 }

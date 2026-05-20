@@ -17,6 +17,9 @@ ARTIFACT_ROOT = (
 BASELINE_REPORT_PATH = ARTIFACT_ROOT / "stage09-baseline-report.json"
 PROMOTION_READINESS_PATH = ARTIFACT_ROOT / "stage09-candidate-promotion-readiness.json"
 CANDIDATE_METRIC_DELTA_PATH = ARTIFACT_ROOT / "stage09-candidate-metric-delta.json"
+RUST_CANDIDATE_REPORT_PATH = (
+    ARTIFACT_ROOT / "stage09-rust-stream-fanout-sample-rate-report.json"
+)
 
 
 class Stage09CandidateMetricDeltaTest(unittest.TestCase):
@@ -34,7 +37,10 @@ class Stage09CandidateMetricDeltaTest(unittest.TestCase):
         self.assertEqual(result["status"], "baseline_reference_no_candidate")
         self.assertTrue(result["same_report_reference"])
         self.assertEqual(result["stable_identity_status"], "matches")
-        self.assertEqual(result["runtime_stream_claim_status"], "contract_only_blocked")
+        self.assertEqual(
+            result["runtime_stream_claim_status"],
+            "runtime_verified_bounded_fanout",
+        )
         self.assertFalse(result["candidate_can_be_promoted"])
         self.assertEqual(result["improved_metrics"], [])
         self.assertEqual(result["regressed_metrics"], [])
@@ -47,7 +53,7 @@ class Stage09CandidateMetricDeltaTest(unittest.TestCase):
     def test_public_candidate_metric_delta_artifact_matches_current_result(self) -> None:
         result = compare_stage09_candidate_metrics(
             baseline_report_path=BASELINE_REPORT_PATH,
-            candidate_report_path=BASELINE_REPORT_PATH,
+            candidate_report_path=RUST_CANDIDATE_REPORT_PATH,
             promotion_readiness_path=PROMOTION_READINESS_PATH,
         )
         artifact = json.loads(CANDIDATE_METRIC_DELTA_PATH.read_text(encoding="utf-8"))
@@ -68,6 +74,10 @@ class Stage09CandidateMetricDeltaTest(unittest.TestCase):
                 [
                     sys.executable,
                     "scripts/compare_stage09_candidate_metrics.py",
+                    "--candidate-report",
+                    str(RUST_CANDIDATE_REPORT_PATH),
+                    "--promotion-readiness",
+                    str(PROMOTION_READINESS_PATH),
                     "--output",
                     str(output_path),
                 ],
@@ -81,7 +91,10 @@ class Stage09CandidateMetricDeltaTest(unittest.TestCase):
             output_payload = json.loads(output_path.read_text(encoding="utf-8"))
 
         self.assertEqual(output_payload, stdout_payload)
-        self.assertEqual(output_payload["status"], "baseline_reference_no_candidate")
+        self.assertEqual(
+            output_payload["status"],
+            "candidate_blocked_pending_promotion_gates",
+        )
 
     def test_rejects_candidate_metric_target_mismatch(self) -> None:
         candidate = json.loads(BASELINE_REPORT_PATH.read_text(encoding="utf-8"))

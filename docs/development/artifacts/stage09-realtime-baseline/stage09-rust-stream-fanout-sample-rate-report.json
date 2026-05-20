@@ -15,21 +15,20 @@
     "trigger_source": "manual fault POST requests through FastAPI TestClient"
   },
   "baseline_verdict": {
-    "missed_targets": [
-      "channel_count",
-      "per_channel_sample_rate_hz",
-      "aggregate_sample_rate_hz"
-    ],
-    "next_comparable_candidate": "Rust stream fanout candidate with target-scale channel/sample-rate and sustained-load runtime evidence",
+    "missed_targets": [],
+    "next_comparable_candidate": "Sustained-load Rust stream fanout proof binding target-scale candidate metrics to live websocket runtime evidence",
     "passed_targets": [
+      "aggregate_sample_rate_hz",
+      "channel_count",
+      "dropped_event_count",
       "p95_alert_latency_ms",
       "p95_replay_query_latency_ms",
-      "dropped_event_count"
+      "per_channel_sample_rate_hz"
     ],
     "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_baseline_verdict.v1",
-    "status": "rust_candidate_targets_not_met",
-    "summary": "Bounded Rust candidate improves throughput over the Python/FastAPI baseline but remains below Stage 09 realtime targets."
+    "status": "rust_candidate_target_scale_ready_for_sustained_load_review",
+    "summary": "Bounded Rust candidate reaches Stage 09 channel and sample-rate targets with zero dropped events; promotion still requires sustained live websocket load evidence."
   },
   "benchmark_contract": {
     "comparability_rules": [
@@ -47,14 +46,14 @@
     "purpose": "Comparable candidate contract for a narrow Rust stream fanout/sample-rate data-plane hot path.",
     "schema": "telemforge.stage09_realtime_benchmark_contract.v1",
     "workload_generation": {
-      "channel_count": 20,
+      "channel_count": 100,
       "database": "none; in-memory deterministic candidate",
       "samples_per_channel": 10,
       "scenario": "rust-stream-fanout-sample-rate",
       "seed": 9090,
       "source": "Rust stdlib deterministic stream fanout candidate",
       "start_at": "2026-05-03T16:00:00Z",
-      "step_seconds": 0.2
+      "step_seconds": 0.1
     }
   },
   "candidate_profile": {
@@ -74,7 +73,10 @@
     "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_rust_stream_fanout_candidate.v1",
     "source_crate": "rust/stage09_stream_fanout_sample_rate",
-    "sustained_load_claimed": false
+    "sustained_load_blocker": "target-scale throughput is a bounded deterministic smoke; sustained live websocket fanout evidence remains required before promotion",
+    "sustained_load_claimed": false,
+    "target_scale_status": "target_scale_metrics_passed_bounded_smoke",
+    "workload_preset": "target_scale"
   },
   "comparison_profile": {
     "compatibility_requirements": [
@@ -157,14 +159,14 @@
     ],
     "schema": "telemforge.stage09_determinism_profile.v1",
     "stable_inputs": {
-      "channel_count": 20,
+      "channel_count": 100,
       "samples_per_channel": 10,
       "scenario": "rust-stream-fanout-sample-rate",
       "seed": 9090,
       "start_at": "2026-05-03T16:00:00Z",
-      "step_seconds": 0.2
+      "step_seconds": 0.1
     },
-    "workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s"
+    "workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-100:samples-10:step-0.1s"
   },
   "dropped_event_profile": {
     "accounting_source": {
@@ -174,9 +176,9 @@
     },
     "comparison_rule": "Do not treat zero drops in this bounded candidate as sustained websocket load evidence.",
     "dropped_event_count": 0,
-    "expected_telemetry_rows": 200,
+    "expected_telemetry_rows": 1000,
     "purpose": "Make bounded Rust fanout dropped-event accounting explicit before sustained load claims.",
-    "replay_sample_count": 200,
+    "replay_sample_count": 1000,
     "rust_scope": "data-plane stream candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_dropped_event_profile.v1",
     "stream_claim_status": "rust_candidate_bounded_queue_accounting"
@@ -190,12 +192,12 @@
       "Python/FastAPI control-plane replacement"
     ],
     "load_shape": {
-      "aggregate_sample_rate_hz": 100.0,
-      "channel_count": 20,
-      "per_channel_sample_rate_hz": 5.0,
+      "aggregate_sample_rate_hz": 1000.0,
+      "channel_count": 100,
+      "per_channel_sample_rate_hz": 10.0,
       "samples_per_channel": 10,
       "scenario": "rust-stream-fanout-sample-rate",
-      "step_seconds": 0.2
+      "step_seconds": 0.1
     },
     "measured_paths": [
       "Rust stdlib deterministic stream sequencing",
@@ -207,11 +209,11 @@
     "resource_scope": "bounded local smoke, no worker fan-out",
     "schema": "telemforge.stage09_execution_profile.v1"
   },
-  "generated_at": "2026-05-19T04:35:45Z",
+  "generated_at": "2026-05-20T04:37:11Z",
   "health_stage": "08-hardening-docker-and-release",
   "input_provenance": {
-    "candidate_virtual_channel_count": 20,
-    "channel_count": 20,
+    "candidate_virtual_channel_count": 100,
+    "channel_count": 100,
     "purpose": "Bind the Rust candidate to the existing telemetry catalog provenance while recording its versioned virtual channel fanout workload.",
     "schema": "telemforge.stage09_input_provenance.v1",
     "source_channel_catalog_path": "fixtures/telemetry/channels.json",
@@ -258,9 +260,9 @@
     "dropped_event_count": 0,
     "p95_alert_latency_ms": 3.328,
     "p95_replay_query_latency_ms": 4.258,
-    "per_channel_sample_rate_hz": 5.0,
-    "replay_sample_count": 200,
-    "telemetry_sample_rate_hz": 100.0
+    "per_channel_sample_rate_hz": 10.0,
+    "replay_sample_count": 1000,
+    "telemetry_sample_rate_hz": 1000.0
   },
   "next_hot_path_profile": {
     "addresses_missed_targets": [
@@ -282,7 +284,7 @@
       "resource_guard",
       "benchmark_contract"
     ],
-    "promotion_signal": "This bounded candidate improves missed throughput metrics but remains blocked until target misses and sustained-load evidence are resolved.",
+    "promotion_signal": "This bounded candidate reaches target-scale throughput metrics; promotion remains blocked until sustained live websocket load evidence is produced.",
     "purpose": "Translate the current baseline misses into the next narrow data-plane candidate without approving a whole-project rewrite.",
     "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_next_hot_path_profile.v1",
@@ -290,7 +292,7 @@
   },
   "notes": [
     "Rust stream fanout/sample-rate candidate is a bounded local smoke, not sustained production load.",
-    "Candidate uses 2 clients and queue depth 250 with zero dropped events in this workload.",
+    "Candidate uses 2 clients and queue depth 1000 with zero dropped events in this workload.",
     "Python/FastAPI remains the control plane for API orchestration, alert latency, and replay latency."
   ],
   "replay_query_profile": {
@@ -316,21 +318,22 @@
     "command": [
       "python3",
       "scripts/run_stage09_rust_stream_fanout_candidate.py",
+      "--target-scale",
       "--output",
       "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json"
     ],
     "comparable_identity": {
       "stable_inputs": {
-        "channel_count": 20,
+        "channel_count": 100,
         "samples_per_channel": 10,
         "scenario": "rust-stream-fanout-sample-rate",
         "seed": 9090,
         "start_at": "2026-05-03T16:00:00Z",
-        "step_seconds": 0.2
+        "step_seconds": 0.1
       },
       "stable_report_fingerprint_field": "stable_report_fingerprint.digest_sha256",
       "telemetry_catalog_sha256": "fe0a09191f4b04677025887035ad0156627ef73bf6cca5692c8eb775f6dc3daf",
-      "workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s"
+      "workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-100:samples-10:step-0.1s"
     },
     "purpose": "Make the bounded Rust candidate rerun evidence explicit before metric comparison.",
     "required_before_metric_comparison": [
@@ -407,10 +410,11 @@
     ],
     "versioned_workload_change": {
       "baseline_workload_identity": "nominal-orbit-daylight:seed-9090:channels-10:samples-10:step-1s",
-      "candidate_workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s",
+      "candidate_workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-100:samples-10:step-0.1s",
       "changed_fields": [
         "execution_profile.process_model",
         "execution_profile.client_count",
+        "candidate_profile.workload_preset",
         "workload.scenario",
         "workload.channel_count",
         "workload.samples_per_channel",
@@ -442,7 +446,7 @@
     "tracked_direction": "Rust data plane direction, not a whole-project rewrite."
   },
   "runtime_observation": {
-    "duration_ms": 0.007,
+    "duration_ms": 0.032,
     "max_expected_runtime_seconds": 30,
     "purpose": "Record the observed bounded Rust candidate duration without claiming sustained production load.",
     "schema": "telemforge.stage09_runtime_observation.v1",
@@ -453,7 +457,7 @@
   "stable_report_fingerprint": {
     "comparison_rule": "Compare timing metrics only after digest_sha256 matches or a versioned workload change is documented.",
     "digest_algorithm": "sha256",
-    "digest_sha256": "c18cd0dab46505060f3267ee495b74a7939659c237378700a23132134c261bac",
+    "digest_sha256": "0a9da38754080f4078d8dbd12ed6f1815ba70556b7ad29edc6408242033b2a5c",
     "excluded_run_variant_fields": [
       "generated_at",
       "metrics.p95_alert_latency_ms",
@@ -607,17 +611,17 @@
     "checks": {
       "aggregate_sample_rate_hz": {
         "comparison": "at_least",
-        "gap_to_target": 900.0,
-        "meets_target": false,
-        "observed": 100.0,
+        "gap_to_target": 0.0,
+        "meets_target": true,
+        "observed": 1000.0,
         "target": 1000,
         "unit": "Hz"
       },
       "channel_count": {
         "comparison": "at_least",
-        "gap_to_target": 80,
-        "meets_target": false,
-        "observed": 20,
+        "gap_to_target": 0,
+        "meets_target": true,
+        "observed": 100,
         "target": 100,
         "unit": "channels"
       },
@@ -647,19 +651,15 @@
       },
       "per_channel_sample_rate_hz": {
         "comparison": "at_least",
-        "gap_to_target": 5.0,
-        "meets_target": false,
-        "observed": 5.0,
+        "gap_to_target": 0.0,
+        "meets_target": true,
+        "observed": 10.0,
         "target": 10,
         "unit": "Hz"
       }
     },
-    "meets_all_targets": false,
-    "missed_targets": [
-      "channel_count",
-      "per_channel_sample_rate_hz",
-      "aggregate_sample_rate_hz"
-    ]
+    "meets_all_targets": true,
+    "missed_targets": []
   },
   "targets": {
     "aggregate_sample_rate_hz": 1000,
@@ -676,36 +676,32 @@
       "promotion_rule": "Improve at least one throughput gap without regressing dropped_event_count, resource_guard, or stream contract evidence.",
       "selected_candidate": "rust_stream_fanout_sample_rate_spike"
     },
-    "candidate_workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-20:samples-10:step-0.2s",
+    "candidate_workload_identity": "rust-stream-fanout-sample-rate:seed-9090:channels-100:samples-10:step-0.1s",
     "gaps": {
       "aggregate_sample_rate_hz": {
-        "gap_to_target": 900.0,
-        "observed": 100.0,
-        "observed_to_target_ratio": 0.1,
+        "gap_to_target": 0.0,
+        "observed": 1000.0,
+        "observed_to_target_ratio": 1.0,
         "target": 1000,
         "unit": "Hz"
       },
       "channel_count": {
-        "gap_to_target": 80,
-        "observed": 20,
-        "observed_to_target_ratio": 0.2,
+        "gap_to_target": 0,
+        "observed": 100,
+        "observed_to_target_ratio": 1.0,
         "target": 100,
         "unit": "channels"
       },
       "per_channel_sample_rate_hz": {
-        "gap_to_target": 5.0,
-        "observed": 5.0,
-        "observed_to_target_ratio": 0.5,
+        "gap_to_target": 0.0,
+        "observed": 10.0,
+        "observed_to_target_ratio": 1.0,
         "target": 10,
         "unit": "Hz"
       }
     },
-    "missed_throughput_targets": [
-      "channel_count",
-      "per_channel_sample_rate_hz",
-      "aggregate_sample_rate_hz"
-    ],
-    "purpose": "Record the versioned Rust candidate's improved but still target-missing channel and sample-rate evidence.",
+    "missed_throughput_targets": [],
+    "purpose": "Record the versioned Rust candidate's target-scale channel and sample-rate evidence while sustained-load proof remains separate.",
     "rust_scope": "data-plane throughput candidate only; not a whole-project rewrite",
     "schema": "telemforge.stage09_throughput_gap_profile.v1"
   },
@@ -733,6 +729,7 @@
     "command": [
       "python3",
       "scripts/run_stage09_rust_stream_fanout_candidate.py",
+      "--target-scale",
       "--output",
       "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json"
     ],
@@ -782,20 +779,20 @@
     "schema": "telemforge.stage09_baseline_verification_contract.v1"
   },
   "workload": {
-    "aggregate_sample_rate_hz": 100.0,
+    "aggregate_sample_rate_hz": 1000.0,
     "alert_iterations": 0,
-    "channel_count": 20,
-    "per_channel_sample_rate_hz": 5.0,
+    "channel_count": 100,
+    "per_channel_sample_rate_hz": 10.0,
     "replay_iterations": 0,
     "sample_window": {
-      "last_sample_at": "2026-05-03T16:00:01.800000Z",
-      "sample_interval_seconds": 0.2,
-      "sample_span_seconds": 1.8,
+      "last_sample_at": "2026-05-03T16:00:00.900000Z",
+      "sample_interval_seconds": 0.1,
+      "sample_span_seconds": 0.9,
       "start_at": "2026-05-03T16:00:00Z"
     },
     "samples_per_channel": 10,
     "scenario": "rust-stream-fanout-sample-rate",
-    "step_seconds": 0.2,
-    "telemetry_rows_written": 200
+    "step_seconds": 0.1,
+    "telemetry_rows_written": 1000
   }
 }

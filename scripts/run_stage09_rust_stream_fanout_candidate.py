@@ -14,7 +14,7 @@ import hashlib
 import json
 import subprocess
 import sys
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -35,17 +35,19 @@ class RustStreamFanoutCandidateError(Exception):
 def run_stage09_rust_stream_fanout_candidate(
     output_path: Path | str = DEFAULT_OUTPUT_PATH,
     baseline_report_path: Path | str = DEFAULT_BASELINE_REPORT_PATH,
+    target_scale: bool = True,
 ) -> dict[str, Any]:
     """Run the Rust candidate and write a Stage 09-compatible report."""
 
     output_path = Path(output_path)
     baseline_report_path = Path(baseline_report_path)
     baseline = _read_json(baseline_report_path)
-    measurement = _run_rust_measurement()
+    measurement = _run_rust_measurement(target_scale=target_scale)
     report = build_stage09_rust_stream_fanout_report(
         baseline=baseline,
         measurement=measurement,
         output_path=output_path,
+        target_scale=target_scale,
     )
     _write_json(output_path, report)
     return report
@@ -55,6 +57,7 @@ def build_stage09_rust_stream_fanout_report(
     baseline: dict[str, Any],
     measurement: dict[str, Any],
     output_path: Path,
+    target_scale: bool = True,
 ) -> dict[str, Any]:
     """Build a report that stays compatible with the Stage 09 contract."""
 
@@ -76,6 +79,7 @@ def build_stage09_rust_stream_fanout_report(
     duration_ms = round(float(measurement["duration_ms"]), 3)
     step_seconds = round(1.0 / per_channel_hz, 6)
     sample_span_seconds = round((samples_per_channel - 1) * step_seconds, 6)
+    workload_preset = "target_scale" if target_scale else "sample_rate_spike"
     workload_identity = (
         "rust-stream-fanout-sample-rate:seed-9090:"
         f"channels-{channel_count}:samples-{samples_per_channel}:"
@@ -94,8 +98,13 @@ def build_stage09_rust_stream_fanout_report(
         "runner": "scripts/run_stage09_rust_stream_fanout_candidate.py",
         "report_path": _display_path(output_path),
         "measurement_schema": measurement["schema"],
+        "workload_preset": workload_preset,
         "bounded_local_smoke": True,
         "sustained_load_claimed": False,
+        "sustained_load_blocker": (
+            "target-scale throughput is a bounded deterministic smoke; sustained "
+            "live websocket fanout evidence remains required before promotion"
+        ),
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
         "public_repo_safety": _public_repo_safety(),
     }
@@ -161,6 +170,7 @@ def build_stage09_rust_stream_fanout_report(
         samples_per_channel=samples_per_channel,
         step_seconds=step_seconds,
         output_path=output_path,
+        target_scale=target_scale,
     )
     _update_measurement_profiles(
         report,
@@ -174,6 +184,7 @@ def build_stage09_rust_stream_fanout_report(
         queue_depth=queue_depth,
     )
     _update_target_results(report)
+    _update_candidate_profile_status(report)
     _update_variant_and_fingerprint(report, workload_identity)
 
     return report
@@ -182,6 +193,14 @@ def build_stage09_rust_stream_fanout_report(
 def main() -> int:
     parser = argparse.ArgumentParser(
         description="Run the Stage 09 Rust stream fanout/sample-rate candidate."
+    )
+    parser.add_argument(
+        "--target-scale",
+        action="store_true",
+        help=(
+            "Use the Stage 09 target-scale preset: 100 channels, 10 Hz per "
+            "channel, 1000 Hz aggregate, bounded local smoke."
+        ),
     )
     parser.add_argument(
         "--output",
@@ -199,6 +218,7 @@ def main() -> int:
         report = run_stage09_rust_stream_fanout_candidate(
             output_path=args.output,
             baseline_report_path=args.baseline_report,
+            target_scale=args.target_scale,
         )
     except (
         OSError,
@@ -213,26 +233,34 @@ def main() -> int:
     return 0
 
 
-def _run_rust_measurement() -> dict[str, Any]:
+def _run_rust_measurement(*, target_scale: bool) -> dict[str, Any]:
+    rust_args = [
+        "cargo",
+        "run",
+        "--quiet",
+        "--manifest-path",
+        str(RUST_MANIFEST_PATH),
+        "--",
+    ]
+    if target_scale:
+        rust_args.append("--target-scale")
+    else:
+        rust_args.extend(
+            [
+                "--channels",
+                "20",
+                "--samples-per-channel",
+                "10",
+                "--per-channel-hz",
+                "5",
+                "--clients",
+                "2",
+                "--queue-depth",
+                "250",
+            ]
+        )
     completed = subprocess.run(
-        [
-            "cargo",
-            "run",
-            "--quiet",
-            "--manifest-path",
-            str(RUST_MANIFEST_PATH),
-            "--",
-            "--channels",
-            "20",
-            "--samples-per-channel",
-            "10",
-            "--per-channel-hz",
-            "5",
-            "--clients",
-            "2",
-            "--queue-depth",
-            "250",
-        ],
+        rust_args,
         cwd=ROOT,
         check=True,
         capture_output=True,
@@ -248,6 +276,7 @@ def _update_benchmark_and_verification_contracts(
     samples_per_channel: int,
     step_seconds: float,
     output_path: Path,
+    target_scale: bool,
 ) -> None:
     report["benchmark_contract"]["workload_generation"] = {
         "source": "Rust stdlib deterministic stream fanout candidate",
@@ -277,6 +306,8 @@ def _update_benchmark_and_verification_contracts(
         "--output",
         output_display_path,
     ]
+    if target_scale:
+        command.insert(2, "--target-scale")
     report["verification_contract"]["command"] = command
     report["verification_contract"]["required_outputs"] = [output_display_path]
     report["verification_contract"]["purpose"] = (
@@ -342,7 +373,7 @@ def _update_measurement_profiles(
         "telemetry_rows_written": telemetry_event_count,
         "sample_window": {
             "start_at": "2026-05-03T16:00:00Z",
-            "last_sample_at": "2026-05-03T16:00:01.800000Z",
+            "last_sample_at": _offset_timestamp(sample_span_seconds),
             "sample_interval_seconds": step_seconds,
             "sample_span_seconds": sample_span_seconds,
         },
@@ -426,22 +457,38 @@ def _update_measurement_profiles(
         per_channel_hz,
         aggregate_hz,
     )
-    report["throughput_gap_profile"]["missed_throughput_targets"] = [
-        "channel_count",
-        "per_channel_sample_rate_hz",
-        "aggregate_sample_rate_hz",
+    missed_throughput_targets = [
+        metric_name
+        for metric_name, gap in report["throughput_gap_profile"]["gaps"].items()
+        if gap["gap_to_target"] > 0
     ]
-    report["throughput_gap_profile"]["purpose"] = (
-        "Record the versioned Rust candidate's improved but still target-missing "
-        "channel and sample-rate evidence."
-    )
+    report["throughput_gap_profile"][
+        "missed_throughput_targets"
+    ] = missed_throughput_targets
+    if missed_throughput_targets:
+        report["throughput_gap_profile"]["purpose"] = (
+            "Record the versioned Rust candidate's improved but still "
+            "target-missing channel and sample-rate evidence."
+        )
+    else:
+        report["throughput_gap_profile"]["purpose"] = (
+            "Record the versioned Rust candidate's target-scale channel and "
+            "sample-rate evidence while sustained-load proof remains separate."
+        )
     report["next_hot_path_profile"]["selected_candidate"] = (
         "rust_stream_fanout_sample_rate_spike"
     )
-    report["next_hot_path_profile"]["promotion_signal"] = (
-        "This bounded candidate improves missed throughput metrics but remains "
-        "blocked until target misses and sustained-load evidence are resolved."
-    )
+    if missed_throughput_targets:
+        report["next_hot_path_profile"]["promotion_signal"] = (
+            "This bounded candidate improves missed throughput metrics but remains "
+            "blocked until target misses and sustained-load evidence are resolved."
+        )
+    else:
+        report["next_hot_path_profile"]["promotion_signal"] = (
+            "This bounded candidate reaches target-scale throughput metrics; "
+            "promotion remains blocked until sustained live websocket load "
+            "evidence is produced."
+        )
     report["input_provenance"]["channel_count"] = channel_count
     report["input_provenance"]["candidate_virtual_channel_count"] = channel_count
     report["input_provenance"]["source_channel_catalog_path"] = report[
@@ -500,34 +547,58 @@ def _update_target_results(report: dict[str, Any]) -> None:
         )
 
     missed_targets = [
-        "channel_count",
-        "per_channel_sample_rate_hz",
-        "aggregate_sample_rate_hz",
+        metric_name
+        for metric_name, check in checks.items()
+        if not check["meets_target"]
+    ]
+    passed_targets = [
+        metric_name for metric_name, check in checks.items() if check["meets_target"]
     ]
     report["target_results"] = {
         "checks": checks,
-        "meets_all_targets": False,
+        "meets_all_targets": not missed_targets,
         "missed_targets": missed_targets,
     }
-    report["baseline_verdict"] = {
-        "schema": "telemforge.stage09_baseline_verdict.v1",
-        "status": "rust_candidate_targets_not_met",
-        "summary": (
+    if missed_targets:
+        status = "rust_candidate_targets_not_met"
+        summary = (
             "Bounded Rust candidate improves throughput over the Python/FastAPI "
             "baseline but remains below Stage 09 realtime targets."
-        ),
-        "passed_targets": [
-            "p95_alert_latency_ms",
-            "p95_replay_query_latency_ms",
-            "dropped_event_count",
-        ],
-        "missed_targets": missed_targets,
-        "next_comparable_candidate": (
+        )
+        next_candidate = (
             "Rust stream fanout candidate with target-scale channel/sample-rate "
             "and sustained-load runtime evidence"
-        ),
+        )
+    else:
+        status = "rust_candidate_target_scale_ready_for_sustained_load_review"
+        summary = (
+            "Bounded Rust candidate reaches Stage 09 channel and sample-rate "
+            "targets with zero dropped events; promotion still requires sustained "
+            "live websocket load evidence."
+        )
+        next_candidate = (
+            "Sustained-load Rust stream fanout proof binding target-scale "
+            "candidate metrics to live websocket runtime evidence"
+        )
+    report["baseline_verdict"] = {
+        "schema": "telemforge.stage09_baseline_verdict.v1",
+        "status": status,
+        "summary": summary,
+        "passed_targets": passed_targets,
+        "missed_targets": missed_targets,
+        "next_comparable_candidate": next_candidate,
         "rust_scope": "data-plane candidate only; not a whole-project rewrite",
     }
+
+
+def _update_candidate_profile_status(report: dict[str, Any]) -> None:
+    candidate_profile = report["candidate_profile"]
+    if report["target_results"]["meets_all_targets"]:
+        candidate_profile["target_scale_status"] = (
+            "target_scale_metrics_passed_bounded_smoke"
+        )
+    else:
+        candidate_profile["target_scale_status"] = "target_scale_metrics_not_met"
 
 
 def _update_variant_and_fingerprint(
@@ -559,6 +630,7 @@ def _update_variant_and_fingerprint(
         "changed_fields": [
             "execution_profile.process_model",
             "execution_profile.client_count",
+            "candidate_profile.workload_preset",
             "workload.scenario",
             "workload.channel_count",
             "workload.samples_per_channel",
@@ -679,6 +751,14 @@ def _display_path(path: Path) -> str:
         return str(path.resolve().relative_to(ROOT))
     except ValueError:
         return path.name
+
+
+def _offset_timestamp(offset_seconds: float) -> str:
+    timestamp = datetime(2026, 5, 3, 16, 0, tzinfo=UTC) + timedelta(
+        seconds=offset_seconds
+    )
+    rendered = timestamp.isoformat().replace("+00:00", "Z")
+    return rendered
 
 
 def _path_value(document: dict[str, Any], field_path: str) -> Any:

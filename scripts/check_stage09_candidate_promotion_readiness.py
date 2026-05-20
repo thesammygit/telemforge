@@ -24,6 +24,9 @@ DEFAULT_TARGET_GAP_PATH = ARTIFACT_ROOT / "stage09-target-gap-summary.json"
 DEFAULT_RUNTIME_CHECKLIST_PATH = (
     ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 )
+DEFAULT_CANDIDATE_REPORT_PATH = (
+    ARTIFACT_ROOT / "stage09-rust-stream-fanout-sample-rate-report.json"
+)
 
 
 class PromotionReadinessError(Exception):
@@ -34,6 +37,7 @@ def check_stage09_candidate_promotion_readiness(
     readiness_path: Path | str = DEFAULT_READINESS_PATH,
     target_gap_path: Path | str = DEFAULT_TARGET_GAP_PATH,
     runtime_checklist_path: Path | str = DEFAULT_RUNTIME_CHECKLIST_PATH,
+    candidate_report_path: Path | str | None = DEFAULT_CANDIDATE_REPORT_PATH,
 ) -> dict[str, Any]:
     """Build a deterministic promotion-readiness gate from public artifacts."""
 
@@ -43,6 +47,9 @@ def check_stage09_candidate_promotion_readiness(
     readiness = _read_json(readiness_path)
     target_gap = _read_json(target_gap_path)
     runtime_checklist = _read_json(runtime_checklist_path)
+    candidate_report = (
+        None if candidate_report_path is None else _read_json(Path(candidate_report_path))
+    )
 
     errors: list[str] = []
     _expect_equal(
@@ -129,7 +136,16 @@ def check_stage09_candidate_promotion_readiness(
     if errors:
         raise PromotionReadinessError("\n".join(errors))
 
-    missed_targets = list(target_gap.get("missed_targets", []))
+    if candidate_report is not None:
+        _validate_candidate_report(candidate_report)
+        missed_targets = list(
+            candidate_report.get("target_results", {}).get("missed_targets", [])
+        )
+        passed_targets = _candidate_passed_targets(candidate_report)
+    else:
+        missed_targets = list(target_gap.get("missed_targets", []))
+        passed_targets = list(target_gap.get("passed_targets", []))
+
     probe_checklist = _require_list(
         runtime_checklist.get("probe_checklist"),
         "runtime_checklist.probe_checklist",
@@ -145,32 +161,51 @@ def check_stage09_candidate_promotion_readiness(
         blocking_reasons.append("missed_realtime_targets_remain")
     if missing_runtime_probe_evidence:
         blocking_reasons.append("runtime_probe_evidence_missing")
+    if candidate_report is not None and not candidate_report.get(
+        "candidate_profile", {}
+    ).get("sustained_load_claimed"):
+        blocking_reasons.append("sustained_load_evidence_missing")
 
     if missing_runtime_probe_evidence:
         status = "blocked_pending_runtime_evidence"
     elif missed_targets:
         status = "blocked_pending_target_misses"
+    elif "sustained_load_evidence_missing" in blocking_reasons:
+        # Keep the legacy status stable for existing Stage 09 bundle gates while
+        # candidate_status_detail records the precise sustained-load blocker.
+        status = "blocked_pending_target_misses"
     else:
         status = "ready_for_candidate_comparison"
 
-    return {
+    candidate_status_detail = _candidate_status_detail(
+        candidate_report=candidate_report,
+        missed_targets=missed_targets,
+        blocking_reasons=blocking_reasons,
+    )
+
+    result = {
         "schema": "telemforge.stage09_candidate_promotion_readiness.v1",
         "status": status,
         "stage": readiness.get("stage"),
         "task_id": readiness.get("task_id"),
         "candidate_can_be_promoted": not blocking_reasons,
+        "candidate_status_detail": candidate_status_detail,
         "next_comparable_candidate": readiness.get("next_comparable_candidate"),
         "baseline_verdict_status": readiness.get("baseline_verdict_status"),
         "runtime_stream_claim_status": readiness.get("runtime_stream_claim_status"),
         "missed_targets": missed_targets,
-        "passed_targets": list(target_gap.get("passed_targets", [])),
+        "passed_targets": passed_targets,
         "blocking_reasons": blocking_reasons,
         "missing_runtime_probe_evidence": missing_runtime_probe_evidence,
-        "required_next_evidence": readiness.get("required_next_evidence", []),
+        "required_next_evidence": _required_next_evidence(
+            readiness.get("required_next_evidence", []),
+            blocking_reasons,
+        ),
         "promotion_rule": (
             "Do not promote a Python/FastAPI refresh or narrow Rust stream fanout "
             "candidate until missed realtime targets are improved or explicitly "
-            "versioned and the compatible report contract remains intact."
+            "versioned, sustained-load evidence is present, and the compatible "
+            "report contract remains intact."
         ),
         "rust_scope": "Rust data-plane candidate only; not a whole-project rewrite",
         "resource_envelope": readiness.get("resource_envelope"),
@@ -190,6 +225,11 @@ def check_stage09_candidate_promotion_readiness(
             "docs_automation_excluded",
         ],
     }
+    if candidate_report_path is not None:
+        result["candidate_report"] = _display_path(Path(candidate_report_path))
+        result["source_artifacts"]["candidate_report"] = result["candidate_report"]
+        result["verified_gates"].append("candidate_report_loaded")
+    return result
 
 
 def main() -> int:
@@ -212,6 +252,14 @@ def main() -> int:
         help="Stage 09 runtime stream evidence checklist JSON path.",
     )
     parser.add_argument(
+        "--candidate-report",
+        default=str(DEFAULT_CANDIDATE_REPORT_PATH.relative_to(ROOT)),
+        help=(
+            "Optional Stage 09 candidate report JSON path. Use 'none' to check "
+            "baseline target gaps only."
+        ),
+    )
+    parser.add_argument(
         "--output",
         default=None,
         help="Optional JSON promotion-readiness path to write after validation passes.",
@@ -223,6 +271,11 @@ def main() -> int:
             readiness_path=args.readiness,
             target_gap_path=args.target_gap,
             runtime_checklist_path=args.runtime_checklist,
+            candidate_report_path=(
+                None
+                if str(args.candidate_report).lower() == "none"
+                else args.candidate_report
+            ),
         )
     except (OSError, json.JSONDecodeError, PromotionReadinessError, KeyError) as error:
         print(f"Stage 09 candidate promotion readiness failed:\n{error}", file=sys.stderr)
@@ -267,11 +320,101 @@ def _expect_equal(
         errors.append(f"{label} mismatch: expected {right!r}, got {left!r}")
 
 
+def _validate_candidate_report(candidate_report: dict[str, Any]) -> None:
+    errors: list[str] = []
+    _expect_equal(
+        candidate_report.get("schema"),
+        "telemforge.stage09_realtime_baseline.v1",
+        "candidate_report.schema",
+        errors,
+    )
+    candidate_profile = candidate_report.get("candidate_profile", {})
+    if not isinstance(candidate_profile, dict):
+        errors.append("candidate_report.candidate_profile must be a JSON object")
+    elif "not a whole-project rewrite" not in str(candidate_profile.get("rust_scope", "")):
+        errors.append("candidate_report.candidate_profile.rust_scope must reject a rewrite")
+    target_results = candidate_report.get("target_results", {})
+    if not isinstance(target_results, dict):
+        errors.append("candidate_report.target_results must be a JSON object")
+    else:
+        _require_mapping(
+            target_results.get("checks"),
+            "candidate_report.target_results.checks",
+        )
+    public_safety = candidate_profile.get("public_repo_safety", {})
+    if not isinstance(public_safety, dict):
+        errors.append("candidate_report public repo safety must be a JSON object")
+    else:
+        for field_name, expected in [
+            ("includes_docs_automation", False),
+            ("uses_absolute_local_paths", False),
+            ("uses_credentials", False),
+            ("uses_private_runtime_state", False),
+        ]:
+            _expect_equal(
+                public_safety.get(field_name),
+                expected,
+                f"candidate_report public repo safety {field_name}",
+                errors,
+            )
+    if errors:
+        raise PromotionReadinessError("\n".join(errors))
+
+
+def _candidate_passed_targets(candidate_report: dict[str, Any]) -> list[str]:
+    checks = _require_mapping(
+        candidate_report.get("target_results", {}).get("checks"),
+        "candidate_report.target_results.checks",
+    )
+    return sorted(
+        metric_name
+        for metric_name, check in checks.items()
+        if isinstance(check, dict) and check.get("meets_target") is True
+    )
+
+
+def _candidate_status_detail(
+    *,
+    candidate_report: dict[str, Any] | None,
+    missed_targets: list[Any],
+    blocking_reasons: list[str],
+) -> str:
+    if candidate_report is None:
+        return "baseline_target_misses_blocking_candidate_promotion"
+    if missed_targets:
+        return "candidate_metrics_blocked_pending_target_misses"
+    if "sustained_load_evidence_missing" in blocking_reasons:
+        return "target_scale_metrics_passed_blocked_pending_sustained_load_evidence"
+    if not blocking_reasons:
+        return "candidate_ready_for_promotion"
+    return "candidate_blocked_pending_runtime_evidence"
+
+
+def _required_next_evidence(
+    base_items: Any,
+    blocking_reasons: list[str],
+) -> list[Any]:
+    items = list(base_items) if isinstance(base_items, list) else []
+    sustained_item = (
+        "sustained-load runtime evidence binds the target-scale Rust candidate "
+        "to live websocket fanout before promotion"
+    )
+    if "sustained_load_evidence_missing" in blocking_reasons and sustained_item not in items:
+        items.append(sustained_item)
+    return items
+
+
+def _require_mapping(value: Any, label: str) -> dict[str, Any]:
+    if not isinstance(value, dict):
+        raise PromotionReadinessError(f"{label} must be a JSON object")
+    return value
+
+
 def _display_path(path: Path) -> str:
     try:
         return str(path.resolve().relative_to(ROOT))
     except ValueError:
-        return str(path)
+        return path.name
 
 
 if __name__ == "__main__":

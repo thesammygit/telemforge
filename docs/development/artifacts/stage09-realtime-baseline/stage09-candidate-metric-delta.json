@@ -1,7 +1,7 @@
 {
   "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
   "blocking_reasons": [
-    "missed_realtime_targets_remain"
+    "sustained_load_evidence_missing"
   ],
   "candidate_can_be_promoted": false,
   "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
@@ -15,24 +15,24 @@
     "aggregate_sample_rate_hz": {
       "baseline_meets_target": false,
       "baseline_observed": 10.0,
-      "candidate_gap_to_target": 900.0,
-      "candidate_meets_target": false,
-      "candidate_observed": 100.0,
+      "candidate_gap_to_target": 0.0,
+      "candidate_meets_target": true,
+      "candidate_observed": 1000.0,
       "change_status": "improved",
       "comparison": "at_least",
-      "delta": 90.0,
+      "delta": 990.0,
       "target": 1000,
       "unit": "Hz"
     },
     "channel_count": {
       "baseline_meets_target": false,
       "baseline_observed": 10,
-      "candidate_gap_to_target": 80,
-      "candidate_meets_target": false,
-      "candidate_observed": 20,
+      "candidate_gap_to_target": 0,
+      "candidate_meets_target": true,
+      "candidate_observed": 100,
       "change_status": "improved",
       "comparison": "at_least",
-      "delta": 10.0,
+      "delta": 90.0,
       "target": 100,
       "unit": "channels"
     },
@@ -75,17 +75,21 @@
     "per_channel_sample_rate_hz": {
       "baseline_meets_target": false,
       "baseline_observed": 1.0,
-      "candidate_gap_to_target": 5.0,
-      "candidate_meets_target": false,
-      "candidate_observed": 5.0,
+      "candidate_gap_to_target": 0.0,
+      "candidate_meets_target": true,
+      "candidate_observed": 10.0,
       "change_status": "improved",
       "comparison": "at_least",
-      "delta": 4.0,
+      "delta": 9.0,
       "target": 10,
       "unit": "Hz"
     }
   },
-  "newly_passing_metrics": [],
+  "newly_passing_metrics": [
+    "aggregate_sample_rate_hz",
+    "channel_count",
+    "per_channel_sample_rate_hz"
+  ],
   "public_repo_safety": {
     "includes_docs_automation": false,
     "paths_are_repo_relative": true,
