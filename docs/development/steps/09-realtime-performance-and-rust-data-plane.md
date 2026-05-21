@@ -200,15 +200,15 @@ whole-project rewrite.
 The candidate promotion-readiness command:
 
 ```text
-python3 scripts/check_stage09_candidate_promotion_readiness.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
+python3 scripts/check_stage09_candidate_promotion_readiness.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json --sustained-load-evidence docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-sustained-load.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-candidate-promotion-readiness.json
 ```
 
 combines the readiness summary, target-gap summary, and runtime stream evidence
-checklist with the explicit Rust candidate report into a deterministic gate. It
-keeps the current Python/FastAPI baseline and narrow Rust stream candidates
-blocked from promotion until missed realtime targets are improved or explicitly
-versioned, sustained-load evidence is present, and the compatible report
-contract remains intact.
+checklist with the explicit Rust candidate report and sustained-load websocket
+evidence into a deterministic gate. The checked-in artifact now marks the
+target-scale candidate ready for Stage 09 review because target metrics pass,
+bounded runtime stream proof remains verified, sustained-load evidence is
+present, and Rust remains scoped to the data plane.
 
 The candidate metric-delta command:
 
@@ -220,8 +220,9 @@ compares a candidate report's target-result metrics against the public
 baseline. The checked-in artifact now compares the target-scale Rust stream
 fanout report against the Python/FastAPI baseline: channel count,
 per-channel sample rate, and aggregate sample rate are newly passing, while
-promotion remains blocked because sustained live websocket load evidence is not
-claimed.
+promotion readiness is now true for Stage 09 review because the sustained-load
+websocket smoke binds the target-scale candidate to bounded live runtime
+evidence.
 
 The target-scale bounded Rust stream fanout/sample-rate candidate command:
 
@@ -235,8 +236,22 @@ candidate report. The candidate records a versioned workload change from the
 Python/FastAPI baseline, reaches 100 channels, 10 Hz per channel, 1000 Hz
 aggregate sample rate, and zero dropped events inside the bounded local
 resource envelope. It is still a deterministic smoke, not a production fanout
-claim, so promotion remains blocked until sustained-load runtime evidence binds
-the target-scale candidate to live websocket behavior.
+claim; promotion depends on the separate sustained-load runtime evidence that
+binds the target-scale candidate to live websocket behavior.
+
+The bounded sustained-load websocket smoke command:
+
+```text
+python3 scripts/run_stage09_live_stream_sustained_load_smoke.py --candidate-report docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json --output docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-sustained-load.json
+```
+
+opens four simultaneous FastAPI `TestClient` websocket connections in one
+process, reads twelve ordered stream messages per client, records per-client
+backpressure/drop accounting, and binds the result to the checked-in
+target-scale Rust candidate report by repo-relative path and SHA-256. This is a
+bounded local proof under the 30 second / 512 MB / no-network resource guard. It
+is not a broad load test, production fanout claim, or Python control-plane
+replacement.
 
 The input-provenance validation command:
 
@@ -302,9 +317,10 @@ python3 scripts/check_stage09_baseline_closeout_gate.py --output docs/developmen
 
 combines digest validation, the baseline evidence index, runtime-stream evidence
 validation, and promotion readiness into one deterministic closeout verdict. It
-keeps the baseline verified but blocked from promotion until runtime stream
-probe evidence exists and missed throughput targets improve or are explicitly
-versioned.
+now records `ready_for_stage09_review` when the target-scale candidate metrics,
+runtime-stream proof, sustained-load evidence, public path safety, and Rust
+data-plane scope all pass. It still does not claim production fanout or approve
+a whole-project rewrite.
 
 The baseline closeout-summary command:
 
@@ -313,10 +329,10 @@ python3 scripts/summarize_stage09_baseline_closeout.py --output docs/development
 ```
 
 renders the closeout gate into a human-readable report with the verified
-baseline digest, passed/missed metrics, blocked runtime claims, required next
-evidence, local resource envelope, and Rust data-plane-only scope. It does not
-rerun the benchmark, claim websocket runtime fanout, or approve a Rust
-whole-project rewrite.
+baseline digest, passed metrics, runtime claims, promotion readiness, local
+resource envelope, and Rust data-plane-only scope. It does not rerun the
+benchmark, claim production websocket fanout, or approve a Rust whole-project
+rewrite.
 
 The target-result artifact-gate command:
 

@@ -1,9 +1,7 @@
 {
   "baseline_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
-  "blocking_reasons": [
-    "sustained_load_evidence_missing"
-  ],
-  "candidate_can_be_promoted": false,
+  "blocking_reasons": [],
+  "candidate_can_be_promoted": true,
   "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
   "comparison_rule": "Compare timing values only after stable identity is compatible. A candidate cannot be promoted if realtime target misses are unaddressed, if required runtime proof artifacts regress, or if any target metric regresses without a versioned workload change.",
   "improved_metrics": [
@@ -109,7 +107,7 @@
   },
   "stable_identity_status": "versioned_workload_change",
   "stage": "09-realtime-performance-and-rust-data-plane",
-  "status": "candidate_blocked_pending_promotion_gates",
+  "status": "candidate_metrics_ready_for_review",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
   "verified_gates": [
     "baseline_report_loaded",

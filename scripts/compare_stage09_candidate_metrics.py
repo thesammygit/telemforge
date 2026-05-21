@@ -153,7 +153,7 @@ def compare_stage09_candidate_metrics(
         "stable_identity_status": stable_identity_status,
         "runtime_stream_claim_status": runtime_stream_claim_status,
         "candidate_can_be_promoted": (
-            candidate_can_be_promoted and not regressed_metrics
+            candidate_can_be_promoted and not regressed_metrics and not same_report
         ),
         "blocking_reasons": blocking_reasons,
         "metric_deltas": metric_deltas,

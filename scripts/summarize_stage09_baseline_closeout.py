@@ -56,19 +56,19 @@ def summarize_stage09_baseline_closeout(
     )
     _expect_equal(
         closeout_gate.get("status"),
-        "blocked_pending_runtime_evidence",
+        "ready_for_stage09_review",
         "closeout_gate.status",
         errors,
     )
     _expect_equal(
         closeout_gate.get("runtime_claims", {}).get("stream_runtime_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime stream claim status",
         errors,
     )
     _expect_equal(
         closeout_gate.get("runtime_claims", {}).get("candidate_can_be_promoted"),
-        False,
+        True,
         "candidate_can_be_promoted",
         errors,
     )
@@ -171,25 +171,26 @@ def _render_markdown(closeout_gate: dict[str, Any], closeout_gate_path: str) -> 
         "## Required Next Evidence",
         "",
     ]
-    lines.extend(
-        f"- `{evidence}`"
-        for evidence in closeout_gate.get("required_next_evidence", [])
-    )
+    required_next_evidence = closeout_gate.get("required_next_evidence", [])
+    if required_next_evidence:
+        lines.extend(f"- `{evidence}`" for evidence in required_next_evidence)
+    else:
+        lines.append("- `none`")
     lines.extend(
         [
             "",
             "## Scope",
             "",
             (
-                "The committed baseline is a Python/FastAPI control-plane "
-                "comparison artifact. It does not claim websocket runtime "
-                "fanout, reconnect behavior, backpressure behavior, or "
-                "stream-based dropped-event measurement."
+                "The closeout binds the target-scale Rust stream candidate to "
+                "bounded Python/FastAPI websocket runtime evidence. It does "
+                "not claim broad production load behavior or replace the "
+                "Python control plane."
             ),
             "",
             (
-                "Rust remains tracked for future data-plane candidates only; "
-                "this closeout does not approve a whole-project rewrite."
+                "Rust remains scoped to a data-plane candidate; this closeout "
+                "does not approve a whole-project rewrite."
             ),
             "",
             "## Safety Envelope",

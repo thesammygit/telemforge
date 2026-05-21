@@ -21,6 +21,10 @@ READINESS_PATH = ARTIFACT_ROOT / "stage09-baseline-readiness-summary.json"
 TARGET_GAP_PATH = ARTIFACT_ROOT / "stage09-target-gap-summary.json"
 RUNTIME_CHECKLIST_PATH = ARTIFACT_ROOT / "stage09-runtime-stream-evidence-checklist.json"
 PROMOTION_READINESS_PATH = ARTIFACT_ROOT / "stage09-candidate-promotion-readiness.json"
+RUST_CANDIDATE_REPORT_PATH = (
+    ARTIFACT_ROOT / "stage09-rust-stream-fanout-sample-rate-report.json"
+)
+SUSTAINED_LOAD_PATH = ARTIFACT_ROOT / "stage09-live-stream-sustained-load.json"
 
 
 class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
@@ -74,6 +78,7 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
                 target_gap_path=TARGET_GAP_PATH,
                 runtime_checklist_path=RUNTIME_CHECKLIST_PATH,
                 candidate_report_path=candidate_path,
+                sustained_load_evidence_path=None,
             )
 
         self.assertFalse(result["candidate_can_be_promoted"])
@@ -103,6 +108,27 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
             "target-scale-candidate.json",
         )
 
+    def test_target_scale_candidate_is_promotable_with_sustained_load_evidence(self) -> None:
+        result = check_stage09_candidate_promotion_readiness(
+            readiness_path=READINESS_PATH,
+            target_gap_path=TARGET_GAP_PATH,
+            runtime_checklist_path=RUNTIME_CHECKLIST_PATH,
+            candidate_report_path=RUST_CANDIDATE_REPORT_PATH,
+            sustained_load_evidence_path=SUSTAINED_LOAD_PATH,
+        )
+
+        self.assertTrue(result["candidate_can_be_promoted"])
+        self.assertEqual(result["status"], "ready_for_candidate_comparison")
+        self.assertEqual(result["candidate_status_detail"], "candidate_ready_for_promotion")
+        self.assertEqual(result["blocking_reasons"], [])
+        self.assertEqual(result["missed_targets"], [])
+        self.assertEqual(result["missing_runtime_probe_evidence"], [])
+        self.assertEqual(
+            result["sustained_load_evidence"],
+            "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-sustained-load.json",
+        )
+        self.assertIn("sustained_load_evidence_valid", result["verified_gates"])
+
     def test_public_promotion_readiness_artifact_matches_current_result(self) -> None:
         result = check_stage09_candidate_promotion_readiness(
             readiness_path=READINESS_PATH,
@@ -112,6 +138,8 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
         artifact = json.loads(PROMOTION_READINESS_PATH.read_text(encoding="utf-8"))
 
         self.assertEqual(artifact, result)
+        self.assertTrue(artifact["candidate_can_be_promoted"])
+        self.assertEqual(artifact["blocking_reasons"], [])
         self.assertFalse(
             any(
                 "docs/automation" in value
@@ -142,7 +170,7 @@ class Stage09CandidatePromotionReadinessTest(unittest.TestCase):
         self.assertEqual(output_payload, stdout_payload)
         self.assertEqual(
             output_payload["status"],
-            "blocked_pending_target_misses",
+            "ready_for_candidate_comparison",
         )
 
     def test_rejects_runtime_claim_without_probe_checklist(self) -> None:

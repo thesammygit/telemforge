@@ -36,20 +36,20 @@ class Stage09RuntimeStreamEvidenceChecklistValidationTest(unittest.TestCase):
             "telemforge.stage09_runtime_stream_evidence_validation.v1",
         )
         self.assertEqual(result["status"], "passed")
-        self.assertEqual(result["runtime_stream_claim_status"], "contract_only_blocked")
-        self.assertEqual(result["required_evidence_count"], 6)
+        self.assertEqual(
+            result["runtime_stream_claim_status"],
+            "runtime_verified_bounded_fanout",
+        )
+        self.assertEqual(result["required_evidence_count"], 7)
         self.assertEqual(
             result["claim_status_counts"],
-            {"not_claimed_until_runtime_test": 6},
+            {"runtime_verified": 7},
         )
         self.assertEqual(
             result["validated_evidence"][0]["evidence"],
             "websocket connection acceptance for an existing session",
         )
-        self.assertEqual(
-            result["validated_evidence"][-1]["required_artifact"],
-            "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json",
-        )
+        self.assertEqual(result["validated_evidence"][-1]["claim_status"], "runtime_verified")
         self.assertFalse(result["public_repo_safety"]["includes_docs_automation"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
 

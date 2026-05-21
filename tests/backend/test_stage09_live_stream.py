@@ -2,6 +2,7 @@ import re
 import tempfile
 import threading
 import unittest
+from contextlib import ExitStack
 from pathlib import Path
 
 from fastapi.testclient import TestClient
@@ -284,6 +285,44 @@ class Stage09LiveStreamTest(unittest.TestCase):
             self.assertEqual(sample["session_id"], session["session_id"])
             self.assertEqual(sample["sequence"], 3)
             self.assertNotIn("dropped_event_count", sample["payload"])
+
+    def test_live_stream_four_clients_have_independent_ordered_queues(self) -> None:
+        client = self.make_client()
+        session = self.create_backpressure_session(client)
+        stream_path = f"/sessions/{session['session_id']}/telemetry/live"
+
+        with ExitStack() as stack:
+            websockets = [
+                stack.enter_context(client.websocket_connect(stream_path))
+                for _ in range(4)
+            ]
+            messages_by_client = [
+                [
+                    websocket.receive_json(),
+                    self.receive_json_with_timeout(websocket),
+                    self.receive_json_with_timeout(websocket),
+                ]
+                for websocket in websockets
+            ]
+
+        dropped_event_counts = []
+        for messages in messages_by_client:
+            message_types = [message["type"] for message in messages]
+            sequences = [message["sequence"] for message in messages]
+            self.assertEqual(
+                message_types,
+                ["stream.snapshot", "stream.backpressure", "telemetry.sample"],
+            )
+            self.assertEqual(sequences, [1, 2, 3])
+            self.assertTrue(all(message["session_id"] == session["session_id"] for message in messages))
+            self.assertEqual(messages[0]["payload"]["stream_scope"], "per_connection")
+            self.assertEqual(messages[1]["payload"]["queue_scope"], "per_connection")
+            self.assertEqual(messages[1]["payload"]["policy"], "drop_oldest_and_report")
+            self.assertNotIn("dropped_event_count", messages[2]["payload"])
+            dropped_event_counts.append(messages[1]["payload"]["dropped_event_count"])
+
+        self.assertEqual(len(set(dropped_event_counts)), 1)
+        self.assertGreater(dropped_event_counts[0], 0)
 
 
 if __name__ == "__main__":

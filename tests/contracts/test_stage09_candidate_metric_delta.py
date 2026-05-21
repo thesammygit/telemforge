@@ -93,7 +93,7 @@ class Stage09CandidateMetricDeltaTest(unittest.TestCase):
         self.assertEqual(output_payload, stdout_payload)
         self.assertEqual(
             output_payload["status"],
-            "candidate_blocked_pending_promotion_gates",
+            "candidate_metrics_ready_for_review",
         )
 
     def test_rejects_candidate_metric_target_mismatch(self) -> None:

@@ -1,7 +1,7 @@
 # Stage 09 Baseline Closeout Summary
 
-Status: `blocked_pending_runtime_evidence`
-Verdict: `baseline_artifacts_verified_but_not_promotable_without_runtime_probe_evidence`
+Status: `ready_for_stage09_review`
+Verdict: `target_scale_candidate_verified_with_sustained_load_runtime_evidence`
 
 ## Source
 
@@ -13,29 +13,24 @@ Verdict: `baseline_artifacts_verified_but_not_promotable_without_runtime_probe_e
 
 | Result | Metrics |
 | --- | --- |
-| Passed | `p95_alert_latency_ms`, `p95_replay_query_latency_ms`, `dropped_event_count` |
-| Missed | `channel_count`, `per_channel_sample_rate_hz`, `aggregate_sample_rate_hz` |
+| Passed | `aggregate_sample_rate_hz`, `channel_count`, `dropped_event_count`, `p95_alert_latency_ms`, `p95_replay_query_latency_ms`, `per_channel_sample_rate_hz` |
+| Missed | `none` |
 
 ## Runtime Claims
 
-- Stream runtime claim: `contract_only_blocked`
-- Candidate can be promoted: `false`
-- Missing runtime probe evidence count: `6`
+- Stream runtime claim: `runtime_verified_bounded_fanout`
+- Candidate can be promoted: `true`
+- Missing runtime probe evidence count: `0`
 
 ## Required Next Evidence
 
-- `candidate report preserves required_top_level_fields`
-- `candidate report preserves required_metric_bindings`
-- `candidate report preserves throughput_gap_profile candidate mapping`
-- `resource envelope stays within the local automation guard`
-- `dropped_event_count does not regress`
-- `at least one missed throughput target improves or a versioned workload change explains why it cannot be compared`
+- `none`
 
 ## Scope
 
-The committed baseline is a Python/FastAPI control-plane comparison artifact. It does not claim websocket runtime fanout, reconnect behavior, backpressure behavior, or stream-based dropped-event measurement.
+The closeout binds the target-scale Rust stream candidate to bounded Python/FastAPI websocket runtime evidence. It does not claim broad production load behavior or replace the Python control plane.
 
-Rust remains tracked for future data-plane candidates only; this closeout does not approve a whole-project rewrite.
+Rust remains scoped to a data-plane candidate; this closeout does not approve a whole-project rewrite.
 
 ## Safety Envelope
 

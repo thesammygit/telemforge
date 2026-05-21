@@ -1,11 +1,9 @@
 {
   "baseline_verdict_status": "baseline_only_targets_not_met",
-  "blocking_reasons": [
-    "sustained_load_evidence_missing"
-  ],
-  "candidate_can_be_promoted": false,
+  "blocking_reasons": [],
+  "candidate_can_be_promoted": true,
   "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
-  "candidate_status_detail": "target_scale_metrics_passed_blocked_pending_sustained_load_evidence",
+  "candidate_status_detail": "candidate_ready_for_promotion",
   "missed_targets": [],
   "missing_runtime_probe_evidence": [],
   "next_comparable_candidate": "rust_stream_fanout_sample_rate_spike",
@@ -25,15 +23,7 @@
     "uses_credentials": false,
     "uses_private_runtime_state": false
   },
-  "required_next_evidence": [
-    "candidate report preserves required_top_level_fields",
-    "candidate report preserves required_metric_bindings",
-    "candidate report preserves throughput_gap_profile candidate mapping",
-    "resource envelope stays within the local automation guard",
-    "dropped_event_count does not regress",
-    "at least one missed throughput target improves or a versioned workload change explains why it cannot be compared",
-    "sustained-load runtime evidence binds the target-scale Rust candidate to live websocket fanout before promotion"
-  ],
+  "required_next_evidence": [],
   "resource_envelope": {
     "max_expected_memory_mb": 512,
     "max_expected_runtime_seconds": 30,
@@ -48,10 +38,12 @@
     "candidate_report": "docs/development/artifacts/stage09-realtime-baseline/stage09-rust-stream-fanout-sample-rate-report.json",
     "readiness_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-readiness-summary.json",
     "runtime_stream_evidence_checklist": "docs/development/artifacts/stage09-realtime-baseline/stage09-runtime-stream-evidence-checklist.json",
+    "sustained_load_evidence": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-sustained-load.json",
     "target_gap_summary": "docs/development/artifacts/stage09-realtime-baseline/stage09-target-gap-summary.json"
   },
   "stage": "09-realtime-performance-and-rust-data-plane",
-  "status": "blocked_pending_target_misses",
+  "status": "ready_for_candidate_comparison",
+  "sustained_load_evidence": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-sustained-load.json",
   "task_id": "telemforge-stage09-realtime-baseline-2026-05-03",
   "verified_gates": [
     "baseline_readiness_summary_loaded",
@@ -61,6 +53,7 @@
     "missed_targets_must_improve_or_be_versioned",
     "rust_scope_data_plane_only",
     "docs_automation_excluded",
-    "candidate_report_loaded"
+    "candidate_report_loaded",
+    "sustained_load_evidence_valid"
   ]
 }

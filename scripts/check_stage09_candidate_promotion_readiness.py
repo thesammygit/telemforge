@@ -9,6 +9,7 @@ rewrite.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -27,6 +28,9 @@ DEFAULT_RUNTIME_CHECKLIST_PATH = (
 DEFAULT_CANDIDATE_REPORT_PATH = (
     ARTIFACT_ROOT / "stage09-rust-stream-fanout-sample-rate-report.json"
 )
+DEFAULT_SUSTAINED_LOAD_EVIDENCE_PATH = (
+    ARTIFACT_ROOT / "stage09-live-stream-sustained-load.json"
+)
 
 
 class PromotionReadinessError(Exception):
@@ -38,17 +42,35 @@ def check_stage09_candidate_promotion_readiness(
     target_gap_path: Path | str = DEFAULT_TARGET_GAP_PATH,
     runtime_checklist_path: Path | str = DEFAULT_RUNTIME_CHECKLIST_PATH,
     candidate_report_path: Path | str | None = DEFAULT_CANDIDATE_REPORT_PATH,
+    sustained_load_evidence_path: Path | str | None = (
+        DEFAULT_SUSTAINED_LOAD_EVIDENCE_PATH
+    ),
 ) -> dict[str, Any]:
     """Build a deterministic promotion-readiness gate from public artifacts."""
 
     readiness_path = Path(readiness_path)
     target_gap_path = Path(target_gap_path)
     runtime_checklist_path = Path(runtime_checklist_path)
+    candidate_report_path_obj = (
+        None if candidate_report_path is None else Path(candidate_report_path)
+    )
+    sustained_load_evidence_path_obj = (
+        None
+        if sustained_load_evidence_path is None
+        else Path(sustained_load_evidence_path)
+    )
     readiness = _read_json(readiness_path)
     target_gap = _read_json(target_gap_path)
     runtime_checklist = _read_json(runtime_checklist_path)
     candidate_report = (
-        None if candidate_report_path is None else _read_json(Path(candidate_report_path))
+        None
+        if candidate_report_path_obj is None
+        else _read_json(candidate_report_path_obj)
+    )
+    sustained_load_evidence = (
+        None
+        if candidate_report is None or sustained_load_evidence_path_obj is None
+        else _read_json(sustained_load_evidence_path_obj)
     )
 
     errors: list[str] = []
@@ -138,6 +160,13 @@ def check_stage09_candidate_promotion_readiness(
 
     if candidate_report is not None:
         _validate_candidate_report(candidate_report)
+        if sustained_load_evidence is not None:
+            _validate_sustained_load_evidence(
+                sustained_load_evidence=sustained_load_evidence,
+                sustained_load_evidence_path=sustained_load_evidence_path_obj,
+                candidate_report=candidate_report,
+                candidate_report_path=candidate_report_path_obj,
+            )
         missed_targets = list(
             candidate_report.get("target_results", {}).get("missed_targets", [])
         )
@@ -161,9 +190,7 @@ def check_stage09_candidate_promotion_readiness(
         blocking_reasons.append("missed_realtime_targets_remain")
     if missing_runtime_probe_evidence:
         blocking_reasons.append("runtime_probe_evidence_missing")
-    if candidate_report is not None and not candidate_report.get(
-        "candidate_profile", {}
-    ).get("sustained_load_claimed"):
+    if candidate_report is not None and sustained_load_evidence is None:
         blocking_reasons.append("sustained_load_evidence_missing")
 
     if missing_runtime_probe_evidence:
@@ -226,9 +253,17 @@ def check_stage09_candidate_promotion_readiness(
         ],
     }
     if candidate_report_path is not None:
-        result["candidate_report"] = _display_path(Path(candidate_report_path))
+        result["candidate_report"] = _display_path(candidate_report_path_obj)
         result["source_artifacts"]["candidate_report"] = result["candidate_report"]
         result["verified_gates"].append("candidate_report_loaded")
+    if sustained_load_evidence is not None:
+        result["sustained_load_evidence"] = _display_path(
+            sustained_load_evidence_path_obj
+        )
+        result["source_artifacts"]["sustained_load_evidence"] = result[
+            "sustained_load_evidence"
+        ]
+        result["verified_gates"].append("sustained_load_evidence_valid")
     return result
 
 
@@ -260,6 +295,14 @@ def main() -> int:
         ),
     )
     parser.add_argument(
+        "--sustained-load-evidence",
+        default=str(DEFAULT_SUSTAINED_LOAD_EVIDENCE_PATH.relative_to(ROOT)),
+        help=(
+            "Optional Stage 09 sustained-load runtime evidence JSON path. Use "
+            "'none' to keep candidate promotion blocked on missing evidence."
+        ),
+    )
+    parser.add_argument(
         "--output",
         default=None,
         help="Optional JSON promotion-readiness path to write after validation passes.",
@@ -275,6 +318,11 @@ def main() -> int:
                 None
                 if str(args.candidate_report).lower() == "none"
                 else args.candidate_report
+            ),
+            sustained_load_evidence_path=(
+                None
+                if str(args.sustained_load_evidence).lower() == "none"
+                else args.sustained_load_evidence
             ),
         )
     except (OSError, json.JSONDecodeError, PromotionReadinessError, KeyError) as error:
@@ -361,6 +409,127 @@ def _validate_candidate_report(candidate_report: dict[str, Any]) -> None:
         raise PromotionReadinessError("\n".join(errors))
 
 
+def _validate_sustained_load_evidence(
+    *,
+    sustained_load_evidence: dict[str, Any],
+    sustained_load_evidence_path: Path | None,
+    candidate_report: dict[str, Any],
+    candidate_report_path: Path | None,
+) -> None:
+    errors: list[str] = []
+    _expect_equal(
+        sustained_load_evidence.get("schema"),
+        "telemforge.stage09_live_stream_sustained_load.v1",
+        "sustained_load_evidence.schema",
+        errors,
+    )
+    _expect_equal(
+        sustained_load_evidence.get("status"),
+        "passed",
+        "sustained_load_evidence.status",
+        errors,
+    )
+    if int(sustained_load_evidence.get("client_count", 0)) < 4:
+        errors.append("sustained_load_evidence.client_count must be at least 4")
+    for field_name in [
+        "ordered_sequence_status",
+        "queue_isolation_status",
+        "dropped_event_reporting_status",
+    ]:
+        _expect_equal(
+            sustained_load_evidence.get(field_name),
+            "passed",
+            f"sustained_load_evidence.{field_name}",
+            errors,
+        )
+
+    resource_guard = sustained_load_evidence.get("resource_guard", {})
+    if not isinstance(resource_guard, dict):
+        errors.append("sustained_load_evidence.resource_guard must be a JSON object")
+    else:
+        if int(resource_guard.get("worker_processes", 0)) != 1:
+            errors.append("sustained-load smoke must use one worker process")
+        if int(resource_guard.get("websocket_client_count", 0)) > 4:
+            errors.append("sustained-load smoke must use at most four websocket clients")
+        if int(resource_guard.get("max_expected_runtime_seconds", 0)) > 30:
+            errors.append("sustained-load smoke must stay within 30 seconds")
+        if int(resource_guard.get("max_expected_memory_mb", 0)) > 512:
+            errors.append("sustained-load smoke must stay within 512 MB")
+        _expect_equal(
+            resource_guard.get("uses_network"),
+            False,
+            "sustained_load_evidence.resource_guard.uses_network",
+            errors,
+        )
+        _expect_equal(
+            resource_guard.get("uses_paid_services"),
+            False,
+            "sustained_load_evidence.resource_guard.uses_paid_services",
+            errors,
+        )
+
+    candidate_binding = sustained_load_evidence.get("candidate_report_binding", {})
+    if not isinstance(candidate_binding, dict):
+        errors.append(
+            "sustained_load_evidence.candidate_report_binding must be a JSON object"
+        )
+    elif candidate_report_path is not None:
+        _expect_equal(
+            candidate_binding.get("path"),
+            _display_path(candidate_report_path),
+            "sustained_load_evidence candidate report path",
+            errors,
+        )
+        _expect_equal(
+            candidate_binding.get("sha256"),
+            _sha256(candidate_report_path),
+            "sustained_load_evidence candidate report digest",
+            errors,
+        )
+        _expect_equal(
+            candidate_binding.get("target_scale_metrics_pass"),
+            True,
+            "sustained_load_evidence target-scale metric binding",
+            errors,
+        )
+
+    public_safety = sustained_load_evidence.get("public_repo_safety", {})
+    if not isinstance(public_safety, dict):
+        errors.append("sustained_load_evidence.public_repo_safety must be an object")
+    else:
+        for field_name, expected in [
+            ("paths_are_repo_relative", True),
+            ("includes_docs_automation", False),
+            ("uses_absolute_local_paths", False),
+            ("uses_credentials", False),
+            ("uses_private_runtime_state", False),
+        ]:
+            _expect_equal(
+                public_safety.get(field_name),
+                expected,
+                f"sustained_load_evidence public safety {field_name}",
+                errors,
+            )
+
+    if sustained_load_evidence_path is not None and "docs/automation" in _display_path(
+        sustained_load_evidence_path
+    ):
+        errors.append("sustained-load evidence path must not reference docs/automation")
+    if "not a whole-project rewrite" not in str(
+        sustained_load_evidence.get("rust_scope", "")
+    ):
+        errors.append("sustained-load evidence rust_scope must reject a rewrite")
+
+    _expect_equal(
+        candidate_report.get("candidate_profile", {}).get("sustained_load_claimed"),
+        False,
+        "candidate report sustained_load_claimed remains separate",
+        errors,
+    )
+    if errors:
+        raise PromotionReadinessError("\n".join(errors))
+
+
 def _candidate_passed_targets(candidate_report: dict[str, Any]) -> list[str]:
     checks = _require_mapping(
         candidate_report.get("target_results", {}).get("checks"),
@@ -394,6 +563,8 @@ def _required_next_evidence(
     base_items: Any,
     blocking_reasons: list[str],
 ) -> list[Any]:
+    if not blocking_reasons:
+        return []
     items = list(base_items) if isinstance(base_items, list) else []
     sustained_item = (
         "sustained-load runtime evidence binds the target-scale Rust candidate "
@@ -415,6 +586,10 @@ def _display_path(path: Path) -> str:
         return str(path.resolve().relative_to(ROOT))
     except ValueError:
         return path.name
+
+
+def _sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 if __name__ == "__main__":

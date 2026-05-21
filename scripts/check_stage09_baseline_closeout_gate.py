@@ -94,53 +94,65 @@ def check_stage09_baseline_closeout_gate(
         errors,
     )
     _expect_equal(runtime_validation.get("status"), "passed", "runtime status", errors)
-    _expect_equal(
-        promotion_readiness.get("status"),
-        "blocked_pending_runtime_evidence",
-        "promotion readiness status",
-        errors,
+    candidate_can_be_promoted = bool(
+        promotion_readiness.get("candidate_can_be_promoted")
     )
-    _expect_equal(
-        promotion_readiness.get("candidate_can_be_promoted"),
-        False,
-        "promotion readiness candidate_can_be_promoted",
-        errors,
+    promotion_blocking_reasons = _require_list(
+        promotion_readiness.get("blocking_reasons"),
+        "promotion_readiness.blocking_reasons",
     )
+    if candidate_can_be_promoted:
+        _expect_equal(
+            promotion_readiness.get("status"),
+            "ready_for_candidate_comparison",
+            "promotion readiness status",
+            errors,
+        )
+        _expect_equal(
+            promotion_blocking_reasons,
+            [],
+            "promotion readiness blocking reasons",
+            errors,
+        )
+    elif not promotion_blocking_reasons:
+        errors.append(
+            "promotion readiness must include blocking_reasons when candidate is not promotable"
+        )
 
     runtime_claims = _require_mapping(
         digest_validation.get("runtime_claims"),
         "digest_validation.runtime_claims",
     )
     _expect_equal(
-        runtime_claims.get("stream_runtime_claim_status"),
-        "contract_only_blocked",
-        "digest runtime stream claim",
-        errors,
-    )
-    _expect_equal(
         runtime_validation.get("runtime_stream_claim_status"),
-        "contract_only_blocked",
+        "runtime_verified_bounded_fanout",
         "runtime validation stream claim",
         errors,
     )
-    _expect_equal(
-        evidence_index.get("runtime_claims", {}).get("candidate_can_be_promoted"),
-        False,
-        "evidence index candidate_can_be_promoted",
-        errors,
-    )
+    if candidate_can_be_promoted and runtime_claims.get("candidate_can_be_promoted"):
+        errors.append(
+            "digest baseline runtime claims must remain baseline-only while candidate promotion comes from promotion readiness"
+        )
 
     missing_runtime_probe_evidence = _require_list(
         promotion_readiness.get("missing_runtime_probe_evidence"),
         "promotion_readiness.missing_runtime_probe_evidence",
     )
-    required_evidence_count = runtime_validation.get("required_evidence_count")
-    _expect_equal(
-        len(missing_runtime_probe_evidence),
-        required_evidence_count,
-        "runtime evidence count",
-        errors,
-    )
+    if candidate_can_be_promoted:
+        _expect_equal(
+            missing_runtime_probe_evidence,
+            [],
+            "promotion readiness missing runtime probe evidence",
+            errors,
+        )
+    else:
+        required_evidence_count = runtime_validation.get("required_evidence_count")
+        _expect_equal(
+            len(missing_runtime_probe_evidence),
+            required_evidence_count,
+            "runtime evidence count",
+            errors,
+        )
 
     for label, artifact in [
         ("digest_validation", digest_validation),
@@ -155,14 +167,33 @@ def check_stage09_baseline_closeout_gate(
     if errors:
         raise BaselineCloseoutGateError("\n".join(errors))
 
+    status = (
+        "ready_for_stage09_review"
+        if candidate_can_be_promoted
+        else "blocked_pending_runtime_evidence"
+    )
+    closeout_verdict = (
+        "target_scale_candidate_verified_with_sustained_load_runtime_evidence"
+        if candidate_can_be_promoted
+        else "baseline_artifacts_verified_but_not_promotable_without_runtime_probe_evidence"
+    )
+    passed_metrics = (
+        promotion_readiness.get("passed_targets")
+        if candidate_can_be_promoted
+        else evidence_index.get("passed_metrics")
+    )
+    missed_metrics = (
+        promotion_readiness.get("missed_targets")
+        if candidate_can_be_promoted
+        else evidence_index.get("missed_metrics")
+    )
+
     return {
         "schema": "telemforge.stage09_baseline_closeout_gate.v1",
-        "status": "blocked_pending_runtime_evidence",
+        "status": status,
         "stage": stage,
         "task_id": task_id,
-        "closeout_verdict": (
-            "baseline_artifacts_verified_but_not_promotable_without_runtime_probe_evidence"
-        ),
+        "closeout_verdict": closeout_verdict,
         "source_artifacts": {
             "digest_validation": _display_path(digest_validation_path),
             "baseline_evidence_index": _display_path(evidence_index_path),
@@ -174,9 +205,13 @@ def check_stage09_baseline_closeout_gate(
         "source_artifact_count": digest_validation.get("source_artifact_count"),
         "aggregate_digest": digest_validation.get("aggregate_digest"),
         "stable_fingerprint": digest_validation.get("stable_fingerprint"),
-        "target_counts": evidence_index.get("target_counts"),
-        "passed_metrics": evidence_index.get("passed_metrics"),
-        "missed_metrics": evidence_index.get("missed_metrics"),
+        "target_counts": {
+            "total": len(passed_metrics or []) + len(missed_metrics or []),
+            "passed": len(passed_metrics or []),
+            "missed": len(missed_metrics or []),
+        },
+        "passed_metrics": passed_metrics,
+        "missed_metrics": missed_metrics,
         "runtime_claims": {
             "stream_runtime_claim_status": runtime_validation.get(
                 "runtime_stream_claim_status"
@@ -185,7 +220,7 @@ def check_stage09_baseline_closeout_gate(
                 "candidate_can_be_promoted"
             ),
         },
-        "blocking_reasons": promotion_readiness.get("blocking_reasons"),
+        "blocking_reasons": promotion_blocking_reasons,
         "missing_runtime_probe_evidence_count": len(missing_runtime_probe_evidence),
         "required_next_evidence": promotion_readiness.get("required_next_evidence"),
         "next_comparable_candidate": promotion_readiness.get(
@@ -198,7 +233,11 @@ def check_stage09_baseline_closeout_gate(
             "digest_validation_passed",
             "baseline_evidence_index_ready",
             "runtime_stream_evidence_validation_passed",
-            "candidate_promotion_blocked_until_runtime_evidence",
+            (
+                "candidate_promotion_ready_for_stage09_review"
+                if candidate_can_be_promoted
+                else "candidate_promotion_blocked_until_runtime_evidence"
+            ),
             "public_paths_are_repo_relative",
             "docs_automation_excluded",
             "rust_scope_data_plane_only",

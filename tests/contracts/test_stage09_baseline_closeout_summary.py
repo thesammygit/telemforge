@@ -19,13 +19,13 @@ CLOSEOUT_SUMMARY_PATH = ARTIFACT_ROOT / "stage09-baseline-closeout-summary.md"
 
 
 class Stage09BaselineCloseoutSummaryTest(unittest.TestCase):
-    def test_summary_keeps_runtime_and_rust_claims_blocked(self) -> None:
+    def test_summary_records_sustained_load_review_readiness(self) -> None:
         summary = summarize_stage09_baseline_closeout(CLOSEOUT_GATE_PATH)
 
-        self.assertIn("Status: `blocked_pending_runtime_evidence`", summary)
-        self.assertIn("Stream runtime claim: `contract_only_blocked`", summary)
-        self.assertIn("Candidate can be promoted: `false`", summary)
-        self.assertIn("Rust remains tracked for future data-plane candidates only", summary)
+        self.assertIn("Status: `ready_for_stage09_review`", summary)
+        self.assertIn("Stream runtime claim: `runtime_verified_bounded_fanout`", summary)
+        self.assertIn("Candidate can be promoted: `true`", summary)
+        self.assertIn("Rust remains scoped to a data-plane candidate", summary)
         self.assertNotIn("docs/automation", summary)
 
     def test_public_summary_artifact_matches_current_result(self) -> None:
@@ -54,11 +54,11 @@ class Stage09BaselineCloseoutSummaryTest(unittest.TestCase):
             output_payload = output_path.read_text(encoding="utf-8")
 
         self.assertEqual(output_payload, stdout_payload)
-        self.assertIn("Status: `blocked_pending_runtime_evidence`", output_payload)
+        self.assertIn("Status: `ready_for_stage09_review`", output_payload)
 
     def test_rejects_drifted_closeout_gate_artifact(self) -> None:
         drifted_gate = CLOSEOUT_GATE_PATH.read_text(encoding="utf-8").replace(
-            '"status": "blocked_pending_runtime_evidence"',
+            '"status": "ready_for_stage09_review"',
             '"status": "promoted"',
             1,
         )

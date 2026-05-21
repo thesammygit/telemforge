@@ -34,26 +34,30 @@ class Stage09RuntimeStreamProofArtifactGateTest(unittest.TestCase):
         )
         self.assertEqual(
             result["status"],
-            "runtime_stream_proof_artifacts_ready_runtime_blocked",
+            "runtime_stream_proof_artifacts_verified_bounded_fanout",
         )
-        self.assertEqual(result["required_evidence_count"], 6)
-        self.assertEqual(result["required_artifact_count"], 6)
-        self.assertEqual(result["unique_required_artifact_count"], 3)
+        self.assertEqual(result["required_evidence_count"], 7)
+        self.assertEqual(result["required_artifact_count"], 7)
+        self.assertEqual(result["unique_required_artifact_count"], 5)
         self.assertEqual(
             result["claim_status_counts"],
-            {"not_claimed_until_runtime_test": 6},
+            {"runtime_verified": 7},
         )
         self.assertEqual(
             result["runtime_stream_claim_status"],
-            "contract_only_blocked",
+            "runtime_verified_bounded_fanout",
         )
         self.assertIn(
-            "tests/contracts/test_stage09_live_telemetry_contract.py",
+            "docs/development/artifacts/stage09-realtime-baseline/stage09-live-stream-bounded-fanout-smoke.json",
             result["unique_required_artifacts"],
         )
-        self.assertEqual(
+        self.assertIn(
+            "tests/backend/test_stage09_live_stream.py",
             result["extra_contract_proof_artifacts"],
-            ["scripts/validate_stage09_live_telemetry_contract.py"],
+        )
+        self.assertIn(
+            "scripts/validate_stage09_live_telemetry_contract.py",
+            result["extra_contract_proof_artifacts"],
         )
         self.assertFalse(result["public_repo_safety"]["includes_docs_automation"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
@@ -80,7 +84,7 @@ class Stage09RuntimeStreamProofArtifactGateTest(unittest.TestCase):
         self.assertEqual(output_payload, stdout_payload)
         self.assertEqual(
             output_payload["status"],
-            "runtime_stream_proof_artifacts_ready_runtime_blocked",
+            "runtime_stream_proof_artifacts_verified_bounded_fanout",
         )
 
     def test_public_gate_artifact_matches_current_result(self) -> None:
@@ -95,7 +99,7 @@ class Stage09RuntimeStreamProofArtifactGateTest(unittest.TestCase):
         self.assertFalse(artifact["public_repo_safety"]["includes_docs_automation"])
         self.assertEqual(
             artifact["runtime_stream_claim_status"],
-            "contract_only_blocked",
+            "runtime_verified_bounded_fanout",
         )
 
     def test_rejects_docs_automation_required_artifact(self) -> None:

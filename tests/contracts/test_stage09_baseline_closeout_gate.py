@@ -25,7 +25,7 @@ CLOSEOUT_GATE_PATH = ARTIFACT_ROOT / "stage09-baseline-closeout-gate.json"
 
 
 class Stage09BaselineCloseoutGateTest(unittest.TestCase):
-    def test_closeout_gate_blocks_promotion_until_runtime_evidence_exists(self) -> None:
+    def test_closeout_gate_marks_target_scale_candidate_ready_for_stage09_review(self) -> None:
         result = check_stage09_baseline_closeout_gate(
             digest_validation_path=DIGEST_VALIDATION_PATH,
             evidence_index_path=EVIDENCE_INDEX_PATH,
@@ -37,17 +37,19 @@ class Stage09BaselineCloseoutGateTest(unittest.TestCase):
             result["schema"],
             "telemforge.stage09_baseline_closeout_gate.v1",
         )
-        self.assertEqual(result["status"], "blocked_pending_runtime_evidence")
-        self.assertFalse(result["runtime_claims"]["candidate_can_be_promoted"])
+        self.assertEqual(result["status"], "ready_for_stage09_review")
+        self.assertTrue(result["runtime_claims"]["candidate_can_be_promoted"])
         self.assertEqual(
             result["runtime_claims"]["stream_runtime_claim_status"],
-            "contract_only_blocked",
+            "runtime_verified_bounded_fanout",
         )
-        self.assertEqual(result["missing_runtime_probe_evidence_count"], 6)
+        self.assertEqual(result["missing_runtime_probe_evidence_count"], 0)
         self.assertEqual(
             result["next_comparable_candidate"],
             "rust_stream_fanout_sample_rate_spike",
         )
+        self.assertEqual(result["blocking_reasons"], [])
+        self.assertEqual(result["missed_metrics"], [])
         self.assertFalse(result["public_repo_safety"]["includes_docs_automation"])
         self.assertIn("not a whole-project rewrite", result["rust_scope"])
 
@@ -91,14 +93,15 @@ class Stage09BaselineCloseoutGateTest(unittest.TestCase):
         self.assertEqual(output_payload, stdout_payload)
         self.assertEqual(
             output_payload["status"],
-            "blocked_pending_runtime_evidence",
+            "ready_for_stage09_review",
         )
 
-    def test_rejects_promotable_candidate_in_closeout_inputs(self) -> None:
+    def test_rejects_promotable_candidate_with_blocking_reasons(self) -> None:
         promotion_readiness = json.loads(
             PROMOTION_READINESS_PATH.read_text(encoding="utf-8")
         )
         promotion_readiness["candidate_can_be_promoted"] = True
+        promotion_readiness["blocking_reasons"] = ["sustained_load_evidence_missing"]
 
         with tempfile.TemporaryDirectory() as tmpdir:
             bad_promotion_readiness = Path(tmpdir) / "bad-promotion-readiness.json"
@@ -115,7 +118,7 @@ class Stage09BaselineCloseoutGateTest(unittest.TestCase):
                     promotion_readiness_path=bad_promotion_readiness,
                 )
 
-        self.assertIn("candidate_can_be_promoted", str(ctx.exception))
+        self.assertIn("blocking reasons", str(ctx.exception))
 
 
 if __name__ == "__main__":
