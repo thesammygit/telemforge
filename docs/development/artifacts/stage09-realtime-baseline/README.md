@@ -421,6 +421,14 @@ improved/regressed/unchanged status, stable identity status, promotion blockers,
 and Rust data-plane-only scope before any Python/FastAPI refresh or narrow Rust
 stream candidate can be reviewed as an improvement.
 
+The `stage09-live-console-stream-binding.json` artifact records the bounded
+frontend binding that lets the operator mission console consume the existing
+Stage 09 websocket path when explicit local configuration is present. It names
+the source and test files, the consumed `stream.snapshot`, `telemetry.sample`,
+and `stream.backpressure` messages, the fixture fallback conditions, and the
+boundary that this is a local UI binding rather than production fanout, live
+operations, or Rust replacement.
+
 The `stage09-baseline-metric-index.json` artifact keeps the headline benchmark
 metrics easy to audit without rerunning the benchmark. It pins the observed
 source path for channel count, per-channel sample rate, aggregate sample rate,

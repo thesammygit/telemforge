@@ -81,6 +81,12 @@ button {
   text-transform: uppercase;
 }
 
+.header-state-stack {
+  display: grid;
+  gap: 10px;
+  justify-items: end;
+}
+
 .mission-state span {
   font-size: 0.8rem;
   font-weight: 800;
@@ -89,6 +95,55 @@ button {
 .mission-state strong {
   color: #172026;
   font-size: 1.15rem;
+}
+
+.stream-state {
+  display: grid;
+  justify-items: end;
+  max-width: 260px;
+  border: 1px solid currentColor;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #ffffff;
+  text-align: right;
+}
+
+.stream-state span {
+  font-size: 0.72rem;
+  font-weight: 820;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+.stream-state strong {
+  margin-top: 3px;
+  color: #172026;
+  font-size: 0.92rem;
+  line-height: 1.25;
+}
+
+.stream-state small {
+  margin-top: 4px;
+  color: #52636f;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+
+.stream-fixture,
+.stream-closed {
+  color: #66717b;
+}
+
+.stream-connecting {
+  color: #2368b5;
+}
+
+.stream-live {
+  color: #12745b;
+}
+
+.stream-degraded {
+  color: #a76a16;
 }
 
 .overview-band,
@@ -529,6 +584,12 @@ button {
     border-left: 0;
     border-top: 4px solid currentColor;
     padding: 14px 0 0;
+  }
+
+  .header-state-stack,
+  .stream-state {
+    justify-items: start;
+    text-align: left;
   }
 
   .status-counts,

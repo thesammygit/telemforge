@@ -1,0 +1,103 @@
+{
+  "schema": "telemforge.stage09_live_console_stream_binding.v1",
+  "stage": "09-realtime-performance-and-rust-data-plane",
+  "task_id": "telemforge-stage09-live-console-stream-binding-2026-05-22",
+  "status": "verified",
+  "purpose": "Make the operator mission console consume the existing Stage 09 live telemetry websocket when explicit local configuration is present, while keeping the Stage 07 fixture-backed review mode as the default fallback.",
+  "boundary": {
+    "scope": "local websocket UI binding only",
+    "production_fanout_claimed": false,
+    "production_operations_claimed": false,
+    "backend_contract_changed": false,
+    "rust_replacement_claimed": false,
+    "rust_scope": "Rust remains a data-plane candidate only; Python/FastAPI remains the control plane"
+  },
+  "configuration": {
+    "required_environment": [
+      "VITE_TELEMFORGE_API_BASE_URL",
+      "VITE_TELEMFORGE_LIVE_SESSION_ID"
+    ],
+    "allowed_api_base_hosts": [
+      "localhost",
+      "127.0.0.1",
+      "::1"
+    ],
+    "fixture_fallback_conditions": [
+      "live configuration absent",
+      "live configuration invalid",
+      "websocket constructor unavailable",
+      "websocket closed before or after valid messages",
+      "websocket parse or transport error"
+    ]
+  },
+  "websocket_endpoint": {
+    "source_contract": "docs/development/artifacts/stage09-realtime-baseline/stage09-live-telemetry-contract.json",
+    "path": "/sessions/{session_id}/telemetry/live",
+    "session_id_source": "VITE_TELEMFORGE_LIVE_SESSION_ID",
+    "url_builder": "frontend/src/lib/liveTelemetryStream.ts",
+    "messages_consumed": [
+      "stream.snapshot",
+      "telemetry.sample",
+      "stream.backpressure",
+      "stream.heartbeat"
+    ]
+  },
+  "source_files": [
+    "frontend/src/App.tsx",
+    "frontend/src/features/mission-console/MissionConsole.tsx",
+    "frontend/src/features/mission-console/consoleViewModel.ts",
+    "frontend/src/features/mission-console/types.ts",
+    "frontend/src/lib/liveTelemetryStream.ts",
+    "frontend/src/lib/stage09LiveConsoleAdapter.ts",
+    "frontend/src/styles/global.css"
+  ],
+  "test_files": [
+    "tests/frontend/consoleViewModel.test.ts",
+    "tests/frontend/liveTelemetryStream.test.ts",
+    "tests/frontend/stage09LiveConsoleAdapter.test.ts"
+  ],
+  "docs": [
+    "docs/development/steps/09-realtime-performance-and-rust-data-plane.md",
+    "docs/development/artifacts/stage09-realtime-baseline/README.md",
+    "docs/development/artifacts/stage09-realtime-baseline/stage09-live-console-stream-binding.json"
+  ],
+  "message_handling": {
+    "stream.snapshot": [
+      "updates latest known telemetry points for existing console channels",
+      "updates active alert count from active_alerts",
+      "marks the stream state live"
+    ],
+    "telemetry.sample": [
+      "updates the matching channel readout",
+      "appends bounded trend samples for selected console trend channels",
+      "marks the stream state live"
+    ],
+    "stream.backpressure": [
+      "marks the stream state degraded",
+      "surfaces dropped_event_count and client_queue_depth",
+      "does not alter telemetry point values or trend ordering"
+    ],
+    "ordering": [
+      "ignores duplicate sequence values",
+      "ignores out-of-order sequence values",
+      "keeps the last valid ordered console state"
+    ]
+  },
+  "verification_commands": [
+    "node --experimental-strip-types --test tests/frontend/consoleViewModel.test.ts",
+    "node --experimental-strip-types --test tests/frontend/liveTelemetryStream.test.ts",
+    "node --experimental-strip-types --test tests/frontend/stage09LiveConsoleAdapter.test.ts",
+    "python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'",
+    "python3 scripts/verify_stage09_baseline_bundle.py",
+    "python3 scripts/public_repo_guard.py --scan-history"
+  ],
+  "public_repo_safety": {
+    "includes_docs_automation": false,
+    "paths_are_repo_relative": true,
+    "uses_absolute_local_paths": false,
+    "uses_credentials": false,
+    "uses_private_runtime_state": false,
+    "uses_network": false,
+    "uses_paid_services": false
+  }
+}

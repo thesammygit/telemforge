@@ -21,13 +21,24 @@ export function MissionConsole({
     <main className="console-shell">
       <header className="console-header">
         <div>
-          <p className="console-kicker">TelemForge Stage 07</p>
+          <p className="console-kicker">
+            {view.stream.state === "fixture"
+              ? "TelemForge Stage 07"
+              : "TelemForge Stage 09"}
+          </p>
           <h1>Replay And Anomaly Layer</h1>
           <p>{view.mission.description}</p>
         </div>
-        <div className={`mission-state status-${view.mission.healthState}`}>
-          <span>{view.mission.healthState}</span>
-          <strong>{view.mission.spacecraftId}</strong>
+        <div className="header-state-stack">
+          <div className={`mission-state status-${view.mission.healthState}`}>
+            <span>{view.mission.healthState}</span>
+            <strong>{view.mission.spacecraftId}</strong>
+          </div>
+          <div className={`stream-state stream-${view.stream.state}`}>
+            <span>{view.stream.state}</span>
+            <strong>{view.stream.label}</strong>
+            <small>{view.stream.detail}</small>
+          </div>
         </div>
       </header>
 
@@ -49,7 +60,7 @@ export function MissionConsole({
           <strong>{view.mission.activeFaultCount}</strong>
         </div>
         <div>
-          <span className="metric-label">Fixture source</span>
+          <span className="metric-label">Telemetry source</span>
           <strong>{view.mission.sourceLabel}</strong>
         </div>
       </section>

@@ -2,6 +2,12 @@ export type TelemetryStatus = "nominal" | "warning" | "critical" | "offline";
 export type TrendDirection = "rising" | "falling" | "flat";
 export type IncidentEventType = "fault.injected" | "telemetry.affected" | "alert.raised";
 export type ReplayMarkerKind = "fault" | "event" | "alert";
+export type LiveTelemetryConnectionState =
+  | "fixture"
+  | "connecting"
+  | "live"
+  | "degraded"
+  | "closed";
 
 export interface ValueRange {
   min: number;
@@ -193,6 +199,15 @@ export interface ReplayPayload {
   };
 }
 
+export interface LiveTelemetryConnectionView {
+  state: LiveTelemetryConnectionState;
+  label: string;
+  detail: string;
+  lastSequence?: number;
+  droppedEventCount?: number;
+  clientQueueDepth?: number;
+}
+
 export interface AnomalyOverlayView extends AnomalyRecord {
   scoreLabel: string;
 }
@@ -209,6 +224,7 @@ export interface ReplayInspectionView {
 
 export interface MissionConsoleView {
   mission: MissionOverviewView;
+  stream: LiveTelemetryConnectionView;
   subsystems: SubsystemSummaryView[];
   selectedSubsystem: SubsystemSummaryView;
   trends: TrendView[];

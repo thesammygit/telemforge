@@ -253,6 +253,16 @@ bounded local proof under the 30 second / 512 MB / no-network resource guard. It
 is not a broad load test, production fanout claim, or Python control-plane
 replacement.
 
+The live-console stream binding artifact
+`docs/development/artifacts/stage09-realtime-baseline/stage09-live-console-stream-binding.json`
+records the bounded frontend handoff from the existing websocket contract into
+the operator mission console. The binding is enabled only by explicit local
+`VITE_TELEMFORGE_API_BASE_URL` and `VITE_TELEMFORGE_LIVE_SESSION_ID`
+configuration, keeps the Stage 07 fixture-backed review path as the default
+fallback, consumes `stream.snapshot`, `telemetry.sample`, and
+`stream.backpressure` without changing backend envelope semantics, and does not
+claim production fanout, live operations, or Rust replacement.
+
 The input-provenance validation command:
 
 ```text

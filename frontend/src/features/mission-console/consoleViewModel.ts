@@ -3,6 +3,7 @@ import type {
   EventLogEntry,
   FaultRecord,
   IncidentStoryView,
+  LiveTelemetryConnectionView,
   MissionConsoleView,
   ReplayInspectionView,
   ReplayPayload,
@@ -43,6 +44,7 @@ export const selectedStage05ChannelIds = [
 export function buildMissionConsoleView(
   fixture: Stage05ConsoleFixture,
   selectedSubsystemId = "thermal",
+  stream = buildFixtureStreamConnection(fixture),
 ): MissionConsoleView {
   const channelsById = new Map(
     fixture.channels.map((channel) => [channel.channelId, channel]),
@@ -70,8 +72,9 @@ export function buildMissionConsoleView(
       activeAlertCount: fixture.alerts.filter((alert) => alert.state === "active")
         .length,
       activeFaultCount: activeFaults.length,
-      sourceLabel: fixture.source.snapshot,
+      sourceLabel: stream.label,
     },
+    stream,
     subsystems,
     selectedSubsystem,
     trends: selectedStage05ChannelIds.map((channelId) =>
@@ -82,6 +85,16 @@ export function buildMissionConsoleView(
     replay: fixture.replay
       ? buildReplayInspectionView(fixture.replay)
       : undefined,
+  };
+}
+
+export function buildFixtureStreamConnection(
+  fixture: Stage05ConsoleFixture,
+): LiveTelemetryConnectionView {
+  return {
+    state: "fixture",
+    label: fixture.source.snapshot,
+    detail: "Fixture review mode",
   };
 }
 
