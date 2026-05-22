@@ -2,7 +2,7 @@
 
 This folder defines a human-centric way to build TelemForge without one-shotting the whole system.
 
-Current rule: do not keep runnable backend/frontend implementation code in the repo before the relevant stage is approved. Placeholder workspace README files and fixture directories are allowed when a stage explicitly calls for conventions or human-testable artifacts.
+Current rule: continue development through bounded, reviewable stages. The stage policy is [Stage Policy](stage-policy.md); it explicitly forbids forever-stages and requires new numbered stages when scope changes.
 
 The intent is:
 
@@ -36,6 +36,9 @@ For each stage:
 7. [Replay And Anomaly Layer](steps/07-replay-and-anomaly.md)
 8. [Hardening, Docker, And Release](steps/08-hardening-docker-and-release.md)
 9. [Realtime Performance And Rust Data Plane](steps/09-realtime-performance-and-rust-data-plane.md)
+10. [Operator Workflow And Incident Lifecycle](steps/10-operator-workflow-and-incident-lifecycle.md)
+
+Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
 ## Development Rules
 
@@ -74,6 +77,7 @@ At each stage the AI should:
 The AI should not:
 
 - jump ahead multiple stages without review
+- keep adding unrelated work to a stage whose exit criteria are already satisfied
 - hide tradeoffs
 - treat “it compiles” as enough
 - replace human review with automated confidence

@@ -16,6 +16,7 @@ This file now acts as the short-form roadmap. The detailed, human-reviewable bui
 10. add live websocket telemetry with reconnect and backpressure behavior
 11. define and benchmark the realtime performance envelope
 12. move telemetry ingest, replay indexing, stream fanout, and alert/anomaly hot paths toward a Rust data plane when measured needs justify it
+13. continue with new numbered stages for each distinct operator workflow, runtime integration, persistence/collaboration, scenario-authoring, deployment, or demo-readiness milestone
 
 ## Guiding Principle
 
@@ -45,3 +46,14 @@ Python can remain useful for orchestration, API control-plane behavior,
 reviewer workflows, fixtures, and early product iteration. The migration should
 be benchmark driven: add explicit latency and throughput targets first, then
 move narrow hot paths to Rust rather than rewriting the whole system at once.
+
+
+## Continuous Stage Policy
+
+TelemForge development should continue indefinitely on the automation branch, but
+not inside one overloaded stage. When a stage satisfies its exit criteria, the
+next safe work should move to a new numbered stage with its own goal, non-goals,
+human test gate, and exit criteria.
+
+Stage 09 is review-ready for automation-branch development. The next active
+product lane is Stage 10: operator workflow and incident lifecycle.
