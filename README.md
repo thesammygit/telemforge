@@ -1,6 +1,6 @@
 # TelemForge
 
-TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current Stage 08 workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, manual fault and alert workflows, replay/anomaly inspection, and a fixture-backed React/Vite mission console.
+TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, manual fault and alert workflows, replay/anomaly inspection, a fixture-backed React/Vite mission console, and a bounded Stage 09 live-telemetry path with review-ready benchmark/runtime evidence.
 
 ## Quick Verification
 
@@ -9,9 +9,13 @@ From the repository root:
 ```text
 python3 scripts/smoke_stage08.py
 python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
+python3 scripts/verify_stage09_baseline_bundle.py
+python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'
 python3 -m unittest discover -s tests/backend
 python3 -m unittest discover -s tests/contracts
 node --experimental-strip-types --test tests/frontend/consoleViewModel.test.ts
+node --experimental-strip-types --test tests/frontend/liveTelemetryStream.test.ts
+node --experimental-strip-types --test tests/frontend/stage09LiveConsoleAdapter.test.ts
 ```
 
 The smoke command runs the core backend workflow in process: health, session creation, tiny simulation, manual fault injection, telemetry, alerts, events, replay, and anomalies.
@@ -66,7 +70,7 @@ docs/       Architecture, local runbook, readiness docs, staged development path
 
 ## Current Scope
 
-Implemented through Stage 08:
+Implemented through the current Stage 09 review-ready slices:
 
 - telemetry contracts and fixture examples;
 - deterministic simulation artifacts;
@@ -74,12 +78,14 @@ Implemented through Stage 08:
 - SQLite persistence for local/test workflows;
 - fixture-backed mission console with incident and replay/anomaly views;
 - local smoke verification and local-only Docker/Compose configuration.
+- websocket telemetry streaming with bounded runtime evidence for snapshot, monotonic sequence, reconnect resume, backpressure reporting, two-client fanout, and sustained-load smoke;
+- reviewable Stage 09 benchmark/baseline artifacts plus a target-scale Rust data-plane candidate kept behind explicit measurement boundaries;
+- local live-console websocket binding behind explicit `VITE_TELEMFORGE_API_BASE_URL` and `VITE_TELEMFORGE_LIVE_SESSION_ID` configuration, with fixture fallback as the default mode.
 
 Deferred:
 
-- websocket streaming;
-- realtime latency and throughput benchmarks;
-- Rust data-plane spike for telemetry ingest, replay indexing, stream fanout, and alert/anomaly hot paths;
+- manual fast-forward of `main` after Stage 09 review;
+- any production claim for broad load behavior, live operations, or Rust control-plane replacement;
 - animated replay playback;
 - alert acknowledgement and clearing;
 - scheduled fault workflows;

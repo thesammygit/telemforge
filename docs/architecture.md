@@ -85,5 +85,7 @@ guarantees:
 - Stage 06 has immediate manual thermal/comms faults, threshold-first alerts, event-log persistence, incident query routes, and a fixture-backed console incident timeline.
 - Stage 07 has bounded replay-window assembly from existing SQLite telemetry/fault/alert/event records, explainable nominal-envelope anomaly scoring, replay/anomaly API routes, and a fixture-backed console replay overlay.
 - Stage 08 has a bounded in-process smoke workflow, local-only Docker/Compose configuration, and reviewer-facing run/readiness docs.
+- Stage 09 now has a bounded websocket telemetry path with runtime evidence for startup snapshot delivery, monotonic per-session ordering, reconnect resume, backpressure and dropped-event reporting, bounded two-client fanout, and sustained-load smoke.
+- Stage 09 also has a reviewable benchmark envelope, a target-scale Rust data-plane candidate for stream fanout/sample-rate work, and a local live-console binding that keeps the fixture path as the default fallback.
 - Stage 02 telemetry contracts and Stage 03 simulation remain the source of the API's baseline telemetry data behavior.
-- Websocket streaming, realtime benchmarks, Rust data-plane migration, animated replay playback, background anomaly daemons, alert acknowledgement, scheduled faults, PostgreSQL runtime wiring, deploy, release, and publish behavior remain deferred.
+- Broad production load claims, Rust control-plane replacement, animated replay playback, background anomaly daemons, alert acknowledgement, scheduled faults, PostgreSQL runtime wiring, deploy, release, and publish behavior remain deferred.
