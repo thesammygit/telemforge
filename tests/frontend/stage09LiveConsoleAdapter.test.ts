@@ -9,7 +9,10 @@ import {
   createStage09LiveConsoleState,
   setStage09LiveConsoleConnection,
 } from "../../frontend/src/lib/stage09LiveConsoleAdapter.ts";
-import { acknowledgeAlertInFixture } from "../../frontend/src/lib/operatorWorkflow.ts";
+import {
+  acknowledgeAlertInFixture,
+  resolveAlertInFixture,
+} from "../../frontend/src/lib/operatorWorkflow.ts";
 import { stage07ConsoleFixture } from "../../frontend/src/lib/stage07ConsoleFixture.ts";
 
 test("createStage09LiveConsoleState keeps the fixture-backed console fallback", () => {
@@ -112,6 +115,43 @@ test("stream.snapshot preserves acknowledged alerts while refreshing active aler
   assert.equal(view.mission.acknowledgedAlertCount, 1);
   assert.equal(view.alerts[0].state, "acknowledged");
   assert.equal(view.incident.timeline.at(-1)?.eventType, "alert.acknowledged");
+});
+
+test("stream.snapshot preserves resolved alerts while refreshing active alerts", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-22T04:00:00Z",
+  );
+  const resolvedFixture = resolveAlertInFixture(
+    acknowledgedFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-22T04:05:00Z",
+  );
+  const state = applyStage09LiveConsoleMessage(
+    setStage09LiveConsoleConnection(
+      createStage09LiveConsoleState(resolvedFixture),
+      "connecting",
+    ),
+    {
+      type: "stream.snapshot",
+      session_id: "session-stage09",
+      sequence: 1,
+      emitted_at: "2026-05-22T04:06:00Z",
+      payload: {
+        latest_points: [],
+        active_alerts: [],
+      },
+    },
+  );
+
+  const view = buildMissionConsoleView(state.fixture, "thermal", state.connection);
+
+  assert.equal(view.mission.activeAlertCount, 0);
+  assert.equal(view.mission.acknowledgedAlertCount, 0);
+  assert.equal(view.mission.resolvedAlertCount, 1);
+  assert.equal(view.alerts[0].state, "resolved");
+  assert.equal(view.incident.timeline.at(-1)?.eventType, "alert.resolved");
 });
 
 test("telemetry.sample appends ordered trend samples and ignores duplicates", () => {

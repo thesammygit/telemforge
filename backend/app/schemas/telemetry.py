@@ -225,7 +225,14 @@ class EventLogEntry:
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "EventLogEntry":
         event_type = _require_text(data, "event_type")
-        if event_type not in {"fault.injected", "telemetry.affected", "alert.raised", "alert.cleared"}:
+        if event_type not in {
+            "fault.injected",
+            "telemetry.affected",
+            "alert.raised",
+            "alert.acknowledged",
+            "alert.resolved",
+            "alert.cleared",
+        }:
             raise ContractError(f"Unsupported event type: {event_type}")
 
         severity = data.get("severity")

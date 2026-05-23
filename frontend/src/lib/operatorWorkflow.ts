@@ -58,6 +58,62 @@ export function acknowledgeAlertInFixture(
   };
 }
 
+export function resolveAlertInFixture(
+  fixture: Stage05ConsoleFixture,
+  alertId: string,
+  resolvedAt: string,
+  resolvedBy = "local operator",
+  resolutionNote = "Resolved from the mission console",
+): Stage05ConsoleFixture {
+  const alertIndex = fixture.alerts.findIndex((alert) => alert.alertId === alertId);
+  if (alertIndex === -1) {
+    return fixture;
+  }
+
+  const currentAlert = fixture.alerts[alertIndex];
+  if (currentAlert.state !== "acknowledged") {
+    return fixture;
+  }
+
+  const updatedAlert: AlertRecord = {
+    ...currentAlert,
+    state: "resolved",
+    resolvedAt,
+    resolvedBy,
+    resolutionNote,
+  };
+  const updatedEvent = buildResolutionEvent(
+    updatedAlert,
+    resolvedAt,
+    resolvedBy,
+    resolutionNote,
+  );
+
+  return {
+    ...fixture,
+    alerts: fixture.alerts.map((alert) =>
+      alert.alertId === alertId ? updatedAlert : { ...alert },
+    ),
+    events: [...(fixture.events ?? []).map((event) => ({ ...event })), updatedEvent],
+    replay: fixture.replay
+      ? {
+          ...fixture.replay,
+          window: { ...fixture.replay.window },
+          markers: [
+            ...fixture.replay.markers.map((marker) => ({ ...marker })),
+            buildResolutionMarker(updatedAlert, resolvedAt, resolvedBy, resolutionNote),
+          ],
+          anomalies: fixture.replay.anomalies.map((anomaly) => ({ ...anomaly })),
+          summary: {
+            ...fixture.replay.summary,
+            affectedChannelIds: [...fixture.replay.summary.affectedChannelIds],
+            markerCount: fixture.replay.summary.markerCount + 1,
+          },
+        }
+      : undefined,
+  };
+}
+
 function buildAcknowledgementEvent(
   alert: AlertRecord,
   acknowledgedAt: string,
@@ -92,6 +148,48 @@ function buildAcknowledgementMarker(
     label: "acknowledged alert",
     message: `Alert acknowledged: ${alert.channelId} by ${acknowledgedBy}. ${
       operatorNote ? operatorNote : ""
+    }`.trim(),
+    severity: alert.severity,
+    relatedFaultId: alert.relatedFaultId,
+    channelId: alert.channelId,
+    alertId: alert.alertId,
+  };
+}
+
+function buildResolutionEvent(
+  alert: AlertRecord,
+  resolvedAt: string,
+  resolvedBy: string,
+  resolutionNote: string,
+): EventLogEntry {
+  return {
+    eventId: `event-alert-resolved-${slug(alert.alertId)}-${slug(resolvedAt)}`,
+    eventType: "alert.resolved",
+    timestamp: resolvedAt,
+    message: `Alert resolved: ${alert.channelId} by ${resolvedBy}.`,
+    relatedFaultId: alert.relatedFaultId,
+    channelId: alert.channelId,
+    alertId: alert.alertId,
+    severity: alert.severity,
+    resolvedBy,
+    resolutionNote,
+  };
+}
+
+function buildResolutionMarker(
+  alert: AlertRecord,
+  resolvedAt: string,
+  resolvedBy: string,
+  resolutionNote: string,
+): ReplayMarker {
+  return {
+    markerId: `marker-alert-resolved-${slug(alert.alertId)}-${slug(resolvedAt)}`,
+    kind: "alert",
+    markerType: "alert.resolved",
+    timestamp: resolvedAt,
+    label: "resolved alert",
+    message: `Alert resolved: ${alert.channelId} by ${resolvedBy}. ${
+      resolutionNote ? resolutionNote : ""
     }`.trim(),
     severity: alert.severity,
     relatedFaultId: alert.relatedFaultId,

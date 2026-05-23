@@ -420,6 +420,121 @@ class TelemetryStore:
             },
         }
 
+    def resolve_alert(
+        self,
+        session_id: str,
+        alert_id: str,
+        resolved_at: str,
+        resolved_by: str | None = None,
+        resolution_note: str | None = None,
+    ) -> dict[str, Any]:
+        session = self.get_session(session_id)
+        if session is None:
+            raise KeyError(f"Unknown session_id: {session_id}")
+
+        with self._connect() as connection:
+            alert_row = connection.execute(
+                """
+                SELECT alert_id, session_id, channel_id, severity, state, timestamp,
+                       message, metadata_json
+                FROM alerts
+                WHERE session_id = ? AND alert_id = ?
+                """,
+                (session_id, alert_id),
+            ).fetchone()
+            if alert_row is None:
+                raise KeyError(f"Unknown alert_id: {alert_id}")
+            if alert_row["state"] != "acknowledged":
+                raise ValueError(f"Alert is not acknowledged: {alert_id}")
+
+            alert_metadata = _decode_metadata(alert_row["metadata_json"])
+            alert_metadata.update(
+                {
+                    "resolved_at": resolved_at,
+                    "resolved_by": resolved_by,
+                    "resolution_note": resolution_note,
+                }
+            )
+            connection.execute(
+                """
+                UPDATE alerts
+                SET state = ?, metadata_json = ?
+                WHERE session_id = ? AND alert_id = ?
+                """,
+                (
+                    "resolved",
+                    json.dumps(alert_metadata, sort_keys=True),
+                    session_id,
+                    alert_id,
+                ),
+            )
+
+            event_id = f"event-alert-resolved-{_slug(alert_id)}-{_slug(resolved_at)}"
+            event_message = (
+                f"Alert resolved: {alert_row['channel_id']} by "
+                f"{resolved_by or 'operator'}."
+            )
+            event_metadata = {
+                "alert_id": alert_id,
+                "channel_id": alert_row["channel_id"],
+                "severity": alert_row["severity"],
+                "state": "resolved",
+                "related_fault_id": alert_metadata.get("related_fault_id"),
+                "fault_type": alert_metadata.get("fault_type"),
+                "acknowledged_at": alert_metadata.get("acknowledged_at"),
+                "acknowledged_by": alert_metadata.get("acknowledged_by"),
+                "resolved_at": resolved_at,
+                "resolved_by": resolved_by,
+                "resolution_note": resolution_note,
+            }
+            connection.execute(
+                """
+                INSERT INTO events (
+                    event_id, session_id, event_type, timestamp, message, metadata_json
+                ) VALUES (
+                    :event_id, :session_id, :event_type, :timestamp, :message, :metadata_json
+                )
+                """,
+                {
+                    "event_id": event_id,
+                    "session_id": session_id,
+                    "event_type": "alert.resolved",
+                    "timestamp": resolved_at,
+                    "message": event_message,
+                    "metadata_json": json.dumps(event_metadata, sort_keys=True),
+                },
+            )
+            updated_alert_row = connection.execute(
+                """
+                SELECT alert_id, session_id, channel_id, severity, state, timestamp,
+                       message, metadata_json
+                FROM alerts
+                WHERE session_id = ? AND alert_id = ?
+                """,
+                (session_id, alert_id),
+            ).fetchone()
+
+        if updated_alert_row is None:
+            raise RuntimeError(f"Failed to update alert state: {alert_id}")
+
+        return {
+            "alert": _alert_from_row(updated_alert_row),
+            "event": {
+                "event_id": event_id,
+                "session_id": session_id,
+                "event_type": "alert.resolved",
+                "timestamp": resolved_at,
+                "message": event_message,
+                "related_fault_id": event_metadata.get("related_fault_id"),
+                "fault_type": event_metadata.get("fault_type"),
+                "channel_id": event_metadata.get("channel_id"),
+                "alert_id": alert_id,
+                "severity": alert_row["severity"],
+                "resolved_by": resolved_by,
+                "resolution_note": resolution_note,
+            },
+        }
+
     def list_telemetry(
         self,
         session_id: str,
@@ -662,6 +777,9 @@ def _alert_from_row(row: sqlite3.Row) -> dict[str, Any]:
         "acknowledged_at": metadata.get("acknowledged_at"),
         "acknowledged_by": metadata.get("acknowledged_by"),
         "operator_note": metadata.get("operator_note"),
+        "resolved_at": metadata.get("resolved_at"),
+        "resolved_by": metadata.get("resolved_by"),
+        "resolution_note": metadata.get("resolution_note"),
     }
 
 
@@ -679,7 +797,9 @@ def _event_from_row(row: sqlite3.Row) -> dict[str, Any]:
         "alert_id": metadata.get("alert_id"),
         "severity": metadata.get("severity"),
         "acknowledged_by": metadata.get("acknowledged_by"),
+        "resolved_by": metadata.get("resolved_by"),
         "operator_note": metadata.get("operator_note"),
+        "resolution_note": metadata.get("resolution_note"),
         "metadata": metadata,
     }
 

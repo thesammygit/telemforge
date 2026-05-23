@@ -406,6 +406,9 @@ function normalizeAlert(payload: unknown): AlertRecord | null {
     acknowledgedAt: stringFrom(payload.acknowledged_at),
     acknowledgedBy: stringFrom(payload.acknowledged_by),
     operatorNote: stringFrom(payload.operator_note),
+    resolvedAt: stringFrom(payload.resolved_at),
+    resolvedBy: stringFrom(payload.resolved_by),
+    resolutionNote: stringFrom(payload.resolution_note),
   };
 }
 

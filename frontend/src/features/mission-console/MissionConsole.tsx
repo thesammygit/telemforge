@@ -5,6 +5,7 @@ interface MissionConsoleProps {
   view: MissionConsoleView;
   onSelectSubsystem: (subsystemId: string) => void;
   onAcknowledgeAlert: (alertId: string) => void;
+  onResolveAlert: (alertId: string) => void;
 }
 
 const statusOrder: TelemetryStatus[] = [
@@ -18,11 +19,13 @@ export function MissionConsole({
   view,
   onSelectSubsystem,
   onAcknowledgeAlert,
+  onResolveAlert,
 }: MissionConsoleProps) {
   const activeAlerts = view.alerts.filter((alert) => alert.state === "active");
   const acknowledgedAlerts = view.alerts.filter(
     (alert) => alert.state === "acknowledged",
   );
+  const resolvedAlerts = view.alerts.filter((alert) => alert.state === "resolved");
 
   return (
     <main className="console-shell">
@@ -65,6 +68,10 @@ export function MissionConsole({
         <div>
           <span className="metric-label">Acknowledged alerts</span>
           <strong>{view.mission.acknowledgedAlertCount}</strong>
+        </div>
+        <div>
+          <span className="metric-label">Resolved alerts</span>
+          <strong>{view.mission.resolvedAlertCount}</strong>
         </div>
         <div>
           <span className="metric-label">Active faults</span>
@@ -335,11 +342,47 @@ export function MissionConsole({
                         {alert.acknowledgedAt}
                       </p>
                     </div>
+                    <button
+                      className="alert-action"
+                      type="button"
+                      onClick={() => onResolveAlert(alert.alertId)}
+                    >
+                      Resolve
+                    </button>
                   </article>
                 ))
               ) : (
                 <p className="empty-state">
                   Acknowledged alerts will remain visible here.
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="alert-group">
+            <h3>Resolved alerts</h3>
+            <div className="alert-list">
+              {resolvedAlerts.length ? (
+                resolvedAlerts.map((alert) => (
+                  <article key={alert.alertId} className="alert-row">
+                    <span className={`status-chip status-${alert.severity}`}>
+                      {alert.severity}
+                    </span>
+                    <div>
+                      <h4>{alert.channelId}</h4>
+                      <p>{alert.message}</p>
+                      <p className="recommended-action">
+                        {alert.resolutionNote}
+                      </p>
+                      <p className="acknowledgement-meta">
+                        Resolved by {alert.resolvedBy ?? "operator"} at{" "}
+                        {alert.resolvedAt}
+                      </p>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <p className="empty-state">
+                  Resolved alerts will remain visible here.
                 </p>
               )}
             </div>

@@ -61,6 +61,7 @@ export function buildMissionConsoleView(
   const acknowledgedAlerts = fixture.alerts.filter(
     (alert) => alert.state === "acknowledged",
   );
+  const resolvedAlerts = fixture.alerts.filter((alert) => alert.state === "resolved");
   const selectedSubsystem =
     subsystems.find((subsystem) => subsystem.id === selectedSubsystemId) ??
     subsystems[0];
@@ -75,6 +76,7 @@ export function buildMissionConsoleView(
       statusCounts: missionCounts,
       activeAlertCount: activeAlerts.length,
       acknowledgedAlertCount: acknowledgedAlerts.length,
+      resolvedAlertCount: resolvedAlerts.length,
       activeFaultCount: activeFaults.length,
       sourceLabel: stream.label,
     },

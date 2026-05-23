@@ -4,7 +4,8 @@ export type IncidentEventType =
   | "fault.injected"
   | "telemetry.affected"
   | "alert.raised"
-  | "alert.acknowledged";
+  | "alert.acknowledged"
+  | "alert.resolved";
 export type ReplayMarkerKind = "fault" | "event" | "alert";
 export type LiveTelemetryConnectionState =
   | "fixture"
@@ -56,6 +57,9 @@ export interface AlertRecord {
   acknowledgedAt?: string;
   acknowledgedBy?: string;
   operatorNote?: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
+  resolutionNote?: string;
 }
 
 export interface FaultRecord {
@@ -78,7 +82,9 @@ export interface EventLogEntry {
   alertId?: string;
   severity?: "info" | "warning" | "critical";
   acknowledgedBy?: string;
+  resolvedBy?: string;
   operatorNote?: string;
+  resolutionNote?: string;
 }
 
 export interface TrendSample {
@@ -118,6 +124,7 @@ export interface MissionOverviewView {
   statusCounts: Record<TelemetryStatus, number>;
   activeAlertCount: number;
   acknowledgedAlertCount: number;
+  resolvedAlertCount: number;
   activeFaultCount: number;
   sourceLabel: string;
 }

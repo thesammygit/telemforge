@@ -13,7 +13,10 @@ import {
 import { stage05ConsoleFixture } from "../../frontend/src/lib/stage05ConsoleFixture.ts";
 import { stage06ConsoleFixture } from "../../frontend/src/lib/stage06ConsoleFixture.ts";
 import { stage07ConsoleFixture } from "../../frontend/src/lib/stage07ConsoleFixture.ts";
-import { acknowledgeAlertInFixture } from "../../frontend/src/lib/operatorWorkflow.ts";
+import {
+  acknowledgeAlertInFixture,
+  resolveAlertInFixture,
+} from "../../frontend/src/lib/operatorWorkflow.ts";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -214,6 +217,34 @@ test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history
   assert.ok(view.replay);
   assert.equal(view.replay?.markerCount, 6);
   assert.equal(view.replay?.timelineMarkers.at(-1)?.markerType, "alert.acknowledged");
+});
+
+test("buildMissionConsoleView surfaces resolved alerts and lifecycle history", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-23T04:10:00Z",
+  );
+  const resolvedFixture = resolveAlertInFixture(
+    acknowledgedFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-23T04:12:00Z",
+  );
+  const view = buildMissionConsoleView(resolvedFixture, "thermal");
+
+  assert.equal(view.mission.activeAlertCount, 2);
+  assert.equal(view.mission.acknowledgedAlertCount, 0);
+  assert.equal(view.mission.resolvedAlertCount, 1);
+  assert.equal(
+    view.alerts.find(
+      (alert) => alert.alertId === "alert-stage06-thermal-avionics",
+    )?.state,
+    "resolved",
+  );
+  assert.equal(view.incident.timeline.at(-1)?.eventType, "alert.resolved");
+  assert.ok(view.replay);
+  assert.equal(view.replay?.markerCount, 7);
+  assert.equal(view.replay?.timelineMarkers.at(-1)?.markerType, "alert.resolved");
 });
 
 function readCsv(path: string): Array<Record<string, string>> {
