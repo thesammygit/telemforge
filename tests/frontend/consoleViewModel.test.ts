@@ -13,6 +13,7 @@ import {
 import { stage05ConsoleFixture } from "../../frontend/src/lib/stage05ConsoleFixture.ts";
 import { stage06ConsoleFixture } from "../../frontend/src/lib/stage06ConsoleFixture.ts";
 import { stage07ConsoleFixture } from "../../frontend/src/lib/stage07ConsoleFixture.ts";
+import { acknowledgeAlertInFixture } from "../../frontend/src/lib/operatorWorkflow.ts";
 
 const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 
@@ -191,6 +192,28 @@ test("buildMissionConsoleView includes Stage 07 replay overlay data when provide
   assert.ok(view.replay);
   assert.equal(view.replay.markerCount, 5);
   assert.equal(view.replay.topAnomalies[0].channelName, "Avionics Bay Temperature");
+});
+
+test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-23T04:10:00Z",
+  );
+  const view = buildMissionConsoleView(acknowledgedFixture, "thermal");
+
+  assert.equal(view.mission.activeAlertCount, 2);
+  assert.equal(view.mission.acknowledgedAlertCount, 1);
+  assert.equal(
+    view.alerts.find(
+      (alert) => alert.alertId === "alert-stage06-thermal-avionics",
+    )?.state,
+    "acknowledged",
+  );
+  assert.equal(view.incident.timeline.at(-1)?.eventType, "alert.acknowledged");
+  assert.ok(view.replay);
+  assert.equal(view.replay?.markerCount, 6);
+  assert.equal(view.replay?.timelineMarkers.at(-1)?.markerType, "alert.acknowledged");
 });
 
 function readCsv(path: string): Array<Record<string, string>> {

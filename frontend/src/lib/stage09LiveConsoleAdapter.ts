@@ -107,9 +107,12 @@ function applySnapshotMessage(
   const latestPoints = arrayFrom(payload.latest_points)
     .map(normalizeTelemetryPoint)
     .filter((point): point is TelemetryPoint => point !== null);
-  const alerts = arrayFrom(payload.active_alerts)
-    .map(normalizeAlert)
-    .filter((alert): alert is AlertRecord => alert !== null);
+  const alerts = mergeAlerts(
+    state.fixture.alerts,
+    arrayFrom(payload.active_alerts)
+      .map(normalizeAlert)
+      .filter((alert): alert is AlertRecord => alert !== null),
+  );
 
   const updatedFixture = {
     ...state.fixture,
@@ -272,6 +275,26 @@ function mergeTelemetryPoints(
   return merged;
 }
 
+function mergeAlerts(
+  currentAlerts: AlertRecord[],
+  updates: AlertRecord[],
+): AlertRecord[] {
+  const updatesByAlertId = new Map(updates.map((alert) => [alert.alertId, alert]));
+  const preservedAlerts = currentAlerts.filter((alert) => {
+    const incoming = updatesByAlertId.get(alert.alertId);
+    if (incoming) {
+      return false;
+    }
+    return alert.state !== "active";
+  });
+
+  return [...preservedAlerts, ...updates].sort(
+    (left, right) =>
+      left.timestamp.localeCompare(right.timestamp) ||
+      left.alertId.localeCompare(right.alertId),
+  );
+}
+
 function appendTrendSamples(
   currentTrends: TrendSample[],
   points: TelemetryPoint[],
@@ -380,6 +403,9 @@ function normalizeAlert(payload: unknown): AlertRecord | null {
           unit: stringFrom(payload.threshold.unit) ?? "",
         }
       : undefined,
+    acknowledgedAt: stringFrom(payload.acknowledged_at),
+    acknowledgedBy: stringFrom(payload.acknowledged_by),
+    operatorNote: stringFrom(payload.operator_note),
   };
 }
 

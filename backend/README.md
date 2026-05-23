@@ -57,10 +57,15 @@ Stage 07 incident/replay routes are synchronous and session-scoped:
 POST /sessions/{session_id}/faults
 GET /sessions/{session_id}/faults
 GET /sessions/{session_id}/alerts
+POST /sessions/{session_id}/alerts/{alert_id}/acknowledge
 GET /sessions/{session_id}/events
 GET /sessions/{session_id}/replay?start_at=...&end_at=...
 GET /sessions/{session_id}/anomalies?start_at=...&end_at=...
 ```
+
+Stage 10 adds a local operator action loop on top of the Stage 06/07 alert
+history. Acknowledge an active alert, then inspect the alert list, event log,
+and replay markers to confirm the lifecycle transition is preserved.
 
 The Stage 08 smoke helper runs that workflow without starting a server:
 

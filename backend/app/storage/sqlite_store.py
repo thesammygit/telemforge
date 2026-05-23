@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 import uuid
 from dataclasses import asdict
@@ -306,6 +307,119 @@ class TelemetryStore:
             "events": incident.events,
         }
 
+    def acknowledge_alert(
+        self,
+        session_id: str,
+        alert_id: str,
+        acknowledged_at: str,
+        acknowledged_by: str | None = None,
+        operator_note: str | None = None,
+    ) -> dict[str, Any]:
+        session = self.get_session(session_id)
+        if session is None:
+            raise KeyError(f"Unknown session_id: {session_id}")
+
+        with self._connect() as connection:
+            alert_row = connection.execute(
+                """
+                SELECT alert_id, session_id, channel_id, severity, state, timestamp,
+                       message, metadata_json
+                FROM alerts
+                WHERE session_id = ? AND alert_id = ?
+                """,
+                (session_id, alert_id),
+            ).fetchone()
+            if alert_row is None:
+                raise KeyError(f"Unknown alert_id: {alert_id}")
+            if alert_row["state"] != "active":
+                raise ValueError(f"Alert is not active: {alert_id}")
+
+            alert_metadata = _decode_metadata(alert_row["metadata_json"])
+            alert_metadata.update(
+                {
+                    "acknowledged_at": acknowledged_at,
+                    "acknowledged_by": acknowledged_by,
+                    "operator_note": operator_note,
+                }
+            )
+            connection.execute(
+                """
+                UPDATE alerts
+                SET state = ?, metadata_json = ?
+                WHERE session_id = ? AND alert_id = ?
+                """,
+                (
+                    "acknowledged",
+                    json.dumps(alert_metadata, sort_keys=True),
+                    session_id,
+                    alert_id,
+                ),
+            )
+
+            event_id = f"event-alert-ack-{_slug(alert_id)}-{_slug(acknowledged_at)}"
+            event_message = (
+                f"Alert acknowledged: {alert_row['channel_id']} by "
+                f"{acknowledged_by or 'operator'}."
+            )
+            event_metadata = {
+                "alert_id": alert_id,
+                "channel_id": alert_row["channel_id"],
+                "severity": alert_row["severity"],
+                "state": "acknowledged",
+                "related_fault_id": alert_metadata.get("related_fault_id"),
+                "fault_type": alert_metadata.get("fault_type"),
+                "acknowledged_at": acknowledged_at,
+                "acknowledged_by": acknowledged_by,
+                "operator_note": operator_note,
+            }
+            connection.execute(
+                """
+                INSERT INTO events (
+                    event_id, session_id, event_type, timestamp, message, metadata_json
+                ) VALUES (
+                    :event_id, :session_id, :event_type, :timestamp, :message, :metadata_json
+                )
+                """,
+                {
+                    "event_id": event_id,
+                    "session_id": session_id,
+                    "event_type": "alert.acknowledged",
+                    "timestamp": acknowledged_at,
+                    "message": event_message,
+                    "metadata_json": json.dumps(event_metadata, sort_keys=True),
+                },
+            )
+            updated_alert_row = connection.execute(
+                """
+                SELECT alert_id, session_id, channel_id, severity, state, timestamp,
+                       message, metadata_json
+                FROM alerts
+                WHERE session_id = ? AND alert_id = ?
+                """,
+                (session_id, alert_id),
+            ).fetchone()
+
+        if updated_alert_row is None:
+            raise RuntimeError(f"Failed to update alert state: {alert_id}")
+
+        return {
+            "alert": _alert_from_row(updated_alert_row),
+            "event": {
+                "event_id": event_id,
+                "session_id": session_id,
+                "event_type": "alert.acknowledged",
+                "timestamp": acknowledged_at,
+                "message": event_message,
+                "related_fault_id": event_metadata.get("related_fault_id"),
+                "fault_type": event_metadata.get("fault_type"),
+                "channel_id": event_metadata.get("channel_id"),
+                "alert_id": alert_id,
+                "severity": alert_row["severity"],
+                "acknowledged_by": acknowledged_by,
+                "operator_note": operator_note,
+            },
+        }
+
     def list_telemetry(
         self,
         session_id: str,
@@ -545,6 +659,9 @@ def _alert_from_row(row: sqlite3.Row) -> dict[str, Any]:
         "recommended_action": metadata.get("recommended_action"),
         "related_fault_id": metadata.get("related_fault_id"),
         "fault_type": metadata.get("fault_type"),
+        "acknowledged_at": metadata.get("acknowledged_at"),
+        "acknowledged_by": metadata.get("acknowledged_by"),
+        "operator_note": metadata.get("operator_note"),
     }
 
 
@@ -561,6 +678,8 @@ def _event_from_row(row: sqlite3.Row) -> dict[str, Any]:
         "channel_id": metadata.get("channel_id"),
         "alert_id": metadata.get("alert_id"),
         "severity": metadata.get("severity"),
+        "acknowledged_by": metadata.get("acknowledged_by"),
+        "operator_note": metadata.get("operator_note"),
         "metadata": metadata,
     }
 
@@ -570,6 +689,10 @@ def _decode_metadata(value: str) -> dict[str, Any]:
         return {}
     decoded = json.loads(value)
     return decoded if isinstance(decoded, dict) else {}
+
+
+def _slug(value: str) -> str:
+    return re.sub(r"[^a-zA-Z0-9]+", "-", value).strip("-").lower() or "item"
 
 
 def _utc_now() -> str:

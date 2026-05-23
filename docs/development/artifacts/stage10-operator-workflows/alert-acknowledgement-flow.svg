@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520" role="img" aria-labelledby="title desc">
+  <title id="title">TelemForge Stage 10 alert acknowledgement flow</title>
+  <desc id="desc">A local mission console alert moves from active to acknowledged, with history and replay markers preserved.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f6f9fc"/>
+      <stop offset="100%" stop-color="#edf3f8"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#f7fbff"/>
+    </linearGradient>
+    <style>
+      .title { font: 700 30px "Arial", sans-serif; fill: #15202b; }
+      .subtitle { font: 400 16px "Arial", sans-serif; fill: #4c5c68; }
+      .panel-title { font: 700 19px "Arial", sans-serif; fill: #183247; }
+      .label { font: 700 14px "Arial", sans-serif; fill: #4a5a66; text-transform: uppercase; letter-spacing: .06em; }
+      .body { font: 400 15px "Arial", sans-serif; fill: #20303d; }
+      .small { font: 400 13px "Arial", sans-serif; fill: #4e606d; }
+      .chip { font: 700 13px "Arial", sans-serif; fill: #12497e; }
+      .arrow { stroke: #2a6ebb; stroke-width: 5; fill: none; marker-end: url(#arrowhead); }
+      .panel { fill: url(#panel); stroke: #d7e3ec; stroke-width: 2; rx: 20; }
+      .pill { fill: #edf6ff; stroke: #c8def4; stroke-width: 1.5; rx: 999; }
+      .active { fill: #fff3f2; stroke: #efc2bd; }
+      .ack { fill: #eef8f1; stroke: #c6e2cf; }
+      .history { fill: #f4f6f8; stroke: #d8e1e8; }
+    </style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 z" fill="#2a6ebb"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="520" fill="url(#bg)"/>
+  <text x="60" y="62" class="title">TelemForge Stage 10: alert acknowledgement flow</text>
+  <text x="60" y="92" class="subtitle">Local-only operator action, preserved event history, and replay marker continuity.</text>
+
+  <rect x="60" y="130" width="290" height="300" class="panel"/>
+  <text x="86" y="170" class="panel-title">Mission console</text>
+  <text x="86" y="202" class="label">Active alert</text>
+  <rect x="86" y="218" width="238" height="76" class="pill active"/>
+  <text x="106" y="248" class="body">thermal.avionics_temp</text>
+  <text x="106" y="272" class="small">State: active</text>
+  <rect x="86" y="322" width="158" height="44" rx="999" class="pill"/>
+  <text x="118" y="350" class="chip">Acknowledge</text>
+  <text x="86" y="392" class="small">Button updates the local state and, when available, the SQLite-backed API.</text>
+
+  <path d="M380 280 C 450 280, 450 280, 515 280" class="arrow"/>
+
+  <rect x="530" y="130" width="310" height="300" class="panel"/>
+  <text x="556" y="170" class="panel-title">Alert history</text>
+  <text x="556" y="202" class="label">Updated record</text>
+  <rect x="556" y="218" width="256" height="92" class="pill ack"/>
+  <text x="576" y="248" class="body">thermal.avionics_temp</text>
+  <text x="576" y="272" class="small">State: acknowledged</text>
+  <text x="576" y="294" class="small">Acknowledged by local operator</text>
+
+  <rect x="556" y="326" width="256" height="64" class="pill history"/>
+  <text x="576" y="354" class="body">Event timeline gains `alert.acknowledged`</text>
+  <text x="576" y="376" class="small">Replay keeps the lifecycle transition inspectable.</text>
+
+  <path d="M850 280 C 920 280, 920 280, 995 280" class="arrow"/>
+
+  <rect x="1000" y="130" width="140" height="300" class="panel"/>
+  <text x="1026" y="170" class="panel-title">Replay</text>
+  <rect x="1026" y="206" width="88" height="58" class="pill active"/>
+  <text x="1040" y="240" class="small">alert.active</text>
+  <rect x="1026" y="284" width="88" height="58" class="pill ack"/>
+  <text x="1034" y="318" class="small">alert.acknowledged</text>
+  <text x="1026" y="378" class="small">Markers remain ordered and auditable.</text>
+</svg>

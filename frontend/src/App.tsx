@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { MissionConsole } from "./features/mission-console/MissionConsole.tsx";
 import { buildMissionConsoleView } from "./features/mission-console/consoleViewModel.ts";
 import { readLiveTelemetryConfig, openLiveTelemetryStream } from "./lib/liveTelemetryStream.ts";
+import { acknowledgeAlertOnServer } from "./lib/missionConsoleApi.ts";
+import { acknowledgeAlertInFixture } from "./lib/operatorWorkflow.ts";
 import { stage07ConsoleFixture } from "./lib/stage07ConsoleFixture.ts";
 import {
   applyStage09LiveConsoleMessage,
@@ -83,10 +85,42 @@ export default function App() {
     [liveConsole, selectedSubsystemId],
   );
 
+  const acknowledgeAlert = async (alertId: string) => {
+    const acknowledgedAt = new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+    const acknowledgedBy = "local operator";
+    const operatorNote = "Acknowledged from the mission console";
+
+    setLiveConsole((state) => ({
+      ...state,
+      fixture: acknowledgeAlertInFixture(
+        state.fixture,
+        alertId,
+        acknowledgedAt,
+        acknowledgedBy,
+        operatorNote,
+      ),
+    }));
+
+    if (liveConfig) {
+      try {
+        await acknowledgeAlertOnServer(
+          liveConfig,
+          alertId,
+          acknowledgedAt,
+          acknowledgedBy,
+          operatorNote,
+        );
+      } catch {
+        // Local console fallback still updates the visible operator state.
+      }
+    }
+  };
+
   return (
     <MissionConsole
       view={consoleView}
       onSelectSubsystem={setSelectedSubsystemId}
+      onAcknowledgeAlert={acknowledgeAlert}
     />
   );
 }

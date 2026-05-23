@@ -57,6 +57,10 @@ export function buildMissionConsoleView(
   const activeFaults = (fixture.faults ?? []).filter(
     (fault) => fault.status === "active",
   );
+  const activeAlerts = fixture.alerts.filter((alert) => alert.state === "active");
+  const acknowledgedAlerts = fixture.alerts.filter(
+    (alert) => alert.state === "acknowledged",
+  );
   const selectedSubsystem =
     subsystems.find((subsystem) => subsystem.id === selectedSubsystemId) ??
     subsystems[0];
@@ -69,8 +73,8 @@ export function buildMissionConsoleView(
       description: fixture.description,
       healthState: worstStatus(fixture.points.map((point) => point.status)),
       statusCounts: missionCounts,
-      activeAlertCount: fixture.alerts.filter((alert) => alert.state === "active")
-        .length,
+      activeAlertCount: activeAlerts.length,
+      acknowledgedAlertCount: acknowledgedAlerts.length,
       activeFaultCount: activeFaults.length,
       sourceLabel: stream.label,
     },

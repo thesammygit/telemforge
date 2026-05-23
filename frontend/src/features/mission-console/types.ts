@@ -1,6 +1,10 @@
 export type TelemetryStatus = "nominal" | "warning" | "critical" | "offline";
 export type TrendDirection = "rising" | "falling" | "flat";
-export type IncidentEventType = "fault.injected" | "telemetry.affected" | "alert.raised";
+export type IncidentEventType =
+  | "fault.injected"
+  | "telemetry.affected"
+  | "alert.raised"
+  | "alert.acknowledged";
 export type ReplayMarkerKind = "fault" | "event" | "alert";
 export type LiveTelemetryConnectionState =
   | "fixture"
@@ -49,6 +53,9 @@ export interface AlertRecord {
     unit: string;
   };
   relatedFaultId?: string;
+  acknowledgedAt?: string;
+  acknowledgedBy?: string;
+  operatorNote?: string;
 }
 
 export interface FaultRecord {
@@ -68,7 +75,10 @@ export interface EventLogEntry {
   message: string;
   relatedFaultId?: string;
   channelId?: string;
+  alertId?: string;
   severity?: "info" | "warning" | "critical";
+  acknowledgedBy?: string;
+  operatorNote?: string;
 }
 
 export interface TrendSample {
@@ -107,6 +117,7 @@ export interface MissionOverviewView {
   healthState: TelemetryStatus;
   statusCounts: Record<TelemetryStatus, number>;
   activeAlertCount: number;
+  acknowledgedAlertCount: number;
   activeFaultCount: number;
   sourceLabel: string;
 }

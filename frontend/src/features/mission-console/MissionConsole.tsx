@@ -4,6 +4,7 @@ import type { MissionConsoleView, TelemetryStatus } from "./types.ts";
 interface MissionConsoleProps {
   view: MissionConsoleView;
   onSelectSubsystem: (subsystemId: string) => void;
+  onAcknowledgeAlert: (alertId: string) => void;
 }
 
 const statusOrder: TelemetryStatus[] = [
@@ -16,7 +17,13 @@ const statusOrder: TelemetryStatus[] = [
 export function MissionConsole({
   view,
   onSelectSubsystem,
+  onAcknowledgeAlert,
 }: MissionConsoleProps) {
+  const activeAlerts = view.alerts.filter((alert) => alert.state === "active");
+  const acknowledgedAlerts = view.alerts.filter(
+    (alert) => alert.state === "acknowledged",
+  );
+
   return (
     <main className="console-shell">
       <header className="console-header">
@@ -54,6 +61,10 @@ export function MissionConsole({
         <div>
           <span className="metric-label">Active alerts</span>
           <strong>{view.mission.activeAlertCount}</strong>
+        </div>
+        <div>
+          <span className="metric-label">Acknowledged alerts</span>
+          <strong>{view.mission.acknowledgedAlertCount}</strong>
         </div>
         <div>
           <span className="metric-label">Active faults</span>
@@ -266,26 +277,73 @@ export function MissionConsole({
         </div>
       </section>
 
-      <section className="alerts-section" aria-label="Active alerts">
+      <section className="alerts-section" aria-label="Alert lifecycle">
         <div className="section-heading">
           <div>
             <span className="metric-label">Threshold-first alert records</span>
-            <h2>Active alerts</h2>
+            <h2>Alert lifecycle</h2>
           </div>
         </div>
-        <div className="alert-list">
-          {view.alerts.map((alert) => (
-            <article key={alert.alertId} className="alert-row">
-              <span className={`status-chip status-${alert.severity}`}>
-                {alert.severity}
-              </span>
-              <div>
-                <h3>{alert.channelId}</h3>
-                <p>{alert.message}</p>
-                <p className="recommended-action">{alert.recommendedAction}</p>
-              </div>
-            </article>
-          ))}
+        <div className="alert-groups">
+          <div className="alert-group">
+            <h3>Active alerts</h3>
+            <div className="alert-list">
+              {activeAlerts.length ? (
+                activeAlerts.map((alert) => (
+                  <article key={alert.alertId} className="alert-row">
+                    <span className={`status-chip status-${alert.severity}`}>
+                      {alert.severity}
+                    </span>
+                    <div>
+                      <h4>{alert.channelId}</h4>
+                      <p>{alert.message}</p>
+                      <p className="recommended-action">
+                        {alert.recommendedAction}
+                      </p>
+                    </div>
+                    <button
+                      className="alert-action"
+                      type="button"
+                      onClick={() => onAcknowledgeAlert(alert.alertId)}
+                    >
+                      Acknowledge
+                    </button>
+                  </article>
+                ))
+              ) : (
+                <p className="empty-state">No active alerts remain.</p>
+              )}
+            </div>
+          </div>
+          <div className="alert-group">
+            <h3>Acknowledged alerts</h3>
+            <div className="alert-list">
+              {acknowledgedAlerts.length ? (
+                acknowledgedAlerts.map((alert) => (
+                  <article key={alert.alertId} className="alert-row">
+                    <span className={`status-chip status-${alert.severity}`}>
+                      {alert.severity}
+                    </span>
+                    <div>
+                      <h4>{alert.channelId}</h4>
+                      <p>{alert.message}</p>
+                      <p className="recommended-action">
+                        {alert.operatorNote}
+                      </p>
+                      <p className="acknowledgement-meta">
+                        Acknowledged by {alert.acknowledgedBy ?? "operator"} at{" "}
+                        {alert.acknowledgedAt}
+                      </p>
+                    </div>
+                  </article>
+                ))
+              ) : (
+                <p className="empty-state">
+                  Acknowledged alerts will remain visible here.
+                </p>
+              )}
+            </div>
+          </div>
         </div>
       </section>
     </main>

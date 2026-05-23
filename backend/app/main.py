@@ -47,6 +47,12 @@ class InjectFaultRequest(BaseModel):
     operator_note: str | None = Field(default=None, max_length=500)
 
 
+class AcknowledgeAlertRequest(BaseModel):
+    acknowledged_at: str = Field(min_length=1)
+    acknowledged_by: str | None = Field(default=None, max_length=120)
+    operator_note: str | None = Field(default=None, max_length=500)
+
+
 def create_app(
     database_path: Path | str | None = None,
     channel_catalog_path: Path | str | None = None,
@@ -195,6 +201,29 @@ def create_app(
             "session_id": session_id,
             "alerts": store.list_alerts(session_id=session_id, state=state),
         }
+
+    @app.post("/sessions/{session_id}/alerts/{alert_id}/acknowledge")
+    def acknowledge_alert(
+        session_id: str,
+        alert_id: str,
+        request: AcknowledgeAlertRequest,
+    ) -> dict[str, Any]:
+        store.initialize()
+        if store.get_session(session_id) is None:
+            raise HTTPException(status_code=404, detail="session not found")
+
+        try:
+            return store.acknowledge_alert(
+                session_id=session_id,
+                alert_id=alert_id,
+                acknowledged_at=request.acknowledged_at,
+                acknowledged_by=request.acknowledged_by,
+                operator_note=request.operator_note,
+            )
+        except KeyError as exc:
+            raise HTTPException(status_code=404, detail=str(exc)) from exc
+        except ValueError as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc
 
     @app.get("/sessions/{session_id}/events")
     def list_events(
