@@ -247,6 +247,16 @@ test("buildMissionConsoleView surfaces resolved alerts and lifecycle history", (
   assert.equal(view.replay?.timelineMarkers.at(-1)?.markerType, "alert.resolved");
 });
 
+test("buildMissionConsoleView exposes the selected Stage 11 runbook playback state", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture, "thermal");
+
+  assert.ok(view.runbook);
+  assert.equal(view.runbook.selectedRunbookId, "thermal-alert-response-local");
+  assert.equal(view.runbook.steps.length, 5);
+  assert.equal(view.runbook.currentStepId, "acknowledge-alert");
+  assert.equal(view.runbook.nextAction?.kind, "acknowledge_alert");
+});
+
 function readCsv(path: string): Array<Record<string, string>> {
   const [headerLine, ...lines] = readFileSync(path, "utf8").trim().split("\n");
   const headers = headerLine.split(",");

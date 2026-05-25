@@ -4,6 +4,7 @@ import type { MissionConsoleView, TelemetryStatus } from "./types.ts";
 interface MissionConsoleProps {
   view: MissionConsoleView;
   onSelectSubsystem: (subsystemId: string) => void;
+  onSelectRunbook: (runbookId: string) => void;
   onAcknowledgeAlert: (alertId: string) => void;
   onResolveAlert: (alertId: string) => void;
 }
@@ -18,6 +19,7 @@ const statusOrder: TelemetryStatus[] = [
 export function MissionConsole({
   view,
   onSelectSubsystem,
+  onSelectRunbook,
   onAcknowledgeAlert,
   onResolveAlert,
 }: MissionConsoleProps) {
@@ -93,7 +95,71 @@ export function MissionConsole({
         ))}
       </section>
 
+      {view.runbook ? (
+        <section className="runbook-section" aria-label="Guided scenario runbook">
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 11 guided playback</span>
+              <h2>{view.runbook.title}</h2>
+            </div>
+            <span className="event-time">{view.runbook.mode}</span>
+          </div>
+          <div className="runbook-layout">
+            <div className="runbook-selector" aria-label="Scenario runbooks">
+              {view.runbook.availableRunbooks.map((runbook) => (
+                <button
+                  key={runbook.runbookId}
+                  className={
+                    runbook.runbookId === view.runbook.selectedRunbookId
+                      ? "runbook-choice selected"
+                      : "runbook-choice"
+                  }
+                  type="button"
+                  onClick={() => onSelectRunbook(runbook.runbookId)}
+                >
+                  <span>{runbook.mode}</span>
+                  <strong>{runbook.title}</strong>
+                </button>
+              ))}
+            </div>
+            <div className="runbook-progress">
+              <div className="runbook-next-action">
+                <span className="metric-label">Next action</span>
+                <strong>{view.runbook.nextAction?.label ?? "No action available"}</strong>
+              </div>
+              <div className="runbook-step-list">
+                {view.runbook.steps.map((step, index) => (
+                  <article
+                    key={step.stepId}
+                    className={`runbook-step runbook-step-${step.status}`}
+                  >
+                    <span className="runbook-step-index">{index + 1}</span>
+                    <div>
+                      <span className="event-type">{step.status}</span>
+                      <h3>{step.title}</h3>
+                      <p>{step.summary}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="runbook-evidence">
+                {view.runbook.evidenceLinks.map((link) => (
+                  <a
+                    key={link.target}
+                    className={`runbook-evidence-link evidence-${link.state}`}
+                    href={`#${link.target}`}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
+        <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">
           <div>
             <span className="metric-label">Manual Stage 07 incident</span>
@@ -136,6 +202,7 @@ export function MissionConsole({
 
       {view.replay ? (
         <section className="replay-section" aria-label="Replay anomaly inspection">
+          <a id="replay-anomaly-inspection" className="section-anchor" />
           <div className="section-heading">
             <div>
               <span className="metric-label">Replay inspection window</span>
@@ -285,6 +352,7 @@ export function MissionConsole({
       </section>
 
       <section className="alerts-section" aria-label="Alert lifecycle">
+        <a id="alert-lifecycle" className="section-anchor" />
         <div className="section-heading">
           <div>
             <span className="metric-label">Threshold-first alert records</span>

@@ -20,6 +20,9 @@ import {
 
 export default function App() {
   const [selectedSubsystemId, setSelectedSubsystemId] = useState("thermal");
+  const [selectedRunbookId, setSelectedRunbookId] = useState(
+    "thermal-alert-response-local",
+  );
   const [liveConsole, setLiveConsole] = useState(() =>
     createStage09LiveConsoleState(stage07ConsoleFixture),
   );
@@ -87,8 +90,9 @@ export default function App() {
         liveConsole.fixture,
         selectedSubsystemId,
         liveConsole.connection,
+        selectedRunbookId,
       ),
-    [liveConsole, selectedSubsystemId],
+    [liveConsole, selectedRunbookId, selectedSubsystemId],
   );
 
   const acknowledgeAlert = async (alertId: string) => {
@@ -157,6 +161,7 @@ export default function App() {
     <MissionConsole
       view={consoleView}
       onSelectSubsystem={setSelectedSubsystemId}
+      onSelectRunbook={setSelectedRunbookId}
       onAcknowledgeAlert={acknowledgeAlert}
       onResolveAlert={resolveAlert}
     />

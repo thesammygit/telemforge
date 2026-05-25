@@ -17,6 +17,7 @@ import type {
   TrendView,
   ValueRange,
 } from "./types.ts";
+import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
   nominal: 0,
@@ -45,6 +46,7 @@ export function buildMissionConsoleView(
   fixture: Stage05ConsoleFixture,
   selectedSubsystemId = "thermal",
   stream = buildFixtureStreamConnection(fixture),
+  selectedRunbookId?: string,
 ): MissionConsoleView {
   const channelsById = new Map(
     fixture.channels.map((channel) => [channel.channelId, channel]),
@@ -91,6 +93,7 @@ export function buildMissionConsoleView(
     replay: fixture.replay
       ? buildReplayInspectionView(fixture.replay)
       : undefined,
+    runbook: buildScenarioRunbookPlayback(fixture, selectedRunbookId),
   };
 }
 

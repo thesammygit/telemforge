@@ -240,6 +240,83 @@ export interface ReplayInspectionView {
   topAnomalies: AnomalyOverlayView[];
 }
 
+export type ScenarioRunbookStepActionKind =
+  | "inspect_alert"
+  | "acknowledge_alert"
+  | "resolve_alert"
+  | "inspect_timeline"
+  | "inspect_replay";
+
+export type ScenarioRunbookStepStatus = "complete" | "current" | "pending";
+
+export interface ScenarioRunbookStepDefinition {
+  stepId: string;
+  title: string;
+  actionKind: ScenarioRunbookStepActionKind;
+  evidenceTarget: string;
+  summary: string;
+}
+
+export interface ScenarioRunbookDefinition {
+  runbookId: string;
+  title: string;
+  scenario: string;
+  mode: "fixture-first";
+  supportedModes: Array<"fixture" | "local-live">;
+  targetAlertId: string;
+  targetChannelId: string;
+  targetFaultId: string;
+  summary: string;
+  steps: ScenarioRunbookStepDefinition[];
+  deferredFeatures: string[];
+}
+
+export interface ScenarioRunbookStepView extends ScenarioRunbookStepDefinition {
+  status: ScenarioRunbookStepStatus;
+}
+
+export interface ScenarioRunbookEvidenceLink {
+  stepId: string;
+  label: string;
+  target: string;
+  state: "available" | "pending";
+}
+
+export type ScenarioRunbookNextAction =
+  | {
+      kind: "acknowledge_alert";
+      alertId: string;
+      label: string;
+    }
+  | {
+      kind: "resolve_alert";
+      alertId: string;
+      label: string;
+    }
+  | {
+      kind: "inspect_timeline" | "inspect_replay" | "playback_complete";
+      label: string;
+    };
+
+export interface ScenarioRunbookPlaybackView {
+  availableRunbooks: Array<{
+    runbookId: string;
+    title: string;
+    mode: string;
+  }>;
+  selectedRunbookId: string;
+  title: string;
+  scenario: string;
+  mode: string;
+  summary: string;
+  targetAlertId: string | null;
+  currentStepId: string;
+  completedStepIds: string[];
+  steps: ScenarioRunbookStepView[];
+  evidenceLinks: ScenarioRunbookEvidenceLink[];
+  nextAction: ScenarioRunbookNextAction | null;
+}
+
 export interface MissionConsoleView {
   mission: MissionOverviewView;
   stream: LiveTelemetryConnectionView;
@@ -249,4 +326,5 @@ export interface MissionConsoleView {
   alerts: AlertRecord[];
   incident: IncidentStoryView;
   replay?: ReplayInspectionView;
+  runbook?: ScenarioRunbookPlaybackView;
 }

@@ -11,6 +11,10 @@ from pydantic import BaseModel, Field
 
 from backend.app.domain.incidents import build_manual_fault_incident
 from backend.app.domain.replay import build_anomaly_window, build_replay_window
+from backend.app.domain.scenario_runbooks import (
+    get_scenario_runbook,
+    list_scenario_runbooks,
+)
 from backend.app.domain.telemetry_simulation import (
     SimulationConfig,
     generate_simulation,
@@ -83,6 +87,17 @@ def create_app(
             "storage": "sqlite",
             "stage": "08-hardening-docker-and-release",
         }
+
+    @app.get("/runbooks")
+    def list_runbooks() -> dict[str, Any]:
+        return {"runbooks": list_scenario_runbooks()}
+
+    @app.get("/runbooks/{runbook_id}")
+    def get_runbook(runbook_id: str) -> dict[str, Any]:
+        runbook = get_scenario_runbook(runbook_id)
+        if runbook is None:
+            raise HTTPException(status_code=404, detail="runbook not found")
+        return {"runbook": runbook}
 
     @app.post("/sessions", status_code=201)
     def create_session(request: CreateSessionRequest) -> dict[str, Any]:
