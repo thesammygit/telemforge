@@ -158,6 +158,96 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.incidentReviewPacket ? (
+        <section
+          className="incident-packet-section"
+          aria-label="Incident review packet"
+        >
+          <a id="incident-review-packet" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 12 incident packet</span>
+              <h2>{view.incidentReviewPacket.title}</h2>
+            </div>
+            <span
+              className={`status-chip packet-status-${view.incidentReviewPacket.readiness.status}`}
+            >
+              {view.incidentReviewPacket.readiness.status.replace("_", " ")}
+            </span>
+          </div>
+          <div className="packet-summary-grid">
+            <div>
+              <span className="metric-label">Runbook steps</span>
+              <strong>
+                {view.incidentReviewPacket.readiness.completedStepCount}/
+                {view.incidentReviewPacket.readiness.totalStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Alert state</span>
+              <strong>{view.incidentReviewPacket.alertLifecycle.state}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Related events</span>
+              <strong>{view.incidentReviewPacket.eventHistory.relatedEventCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Replay markers</span>
+              <strong>
+                {view.incidentReviewPacket.replayEvidence.relatedMarkerCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence gaps</span>
+              <strong>
+                {view.incidentReviewPacket.readiness.unresolvedGapCount}
+              </strong>
+            </div>
+          </div>
+          <div className="packet-detail-grid">
+            <div className="packet-panel">
+              <span className="metric-label">Operator actions</span>
+              {view.incidentReviewPacket.operatorActions.map((action) => (
+                <article key={action.actionKind} className="packet-action-row">
+                  <span className={`status-dot packet-action-${action.status}`} />
+                  <div>
+                    <strong>{action.actionKind.replace("_", " ")}</strong>
+                    <p>
+                      {action.status === "complete"
+                        ? `${action.actor ?? "operator"} at ${action.timestamp}`
+                        : "Pending local operator action"}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="packet-panel">
+              <span className="metric-label">Replay evidence</span>
+              <p className="packet-marker-types">
+                {view.incidentReviewPacket.replayEvidence.markerTypes.join(", ") ||
+                  "No related markers"}
+              </p>
+              <p className="packet-meta-line">
+                {view.incidentReviewPacket.replayEvidence.sampleCount} samples,{" "}
+                {view.incidentReviewPacket.replayEvidence.anomalyCount} anomalies
+              </p>
+            </div>
+            <div className="packet-panel">
+              <span className="metric-label">Unresolved gaps</span>
+              {view.incidentReviewPacket.evidenceGaps.length ? (
+                <ul className="packet-gap-list">
+                  {view.incidentReviewPacket.evidenceGaps.map((gap) => (
+                    <li key={gap.gapId}>{gap.summary}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="packet-meta-line">No unresolved evidence gaps.</p>
+              )}
+            </div>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

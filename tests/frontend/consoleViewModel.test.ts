@@ -257,6 +257,25 @@ test("buildMissionConsoleView exposes the selected Stage 11 runbook playback sta
   assert.equal(view.runbook.nextAction?.kind, "acknowledge_alert");
 });
 
+test("buildMissionConsoleView exposes the Stage 12 incident review packet", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:30:00Z",
+  );
+  const resolvedFixture = resolveAlertInFixture(
+    acknowledgedFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:32:00Z",
+  );
+  const view = buildMissionConsoleView(resolvedFixture, "thermal");
+
+  assert.ok(view.incidentReviewPacket);
+  assert.equal(view.incidentReviewPacket.readiness.status, "ready");
+  assert.equal(view.incidentReviewPacket.eventHistory.relatedEventCount, 5);
+  assert.equal(view.incidentReviewPacket.replayEvidence.relatedMarkerCount, 7);
+});
+
 function readCsv(path: string): Array<Record<string, string>> {
   const [headerLine, ...lines] = readFileSync(path, "utf8").trim().split("\n");
   const headers = headerLine.split(",");

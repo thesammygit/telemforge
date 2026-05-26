@@ -317,6 +317,64 @@ export interface ScenarioRunbookPlaybackView {
   nextAction: ScenarioRunbookNextAction | null;
 }
 
+export interface IncidentReviewPacketView {
+  schema: "telemforge.incident_review_packet.v1";
+  packetId: string;
+  title: string;
+  runbook: {
+    runbookId: string;
+    scenario: string;
+    mode: string;
+    targetAlertId: string;
+    targetChannelId: string;
+    targetFaultId: string;
+  };
+  readiness: {
+    status: "ready" | "in_progress" | "blocked";
+    completedStepCount: number;
+    totalStepCount: number;
+    unresolvedGapCount: number;
+  };
+  alertLifecycle: {
+    targetAlertId: string;
+    channelId: string;
+    state: AlertRecord["state"] | "missing";
+    severity: AlertRecord["severity"] | null;
+    acknowledgedAt?: string;
+    acknowledgedBy?: string;
+    resolvedAt?: string;
+    resolvedBy?: string;
+  };
+  operatorActions: Array<{
+    actionKind: "acknowledge_alert" | "resolve_alert";
+    status: "complete" | "pending";
+    timestamp: string | null;
+    actor: string | null;
+    sourceEventId: string | null;
+  }>;
+  eventHistory: {
+    relatedEventCount: number;
+    eventTypes: string[];
+    latestEventAt: string | null;
+  };
+  replayEvidence: {
+    sampleCount: number;
+    anomalyCount: number;
+    relatedMarkerCount: number;
+    markerTypes: string[];
+    affectedChannelIds: string[];
+  };
+  evidenceGaps: Array<{
+    gapId: string;
+    summary: string;
+  }>;
+  sourceRefs: Array<{
+    label: string;
+    path: string;
+  }>;
+  deferredFeatures: string[];
+}
+
 export interface MissionConsoleView {
   mission: MissionOverviewView;
   stream: LiveTelemetryConnectionView;
@@ -327,4 +385,5 @@ export interface MissionConsoleView {
   incident: IncidentStoryView;
   replay?: ReplayInspectionView;
   runbook?: ScenarioRunbookPlaybackView;
+  incidentReviewPacket?: IncidentReviewPacketView;
 }

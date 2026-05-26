@@ -125,7 +125,9 @@ def build_timeline_markers(
                 "message": event["message"],
                 "severity": event.get("severity") or "info",
                 "related_fault_id": event.get("related_fault_id"),
+                "fault_type": event.get("fault_type"),
                 "channel_id": event.get("channel_id"),
+                "channel_ids": event.get("metadata", {}).get("target_channel_ids", []),
                 "alert_id": event.get("alert_id"),
             }
         )

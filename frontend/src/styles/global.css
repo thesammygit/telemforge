@@ -153,6 +153,7 @@ button {
 .replay-section,
 .trend-section,
 .runbook-section,
+.incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -286,6 +287,7 @@ button {
 .detail-panel,
 .trend-section,
 .runbook-section,
+.incident-packet-section,
 .alerts-section {
   padding: 18px;
 }
@@ -369,6 +371,7 @@ button {
 .replay-section,
 .trend-section,
 .runbook-section,
+.incident-packet-section,
 .alerts-section {
   margin-top: 18px;
 }
@@ -567,6 +570,88 @@ button {
 
 .evidence-pending {
   color: #66717b;
+}
+
+.packet-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.packet-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.packet-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  color: #172026;
+  font-size: 1.15rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-transform: capitalize;
+}
+
+.packet-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr 1.1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.packet-panel {
+  min-width: 0;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 14px;
+}
+
+.packet-action-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.packet-action-row strong {
+  display: block;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  text-transform: capitalize;
+}
+
+.packet-action-row p,
+.packet-marker-types,
+.packet-meta-line,
+.packet-gap-list {
+  margin: 6px 0 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.packet-gap-list {
+  padding-left: 18px;
+}
+
+.packet-status-ready,
+.packet-action-complete {
+  color: #12745b;
+}
+
+.packet-status-in_progress,
+.packet-action-pending {
+  color: #a76a16;
+}
+
+.packet-status-blocked {
+  color: #c43535;
 }
 
 .replay-summary {
@@ -781,6 +866,11 @@ button {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .packet-summary-grid,
+  .packet-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
   .subsystem-rail {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -794,6 +884,7 @@ button {
 
   .status-counts,
   .replay-summary,
+  .packet-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,

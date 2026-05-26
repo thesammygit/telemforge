@@ -9,6 +9,10 @@ from typing import Any
 from fastapi import FastAPI, HTTPException, Query, WebSocket, status
 from pydantic import BaseModel, Field
 
+from backend.app.domain.incident_review_packets import (
+    build_incident_review_packet,
+    incident_review_window,
+)
 from backend.app.domain.incidents import build_manual_fault_incident
 from backend.app.domain.replay import build_anomaly_window, build_replay_window
 from backend.app.domain.scenario_runbooks import (
@@ -98,6 +102,59 @@ def create_app(
         if runbook is None:
             raise HTTPException(status_code=404, detail="runbook not found")
         return {"runbook": runbook}
+
+    @app.get("/sessions/{session_id}/incident-review-packets/{runbook_id}")
+    def get_incident_review_packet(
+        session_id: str,
+        runbook_id: str,
+        start_at: str | None = Query(default=None, min_length=1),
+        end_at: str | None = Query(default=None, min_length=1),
+        limit: int = Query(default=250, ge=1, le=500),
+    ) -> dict[str, Any]:
+        store.initialize()
+        session = store.get_session(session_id)
+        if session is None:
+            raise HTTPException(status_code=404, detail="session not found")
+
+        runbook = get_scenario_runbook(runbook_id)
+        if runbook is None:
+            raise HTTPException(status_code=404, detail="runbook not found")
+
+        alerts = store.list_alerts(session_id=session_id)
+        events = store.list_events(session_id=session_id, limit=250)
+        window = incident_review_window(
+            runbook=runbook,
+            alerts=alerts,
+            events=events,
+            start_at=start_at,
+            end_at=end_at,
+        )
+
+        try:
+            replay = build_replay_window(
+                session=session,
+                channels=app.state.channels,
+                start_at=window["start_at"],
+                end_at=window["end_at"],
+                source=store.load_replay_source(
+                    session_id=session_id,
+                    start_at=window["start_at"],
+                    end_at=window["end_at"],
+                    limit=limit,
+                ),
+            )
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+        return {
+            "packet": build_incident_review_packet(
+                session=session,
+                runbook=runbook,
+                alerts=alerts,
+                events=events,
+                replay=replay,
+            )
+        }
 
     @app.post("/sessions", status_code=201)
     def create_session(request: CreateSessionRequest) -> dict[str, Any]:
