@@ -38,6 +38,7 @@ For each stage:
 9. [Realtime Performance And Rust Data Plane](steps/09-realtime-performance-and-rust-data-plane.md)
 10. [Operator Workflow And Incident Lifecycle](steps/10-operator-workflow-and-incident-lifecycle.md)
 11. [Scenario Runbooks And Guided Playback](steps/11-scenario-runbooks-and-guided-playback.md)
+12. [Incident Review Packets And Evidence Export](steps/12-incident-review-packets-and-evidence-export.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
