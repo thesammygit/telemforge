@@ -17,7 +17,10 @@ import type {
   TrendView,
   ValueRange,
 } from "./types.ts";
-import { buildIncidentReviewPacket } from "../../lib/incidentReviewPackets.ts";
+import {
+  buildIncidentReviewExportPayload,
+  buildIncidentReviewPacket,
+} from "../../lib/incidentReviewPackets.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -96,6 +99,10 @@ export function buildMissionConsoleView(
       : undefined,
     runbook: buildScenarioRunbookPlayback(fixture, selectedRunbookId),
     incidentReviewPacket: buildIncidentReviewPacket(fixture, selectedRunbookId),
+    incidentReviewExport: buildIncidentReviewExportPayload(
+      fixture,
+      selectedRunbookId,
+    ),
   };
 }
 

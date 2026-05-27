@@ -375,6 +375,32 @@ export interface IncidentReviewPacketView {
   deferredFeatures: string[];
 }
 
+export interface IncidentReviewExportPayload {
+  schema: "telemforge.incident_review_export.v1";
+  version: 1;
+  exportId: string;
+  packetIdentity: {
+    packetId: string;
+    spacecraftId: string;
+    runbookId: string;
+    runbookTitle: string;
+    scenario: string;
+  };
+  readiness: IncidentReviewPacketView["readiness"];
+  alertLifecycle: IncidentReviewPacketView["alertLifecycle"];
+  operatorActions: {
+    completeCount: number;
+    pendingCount: number;
+    actions: IncidentReviewPacketView["operatorActions"];
+  };
+  eventHistory: IncidentReviewPacketView["eventHistory"];
+  replayEvidence: IncidentReviewPacketView["replayEvidence"];
+  sourceRefs: IncidentReviewPacketView["sourceRefs"];
+  deferredFeatures: string[];
+  unresolvedGaps: IncidentReviewPacketView["evidenceGaps"];
+  scopeNotes: string[];
+}
+
 export interface MissionConsoleView {
   mission: MissionOverviewView;
   stream: LiveTelemetryConnectionView;
@@ -386,4 +412,5 @@ export interface MissionConsoleView {
   replay?: ReplayInspectionView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
+  incidentReviewExport?: IncidentReviewExportPayload;
 }

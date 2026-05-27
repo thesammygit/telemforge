@@ -10,6 +10,7 @@ from fastapi import FastAPI, HTTPException, Query, WebSocket, status
 from pydantic import BaseModel, Field
 
 from backend.app.domain.incident_review_packets import (
+    build_incident_review_export,
     build_incident_review_packet,
     incident_review_window,
 )
@@ -103,13 +104,12 @@ def create_app(
             raise HTTPException(status_code=404, detail="runbook not found")
         return {"runbook": runbook}
 
-    @app.get("/sessions/{session_id}/incident-review-packets/{runbook_id}")
-    def get_incident_review_packet(
+    def _load_incident_review_packet(
         session_id: str,
         runbook_id: str,
-        start_at: str | None = Query(default=None, min_length=1),
-        end_at: str | None = Query(default=None, min_length=1),
-        limit: int = Query(default=250, ge=1, le=500),
+        start_at: str | None,
+        end_at: str | None,
+        limit: int,
     ) -> dict[str, Any]:
         store.initialize()
         session = store.get_session(session_id)
@@ -146,15 +146,48 @@ def create_app(
         except ValueError as exc:
             raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+        return build_incident_review_packet(
+            session=session,
+            runbook=runbook,
+            alerts=alerts,
+            events=events,
+            replay=replay,
+        )
+
+    @app.get("/sessions/{session_id}/incident-review-packets/{runbook_id}")
+    def get_incident_review_packet(
+        session_id: str,
+        runbook_id: str,
+        start_at: str | None = Query(default=None, min_length=1),
+        end_at: str | None = Query(default=None, min_length=1),
+        limit: int = Query(default=250, ge=1, le=500),
+    ) -> dict[str, Any]:
         return {
-            "packet": build_incident_review_packet(
-                session=session,
-                runbook=runbook,
-                alerts=alerts,
-                events=events,
-                replay=replay,
+            "packet": _load_incident_review_packet(
+                session_id=session_id,
+                runbook_id=runbook_id,
+                start_at=start_at,
+                end_at=end_at,
+                limit=limit,
             )
         }
+
+    @app.get("/sessions/{session_id}/incident-review-packets/{runbook_id}/export")
+    def get_incident_review_export(
+        session_id: str,
+        runbook_id: str,
+        start_at: str | None = Query(default=None, min_length=1),
+        end_at: str | None = Query(default=None, min_length=1),
+        limit: int = Query(default=250, ge=1, le=500),
+    ) -> dict[str, Any]:
+        packet = _load_incident_review_packet(
+            session_id=session_id,
+            runbook_id=runbook_id,
+            start_at=start_at,
+            end_at=end_at,
+            limit=limit,
+        )
+        return {"export": build_incident_review_export(packet)}
 
     @app.post("/sessions", status_code=201)
     def create_session(request: CreateSessionRequest) -> dict[str, Any]:

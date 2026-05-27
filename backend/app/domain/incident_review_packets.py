@@ -7,6 +7,7 @@ from typing import Any
 
 
 PACKET_SCHEMA = "telemforge.incident_review_packet.v1"
+EXPORT_SCHEMA = "telemforge.incident_review_export.v1"
 REQUIRED_EVENT_TYPES = [
     "alert.raised",
     "alert.acknowledged",
@@ -113,6 +114,65 @@ def build_incident_review_packet(
             },
         ],
         "deferred_features": list(runbook.get("deferred_features", [])),
+    }
+
+
+def build_incident_review_export(packet: dict[str, Any]) -> dict[str, Any]:
+    """Build a deterministic copy-safe export payload from a local packet."""
+
+    operator_actions = list(packet["operator_actions"])
+    completed_actions = [
+        action for action in operator_actions if action["status"] == "complete"
+    ]
+    pending_actions = [
+        action for action in operator_actions if action["status"] != "complete"
+    ]
+
+    return {
+        "schema": EXPORT_SCHEMA,
+        "version": 1,
+        "export_id": f"incident-review-export:{packet['packet_id']}",
+        "packet_identity": {
+            "packet_id": packet["packet_id"],
+            "session_id": packet["session"]["session_id"],
+            "spacecraft_id": packet["session"]["spacecraft_id"],
+            "runbook_id": packet["runbook"]["runbook_id"],
+            "runbook_title": packet["runbook"]["title"],
+            "scenario": packet["runbook"]["scenario"],
+        },
+        "readiness": dict(packet["readiness"]),
+        "alert_lifecycle": dict(packet["alert_lifecycle"]),
+        "operator_actions": {
+            "complete_count": len(completed_actions),
+            "pending_count": len(pending_actions),
+            "actions": operator_actions,
+        },
+        "event_history": dict(packet["event_history"]),
+        "replay_evidence": dict(packet["replay_evidence"]),
+        "source_refs": _merge_source_refs(
+            packet["source_refs"],
+            [
+                {
+                    "label": "Incident packet domain",
+                    "path": "backend/app/domain/incident_review_packets.py",
+                },
+                {
+                    "label": "Evidence export API",
+                    "path": "backend/app/main.py",
+                },
+                {
+                    "label": "Fixture export helper",
+                    "path": "frontend/src/lib/incidentReviewPackets.ts",
+                },
+            ],
+        ),
+        "deferred_features": list(packet["deferred_features"]),
+        "unresolved_gaps": list(packet["evidence_gaps"]),
+        "scope_notes": [
+            "Local deterministic export payload; no files are written by the API.",
+            "Derived from fixture/local-live packet state already present in the local app.",
+            "No authentication, cloud service, telemetry upload, deployment, or production archive is introduced.",
+        ],
     }
 
 
@@ -370,6 +430,21 @@ def _operator_action(
 
 def _unique_sorted(values: list[str]) -> list[str]:
     return sorted(set(values))
+
+
+def _merge_source_refs(
+    existing_refs: list[dict[str, str]],
+    additional_refs: list[dict[str, str]],
+) -> list[dict[str, str]]:
+    merged: list[dict[str, str]] = []
+    seen_paths: set[str] = set()
+    for source_ref in [*existing_refs, *additional_refs]:
+        path = source_ref["path"]
+        if path in seen_paths:
+            continue
+        merged.append({"label": source_ref["label"], "path": path})
+        seen_paths.add(path)
+    return merged
 
 
 def _plus_one_second(value: str) -> str:

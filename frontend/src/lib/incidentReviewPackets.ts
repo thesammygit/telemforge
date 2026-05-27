@@ -1,6 +1,7 @@
 import type {
   AlertRecord,
   EventLogEntry,
+  IncidentReviewExportPayload,
   IncidentReviewPacketView,
   ReplayMarker,
   ScenarioRunbookDefinition,
@@ -87,6 +88,77 @@ export function buildIncidentReviewPacket(
       },
     ],
     deferredFeatures: [...runbook.deferredFeatures],
+  };
+}
+
+export function buildIncidentReviewExportPayload(
+  fixture: Stage05ConsoleFixture,
+  selectedRunbookId = localScenarioRunbooks[0].runbookId,
+): IncidentReviewExportPayload {
+  return buildIncidentReviewExportPayloadFromPacket(
+    buildIncidentReviewPacket(fixture, selectedRunbookId),
+    fixture.spacecraftId,
+  );
+}
+
+export function buildIncidentReviewExportPayloadFromPacket(
+  packet: IncidentReviewPacketView,
+  spacecraftId = packet.packetId.split(":")[1] ?? "",
+): IncidentReviewExportPayload {
+  const completeActions = packet.operatorActions.filter(
+    (action) => action.status === "complete",
+  );
+  const pendingActions = packet.operatorActions.filter(
+    (action) => action.status !== "complete",
+  );
+
+  return {
+    schema: "telemforge.incident_review_export.v1",
+    version: 1,
+    exportId: `incident-review-export:${packet.packetId}`,
+    packetIdentity: {
+      packetId: packet.packetId,
+      spacecraftId,
+      runbookId: packet.runbook.runbookId,
+      runbookTitle: packet.title.replace(/ Incident Review$/, ""),
+      scenario: packet.runbook.scenario,
+    },
+    readiness: { ...packet.readiness },
+    alertLifecycle: { ...packet.alertLifecycle },
+    operatorActions: {
+      completeCount: completeActions.length,
+      pendingCount: pendingActions.length,
+      actions: packet.operatorActions.map((action) => ({ ...action })),
+    },
+    eventHistory: {
+      relatedEventCount: packet.eventHistory.relatedEventCount,
+      eventTypes: [...packet.eventHistory.eventTypes],
+      latestEventAt: packet.eventHistory.latestEventAt,
+    },
+    replayEvidence: {
+      sampleCount: packet.replayEvidence.sampleCount,
+      anomalyCount: packet.replayEvidence.anomalyCount,
+      relatedMarkerCount: packet.replayEvidence.relatedMarkerCount,
+      markerTypes: [...packet.replayEvidence.markerTypes],
+      affectedChannelIds: [...packet.replayEvidence.affectedChannelIds],
+    },
+    sourceRefs: mergeSourceRefs(packet.sourceRefs, [
+      {
+        label: "Fixture export helper",
+        path: "frontend/src/lib/incidentReviewPackets.ts",
+      },
+      {
+        label: "Mission console export summary",
+        path: "frontend/src/features/mission-console/MissionConsole.tsx",
+      },
+    ]),
+    deferredFeatures: [...packet.deferredFeatures],
+    unresolvedGaps: packet.evidenceGaps.map((gap) => ({ ...gap })),
+    scopeNotes: [
+      "Local fixture export mirrors the backend boundary without writing files.",
+      "Fixture/local-live packet state is deterministic and public-safe.",
+      "No authentication, cloud service, telemetry upload, deployment, or production archive is introduced.",
+    ],
   };
 }
 
@@ -257,4 +329,20 @@ function buildOperatorAction(
 
 function uniqueSorted(values: string[]): string[] {
   return [...new Set(values)].sort();
+}
+
+function mergeSourceRefs(
+  existingRefs: IncidentReviewPacketView["sourceRefs"],
+  additionalRefs: IncidentReviewPacketView["sourceRefs"],
+): IncidentReviewPacketView["sourceRefs"] {
+  const merged: IncidentReviewPacketView["sourceRefs"] = [];
+  const seenPaths = new Set<string>();
+  for (const sourceRef of [...existingRefs, ...additionalRefs]) {
+    if (seenPaths.has(sourceRef.path)) {
+      continue;
+    }
+    merged.push({ ...sourceRef });
+    seenPaths.add(sourceRef.path);
+  }
+  return merged;
 }

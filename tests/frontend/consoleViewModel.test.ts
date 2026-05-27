@@ -276,6 +276,29 @@ test("buildMissionConsoleView exposes the Stage 12 incident review packet", () =
   assert.equal(view.incidentReviewPacket.replayEvidence.relatedMarkerCount, 7);
 });
 
+test("buildMissionConsoleView exposes the Stage 12 evidence export payload", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:30:00Z",
+  );
+  const resolvedFixture = resolveAlertInFixture(
+    acknowledgedFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:32:00Z",
+  );
+  const view = buildMissionConsoleView(resolvedFixture, "thermal");
+
+  assert.ok(view.incidentReviewExport);
+  assert.equal(
+    view.incidentReviewExport.schema,
+    "telemforge.incident_review_export.v1",
+  );
+  assert.equal(view.incidentReviewExport.operatorActions.completeCount, 2);
+  assert.equal(view.incidentReviewExport.unresolvedGaps.length, 0);
+  assert.ok(view.incidentReviewExport.scopeNotes[0].includes("Local fixture export"));
+});
+
 function readCsv(path: string): Array<Record<string, string>> {
   const [headerLine, ...lines] = readFileSync(path, "utf8").trim().split("\n");
   const headers = headerLine.split(",");

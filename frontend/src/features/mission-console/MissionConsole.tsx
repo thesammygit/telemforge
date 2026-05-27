@@ -245,6 +245,26 @@ export function MissionConsole({
               )}
             </div>
           </div>
+          {view.incidentReviewExport ? (
+            <div className="packet-export-panel">
+              <div>
+                <span className="metric-label">Local evidence export</span>
+                <strong>{view.incidentReviewExport.exportId}</strong>
+                <p className="packet-meta-line">
+                  {view.incidentReviewExport.schema}
+                </p>
+              </div>
+              <div className="packet-export-facts">
+                <span>
+                  {view.incidentReviewExport.operatorActions.completeCount} actions
+                </span>
+                <span>{view.incidentReviewExport.sourceRefs.length} sources</span>
+                <span>
+                  {view.incidentReviewExport.deferredFeatures.length} deferred
+                </span>
+              </div>
+            </div>
+          ) : null}
         </section>
       ) : null}
 

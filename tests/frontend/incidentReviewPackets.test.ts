@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { buildIncidentReviewPacket } from "../../frontend/src/lib/incidentReviewPackets.ts";
+import {
+  buildIncidentReviewExportPayload,
+  buildIncidentReviewPacket,
+} from "../../frontend/src/lib/incidentReviewPackets.ts";
 import {
   acknowledgeAlertInFixture,
   resolveAlertInFixture,
@@ -56,4 +59,41 @@ test("buildIncidentReviewPacket summarizes completed local playback evidence", (
   assert.equal(packet.replayEvidence.relatedMarkerCount, 7);
   assert.ok(packet.replayEvidence.markerTypes.includes("alert.resolved"));
   assert.deepEqual(packet.evidenceGaps, []);
+});
+
+test("buildIncidentReviewExportPayload creates a deterministic local review payload", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:30:00Z",
+  );
+  const resolvedFixture = resolveAlertInFixture(
+    acknowledgedFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:32:00Z",
+  );
+
+  const exportPayload = buildIncidentReviewExportPayload(resolvedFixture);
+
+  assert.equal(exportPayload.schema, "telemforge.incident_review_export.v1");
+  assert.equal(exportPayload.version, 1);
+  assert.equal(
+    exportPayload.exportId,
+    "incident-review-export:incident-review:tf-sat-01:thermal-alert-response-local",
+  );
+  assert.equal(
+    exportPayload.packetIdentity.packetId,
+    "incident-review:tf-sat-01:thermal-alert-response-local",
+  );
+  assert.equal(exportPayload.readiness.status, "ready");
+  assert.equal(exportPayload.operatorActions.completeCount, 2);
+  assert.equal(exportPayload.operatorActions.pendingCount, 0);
+  assert.equal(exportPayload.eventHistory.relatedEventCount, 5);
+  assert.equal(exportPayload.replayEvidence.relatedMarkerCount, 7);
+  assert.deepEqual(exportPayload.unresolvedGaps, []);
+  assert.ok(
+    exportPayload.scopeNotes.includes(
+      "Local fixture export mirrors the backend boundary without writing files.",
+    ),
+  );
 });

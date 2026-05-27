@@ -611,6 +611,45 @@ button {
   padding-top: 14px;
 }
 
+.packet-export-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  margin-top: 14px;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 14px;
+}
+
+.packet-export-panel strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.packet-export-facts {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  justify-content: end;
+  gap: 8px;
+}
+
+.packet-export-facts span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #fbfcfd;
+  color: #52636f;
+  padding: 0 10px;
+  font-size: 0.78rem;
+  font-weight: 780;
+}
+
 .packet-action-row {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -867,8 +906,13 @@ button {
   }
 
   .packet-summary-grid,
-  .packet-detail-grid {
+  .packet-detail-grid,
+  .packet-export-panel {
     grid-template-columns: 1fr;
+  }
+
+  .packet-export-facts {
+    justify-content: start;
   }
 
   .subsystem-rail {
