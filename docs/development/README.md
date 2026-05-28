@@ -39,6 +39,7 @@ For each stage:
 10. [Operator Workflow And Incident Lifecycle](steps/10-operator-workflow-and-incident-lifecycle.md)
 11. [Scenario Runbooks And Guided Playback](steps/11-scenario-runbooks-and-guided-playback.md)
 12. [Incident Review Packets And Evidence Export](steps/12-incident-review-packets-and-evidence-export.md)
+13. [Replay Playback And Review Timeline](steps/13-replay-playback-and-review-timeline.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
