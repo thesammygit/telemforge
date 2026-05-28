@@ -153,6 +153,7 @@ button {
 .replay-section,
 .trend-section,
 .runbook-section,
+.replay-playback-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -287,6 +288,7 @@ button {
 .detail-panel,
 .trend-section,
 .runbook-section,
+.replay-playback-section,
 .incident-packet-section,
 .alerts-section {
   padding: 18px;
@@ -371,13 +373,15 @@ button {
 .replay-section,
 .trend-section,
 .runbook-section,
+.replay-playback-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
 }
 
 .incident-section,
-.replay-section {
+.replay-section,
+.replay-playback-section {
   padding: 18px;
 }
 
@@ -693,6 +697,166 @@ button {
   color: #c43535;
 }
 
+.playback-status-fixture {
+  color: #66717b;
+}
+
+.playback-status-local-live {
+  color: #12745b;
+}
+
+.playback-contract-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr) minmax(110px, 0.35fr);
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.playback-contract-row div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.playback-contract-row strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.playback-frame-strip {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  overflow-x: auto;
+  padding-bottom: 3px;
+}
+
+.playback-frame-button {
+  display: grid;
+  flex: 0 0 150px;
+  min-height: 82px;
+  border: 1px solid #d5e0e7;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #273640;
+  cursor: pointer;
+  padding: 10px;
+  text-align: left;
+}
+
+.playback-frame-button:hover,
+.playback-frame-button.selected {
+  border-color: #2368b5;
+  background: #eef6ff;
+}
+
+.playback-frame-button span {
+  color: #64727d;
+  font-size: 0.72rem;
+  font-weight: 820;
+  text-transform: uppercase;
+}
+
+.playback-frame-button strong {
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.9rem;
+  line-height: 1.25;
+}
+
+.playback-frame-button small {
+  margin-top: 7px;
+  color: #64727d;
+  font-size: 0.72rem;
+  line-height: 1.25;
+}
+
+.playback-current-frame {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.55fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.playback-marker-panel,
+.playback-context-panel {
+  min-width: 0;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 14px;
+}
+
+.playback-marker-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+}
+
+.playback-marker-heading h3,
+.playback-context-panel strong,
+.playback-context-panel a {
+  display: block;
+  margin: 4px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  font-weight: 760;
+  line-height: 1.3;
+}
+
+.playback-context-panel a {
+  color: #184d88;
+  text-decoration: none;
+}
+
+.playback-marker-panel p,
+.playback-context-panel p {
+  margin: 6px 0 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.playback-marker-panel > strong {
+  display: block;
+  margin-top: 8px;
+  color: #273640;
+  font-size: 0.83rem;
+}
+
+.playback-context-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.playback-scope-notes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.playback-scope-notes span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #fbfcfd;
+  color: #52636f;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -882,6 +1046,7 @@ button {
   .console-header,
   .console-grid,
   .replay-grid,
+  .playback-current-frame,
   .runbook-layout,
   .overview-band {
     grid-template-columns: 1fr;
@@ -907,7 +1072,9 @@ button {
 
   .packet-summary-grid,
   .packet-detail-grid,
-  .packet-export-panel {
+  .packet-export-panel,
+  .playback-contract-row,
+  .playback-context-grid {
     grid-template-columns: 1fr;
   }
 
@@ -929,6 +1096,7 @@ button {
   .status-counts,
   .replay-summary,
   .packet-summary-grid,
+  .playback-contract-row,
   .trend-grid,
   .subsystem-rail,
   .channel-row,

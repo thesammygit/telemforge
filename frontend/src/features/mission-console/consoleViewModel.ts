@@ -1,12 +1,20 @@
 import type {
+  AnomalyRecord,
   ChannelDetailView,
   EventLogEntry,
   FaultRecord,
+  IncidentReviewExportPayload,
+  IncidentReviewPacketView,
   IncidentStoryView,
   LiveTelemetryConnectionView,
   MissionConsoleView,
+  ReplayMarker,
+  ReplayPlaybackFrameView,
+  ReplayPlaybackView,
   ReplayInspectionView,
   ReplayPayload,
+  ScenarioRunbookPlaybackView,
+  ScenarioRunbookStepView,
   Stage05ConsoleFixture,
   SubsystemSummaryView,
   TelemetryChannel,
@@ -51,6 +59,7 @@ export function buildMissionConsoleView(
   selectedSubsystemId = "thermal",
   stream = buildFixtureStreamConnection(fixture),
   selectedRunbookId?: string,
+  selectedReplayFrameId?: string,
 ): MissionConsoleView {
   const channelsById = new Map(
     fixture.channels.map((channel) => [channel.channelId, channel]),
@@ -71,6 +80,28 @@ export function buildMissionConsoleView(
   const selectedSubsystem =
     subsystems.find((subsystem) => subsystem.id === selectedSubsystemId) ??
     subsystems[0];
+  const replay = fixture.replay
+    ? buildReplayInspectionView(fixture.replay)
+    : undefined;
+  const runbook = buildScenarioRunbookPlayback(fixture, selectedRunbookId);
+  const incidentReviewPacket = buildIncidentReviewPacket(
+    fixture,
+    selectedRunbookId,
+  );
+  const incidentReviewExport = buildIncidentReviewExportPayload(
+    fixture,
+    selectedRunbookId,
+  );
+  const replayPlayback = fixture.replay
+    ? buildReplayPlaybackView(
+        fixture.replay,
+        runbook,
+        incidentReviewPacket,
+        incidentReviewExport,
+        stream.state === "fixture" ? "fixture" : "local-live",
+        selectedReplayFrameId,
+      )
+    : undefined;
 
   return {
     mission: {
@@ -94,15 +125,11 @@ export function buildMissionConsoleView(
     ),
     alerts: fixture.alerts,
     incident: buildIncidentStory(activeFaults, fixture.events ?? []),
-    replay: fixture.replay
-      ? buildReplayInspectionView(fixture.replay)
-      : undefined,
-    runbook: buildScenarioRunbookPlayback(fixture, selectedRunbookId),
-    incidentReviewPacket: buildIncidentReviewPacket(fixture, selectedRunbookId),
-    incidentReviewExport: buildIncidentReviewExportPayload(
-      fixture,
-      selectedRunbookId,
-    ),
+    replay,
+    replayPlayback,
+    runbook,
+    incidentReviewPacket,
+    incidentReviewExport,
   };
 }
 
@@ -145,6 +172,51 @@ export function buildReplayInspectionView(
     affectedChannelIds: replay.summary.affectedChannelIds,
     timelineMarkers,
     topAnomalies,
+  };
+}
+
+export function buildReplayPlaybackView(
+  replay: ReplayPayload,
+  runbook: ScenarioRunbookPlaybackView,
+  incidentReviewPacket: IncidentReviewPacketView,
+  incidentReviewExport: IncidentReviewExportPayload,
+  localStatus: ReplayPlaybackView["localStatus"] = "fixture",
+  selectedReplayFrameId?: string,
+): ReplayPlaybackView | undefined {
+  const markers = [...replay.markers].sort(compareReplayMarkers);
+  if (!markers.length) {
+    return undefined;
+  }
+
+  const anomalies = [...replay.anomalies].sort(compareAnomalies);
+  const frames = markers.map((marker, index) =>
+    buildReplayPlaybackFrame(
+      marker,
+      index,
+      anomalies,
+      runbook,
+      incidentReviewPacket,
+      incidentReviewExport,
+    ),
+  );
+  const currentFrame =
+    frames.find((frame) => frame.frameId === selectedReplayFrameId) ?? frames[0];
+
+  return {
+    schema: "telemforge.replay_playback.v1",
+    version: 1,
+    contractLabel: "local deterministic replay playback",
+    localStatus,
+    selectedTimestamp: currentFrame.timestamp,
+    frameIndex: currentFrame.frameIndex,
+    totalFrameCount: frames.length,
+    currentFrame,
+    frames,
+    scopeNotes: [
+      "Local playback is derived from the existing replay payload; it does not open external services.",
+      "Frame selection is deterministic and does not persist saved reviewer sessions.",
+      "Incident packet and export references remain local review evidence only.",
+    ],
   };
 }
 
@@ -331,6 +403,133 @@ function markerKindRank(kind: string): number {
     return 2;
   }
   return 9;
+}
+
+function compareReplayMarkers(left: ReplayMarker, right: ReplayMarker): number {
+  return (
+    left.timestamp.localeCompare(right.timestamp) ||
+    markerKindRank(left.kind) - markerKindRank(right.kind) ||
+    left.markerId.localeCompare(right.markerId)
+  );
+}
+
+function compareAnomalies(left: AnomalyRecord, right: AnomalyRecord): number {
+  return (
+    left.timestamp.localeCompare(right.timestamp) ||
+    left.channelId.localeCompare(right.channelId) ||
+    left.score - right.score
+  );
+}
+
+function buildReplayPlaybackFrame(
+  marker: ReplayMarker,
+  index: number,
+  anomalies: AnomalyRecord[],
+  runbook: ScenarioRunbookPlaybackView,
+  incidentReviewPacket: IncidentReviewPacketView,
+  incidentReviewExport: IncidentReviewExportPayload,
+): ReplayPlaybackFrameView {
+  const relatedAnomaly = selectRelatedAnomaly(marker, anomalies);
+  const runbookTarget = selectRunbookTarget(marker, runbook);
+
+  return {
+    frameId: `playback-frame-${index + 1}-${marker.markerId}`,
+    frameIndex: index + 1,
+    timestamp: marker.timestamp,
+    marker: {
+      markerId: marker.markerId,
+      kind: marker.kind,
+      markerType: marker.markerType,
+      label: marker.label,
+      message: marker.message,
+      severity: marker.severity,
+      channelId: marker.channelId,
+      alertId: marker.alertId,
+      relatedFaultId: marker.relatedFaultId,
+    },
+    anomalyContext: relatedAnomaly
+      ? {
+          anomalyId: relatedAnomaly.anomalyId,
+          timestamp: relatedAnomaly.timestamp,
+          channelId: relatedAnomaly.channelId,
+          channelName: relatedAnomaly.channelName,
+          severity: relatedAnomaly.severity,
+          scoreLabel: `${Math.round(relatedAnomaly.score * 100)}%`,
+          observedValueLabel: `${relatedAnomaly.observedValue} ${relatedAnomaly.unit}`,
+          reason: relatedAnomaly.reason,
+        }
+      : null,
+    runbookTarget,
+    packetReference: incidentReviewPacket
+      ? {
+          packetId: incidentReviewPacket.packetId,
+          readinessStatus: incidentReviewPacket.readiness.status,
+          relatedMarkerCount:
+            incidentReviewPacket.replayEvidence.relatedMarkerCount,
+        }
+      : null,
+    exportReference: incidentReviewExport
+      ? {
+          exportId: incidentReviewExport.exportId,
+          schema: incidentReviewExport.schema,
+        }
+      : null,
+  };
+}
+
+function selectRelatedAnomaly(
+  marker: ReplayMarker,
+  anomalies: AnomalyRecord[],
+): AnomalyRecord | null {
+  const sameChannel = marker.channelId
+    ? anomalies.filter((anomaly) => anomaly.channelId === marker.channelId)
+    : [];
+  const candidates = sameChannel.length ? sameChannel : anomalies;
+  if (!candidates.length) {
+    return null;
+  }
+
+  const atOrBefore = candidates.filter(
+    (anomaly) => anomaly.timestamp <= marker.timestamp,
+  );
+  return (atOrBefore.length ? atOrBefore : candidates).at(-1) ?? null;
+}
+
+function selectRunbookTarget(
+  marker: ReplayMarker,
+  runbook: ScenarioRunbookPlaybackView,
+): ReplayPlaybackFrameView["runbookTarget"] {
+  const targetStepId = runbookStepIdForMarker(marker);
+  const step =
+    runbook.steps.find((candidate) => candidate.stepId === targetStepId) ??
+    runbook.steps.find((candidate) => candidate.actionKind === "inspect_replay");
+  if (!step) {
+    return null;
+  }
+
+  return {
+    runbookId: runbook.selectedRunbookId,
+    stepId: step.stepId,
+    title: step.title,
+    evidenceTarget: step.evidenceTarget,
+    stepStatus: step.status,
+  };
+}
+
+function runbookStepIdForMarker(marker: ReplayMarker): ScenarioRunbookStepView["stepId"] {
+  if (marker.markerType === "alert.acknowledged") {
+    return "acknowledge-alert";
+  }
+  if (marker.markerType === "alert.resolved") {
+    return "resolve-alert";
+  }
+  if (marker.markerType === "alert.raised" || marker.markerType === "alert.active") {
+    return "triage-alert";
+  }
+  if (marker.kind === "fault" || marker.kind === "event") {
+    return "review-event-history";
+  }
+  return "inspect-replay-evidence";
 }
 
 function buildSparklinePath(values: number[]): string {

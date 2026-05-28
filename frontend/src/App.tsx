@@ -23,6 +23,9 @@ export default function App() {
   const [selectedRunbookId, setSelectedRunbookId] = useState(
     "thermal-alert-response-local",
   );
+  const [selectedReplayFrameId, setSelectedReplayFrameId] = useState<
+    string | undefined
+  >();
   const [liveConsole, setLiveConsole] = useState(() =>
     createStage09LiveConsoleState(stage07ConsoleFixture),
   );
@@ -91,8 +94,9 @@ export default function App() {
         selectedSubsystemId,
         liveConsole.connection,
         selectedRunbookId,
+        selectedReplayFrameId,
       ),
-    [liveConsole, selectedRunbookId, selectedSubsystemId],
+    [liveConsole, selectedReplayFrameId, selectedRunbookId, selectedSubsystemId],
   );
 
   const acknowledgeAlert = async (alertId: string) => {
@@ -162,6 +166,7 @@ export default function App() {
       view={consoleView}
       onSelectSubsystem={setSelectedSubsystemId}
       onSelectRunbook={setSelectedRunbookId}
+      onSelectReplayFrame={setSelectedReplayFrameId}
       onAcknowledgeAlert={acknowledgeAlert}
       onResolveAlert={resolveAlert}
     />

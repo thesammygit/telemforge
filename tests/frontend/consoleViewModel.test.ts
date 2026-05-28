@@ -5,6 +5,7 @@ import test from "node:test";
 import { fileURLToPath } from "node:url";
 
 import {
+  buildFixtureStreamConnection,
   buildReplayInspectionView,
   buildMissionConsoleView,
   formatTelemetryValue,
@@ -197,6 +198,43 @@ test("buildMissionConsoleView includes Stage 07 replay overlay data when provide
   assert.equal(view.replay.topAnomalies[0].channelName, "Avionics Bay Temperature");
 });
 
+test("buildMissionConsoleView exposes deterministic Stage 13 replay playback frames", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture, "thermal");
+
+  assert.ok(view.replayPlayback);
+  assert.equal(view.replayPlayback.schema, "telemforge.replay_playback.v1");
+  assert.equal(view.replayPlayback.version, 1);
+  assert.equal(
+    view.replayPlayback.contractLabel,
+    "local deterministic replay playback",
+  );
+  assert.equal(view.replayPlayback.localStatus, "fixture");
+  assert.equal(view.replayPlayback.totalFrameCount, 5);
+  assert.equal(view.replayPlayback.frameIndex, 1);
+  assert.equal(view.replayPlayback.selectedTimestamp, "2026-04-30T19:15:00Z");
+  assert.deepEqual(
+    view.replayPlayback.frames.map((frame) => frame.frameIndex),
+    [1, 2, 3, 4, 5],
+  );
+  assert.equal(view.replayPlayback.currentFrame.marker.markerType, "fault.active");
+  assert.equal(
+    view.replayPlayback.currentFrame.anomalyContext?.channelId,
+    "thermal.avionics_temp",
+  );
+  assert.equal(
+    view.replayPlayback.currentFrame.runbookTarget?.stepId,
+    "review-event-history",
+  );
+  assert.equal(
+    view.replayPlayback.currentFrame.packetReference?.packetId,
+    "incident-review:tf-sat-01:thermal-alert-response-local",
+  );
+  assert.equal(
+    view.replayPlayback.currentFrame.exportReference?.schema,
+    "telemforge.incident_review_export.v1",
+  );
+});
+
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
   const acknowledgedFixture = acknowledgeAlertInFixture(
     stage07ConsoleFixture,
@@ -297,6 +335,57 @@ test("buildMissionConsoleView exposes the Stage 12 evidence export payload", () 
   assert.equal(view.incidentReviewExport.operatorActions.completeCount, 2);
   assert.equal(view.incidentReviewExport.unresolvedGaps.length, 0);
   assert.ok(view.incidentReviewExport.scopeNotes[0].includes("Local fixture export"));
+});
+
+test("buildMissionConsoleView selects a completed Stage 13 playback frame", () => {
+  const acknowledgedFixture = acknowledgeAlertInFixture(
+    stage07ConsoleFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:30:00Z",
+  );
+  const resolvedFixture = resolveAlertInFixture(
+    acknowledgedFixture,
+    "alert-stage06-thermal-avionics",
+    "2026-05-26T04:32:00Z",
+  );
+  const baselineView = buildMissionConsoleView(resolvedFixture, "thermal");
+  const resolvedFrame = baselineView.replayPlayback?.frames.find(
+    (frame) => frame.marker.markerType === "alert.resolved",
+  );
+
+  assert.ok(resolvedFrame);
+
+  const selectedView = buildMissionConsoleView(
+    resolvedFixture,
+    "thermal",
+    buildFixtureStreamConnection(resolvedFixture),
+    undefined,
+    resolvedFrame.frameId,
+  );
+
+  assert.ok(selectedView.replayPlayback);
+  assert.equal(selectedView.replayPlayback.totalFrameCount, 7);
+  assert.equal(
+    selectedView.replayPlayback.currentFrame.marker.markerType,
+    "alert.resolved",
+  );
+  assert.equal(
+    selectedView.replayPlayback.currentFrame.runbookTarget?.stepId,
+    "resolve-alert",
+  );
+  assert.equal(
+    selectedView.replayPlayback.currentFrame.packetReference?.readinessStatus,
+    "ready",
+  );
+  assert.equal(
+    selectedView.replayPlayback.currentFrame.exportReference?.exportId,
+    "incident-review-export:incident-review:tf-sat-01:thermal-alert-response-local",
+  );
+  assert.ok(
+    selectedView.replayPlayback.scopeNotes.some((note) =>
+      note.includes("does not persist saved reviewer sessions"),
+    ),
+  );
 });
 
 function readCsv(path: string): Array<Record<string, string>> {

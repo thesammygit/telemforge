@@ -5,6 +5,7 @@ interface MissionConsoleProps {
   view: MissionConsoleView;
   onSelectSubsystem: (subsystemId: string) => void;
   onSelectRunbook: (runbookId: string) => void;
+  onSelectReplayFrame: (frameId: string) => void;
   onAcknowledgeAlert: (alertId: string) => void;
   onResolveAlert: (alertId: string) => void;
 }
@@ -20,6 +21,7 @@ export function MissionConsole({
   view,
   onSelectSubsystem,
   onSelectRunbook,
+  onSelectReplayFrame,
   onAcknowledgeAlert,
   onResolveAlert,
 }: MissionConsoleProps) {
@@ -28,6 +30,8 @@ export function MissionConsole({
     (alert) => alert.state === "acknowledged",
   );
   const resolvedAlerts = view.alerts.filter((alert) => alert.state === "resolved");
+  const playback = view.replayPlayback;
+  const currentPlaybackFrame = playback?.currentFrame;
 
   return (
     <main className="console-shell">
@@ -265,6 +269,137 @@ export function MissionConsole({
               </div>
             </div>
           ) : null}
+        </section>
+      ) : null}
+
+      {playback && currentPlaybackFrame ? (
+        <section
+          className="replay-playback-section"
+          aria-label="Replay playback timeline"
+        >
+          <a id="replay-playback-timeline" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 13 playback</span>
+              <h2>Local replay timeline</h2>
+            </div>
+            <span className={`status-chip playback-status-${playback.localStatus}`}>
+              {playback.localStatus}
+            </span>
+          </div>
+          <div className="playback-contract-row">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{playback.schema}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Selected timestamp</span>
+              <strong>{playback.selectedTimestamp}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Frame</span>
+              <strong>
+                {playback.frameIndex}/{playback.totalFrameCount}
+              </strong>
+            </div>
+          </div>
+          <div className="playback-frame-strip" aria-label="Replay frames">
+            {playback.frames.map((frame) => (
+              <button
+                key={frame.frameId}
+                className={
+                  frame.frameId === currentPlaybackFrame.frameId
+                    ? "playback-frame-button selected"
+                    : "playback-frame-button"
+                }
+                type="button"
+                aria-pressed={frame.frameId === currentPlaybackFrame.frameId}
+                onClick={() => onSelectReplayFrame(frame.frameId)}
+              >
+                <span>Frame {frame.frameIndex}</span>
+                <strong>{frame.marker.markerType}</strong>
+                <small>{frame.timestamp}</small>
+              </button>
+            ))}
+          </div>
+          <div className="playback-current-frame">
+            <article className="playback-marker-panel">
+              <div className="playback-marker-heading">
+                <span
+                  className={`status-dot status-${currentPlaybackFrame.marker.severity}`}
+                />
+                <div>
+                  <span className="event-type">
+                    {currentPlaybackFrame.marker.markerType}
+                  </span>
+                  <h3>{currentPlaybackFrame.marker.label}</h3>
+                </div>
+              </div>
+              <p>{currentPlaybackFrame.marker.message}</p>
+              {currentPlaybackFrame.marker.channelId ? (
+                <strong>{currentPlaybackFrame.marker.channelId}</strong>
+              ) : null}
+            </article>
+            <div className="playback-context-grid">
+              <div className="playback-context-panel">
+                <span className="metric-label">Related anomaly</span>
+                {currentPlaybackFrame.anomalyContext ? (
+                  <>
+                    <strong>
+                      {currentPlaybackFrame.anomalyContext.channelName}
+                    </strong>
+                    <p>
+                      {currentPlaybackFrame.anomalyContext.observedValueLabel} /{" "}
+                      {currentPlaybackFrame.anomalyContext.scoreLabel}
+                    </p>
+                    <p>{currentPlaybackFrame.anomalyContext.reason}</p>
+                  </>
+                ) : (
+                  <p>No related anomaly context for this frame.</p>
+                )}
+              </div>
+              <div className="playback-context-panel">
+                <span className="metric-label">Runbook target</span>
+                {currentPlaybackFrame.runbookTarget ? (
+                  <>
+                    <a href={`#${currentPlaybackFrame.runbookTarget.evidenceTarget}`}>
+                      {currentPlaybackFrame.runbookTarget.title}
+                    </a>
+                    <p>
+                      {currentPlaybackFrame.runbookTarget.stepStatus} /{" "}
+                      {currentPlaybackFrame.runbookTarget.evidenceTarget}
+                    </p>
+                  </>
+                ) : (
+                  <p>No runbook target is available.</p>
+                )}
+              </div>
+              <div className="playback-context-panel">
+                <span className="metric-label">Packet/export reference</span>
+                {currentPlaybackFrame.packetReference ? (
+                  <>
+                    <strong>
+                      {currentPlaybackFrame.packetReference.readinessStatus.replace(
+                        "_",
+                        " ",
+                      )}
+                    </strong>
+                    <p>{currentPlaybackFrame.packetReference.packetId}</p>
+                    {currentPlaybackFrame.exportReference ? (
+                      <p>{currentPlaybackFrame.exportReference.exportId}</p>
+                    ) : null}
+                  </>
+                ) : (
+                  <p>No packet reference is available.</p>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="playback-scope-notes">
+            {playback.scopeNotes.map((note) => (
+              <span key={note}>{note}</span>
+            ))}
+          </div>
         </section>
       ) : null}
 

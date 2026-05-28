@@ -240,6 +240,62 @@ export interface ReplayInspectionView {
   topAnomalies: AnomalyOverlayView[];
 }
 
+export interface ReplayPlaybackFrameView {
+  frameId: string;
+  frameIndex: number;
+  timestamp: string;
+  marker: {
+    markerId: string;
+    kind: ReplayMarkerKind;
+    markerType: string;
+    label: string;
+    message: string;
+    severity: ReplayMarker["severity"];
+    channelId?: string;
+    alertId?: string;
+    relatedFaultId?: string;
+  };
+  anomalyContext: {
+    anomalyId: string;
+    timestamp: string;
+    channelId: string;
+    channelName: string;
+    severity: AnomalyRecord["severity"];
+    scoreLabel: string;
+    observedValueLabel: string;
+    reason: string;
+  } | null;
+  runbookTarget: {
+    runbookId: string;
+    stepId: string;
+    title: string;
+    evidenceTarget: string;
+    stepStatus: ScenarioRunbookStepStatus;
+  } | null;
+  packetReference: {
+    packetId: string;
+    readinessStatus: IncidentReviewPacketView["readiness"]["status"];
+    relatedMarkerCount: number;
+  } | null;
+  exportReference: {
+    exportId: string;
+    schema: IncidentReviewExportPayload["schema"];
+  } | null;
+}
+
+export interface ReplayPlaybackView {
+  schema: "telemforge.replay_playback.v1";
+  version: 1;
+  contractLabel: "local deterministic replay playback";
+  localStatus: "fixture" | "local-live";
+  selectedTimestamp: string;
+  frameIndex: number;
+  totalFrameCount: number;
+  currentFrame: ReplayPlaybackFrameView;
+  frames: ReplayPlaybackFrameView[];
+  scopeNotes: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -410,6 +466,7 @@ export interface MissionConsoleView {
   alerts: AlertRecord[];
   incident: IncidentStoryView;
   replay?: ReplayInspectionView;
+  replayPlayback?: ReplayPlaybackView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
