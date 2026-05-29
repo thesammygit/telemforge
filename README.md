@@ -1,6 +1,6 @@
 # TelemForge
 
-TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, manual fault and alert workflows, replay/anomaly inspection, a fixture-backed React/Vite mission console, and a bounded Stage 09 live-telemetry path with review-ready benchmark/runtime evidence.
+TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, bounded websocket telemetry streaming, manual alert acknowledgement and resolution workflows, replay/anomaly inspection, guided scenario playback, incident review packets and evidence export, deterministic replay playback timelines, and a fixture-backed React/Vite mission console with a local review decision register.
 
 ## Quick Verification
 
@@ -11,11 +11,19 @@ python3 scripts/smoke_stage08.py
 python3 scripts/benchmark_stage09_realtime.py --output docs/development/artifacts/stage09-realtime-baseline/stage09-baseline-report.json
 python3 scripts/verify_stage09_baseline_bundle.py
 python3 -m unittest discover -s tests/backend -p 'test_stage09_live_stream.py'
+python3 -m unittest discover -s tests/backend -p 'test_stage10_alert_acknowledgement.py'
+python3 -m unittest discover -s tests/backend -p 'test_stage10_alert_resolution.py'
+python3 -m unittest discover -s tests/backend -p 'test_stage11_scenario_runbooks.py'
+python3 -m unittest discover -s tests/backend -p 'test_stage12_incident_review_packets.py'
+python3 -m unittest discover -s tests/backend -p 'test_stage12_incident_review_exports.py'
 python3 -m unittest discover -s tests/backend
 python3 -m unittest discover -s tests/contracts
 node --experimental-strip-types --test tests/frontend/consoleViewModel.test.ts
 node --experimental-strip-types --test tests/frontend/liveTelemetryStream.test.ts
 node --experimental-strip-types --test tests/frontend/stage09LiveConsoleAdapter.test.ts
+node --experimental-strip-types --test tests/frontend/incidentReviewPackets.test.ts
+node --experimental-strip-types --test tests/frontend/scenarioRunbooks.test.ts
+node --experimental-strip-types --test tests/frontend/reviewDecisionRegister.test.ts
 ```
 
 The smoke command runs the core backend workflow in process: health, session creation, tiny simulation, manual fault injection, telemetry, alerts, events, replay, and anomalies.
@@ -70,7 +78,7 @@ docs/       Architecture, local runbook, readiness docs, staged development path
 
 ## Current Scope
 
-Implemented through the current Stage 09 review-ready slices:
+Implemented through the current Stage 14 review-ready slices:
 
 - telemetry contracts and fixture examples;
 - deterministic simulation artifacts;
@@ -81,13 +89,19 @@ Implemented through the current Stage 09 review-ready slices:
 - websocket telemetry streaming with bounded runtime evidence for snapshot, monotonic sequence, reconnect resume, backpressure reporting, two-client fanout, and sustained-load smoke;
 - reviewable Stage 09 benchmark/baseline artifacts plus a target-scale Rust data-plane candidate kept behind explicit measurement boundaries;
 - local live-console websocket binding behind explicit `VITE_TELEMFORGE_API_BASE_URL` and `VITE_TELEMFORGE_LIVE_SESSION_ID` configuration, with fixture fallback as the default mode.
+- local alert acknowledgement and resolution flows for the thermal-alert review path;
+- deterministic scenario runbook playback and compact guided mission-console review states;
+- incident review packets plus deterministic local evidence export payloads;
+- replay playback frames and a compact review timeline tied back to runbook and packet evidence;
+- a deterministic local review decision register and handoff checklist for the existing thermal-alert review flow.
 
 Deferred:
 
 - manual fast-forward of `main` after Stage 09 review;
 - any production claim for broad load behavior, live operations, or Rust control-plane replacement;
-- animated replay playback;
-- alert acknowledgement and clearing;
+- a fuller animated replay engine beyond the current compact local timeline;
 - scheduled fault workflows;
 - PostgreSQL runtime profile;
+- authentication, saved reviewer sessions, collaboration identity, or persistent reviewer notes;
+- external ticketing, messaging, or cloud-backed handoff workflows;
 - publishing releases, packages, or container images.

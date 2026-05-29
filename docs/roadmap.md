@@ -55,5 +55,6 @@ not inside one overloaded stage. When a stage satisfies its exit criteria, the
 next safe work should move to a new numbered stage with its own goal, non-goals,
 human test gate, and exit criteria.
 
-Stage 09 is review-ready for automation-branch development. The next active
-product lane is Stage 10: operator workflow and incident lifecycle.
+Stages 09 through 14 are review-ready/completed for automation-branch
+development. The next cycle should split an explicit Stage 15 instead of
+adding more Stage 14 proof or UX accretion.

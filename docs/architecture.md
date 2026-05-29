@@ -87,6 +87,10 @@ guarantees:
 - Stage 08 has a bounded in-process smoke workflow, local-only Docker/Compose configuration, and reviewer-facing run/readiness docs.
 - Stage 09 is review-ready for automation-branch development. It has a bounded websocket telemetry path with runtime evidence for startup snapshot delivery, monotonic per-session ordering, reconnect resume, backpressure and dropped-event reporting, bounded two-client fanout, and sustained-load smoke.
 - Stage 09 also has a reviewable benchmark envelope, a target-scale Rust data-plane candidate for stream fanout/sample-rate work, and a local live-console binding that keeps the fixture path as the default fallback.
-- Stage 10 starts the next separated product lane: operator workflow and incident lifecycle, using the Stage 09 realtime primitives without reopening Stage 09 unless a focused regression is found.
+- Stage 10 is review-ready/completed for automation-branch development with local alert acknowledgement and alert resolution flows built on the Stage 09 realtime primitives.
+- Stage 11 is review-ready/completed for automation-branch development with a deterministic guided scenario runbook for the thermal-alert response path.
+- Stage 12 is review-ready/completed for automation-branch development with a local incident review packet and deterministic evidence export payload.
+- Stage 13 is review-ready/completed for automation-branch development with replay playback frames and a compact review timeline in the mission console.
+- Stage 14 is review-ready/completed for automation-branch development with a deterministic local review decision register and handoff checklist tied to replay, runbook, packet, and export evidence.
 - Stage 02 telemetry contracts and Stage 03 simulation remain the source of the API's baseline telemetry data behavior.
-- Broad production load claims, Rust control-plane replacement, animated replay playback, background anomaly daemons, alert acknowledgement, scheduled faults, PostgreSQL runtime wiring, deploy, release, and publish behavior remain deferred.
+- Broad production load claims, Rust control-plane replacement, a full animated replay engine, background anomaly daemons, scheduled faults, PostgreSQL runtime wiring, auth/collaboration identity, persistent reviewer notes, external ticketing or messaging, deploy, release, and publish behavior remain deferred.
