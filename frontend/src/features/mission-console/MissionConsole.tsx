@@ -403,6 +403,99 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewDecisionRegister ? (
+        <section
+          className="review-decision-section"
+          aria-label="Review decision register"
+        >
+          <a id="review-decision-register" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 14 review decisions</span>
+              <h2>Decision register and handoff checklist</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${view.reviewDecisionRegister.localStatus}`}
+            >
+              {view.reviewDecisionRegister.localStatus}
+            </span>
+          </div>
+          <div className="decision-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewDecisionRegister.schema}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Ready</span>
+              <strong>{view.reviewDecisionRegister.summary.readyCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up</span>
+              <strong>{view.reviewDecisionRegister.summary.followUpCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>{view.reviewDecisionRegister.summary.deferredCount}</strong>
+            </div>
+          </div>
+          <div className="decision-register-layout">
+            <div className="decision-list">
+              {view.reviewDecisionRegister.decisions.map((decision) => (
+                <article
+                  key={decision.decisionId}
+                  className={`decision-row decision-${decision.status}`}
+                >
+                  <div className="decision-row-heading">
+                    <span className={`status-chip decision-status-${decision.status}`}>
+                      {decision.status.replace("_", " ")}
+                    </span>
+                    <div>
+                      <span className="event-type">{decision.decisionId}</span>
+                      <h3>{decision.label}</h3>
+                    </div>
+                  </div>
+                  <p>{decision.summary}</p>
+                  {decision.followUpReason ? (
+                    <p className="decision-follow-up">{decision.followUpReason}</p>
+                  ) : null}
+                  <div className="decision-evidence-list">
+                    {decision.supportingEvidence.map((evidence) => (
+                      <a
+                        key={`${decision.decisionId}:${evidence.label}`}
+                        href={`#${evidence.target}`}
+                      >
+                        {evidence.label}
+                      </a>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="handoff-checklist">
+              <span className="metric-label">Handoff checklist</span>
+              {view.reviewDecisionRegister.handoffChecklist.map((item) => (
+                <a
+                  key={item.itemId}
+                  className={`handoff-item handoff-${item.status}`}
+                  href={`#${item.evidenceTarget}`}
+                >
+                  <span className={`status-dot decision-status-${item.status}`} />
+                  <div>
+                    <strong>{item.label}</strong>
+                    <p>{item.summary}</p>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+          <div className="playback-scope-notes">
+            {view.reviewDecisionRegister.scopeNotes.map((note) => (
+              <span key={note}>{note}</span>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

@@ -29,6 +29,7 @@ import {
   buildIncidentReviewExportPayload,
   buildIncidentReviewPacket,
 } from "../../lib/incidentReviewPackets.ts";
+import { buildReviewDecisionRegister } from "../../lib/reviewDecisionRegister.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -102,6 +103,12 @@ export function buildMissionConsoleView(
         selectedReplayFrameId,
       )
     : undefined;
+  const reviewDecisionRegister = buildReviewDecisionRegister(
+    replayPlayback,
+    runbook,
+    incidentReviewPacket,
+    incidentReviewExport,
+  );
 
   return {
     mission: {
@@ -127,6 +134,7 @@ export function buildMissionConsoleView(
     incident: buildIncidentStory(activeFaults, fixture.events ?? []),
     replay,
     replayPlayback,
+    reviewDecisionRegister,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

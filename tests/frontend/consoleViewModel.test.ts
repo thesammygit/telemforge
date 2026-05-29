@@ -233,6 +233,13 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.replayPlayback.currentFrame.exportReference?.schema,
     "telemforge.incident_review_export.v1",
   );
+  assert.ok(view.reviewDecisionRegister);
+  assert.equal(
+    view.reviewDecisionRegister.schema,
+    "telemforge.review_decision_register.v1",
+  );
+  assert.equal(view.reviewDecisionRegister.summary.readyCount, 1);
+  assert.equal(view.reviewDecisionRegister.summary.followUpCount, 2);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {

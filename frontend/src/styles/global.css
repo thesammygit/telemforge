@@ -154,6 +154,7 @@ button {
 .trend-section,
 .runbook-section,
 .replay-playback-section,
+.review-decision-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -289,6 +290,7 @@ button {
 .trend-section,
 .runbook-section,
 .replay-playback-section,
+.review-decision-section,
 .incident-packet-section,
 .alerts-section {
   padding: 18px;
@@ -374,6 +376,7 @@ button {
 .trend-section,
 .runbook-section,
 .replay-playback-section,
+.review-decision-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -382,6 +385,10 @@ button {
 .incident-section,
 .replay-section,
 .replay-playback-section {
+  padding: 18px;
+}
+
+.review-decision-section {
   padding: 18px;
 }
 
@@ -857,6 +864,135 @@ button {
   font-weight: 760;
 }
 
+.decision-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.4fr) repeat(3, minmax(90px, 0.45fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.decision-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.decision-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.decision-register-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.decision-list,
+.handoff-checklist {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.decision-row {
+  min-width: 0;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 14px;
+}
+
+.decision-row-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.decision-row h3 {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.decision-row p,
+.handoff-item p {
+  margin: 6px 0 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.decision-follow-up {
+  color: #273640;
+  font-weight: 680;
+}
+
+.decision-evidence-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.decision-evidence-list a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #fbfcfd;
+  color: #184d88;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+.handoff-checklist {
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px;
+}
+
+.handoff-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 10px;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 12px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.handoff-item strong {
+  display: block;
+  color: #172026;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.decision-status-ready {
+  color: #12745b;
+}
+
+.decision-status-follow_up {
+  color: #a76a16;
+}
+
+.decision-status-deferred {
+  color: #66717b;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1074,7 +1210,9 @@ button {
   .packet-detail-grid,
   .packet-export-panel,
   .playback-contract-row,
-  .playback-context-grid {
+  .playback-context-grid,
+  .decision-summary-grid,
+  .decision-register-layout {
     grid-template-columns: 1fr;
   }
 
@@ -1097,6 +1235,7 @@ button {
   .replay-summary,
   .packet-summary-grid,
   .playback-contract-row,
+  .decision-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,

@@ -296,6 +296,57 @@ export interface ReplayPlaybackView {
   scopeNotes: string[];
 }
 
+export type ReviewDecisionStatus = "ready" | "follow_up" | "deferred";
+
+export interface ReviewDecisionEvidenceRef {
+  label: string;
+  target: string;
+  source:
+    | "playback_frame"
+    | "runbook"
+    | "incident_packet"
+    | "evidence_export"
+    | "scope_boundary";
+  frameId?: string;
+  markerId?: string;
+  path?: string;
+}
+
+export interface ReviewDecisionView {
+  decisionId: string;
+  status: ReviewDecisionStatus;
+  label: string;
+  summary: string;
+  supportingEvidence: ReviewDecisionEvidenceRef[];
+  relatedPlaybackFrameId: string;
+  followUpReason: string | null;
+  localOnlyScopeNotes: string[];
+}
+
+export interface ReviewHandoffChecklistItem {
+  itemId: string;
+  label: string;
+  status: ReviewDecisionStatus;
+  evidenceTarget: string;
+  summary: string;
+}
+
+export interface ReviewDecisionRegisterView {
+  schema: "telemforge.review_decision_register.v1";
+  version: 1;
+  contractLabel: "local deterministic review decision register";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: {
+    totalDecisionCount: number;
+    readyCount: number;
+    followUpCount: number;
+    deferredCount: number;
+  };
+  decisions: ReviewDecisionView[];
+  handoffChecklist: ReviewHandoffChecklistItem[];
+  scopeNotes: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -467,6 +518,7 @@ export interface MissionConsoleView {
   incident: IncidentStoryView;
   replay?: ReplayInspectionView;
   replayPlayback?: ReplayPlaybackView;
+  reviewDecisionRegister?: ReviewDecisionRegisterView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
