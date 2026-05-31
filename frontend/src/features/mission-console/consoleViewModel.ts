@@ -29,6 +29,7 @@ import {
   buildIncidentReviewExportPayload,
   buildIncidentReviewPacket,
 } from "../../lib/incidentReviewPackets.ts";
+import { buildReviewBriefingBoard } from "../../lib/reviewBriefingBoard.ts";
 import { buildReviewDecisionRegister } from "../../lib/reviewDecisionRegister.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -109,6 +110,7 @@ export function buildMissionConsoleView(
     incidentReviewPacket,
     incidentReviewExport,
   );
+  const reviewBriefingBoard = buildReviewBriefingBoard(reviewDecisionRegister);
 
   return {
     mission: {
@@ -135,6 +137,7 @@ export function buildMissionConsoleView(
     replay,
     replayPlayback,
     reviewDecisionRegister,
+    reviewBriefingBoard,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

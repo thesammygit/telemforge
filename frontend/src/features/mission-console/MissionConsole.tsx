@@ -496,6 +496,143 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewBriefingBoard ? (
+        <section
+          className="review-briefing-section"
+          aria-label="Review briefing board"
+        >
+          <a id="review-briefing-board" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 15 briefing board</span>
+              <h2>Review briefing board and evidence drilldown</h2>
+            </div>
+            <span
+              className={`status-chip briefing-status-${view.reviewBriefingBoard.readinessStatus}`}
+            >
+              {view.reviewBriefingBoard.readinessStatus.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="briefing-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewBriefingBoard.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Ready</span>
+              <strong>{view.reviewBriefingBoard.summary.readyCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up</span>
+              <strong>{view.reviewBriefingBoard.summary.followUpCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>{view.reviewBriefingBoard.summary.deferredCount}</strong>
+            </div>
+          </div>
+          <div className="briefing-board-layout">
+            <div className="briefing-group-list">
+              {view.reviewBriefingBoard.groupedDecisionSummaries.map((group) => (
+                <article
+                  key={group.status}
+                  className={`briefing-group briefing-group-${group.status}`}
+                >
+                  <div className="briefing-group-heading">
+                    <div>
+                      <span className={`status-chip decision-status-${group.status}`}>
+                        {group.status.replace("_", " ")}
+                      </span>
+                      <h3>{group.label}</h3>
+                    </div>
+                    <strong>{group.decisionCount}</strong>
+                  </div>
+                  <p>{group.summary}</p>
+                  <div className="briefing-decision-list">
+                    {group.decisions.map((decision) => (
+                      <article
+                        key={decision.decisionId}
+                        className="briefing-decision-card"
+                      >
+                        <div className="briefing-decision-heading">
+                          <span className="event-type">{decision.decisionId}</span>
+                          <strong>{decision.label}</strong>
+                        </div>
+                        <p>{decision.summary}</p>
+                        <p className="briefing-decision-frame">
+                          Playback frame {decision.relatedPlaybackFrameId}
+                        </p>
+                        {decision.followUpReason ? (
+                          <p className="briefing-decision-follow-up">
+                            {decision.followUpReason}
+                          </p>
+                        ) : null}
+                      </article>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="briefing-sidebar">
+              <div className="briefing-panel">
+                <span className="metric-label">Follow-up actions</span>
+                {view.reviewBriefingBoard.followUpActions.length ? (
+                  <div className="briefing-follow-up-list">
+                    {view.reviewBriefingBoard.followUpActions.map((action) => (
+                      <article key={action.actionId} className="briefing-follow-up-item">
+                        <strong>{action.label}</strong>
+                        <p>{action.summary}</p>
+                        <div className="briefing-follow-up-meta">
+                          <span>{action.decisionIds.join(", ")}</span>
+                          <span>{action.evidenceTargets.join(", ")}</span>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="empty-state">No follow-up actions remain.</p>
+                )}
+              </div>
+              <div className="briefing-panel">
+                <span className="metric-label">Evidence drilldown</span>
+                <div className="briefing-evidence-list">
+                  {view.reviewBriefingBoard.evidenceDrilldownRows.map((row) => (
+                    <article
+                      key={row.rowId}
+                      className={`briefing-evidence-row evidence-${row.decisionStatus}`}
+                    >
+                      <span
+                        className={`status-chip decision-status-${row.decisionStatus}`}
+                      >
+                        {row.decisionStatus.replace(/_/g, " ")}
+                      </span>
+                      <div>
+                        <div className="briefing-evidence-heading">
+                          <strong>{row.evidenceLabel}</strong>
+                          <span>{row.source.replace(/_/g, " ")}</span>
+                        </div>
+                        <p>{row.decisionLabel}</p>
+                        <p>{row.reviewNote}</p>
+                        <div className="briefing-evidence-meta">
+                          <span>{row.target}</span>
+                          {row.frameId ? <span>{row.frameId}</span> : null}
+                          {row.path ? <span>{row.path}</span> : null}
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="playback-scope-notes">
+            {view.reviewBriefingBoard.localOnlyScopeNotes.map((note) => (
+              <span key={note}>{note}</span>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

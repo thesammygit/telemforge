@@ -155,6 +155,7 @@ button {
 .runbook-section,
 .replay-playback-section,
 .review-decision-section,
+.review-briefing-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -377,6 +378,7 @@ button {
 .runbook-section,
 .replay-playback-section,
 .review-decision-section,
+.review-briefing-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -389,6 +391,10 @@ button {
 }
 
 .review-decision-section {
+  padding: 18px;
+}
+
+.review-briefing-section {
   padding: 18px;
 }
 
@@ -889,6 +895,31 @@ button {
   line-height: 1.35;
 }
 
+.briefing-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(90px, 0.45fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.briefing-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.briefing-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
 .decision-register-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.45fr) minmax(260px, 0.55fr);
@@ -991,6 +1022,164 @@ button {
 
 .decision-status-deferred {
   color: #66717b;
+}
+
+.briefing-board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.briefing-group-list,
+.briefing-sidebar,
+.briefing-follow-up-list,
+.briefing-evidence-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.briefing-group {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 14px;
+}
+
+.briefing-group-heading {
+  display: grid;
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: start;
+}
+
+.briefing-group-heading h3 {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.briefing-group p,
+.briefing-decision-card p,
+.briefing-follow-up-item p,
+.briefing-evidence-row p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.briefing-decision-list {
+  display: grid;
+  gap: 10px;
+}
+
+.briefing-decision-card,
+.briefing-follow-up-item,
+.briefing-evidence-row {
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 13px 15px;
+}
+
+.briefing-decision-card {
+  display: grid;
+  gap: 6px;
+}
+
+.briefing-decision-heading {
+  display: grid;
+  gap: 2px;
+}
+
+.briefing-decision-heading strong,
+.briefing-follow-up-item strong,
+.briefing-evidence-row strong {
+  color: #172026;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.briefing-decision-frame {
+  color: #64727d;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.briefing-decision-follow-up {
+  color: #273640;
+  font-weight: 680;
+}
+
+.briefing-panel {
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px;
+}
+
+.briefing-follow-up-item {
+  display: grid;
+  gap: 6px;
+}
+
+.briefing-follow-up-meta,
+.briefing-evidence-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  color: #64727d;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.briefing-follow-up-meta span,
+.briefing-evidence-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 26px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  padding: 0 9px;
+}
+
+.briefing-evidence-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+}
+
+.briefing-evidence-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.briefing-evidence-heading span {
+  color: #64727d;
+  font-size: 0.76rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.briefing-evidence-row p + p {
+  margin-top: 6px;
+}
+
+.briefing-status-ready_for_handoff {
+  color: #12745b;
+}
+
+.briefing-status-needs_follow_up {
+  color: #a76a16;
 }
 
 .replay-summary {
@@ -1212,6 +1401,7 @@ button {
   .playback-contract-row,
   .playback-context-grid,
   .decision-summary-grid,
+  .briefing-summary-grid,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
@@ -1236,6 +1426,7 @@ button {
   .packet-summary-grid,
   .playback-contract-row,
   .decision-summary-grid,
+  .briefing-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,

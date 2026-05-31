@@ -347,6 +347,66 @@ export interface ReviewDecisionRegisterView {
   scopeNotes: string[];
 }
 
+export interface ReviewBriefingBoardDecisionView {
+  decisionId: string;
+  status: ReviewDecisionStatus;
+  label: string;
+  summary: string;
+  relatedPlaybackFrameId: string;
+  followUpReason: string | null;
+}
+
+export interface ReviewBriefingBoardGroupView {
+  status: ReviewDecisionStatus;
+  label: string;
+  summary: string;
+  decisionCount: number;
+  decisions: ReviewBriefingBoardDecisionView[];
+}
+
+export interface ReviewBriefingBoardEvidenceRowView {
+  rowId: string;
+  decisionId: string;
+  decisionLabel: string;
+  decisionStatus: ReviewDecisionStatus;
+  evidenceLabel: string;
+  target: string;
+  source: ReviewDecisionEvidenceRef["source"];
+  frameId?: string;
+  markerId?: string;
+  path?: string;
+  reviewNote: string;
+}
+
+export interface ReviewBriefingBoardFollowUpActionView {
+  actionId: string;
+  label: string;
+  summary: string;
+  decisionIds: string[];
+  evidenceTargets: string[];
+}
+
+export interface ReviewBriefingBoardView {
+  schema: "telemforge.review_briefing_board.v1";
+  version: 1;
+  contractLabel: "local deterministic review briefing board";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readinessStatus: "ready_for_handoff" | "needs_follow_up";
+  summary: {
+    totalDecisionCount: number;
+    readyCount: number;
+    followUpCount: number;
+    deferredCount: number;
+    groupCount: number;
+    evidenceRowCount: number;
+    followUpActionCount: number;
+  };
+  groupedDecisionSummaries: ReviewBriefingBoardGroupView[];
+  evidenceDrilldownRows: ReviewBriefingBoardEvidenceRowView[];
+  followUpActions: ReviewBriefingBoardFollowUpActionView[];
+  localOnlyScopeNotes: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -519,6 +579,7 @@ export interface MissionConsoleView {
   replay?: ReplayInspectionView;
   replayPlayback?: ReplayPlaybackView;
   reviewDecisionRegister?: ReviewDecisionRegisterView;
+  reviewBriefingBoard?: ReviewBriefingBoardView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

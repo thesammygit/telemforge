@@ -234,12 +234,18 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     "telemforge.incident_review_export.v1",
   );
   assert.ok(view.reviewDecisionRegister);
+  assert.ok(view.reviewBriefingBoard);
   assert.equal(
     view.reviewDecisionRegister.schema,
     "telemforge.review_decision_register.v1",
   );
   assert.equal(view.reviewDecisionRegister.summary.readyCount, 1);
   assert.equal(view.reviewDecisionRegister.summary.followUpCount, 2);
+  assert.equal(
+    view.reviewBriefingBoard?.schema,
+    "telemforge.review_briefing_board.v1",
+  );
+  assert.equal(view.reviewBriefingBoard?.summary.followUpActionCount, 2);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -387,6 +393,10 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   assert.equal(
     selectedView.replayPlayback.currentFrame.exportReference?.exportId,
     "incident-review-export:incident-review:tf-sat-01:thermal-alert-response-local",
+  );
+  assert.equal(
+    selectedView.reviewBriefingBoard?.readinessStatus,
+    "ready_for_handoff",
   );
   assert.ok(
     selectedView.replayPlayback.scopeNotes.some((note) =>
