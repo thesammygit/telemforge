@@ -235,6 +235,7 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
   );
   assert.ok(view.reviewDecisionRegister);
   assert.ok(view.reviewBriefingBoard);
+  assert.ok(view.reviewActionQueue);
   assert.equal(
     view.reviewDecisionRegister.schema,
     "telemforge.review_decision_register.v1",
@@ -246,6 +247,11 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     "telemforge.review_briefing_board.v1",
   );
   assert.equal(view.reviewBriefingBoard?.summary.followUpActionCount, 2);
+  assert.equal(
+    view.reviewActionQueue.readiness.verdict,
+    "blocked_by_local_follow_up",
+  );
+  assert.equal(view.reviewActionQueue.readiness.counts.blockingActionCount, 2);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -397,6 +403,10 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   assert.equal(
     selectedView.reviewBriefingBoard?.readinessStatus,
     "ready_for_handoff",
+  );
+  assert.equal(
+    selectedView.reviewActionQueue?.readiness.verdict,
+    "deferred_production_scope_only",
   );
   assert.ok(
     selectedView.replayPlayback.scopeNotes.some((note) =>

@@ -407,6 +407,51 @@ export interface ReviewBriefingBoardView {
   localOnlyScopeNotes: string[];
 }
 
+export type ReviewActionPriority = "p0" | "p1" | "p2";
+
+export type ReviewActionBlockerCategory =
+  | "local_follow_up"
+  | "local_evidence_gap"
+  | "deferred_production_scope";
+
+export type ReviewActionQueueReadinessVerdict =
+  | "blocked_by_local_follow_up"
+  | "deferred_production_scope_only"
+  | "ready_for_local_handoff";
+
+export interface ReviewActionQueueActionView {
+  actionId: string;
+  label: string;
+  summary: string;
+  priority: ReviewActionPriority;
+  blockerCategory: ReviewActionBlockerCategory;
+  blocking: boolean;
+  decisionIds: string[];
+  evidenceTargets: string[];
+  nextLocalStep: string;
+  readinessImpact: string;
+}
+
+export interface ReviewActionQueueView {
+  schema: "telemforge.review_action_queue.v1";
+  version: 1;
+  contractLabel: "local deterministic review action queue";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readiness: {
+    verdict: ReviewActionQueueReadinessVerdict;
+    label: string;
+    summary: string;
+    counts: {
+      totalActionCount: number;
+      blockingActionCount: number;
+      deferredProductionActionCount: number;
+    };
+  };
+  actions: ReviewActionQueueActionView[];
+  deferredScopeNotes: string[];
+  humanTestGateSummary: string;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -580,6 +625,7 @@ export interface MissionConsoleView {
   replayPlayback?: ReplayPlaybackView;
   reviewDecisionRegister?: ReviewDecisionRegisterView;
   reviewBriefingBoard?: ReviewBriefingBoardView;
+  reviewActionQueue?: ReviewActionQueueView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

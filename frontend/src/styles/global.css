@@ -156,6 +156,7 @@ button {
 .replay-playback-section,
 .review-decision-section,
 .review-briefing-section,
+.review-action-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -292,6 +293,7 @@ button {
 .runbook-section,
 .replay-playback-section,
 .review-decision-section,
+.review-action-section,
 .incident-packet-section,
 .alerts-section {
   padding: 18px;
@@ -379,6 +381,7 @@ button {
 .replay-playback-section,
 .review-decision-section,
 .review-briefing-section,
+.review-action-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -395,6 +398,10 @@ button {
 }
 
 .review-briefing-section {
+  padding: 18px;
+}
+
+.review-action-section {
   padding: 18px;
 }
 
@@ -1182,6 +1189,154 @@ button {
   color: #a76a16;
 }
 
+.action-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(90px, 0.45fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.action-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.action-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.action-queue-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.action-queue-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.action-queue-item,
+.handoff-readiness-panel {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.action-queue-item {
+  display: grid;
+  gap: 8px;
+}
+
+.action-queue-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.action-queue-heading h3 {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.action-queue-item p,
+.handoff-readiness-panel p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.action-next-step {
+  color: #273640;
+  font-weight: 680;
+}
+
+.action-readiness-impact {
+  color: #64727d;
+  font-size: 0.82rem;
+}
+
+.action-evidence-list,
+.readiness-count-strip,
+.deferred-scope-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.action-evidence-list a,
+.readiness-count-strip span,
+.deferred-scope-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #184d88;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+  text-decoration: none;
+}
+
+.handoff-readiness-panel {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.handoff-readiness-panel strong {
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.human-test-gate {
+  color: #273640;
+  font-weight: 680;
+}
+
+.deferred-scope-list span {
+  min-height: 30px;
+  color: #52636f;
+}
+
+.action-priority-chip-p0,
+.action-status-blocked_by_local_follow_up {
+  color: #a76a16;
+}
+
+.action-priority-chip-p1 {
+  color: #2368b5;
+}
+
+.action-priority-chip-p2,
+.action-status-deferred_production_scope_only {
+  color: #66717b;
+}
+
+.action-status-ready_for_local_handoff {
+  color: #12745b;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1402,6 +1557,8 @@ button {
   .playback-context-grid,
   .decision-summary-grid,
   .briefing-summary-grid,
+  .action-summary-grid,
+  .action-queue-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
@@ -1427,6 +1584,7 @@ button {
   .playback-contract-row,
   .decision-summary-grid,
   .briefing-summary-grid,
+  .action-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,

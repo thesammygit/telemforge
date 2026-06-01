@@ -633,6 +633,115 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewActionQueue ? (
+        <section
+          className="review-action-section"
+          aria-label="Review action queue and handoff readiness"
+        >
+          <a id="review-action-queue" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 16 action queue</span>
+              <h2>Review action queue and handoff readiness</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewActionQueue.readiness.verdict}`}
+            >
+              {view.reviewActionQueue.readiness.verdict.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="action-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewActionQueue.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Actions</span>
+              <strong>
+                {view.reviewActionQueue.readiness.counts.totalActionCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Blocking</span>
+              <strong>
+                {view.reviewActionQueue.readiness.counts.blockingActionCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred scope</span>
+              <strong>
+                {
+                  view.reviewActionQueue.readiness.counts
+                    .deferredProductionActionCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="action-queue-layout">
+            <div className="action-queue-list">
+              {view.reviewActionQueue.actions.map((action) => (
+                <article
+                  key={action.actionId}
+                  className={`action-queue-item action-priority-${action.priority} action-category-${action.blockerCategory}`}
+                >
+                  <div className="action-queue-heading">
+                    <span
+                      className={`status-chip action-priority-chip-${action.priority}`}
+                    >
+                      {action.priority.toUpperCase()}
+                    </span>
+                    <div>
+                      <span className="event-type">
+                        {action.blockerCategory.replace(/_/g, " ")}
+                      </span>
+                      <h3>{action.label}</h3>
+                    </div>
+                  </div>
+                  <p>{action.summary}</p>
+                  <p className="action-next-step">{action.nextLocalStep}</p>
+                  <p className="action-readiness-impact">
+                    {action.readinessImpact}
+                  </p>
+                  <div className="action-evidence-list">
+                    {action.evidenceTargets.map((target) => (
+                      <a key={`${action.actionId}:${target}`} href={`#${target}`}>
+                        {target}
+                      </a>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="handoff-readiness-panel">
+              <span className="metric-label">Handoff readiness</span>
+              <strong>{view.reviewActionQueue.readiness.label}</strong>
+              <p>{view.reviewActionQueue.readiness.summary}</p>
+              <div className="readiness-count-strip">
+                <span>
+                  {view.reviewActionQueue.readiness.counts.blockingActionCount}{" "}
+                  blockers
+                </span>
+                <span>
+                  {
+                    view.reviewActionQueue.readiness.counts
+                      .deferredProductionActionCount
+                  }{" "}
+                  deferred
+                </span>
+              </div>
+              <p className="human-test-gate">
+                {view.reviewActionQueue.humanTestGateSummary}
+              </p>
+              <div className="deferred-scope-list">
+                {view.reviewActionQueue.deferredScopeNotes.map((note) => (
+                  <span key={note}>{note}</span>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">
