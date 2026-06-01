@@ -42,6 +42,7 @@ For each stage:
 13. [Replay Playback And Review Timeline](steps/13-replay-playback-and-review-timeline.md)
 14. [Review Decision Register And Handoff Checklist](steps/14-review-decision-register-and-handoff-checklist.md)
 15. [Review Briefing Board And Evidence Drilldown](steps/15-review-briefing-board-and-evidence-drilldown.md)
+16. [Review Action Queue And Handoff Readiness](steps/16-review-action-queue-and-handoff-readiness.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
