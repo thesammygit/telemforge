@@ -43,6 +43,7 @@ For each stage:
 14. [Review Decision Register And Handoff Checklist](steps/14-review-decision-register-and-handoff-checklist.md)
 15. [Review Briefing Board And Evidence Drilldown](steps/15-review-briefing-board-and-evidence-drilldown.md)
 16. [Review Action Queue And Handoff Readiness](steps/16-review-action-queue-and-handoff-readiness.md)
+17. [Action Evidence Walkthrough And Local Handoff Path](steps/17-action-evidence-walkthrough-and-local-handoff-path.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
