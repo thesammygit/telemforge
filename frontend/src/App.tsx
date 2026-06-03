@@ -26,6 +26,9 @@ export default function App() {
   const [selectedReplayFrameId, setSelectedReplayFrameId] = useState<
     string | undefined
   >();
+  const [selectedReviewActionId, setSelectedReviewActionId] = useState<
+    string | undefined
+  >();
   const [liveConsole, setLiveConsole] = useState(() =>
     createStage09LiveConsoleState(stage07ConsoleFixture),
   );
@@ -95,8 +98,15 @@ export default function App() {
         liveConsole.connection,
         selectedRunbookId,
         selectedReplayFrameId,
+        selectedReviewActionId,
       ),
-    [liveConsole, selectedReplayFrameId, selectedRunbookId, selectedSubsystemId],
+    [
+      liveConsole,
+      selectedReplayFrameId,
+      selectedReviewActionId,
+      selectedRunbookId,
+      selectedSubsystemId,
+    ],
   );
 
   const acknowledgeAlert = async (alertId: string) => {
@@ -167,6 +177,7 @@ export default function App() {
       onSelectSubsystem={setSelectedSubsystemId}
       onSelectRunbook={setSelectedRunbookId}
       onSelectReplayFrame={setSelectedReplayFrameId}
+      onSelectReviewAction={setSelectedReviewActionId}
       onAcknowledgeAlert={acknowledgeAlert}
       onResolveAlert={resolveAlert}
     />

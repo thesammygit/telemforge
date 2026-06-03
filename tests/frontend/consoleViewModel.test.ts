@@ -252,6 +252,13 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     "blocked_by_local_follow_up",
   );
   assert.equal(view.reviewActionQueue.readiness.counts.blockingActionCount, 2);
+  assert.ok(view.reviewActionWalkthrough);
+  assert.equal(
+    view.reviewActionWalkthrough?.selectedActionId,
+    "action:follow-up:decision:alert-lifecycle-handoff",
+  );
+  assert.equal(view.reviewActionWalkthrough?.coverage.missingTargetCount, 0);
+  assert.equal(view.reviewActionWalkthrough?.evidencePathRows.length, 3);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -380,6 +387,7 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
     buildFixtureStreamConnection(resolvedFixture),
     undefined,
     resolvedFrame.frameId,
+    "action:deferred-production-handoff-scope",
   );
 
   assert.ok(selectedView.replayPlayback);
@@ -407,6 +415,18 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   assert.equal(
     selectedView.reviewActionQueue?.readiness.verdict,
     "deferred_production_scope_only",
+  );
+  assert.equal(
+    selectedView.reviewActionWalkthrough?.selectedActionId,
+    "action:deferred-production-handoff-scope",
+  );
+  assert.equal(
+    selectedView.reviewActionWalkthrough?.selectedAction.blocking,
+    false,
+  );
+  assert.deepEqual(
+    selectedView.reviewActionWalkthrough?.evidencePathRows.map((row) => row.target),
+    ["review-decision-register"],
   );
   assert.ok(
     selectedView.replayPlayback.scopeNotes.some((note) =>

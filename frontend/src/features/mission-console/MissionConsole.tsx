@@ -6,6 +6,7 @@ interface MissionConsoleProps {
   onSelectSubsystem: (subsystemId: string) => void;
   onSelectRunbook: (runbookId: string) => void;
   onSelectReplayFrame: (frameId: string) => void;
+  onSelectReviewAction: (actionId: string) => void;
   onAcknowledgeAlert: (alertId: string) => void;
   onResolveAlert: (alertId: string) => void;
 }
@@ -22,6 +23,7 @@ export function MissionConsole({
   onSelectSubsystem,
   onSelectRunbook,
   onSelectReplayFrame,
+  onSelectReviewAction,
   onAcknowledgeAlert,
   onResolveAlert,
 }: MissionConsoleProps) {
@@ -738,6 +740,225 @@ export function MissionConsole({
                 ))}
               </div>
             </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {view.reviewActionWalkthrough ? (
+        <section
+          className="review-walkthrough-section"
+          aria-label="Action evidence walkthrough"
+        >
+          <a id="review-action-walkthrough" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 17 action walkthrough</span>
+              <h2>Selected action evidence path</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${
+                view.reviewActionWalkthrough.selectedAction.blocking
+                  ? "blocked_by_local_follow_up"
+                  : "deferred_production_scope_only"
+              }`}
+            >
+              {view.reviewActionWalkthrough.selectedAction.blocking
+                ? "blocked by local follow up"
+                : "deferred production scope only"}
+            </span>
+          </div>
+          <div className="walkthrough-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewActionWalkthrough.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Selected action</span>
+              <strong>{view.reviewActionWalkthrough.selectedAction.label}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Targets</span>
+              <strong>{view.reviewActionWalkthrough.coverage.totalTargetCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Missing</span>
+              <strong>
+                {view.reviewActionWalkthrough.coverage.missingTargetCount}
+              </strong>
+            </div>
+          </div>
+          <div className="walkthrough-layout">
+            <div className="walkthrough-selector" aria-label="Action selector">
+              {view.reviewActionWalkthrough.actions.map((action) => (
+                <button
+                  key={action.actionId}
+                  className={
+                    action.actionId === view.reviewActionWalkthrough?.selectedActionId
+                      ? "walkthrough-choice selected"
+                      : "walkthrough-choice"
+                  }
+                  type="button"
+                  onClick={() => onSelectReviewAction(action.actionId)}
+                >
+                  <span className={`status-chip action-priority-chip-${action.priority}`}>
+                    {action.priority.toUpperCase()}
+                  </span>
+                  <strong>{action.label}</strong>
+                  <p>{action.summary}</p>
+                  <div className="walkthrough-choice-meta">
+                    <span>{action.evidenceTargets.length} targets</span>
+                    <span>
+                      {action.blocking ? "blocking" : "deferred production"}
+                    </span>
+                  </div>
+                </button>
+              ))}
+            </div>
+            <div className="walkthrough-details">
+              <article className="walkthrough-action-card">
+                <div className="walkthrough-action-heading">
+                  <div>
+                    <span className="event-type">
+                      {view.reviewActionWalkthrough.selectedAction.blockerCategory.replace(
+                        /_/g,
+                        " ",
+                      )}
+                    </span>
+                    <h3>{view.reviewActionWalkthrough.selectedAction.label}</h3>
+                  </div>
+                  <span className="walkthrough-selected-action-id">
+                    {view.reviewActionWalkthrough.selectedActionId}
+                  </span>
+                </div>
+                <p>{view.reviewActionWalkthrough.selectedAction.summary}</p>
+                <p className="action-next-step">
+                  {view.reviewActionWalkthrough.nextLocalStep}
+                </p>
+                <p className="action-readiness-impact">
+                  {view.reviewActionWalkthrough.selectedAction.readinessImpact}
+                </p>
+                <div className="decision-evidence-list">
+                  {view.reviewActionWalkthrough.selectedAction.decisionIds.map(
+                    (decisionId) => (
+                      <span key={decisionId}>{decisionId}</span>
+                    ),
+                  )}
+                  {view.reviewActionWalkthrough.selectedAction.evidenceTargets.map(
+                    (target) => (
+                      <a key={target} href={`#${target}`}>
+                        {target}
+                      </a>
+                    ),
+                  )}
+                </div>
+              </article>
+              <div className="walkthrough-path-list">
+                {view.reviewActionWalkthrough.evidencePathRows.map((row) => (
+                  <article
+                    key={row.rowId}
+                    className={`walkthrough-path-row walkthrough-path-${row.status}`}
+                  >
+                    <div className="walkthrough-path-heading">
+                      <span
+                        className={`status-chip decision-status-${
+                          row.status === "available" ? "ready" : "follow_up"
+                        }`}
+                      >
+                        {row.status}
+                      </span>
+                      <div>
+                        <span className="event-type">{row.target}</span>
+                        <h3>{row.label}</h3>
+                      </div>
+                    </div>
+                    <p>
+                      {row.evidenceRows.length} briefing rows,{" "}
+                      {row.replayFrameIds.length} replay frames,{" "}
+                      {row.runbookTargets.length} runbook targets.
+                    </p>
+                    <div className="walkthrough-reference-strip">
+                      {row.replayFrameIds.map((frameId) => (
+                        <span key={`${row.rowId}:${frameId}`}>{frameId}</span>
+                      ))}
+                      {row.runbookTargets.map((target) => (
+                        <span key={`${row.rowId}:${target.stepId}`}>
+                          {target.stepId}
+                        </span>
+                      ))}
+                      {row.packetReferences.map((reference) => (
+                        <span key={`${row.rowId}:${reference.packetId}`}>
+                          {reference.packetId}
+                        </span>
+                      ))}
+                      {row.exportReferences.map((reference) => (
+                        <span key={`${row.rowId}:${reference.exportId}`}>
+                          {reference.exportId}
+                        </span>
+                      ))}
+                      {row.sourcePaths.map((path) => (
+                        <span key={`${row.rowId}:${path}`}>{path}</span>
+                      ))}
+                    </div>
+                    <div className="walkthrough-evidence-list">
+                      {row.evidenceRows.map((evidence) => (
+                        <article
+                          key={evidence.rowId}
+                          className="briefing-evidence-row"
+                        >
+                          <span
+                            className={`status-chip decision-status-${evidence.decisionStatus}`}
+                          >
+                            {evidence.decisionStatus.replace(/_/g, " ")}
+                          </span>
+                          <div>
+                            <div className="briefing-evidence-heading">
+                              <strong>{evidence.evidenceLabel}</strong>
+                              <span>{evidence.source.replace(/_/g, " ")}</span>
+                            </div>
+                            <p>{evidence.reviewNote}</p>
+                            <div className="briefing-evidence-meta">
+                              <span>{evidence.decisionLabel}</span>
+                              <span>{evidence.target}</span>
+                              {evidence.frameId ? <span>{evidence.frameId}</span> : null}
+                              {evidence.path ? <span>{evidence.path}</span> : null}
+                            </div>
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="walkthrough-missing-panel">
+                <span className="metric-label">Missing targets</span>
+                {view.reviewActionWalkthrough.missingTargetRecords.length ? (
+                  <div className="walkthrough-missing-list">
+                    {view.reviewActionWalkthrough.missingTargetRecords.map((record) => (
+                      <article key={record.target} className="walkthrough-missing-row">
+                        <strong>{record.label}</strong>
+                        <p>{record.reason}</p>
+                        <div className="briefing-evidence-meta">
+                          {record.expectedHints.map((hint) => (
+                            <span key={`${record.target}:${hint}`}>{hint}</span>
+                          ))}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="empty-state">
+                    All selected action targets resolved to local evidence.
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+          <div className="playback-scope-notes">
+            {view.reviewActionWalkthrough.deferredProductionBoundaryNotes.map(
+              (note) => (
+                <span key={note}>{note}</span>
+              ),
+            )}
           </div>
         </section>
       ) : null}

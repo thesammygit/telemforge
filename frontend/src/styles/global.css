@@ -157,6 +157,7 @@ button {
 .review-decision-section,
 .review-briefing-section,
 .review-action-section,
+.review-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -382,6 +383,7 @@ button {
 .review-decision-section,
 .review-briefing-section,
 .review-action-section,
+.review-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -402,6 +404,10 @@ button {
 }
 
 .review-action-section {
+  padding: 18px;
+}
+
+.review-walkthrough-section {
   padding: 18px;
 }
 
@@ -1282,6 +1288,7 @@ button {
 }
 
 .action-evidence-list a,
+.decision-evidence-list span,
 .readiness-count-strip span,
 .deferred-scope-list span {
   display: inline-flex;
@@ -1317,6 +1324,174 @@ button {
 .deferred-scope-list span {
   min-height: 30px;
   color: #52636f;
+}
+
+.walkthrough-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(90px, 0.45fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.walkthrough-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.walkthrough-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.38fr) minmax(0, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.walkthrough-selector {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.walkthrough-choice {
+  display: grid;
+  gap: 6px;
+  min-height: 82px;
+  border: 1px solid #d5e0e7;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #273640;
+  cursor: pointer;
+  padding: 10px 12px;
+  text-align: left;
+}
+
+.walkthrough-choice:hover,
+.walkthrough-choice.selected {
+  border-color: #2368b5;
+  background: #eef6ff;
+}
+
+.walkthrough-choice strong,
+.walkthrough-action-card h3,
+.walkthrough-path-row h3,
+.walkthrough-missing-row strong {
+  margin: 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.walkthrough-choice p,
+.walkthrough-action-card p,
+.walkthrough-path-row p,
+.walkthrough-missing-row p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.walkthrough-choice-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.walkthrough-choice-meta span,
+.walkthrough-reference-strip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #fbfcfd;
+  color: #52636f;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.walkthrough-details {
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.walkthrough-action-card,
+.walkthrough-path-row,
+.walkthrough-missing-panel {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.walkthrough-action-card {
+  display: grid;
+  gap: 8px;
+}
+
+.walkthrough-action-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.walkthrough-selected-action-id {
+  color: #64727d;
+  font-size: 0.76rem;
+  font-weight: 760;
+  text-transform: uppercase;
+}
+
+.walkthrough-path-list,
+.walkthrough-missing-list {
+  display: grid;
+  gap: 10px;
+}
+
+.walkthrough-path-row {
+  display: grid;
+  gap: 10px;
+}
+
+.walkthrough-path-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.walkthrough-reference-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.walkthrough-evidence-list {
+  display: grid;
+  gap: 8px;
+}
+
+.walkthrough-missing-row {
+  display: grid;
+  gap: 6px;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 12px;
 }
 
 .action-priority-chip-p0,
@@ -1558,7 +1733,9 @@ button {
   .decision-summary-grid,
   .briefing-summary-grid,
   .action-summary-grid,
+  .walkthrough-summary-grid,
   .action-queue-layout,
+  .walkthrough-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
@@ -1585,6 +1762,7 @@ button {
   .decision-summary-grid,
   .briefing-summary-grid,
   .action-summary-grid,
+  .walkthrough-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,

@@ -452,6 +452,71 @@ export interface ReviewActionQueueView {
   humanTestGateSummary: string;
 }
 
+export interface ReviewActionWalkthroughRunbookTargetView {
+  stepId: string;
+  title: string;
+  evidenceTarget: string;
+  stepStatus: ScenarioRunbookStepStatus;
+}
+
+export interface ReviewActionWalkthroughPacketReferenceView {
+  packetId: string;
+  readinessStatus: IncidentReviewPacketView["readiness"]["status"];
+  relatedMarkerCount: number;
+}
+
+export interface ReviewActionWalkthroughExportReferenceView {
+  exportId: string;
+  schema: IncidentReviewExportPayload["schema"];
+}
+
+export interface ReviewActionWalkthroughEvidencePathRowView {
+  rowId: string;
+  target: string;
+  label: string;
+  status: "available" | "missing";
+  evidenceRows: ReviewBriefingBoardEvidenceRowView[];
+  replayFrameIds: string[];
+  runbookTargets: ReviewActionWalkthroughRunbookTargetView[];
+  packetReferences: ReviewActionWalkthroughPacketReferenceView[];
+  exportReferences: ReviewActionWalkthroughExportReferenceView[];
+  sourcePaths: string[];
+}
+
+export interface ReviewActionWalkthroughMissingTargetView {
+  target: string;
+  label: string;
+  reason: string;
+  expectedHints: string[];
+}
+
+export interface ReviewActionWalkthroughCoverageView {
+  totalTargetCount: number;
+  resolvedTargetCount: number;
+  missingTargetCount: number;
+  evidenceRowCount: number;
+  replayFrameCount: number;
+  runbookTargetCount: number;
+  packetReferenceCount: number;
+  exportReferenceCount: number;
+  sourcePathCount: number;
+}
+
+export interface ReviewActionWalkthroughView {
+  schema: "telemforge.review_action_walkthrough.v1";
+  version: 1;
+  contractLabel: "local deterministic action evidence walkthrough";
+  localStatus: ReplayPlaybackView["localStatus"];
+  actions: ReviewActionQueueActionView[];
+  selectedActionId: string;
+  selectedAction: ReviewActionQueueActionView;
+  coverage: ReviewActionWalkthroughCoverageView;
+  evidencePathRows: ReviewActionWalkthroughEvidencePathRowView[];
+  missingTargetRecords: ReviewActionWalkthroughMissingTargetView[];
+  nextLocalStep: string;
+  deferredProductionBoundaryNotes: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -626,6 +691,7 @@ export interface MissionConsoleView {
   reviewDecisionRegister?: ReviewDecisionRegisterView;
   reviewBriefingBoard?: ReviewBriefingBoardView;
   reviewActionQueue?: ReviewActionQueueView;
+  reviewActionWalkthrough?: ReviewActionWalkthroughView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

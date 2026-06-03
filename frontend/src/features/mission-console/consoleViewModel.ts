@@ -30,6 +30,7 @@ import {
   buildIncidentReviewPacket,
 } from "../../lib/incidentReviewPackets.ts";
 import { buildReviewActionQueue } from "../../lib/reviewActionQueue.ts";
+import { buildReviewActionWalkthrough } from "../../lib/reviewActionWalkthrough.ts";
 import { buildReviewBriefingBoard } from "../../lib/reviewBriefingBoard.ts";
 import { buildReviewDecisionRegister } from "../../lib/reviewDecisionRegister.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
@@ -63,6 +64,7 @@ export function buildMissionConsoleView(
   stream = buildFixtureStreamConnection(fixture),
   selectedRunbookId?: string,
   selectedReplayFrameId?: string,
+  selectedReviewActionId?: string,
 ): MissionConsoleView {
   const channelsById = new Map(
     fixture.channels.map((channel) => [channel.channelId, channel]),
@@ -113,6 +115,15 @@ export function buildMissionConsoleView(
   );
   const reviewBriefingBoard = buildReviewBriefingBoard(reviewDecisionRegister);
   const reviewActionQueue = buildReviewActionQueue(reviewBriefingBoard);
+  const reviewActionWalkthrough = buildReviewActionWalkthrough(
+    reviewActionQueue,
+    reviewBriefingBoard,
+    replayPlayback,
+    runbook,
+    incidentReviewPacket,
+    incidentReviewExport,
+    selectedReviewActionId,
+  );
 
   return {
     mission: {
@@ -141,6 +152,7 @@ export function buildMissionConsoleView(
     reviewDecisionRegister,
     reviewBriefingBoard,
     reviewActionQueue,
+    reviewActionWalkthrough,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
