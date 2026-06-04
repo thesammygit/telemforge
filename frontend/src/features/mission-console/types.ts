@@ -2234,6 +2234,155 @@ export interface ReviewWalkthroughPathView {
   sourceSurfaceIndex: ReviewSurfaceIndexView;
 }
 
+export type ReviewObservationAttentionKind =
+  | "source_alignment"
+  | "anchor_resolution"
+  | "count_signal"
+  | "deferred_boundary";
+
+export interface ReviewObservationSourceReferenceView {
+  sourceReferenceId: string;
+  sourceStepId: string;
+  sourceSurfaceId: string;
+  sourceStageNumber: number;
+  sourceSchema: string;
+  sourceContractLabel: string;
+  sourceLabels: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewObservationAnchorReferenceView {
+  anchorReferenceId: string;
+  sourceStepId: string;
+  anchorId: string;
+  href: string;
+  label: string;
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+}
+
+export interface ReviewObservationCountSignalView {
+  signalId: string;
+  sourceStepId: string;
+  sourceSurfaceId: string;
+  label: string;
+  value: number;
+  sourcePath: string;
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewObservationDeferredBoundarySummaryView {
+  summaryId: string;
+  sourceNoteId: string;
+  label: string;
+  summary: string;
+  sourceStepIds: string[];
+  sourceSurfaceIds: string[];
+  sourceAnchorIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewObservationRowView {
+  observationRowId: string;
+  observationNumber: number;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  label: string;
+  summary: string;
+  sourceStepId: string;
+  sourceSurfaceId: string;
+  sourceStageNumber: number;
+  sourceSchema: string;
+  sourceContractLabel: string;
+  localStatusLabel: string;
+  statusLabel: string;
+  anchor: ReviewSurfaceAnchorReferenceView;
+  sourceReferenceId: string;
+  countSignalIds: string[];
+  deferredBoundarySummaryIds: string[];
+  sourceLabels: string[];
+  staticInspectionPrompt: string;
+  staticExpectedObservation: string;
+  attentionKinds: ReviewObservationAttentionKind[];
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationAttentionGroupView {
+  attentionGroupId: string;
+  kind: ReviewObservationAttentionKind;
+  order: number;
+  label: string;
+  summary: string;
+  observationRowIds: string[];
+  anchorIds: string[];
+  countSignalIds: string[];
+  deferredBoundarySummaryIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationSummaryView {
+  lensId: "candidate-local-review-observation-lens";
+  label: string;
+  summary: string;
+  defaultObservationRowId: string;
+  defaultAnchorId: string;
+  defaultAttentionGroupId: string;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    totalObservationRowCount: number;
+    attentionGroupCount: number;
+    localAnchorCount: number;
+    sourceReferenceCount: number;
+    countSignalCount: number;
+    deferredBoundarySummaryCount: number;
+    staticExpectedObservationCount: number;
+    localOnlyObservationCount: number;
+  };
+}
+
+export interface ReviewObservationLensView {
+  schema: "telemforge.review_observation_lens.v1";
+  version: 1;
+  contractLabel: "local deterministic review observation lens and static attention map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationSummaryView;
+  observationRows: ReviewObservationRowView[];
+  attentionGroups: ReviewObservationAttentionGroupView[];
+  sourceReferences: ReviewObservationSourceReferenceView[];
+  anchorReferences: ReviewObservationAnchorReferenceView[];
+  countSignals: ReviewObservationCountSignalView[];
+  deferredBoundarySummaries: ReviewObservationDeferredBoundarySummaryView[];
+  staticAttentionSummary: string;
+  sourceWalkthroughPath: ReviewWalkthroughPathView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -2423,6 +2572,7 @@ export interface MissionConsoleView {
   reviewProofReconciliation?: ReviewProofReconciliationView;
   reviewSurfaceIndex?: ReviewSurfaceIndexView;
   reviewWalkthroughPath?: ReviewWalkthroughPathView;
+  reviewObservationLens?: ReviewObservationLensView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

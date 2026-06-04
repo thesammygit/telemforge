@@ -171,6 +171,7 @@ button {
 .review-proof-reconciliation-section,
 .review-surface-index-section,
 .review-walkthrough-path-section,
+.review-observation-lens-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -410,6 +411,7 @@ button {
 .review-proof-reconciliation-section,
 .review-surface-index-section,
 .review-walkthrough-path-section,
+.review-observation-lens-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -486,6 +488,10 @@ button {
 }
 
 .review-walkthrough-path-section {
+  padding: 18px;
+}
+
+.review-observation-lens-section {
   padding: 18px;
 }
 
@@ -2427,6 +2433,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-lens-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2466,7 +2479,11 @@ button {
 .walkthrough-path-step-list,
 .walkthrough-path-panel,
 .walkthrough-prompt-group-list,
-.walkthrough-deferred-list {
+.walkthrough-deferred-list,
+.observation-row-list,
+.observation-panel,
+.observation-attention-list,
+.observation-boundary-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2509,7 +2526,11 @@ button {
 .walkthrough-path-step,
 .walkthrough-path-panel,
 .walkthrough-prompt-group-list article,
-.walkthrough-deferred-list article {
+.walkthrough-deferred-list article,
+.observation-row,
+.observation-panel,
+.observation-attention-list article,
+.observation-boundary-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2523,7 +2544,8 @@ button {
 .proof-navigator-row,
 .proof-reconciliation-row,
 .surface-index-row,
-.walkthrough-path-step {
+.walkthrough-path-step,
+.observation-row {
   display: grid;
   gap: 10px;
 }
@@ -2581,6 +2603,34 @@ button {
 }
 
 .walkthrough-path-step-reconciliation {
+  border-left: 4px solid #172026;
+}
+
+.observation-row-decision {
+  border-left: 4px solid #2368b5;
+}
+
+.observation-row-action {
+  border-left: 4px solid #a76a16;
+}
+
+.observation-row-readiness {
+  border-left: 4px solid #12745b;
+}
+
+.observation-row-evidence {
+  border-left: 4px solid #184d88;
+}
+
+.observation-row-proof {
+  border-left: 4px solid #6f4eb6;
+}
+
+.observation-row-navigator {
+  border-left: 4px solid #52636f;
+}
+
+.observation-row-reconciliation {
   border-left: 4px solid #172026;
 }
 
@@ -2655,7 +2705,11 @@ button {
 .walkthrough-path-step h3,
 .walkthrough-path-panel strong,
 .walkthrough-prompt-group-list strong,
-.walkthrough-deferred-list strong {
+.walkthrough-deferred-list strong,
+.observation-row h3,
+.observation-panel strong,
+.observation-attention-list strong,
+.observation-boundary-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2696,7 +2750,11 @@ button {
 .walkthrough-path-step p,
 .walkthrough-path-panel p,
 .walkthrough-prompt-group-list p,
-.walkthrough-deferred-list p {
+.walkthrough-deferred-list p,
+.observation-row p,
+.observation-panel p,
+.observation-attention-list p,
+.observation-boundary-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2726,7 +2784,9 @@ button {
 .surface-index-group-list article,
 .surface-index-deferred-list article,
 .walkthrough-prompt-group-list article,
-.walkthrough-deferred-list article {
+.walkthrough-deferred-list article,
+.observation-attention-list article,
+.observation-boundary-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
@@ -2844,7 +2904,9 @@ button {
 }
 
 .walkthrough-prompt-group-list,
-.walkthrough-deferred-list {
+.walkthrough-deferred-list,
+.observation-attention-list,
+.observation-boundary-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3128,6 +3190,7 @@ button {
   .proof-reconciliation-layout,
   .surface-index-layout,
   .walkthrough-path-layout,
+  .observation-lens-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

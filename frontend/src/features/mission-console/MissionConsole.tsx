@@ -34,6 +34,17 @@ export function MissionConsole({
   const resolvedAlerts = view.alerts.filter((alert) => alert.state === "resolved");
   const playback = view.replayPlayback;
   const currentPlaybackFrame = playback?.currentFrame;
+  const observationLens = view.reviewObservationLens;
+  const observationCountSignalById = new Map(
+    observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
+      [],
+  );
+  const observationDeferredSummaryById = new Map(
+    observationLens?.deferredBoundarySummaries.map((summary) => [
+      summary.summaryId,
+      summary,
+    ]) ?? [],
+  );
 
   return (
     <main className="console-shell">
@@ -705,6 +716,183 @@ export function MissionConsole({
                     <div className="gap-reference-strip">
                       {note.sourceAnchorIds.map((anchorId) => (
                         <span key={`${note.noteId}:${anchorId}`}>
+                          {anchorId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationLens ? (
+        <section
+          className="review-observation-lens-section"
+          aria-label="Review observation lens and static attention map"
+        >
+          <a id="review-observation-lens" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 32 observation lens</span>
+              <h2>Review observation lens and static attention map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationLens.localStatus}`}
+            >
+              {observationLens.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationLens.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Observations</span>
+              <strong>
+                {observationLens.summary.counts.totalObservationRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Attention groups</span>
+              <strong>{observationLens.summary.counts.attentionGroupCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Count signals</span>
+              <strong>{observationLens.summary.counts.countSignalCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  observationLens.summary.counts
+                    .deferredBoundarySummaryCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-lens-layout">
+            <div className="observation-row-list">
+              {observationLens.observationRows.map((row) => (
+                <article
+                  key={row.observationRowId}
+                  className={`observation-row observation-row-${row.workflowGroup}`}
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Observation {row.observationNumber} · Stage{" "}
+                        {row.sourceStageNumber} ·{" "}
+                        {row.workflowGroup.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <a className="surface-index-anchor" href={row.anchor.href}>
+                      {row.anchor.anchorId}
+                    </a>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="surface-index-label-strip">
+                    <span>{row.sourceSchema}</span>
+                    <span>{row.sourceContractLabel}</span>
+                    <span>{row.localStatusLabel}</span>
+                    <span>{row.statusLabel.replace(/_/g, " ")}</span>
+                  </div>
+                  <div className="walkthrough-prompt-block">
+                    <span className="metric-label">Expected observation</span>
+                    <p>{row.staticExpectedObservation}</p>
+                    <span className="metric-label">Attention</span>
+                    <div className="surface-index-label-strip">
+                      {row.attentionKinds.map((kind) => (
+                        <span key={`${row.observationRowId}:${kind}`}>
+                          {kind.replace(/_/g, " ")}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="surface-index-count-grid">
+                    {row.countSignalIds.map((signalId) => {
+                      const signal = observationCountSignalById.get(signalId);
+                      return signal ? (
+                        <div key={`${row.observationRowId}:${signal.signalId}`}>
+                          <span className="metric-label">{signal.label}</span>
+                          <strong>{signal.value}</strong>
+                        </div>
+                      ) : null;
+                    })}
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.deferredBoundarySummaryIds.map((summaryId) => {
+                      const summary = observationDeferredSummaryById.get(summaryId);
+                      return summary ? (
+                        <span key={`${row.observationRowId}:${summary.summaryId}`}>
+                          {summary.label}
+                        </span>
+                      ) : null;
+                    })}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-panel">
+              <span className="metric-label">Static attention map</span>
+              <strong>{observationLens.summary.label}</strong>
+              <p>{observationLens.summary.summary}</p>
+              <div className="surface-index-nav-grid">
+                {observationLens.anchorReferences.map((anchor) => (
+                  <a
+                    key={anchor.anchorReferenceId}
+                    className="surface-index-nav-chip"
+                    href={anchor.href}
+                  >
+                    {anchor.label}
+                  </a>
+                ))}
+              </div>
+              <div className="observation-attention-list">
+                {observationLens.attentionGroups.map((group) => (
+                  <article key={group.attentionGroupId}>
+                    <span className="event-type">
+                      Attention {group.order} · {group.kind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <p>{group.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Rows</span>
+                        <strong>{group.observationRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{group.anchorIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Counts</span>
+                        <strong>{group.countSignalIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{group.deferredBoundarySummaryIds.length}</strong>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p>{observationLens.staticAttentionSummary}</p>
+              <div className="observation-boundary-list">
+                {observationLens.deferredBoundarySummaries.map((summary) => (
+                  <article key={summary.summaryId}>
+                    <span className="event-type">
+                      {summary.actionability.replace(/_/g, " ")}
+                    </span>
+                    <strong>{summary.label}</strong>
+                    <p>{summary.summary}</p>
+                    <div className="gap-reference-strip">
+                      {summary.sourceAnchorIds.map((anchorId) => (
+                        <span key={`${summary.summaryId}:${anchorId}`}>
                           {anchorId}
                         </span>
                       ))}
