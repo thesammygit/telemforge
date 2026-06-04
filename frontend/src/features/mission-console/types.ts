@@ -1039,6 +1039,117 @@ export interface ReviewPassOutcomeView {
   sourceEvidenceMapRows: ReviewPassEvidenceMapRowView[];
 }
 
+export type ReviewEvidenceTraceSegmentKind =
+  | "outcome"
+  | "readiness"
+  | "resolution"
+  | "coverage"
+  | "proof"
+  | "deferred_scope";
+
+export type ReviewEvidenceTraceSourceReferenceKind =
+  | "outcome"
+  | "readiness"
+  | "resolution"
+  | "coverage"
+  | "action"
+  | "evidence_target"
+  | "source_bucket";
+
+export interface ReviewEvidenceTraceProofCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  source:
+    | "stage24_trace"
+    | ReviewPassOutcomeProofCommandReferenceView["source"];
+}
+
+export interface ReviewEvidenceTraceSourceReferenceGroupView {
+  groupId: string;
+  sourceKind: ReviewEvidenceTraceSourceReferenceKind;
+  label: string;
+  sourceIds: string[];
+}
+
+export interface ReviewEvidenceTraceSegmentView {
+  segmentId: string;
+  segmentKind: ReviewEvidenceTraceSegmentKind;
+  label: string;
+  summary: string;
+  sourceReferenceGroupIds: string[];
+  proofCommandIds: string[];
+  nextStaticLocalReviewStep?: string;
+}
+
+export interface ReviewEvidenceTraceRowView {
+  traceRowId: string;
+  rank: number;
+  status: ReviewPassOutcomeRowStatus;
+  outcomeBucket: ReviewPassOutcomeBucket;
+  label: string;
+  summary: string;
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  sourceBucketLabels: string[];
+  sourceReferenceGroups: ReviewEvidenceTraceSourceReferenceGroupView[];
+  proofCommandReferences: ReviewEvidenceTraceProofCommandReferenceView[];
+  traceSegments: ReviewEvidenceTraceSegmentView[];
+  nextStaticLocalReviewStep: string;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewEvidenceTraceDeferredBoundaryNoteView {
+  noteId: string;
+  label: string;
+  summary: string;
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  actionability: "deferred_non_actionable";
+  nextStaticLocalReviewStep: string;
+}
+
+export interface ReviewEvidenceTraceSummaryView {
+  traceId: "candidate-local-review-evidence-trace";
+  label: string;
+  summary: string;
+  defaultTraceRowId: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalTraceRowCount: number;
+    unresolvedLocalProofGapCount: number;
+    readyLocalEvidenceRowCount: number;
+    deferredProductionScopeRowCount: number;
+    sourceOutcomeRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceResolutionRowCount: number;
+    sourceMatrixRowCount: number;
+    evidenceTargetCount: number;
+    proofCommandReferenceCount: number;
+  };
+}
+
+export interface ReviewEvidenceTraceView {
+  schema: "telemforge.review_evidence_trace.v1";
+  version: 1;
+  contractLabel: "local deterministic review evidence trace navigator";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewEvidenceTraceSummaryView;
+  traceRows: ReviewEvidenceTraceRowView[];
+  selectedTraceRow: ReviewEvidenceTraceRowView;
+  proofCommandReferences: ReviewEvidenceTraceProofCommandReferenceView[];
+  deferredBoundaryNotes: ReviewEvidenceTraceDeferredBoundaryNoteView[];
+  staticProofChecklistSummary: string;
+  sourceOutcome: ReviewPassOutcomeView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -1220,6 +1331,7 @@ export interface MissionConsoleView {
   reviewGapResolution?: ReviewGapResolutionView;
   reviewPassReadiness?: ReviewPassReadinessView;
   reviewPassOutcome?: ReviewPassOutcomeView;
+  reviewEvidenceTrace?: ReviewEvidenceTraceView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

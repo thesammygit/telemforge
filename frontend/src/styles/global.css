@@ -163,6 +163,7 @@ button {
 .review-gap-section,
 .review-pass-section,
 .review-outcome-section,
+.review-trace-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -394,6 +395,7 @@ button {
 .review-gap-section,
 .review-pass-section,
 .review-outcome-section,
+.review-trace-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -438,6 +440,10 @@ button {
 }
 
 .review-outcome-section {
+  padding: 18px;
+}
+
+.review-trace-section {
   padding: 18px;
 }
 
@@ -2252,6 +2258,84 @@ button {
   background: #ffffff;
 }
 
+.review-trace-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.review-trace-row-list,
+.review-trace-panel,
+.trace-segment-list,
+.trace-deferred-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.review-trace-row,
+.review-trace-panel,
+.trace-segment-list article,
+.trace-deferred-list article {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.review-trace-row {
+  display: grid;
+  gap: 10px;
+}
+
+.review-trace-row-unresolved_local_proof_gap {
+  border-left: 4px solid #a76a16;
+}
+
+.review-trace-row-ready_local_evidence {
+  border-left: 4px solid #12745b;
+}
+
+.review-trace-row-deferred_production_scope {
+  border-left: 4px solid #66717b;
+}
+
+.review-trace-row h3,
+.review-trace-panel strong,
+.trace-segment-list strong,
+.trace-deferred-list strong {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.review-trace-row p,
+.review-trace-panel p,
+.trace-segment-list p,
+.trace-deferred-list p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.trace-source-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.trace-source-grid > div,
+.trace-segment-list article,
+.trace-deferred-list article {
+  display: grid;
+  gap: 8px;
+  background: #ffffff;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2484,6 +2568,7 @@ button {
   .gap-triage-layout,
   .review-pass-layout,
   .review-outcome-layout,
+  .review-trace-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

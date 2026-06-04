@@ -1915,6 +1915,161 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewEvidenceTrace ? (
+        <section
+          className="review-trace-section"
+          aria-label="Review evidence trace navigator"
+        >
+          <a id="review-evidence-trace-navigator" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 24 evidence trace</span>
+              <h2>Trace navigator and proof drilldown</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewEvidenceTrace.selectedTraceRow.status}`}
+            >
+              {view.reviewEvidenceTrace.selectedTraceRow.status.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewEvidenceTrace.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Trace rows</span>
+              <strong>
+                {view.reviewEvidenceTrace.summary.counts.totalTraceRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default trace</span>
+              <strong>{view.reviewEvidenceTrace.selectedTraceRow.rank}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Local gaps</span>
+              <strong>
+                {
+                  view.reviewEvidenceTrace.summary.counts
+                    .unresolvedLocalProofGapCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Proof refs</span>
+              <strong>
+                {
+                  view.reviewEvidenceTrace.summary.counts
+                    .proofCommandReferenceCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="review-trace-layout">
+            <div className="review-trace-row-list">
+              {view.reviewEvidenceTrace.traceRows.map((row) => (
+                <article
+                  key={row.traceRowId}
+                  className={`review-trace-row review-trace-row-${row.status}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {row.outcomeBucket.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.summary}</p>
+                  <p className="action-next-step">
+                    {row.nextStaticLocalReviewStep}
+                  </p>
+                  <div className="trace-source-grid">
+                    {row.sourceReferenceGroups.map((group) => (
+                      <div key={group.groupId}>
+                        <span className="metric-label">{group.label}</span>
+                        <div className="gap-reference-strip">
+                          {group.sourceIds.map((sourceId) => (
+                            <span key={`${group.groupId}:${sourceId}`}>
+                              {sourceId}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="gap-bucket-strip">
+                    {row.sourceBucketLabels.map((label) => (
+                      <span key={`${row.traceRowId}:${label}`}>{label}</span>
+                    ))}
+                  </div>
+                  <div className="outcome-proof-list">
+                    {row.proofCommandReferences.map((command) => (
+                      <span key={`${row.traceRowId}:${command.commandId}`}>
+                        {command.commandId}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="review-trace-panel">
+              <span className="metric-label">Selected trace</span>
+              <strong>{view.reviewEvidenceTrace.selectedTraceRow.label}</strong>
+              <p>{view.reviewEvidenceTrace.summary.summary}</p>
+              <p>{view.reviewEvidenceTrace.staticProofChecklistSummary}</p>
+              <div className="trace-segment-list">
+                {view.reviewEvidenceTrace.selectedTraceRow.traceSegments.map(
+                  (segment) => (
+                    <article key={segment.segmentId}>
+                      <span className="event-type">
+                        {segment.segmentKind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{segment.label}</strong>
+                      <p>{segment.summary}</p>
+                      <div className="gap-reference-strip">
+                        {segment.sourceReferenceGroupIds.map((groupId) => (
+                          <span key={`${segment.segmentId}:${groupId}`}>
+                            {groupId}
+                          </span>
+                        ))}
+                        {segment.proofCommandIds.map((commandId) => (
+                          <span key={`${segment.segmentId}:${commandId}`}>
+                            {commandId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="trace-deferred-list">
+                {view.reviewEvidenceTrace.deferredBoundaryNotes.map((note) => (
+                  <article key={note.noteId}>
+                    <span className="event-type">
+                      {note.actionability.replace(/_/g, " ")}
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="coverage-command-list">
+                {view.reviewEvidenceTrace.proofCommandReferences.map((command) => (
+                  <article key={command.commandId} className="coverage-command-row">
+                    <strong>{command.label}</strong>
+                    <code>{command.command}</code>
+                    <p>{command.purpose}</p>
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

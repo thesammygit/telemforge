@@ -385,6 +385,37 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewPassOutcome?.staticVerdictNotes[0].noteId,
     "stage23-informational-only",
   );
+  assert.ok(view.reviewEvidenceTrace);
+  assert.equal(
+    view.reviewEvidenceTrace?.schema,
+    "telemforge.review_evidence_trace.v1",
+  );
+  assert.equal(
+    view.reviewEvidenceTrace?.summary.defaultTraceRowId,
+    "evidence-trace:review-pass-outcome:review-pass:resolution:next-pass-1:action:follow-up:decision:alert-lifecycle-handoff",
+  );
+  assert.equal(view.reviewEvidenceTrace?.traceRows.length, 3);
+  assert.equal(
+    view.reviewEvidenceTrace?.selectedTraceRow.sourceOutcomeRowIds[0],
+    view.reviewPassOutcome?.outcomeRows[0].outcomeRowId,
+  );
+  assert.equal(
+    view.reviewEvidenceTrace?.selectedTraceRow.sourceReadinessRowIds[0],
+    view.reviewPassReadiness?.readinessRows[0].readinessRowId,
+  );
+  assert.equal(
+    view.reviewEvidenceTrace?.selectedTraceRow.sourceResolutionIds[0],
+    view.reviewGapResolution?.resolutionRows[0].resolutionId,
+  );
+  assert.equal(
+    view.reviewEvidenceTrace?.selectedTraceRow.sourceMatrixRowIds[0],
+    view.reviewHandoffCoverageMatrix?.rows[0].rowId,
+  );
+  assert.equal(
+    view.reviewEvidenceTrace?.proofCommandReferences[0].commandId,
+    "review-evidence-trace",
+  );
+  assert.equal(view.reviewEvidenceTrace?.deferredBoundaryNotes.length, 1);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
