@@ -48,6 +48,7 @@ import { buildReviewProofReconciliation } from "../../lib/reviewProofReconciliat
 import { buildReviewSurfaceIndex } from "../../lib/reviewSurfaceIndex.ts";
 import { buildReviewWalkthroughPath } from "../../lib/reviewWalkthroughPath.ts";
 import { buildReviewObservationLens } from "../../lib/reviewObservationLens.ts";
+import { buildReviewObservationCoverage } from "../../lib/reviewObservationCoverage.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -183,6 +184,8 @@ export function buildMissionConsoleView(
   const reviewWalkthroughPath = buildReviewWalkthroughPath(reviewSurfaceIndex);
   const reviewObservationLens =
     buildReviewObservationLens(reviewWalkthroughPath);
+  const reviewObservationCoverage =
+    buildReviewObservationCoverage(reviewObservationLens);
 
   return {
     mission: {
@@ -227,6 +230,7 @@ export function buildMissionConsoleView(
     reviewSurfaceIndex,
     reviewWalkthroughPath,
     reviewObservationLens,
+    reviewObservationCoverage,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

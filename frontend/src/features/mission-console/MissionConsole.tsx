@@ -35,6 +35,7 @@ export function MissionConsole({
   const playback = view.replayPlayback;
   const currentPlaybackFrame = playback?.currentFrame;
   const observationLens = view.reviewObservationLens;
+  const observationCoverage = view.reviewObservationCoverage;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -900,6 +901,188 @@ export function MissionConsole({
                   </article>
                 ))}
               </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationCoverage ? (
+        <section
+          className="review-observation-coverage-section"
+          aria-label="Review observation coverage matrix and static blind spot map"
+        >
+          <a id="review-observation-coverage" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 33 observation coverage</span>
+              <h2>Observation coverage matrix and blind-spot map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationCoverage.localStatus}`}
+            >
+              {observationCoverage.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationCoverage.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Phases</span>
+              <strong>
+                {observationCoverage.summary.counts.phaseCoverageRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source stages</span>
+              <strong>
+                {observationCoverage.summary.counts.sourceStageCoverageRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Anchors</span>
+              <strong>{observationCoverage.summary.counts.localAnchorCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Blind spots</span>
+              <strong>{observationCoverage.summary.counts.blindSpotRowCount}</strong>
+            </div>
+          </div>
+          <div className="observation-coverage-layout">
+            <div className="observation-coverage-phase-list">
+              {observationCoverage.phaseCoverageRows.map((row) => (
+                <article
+                  key={row.phaseRowId}
+                  className={`observation-coverage-row observation-coverage-row-${row.workflowGroup}`}
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Phase {row.order} · {row.workflowGroup.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>{row.observationRowIds.length} rows</strong>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="surface-index-label-strip">
+                    {row.sourceStageNumbers.map((stageNumber) => (
+                      <span key={`${row.phaseRowId}:${stageNumber}`}>
+                        Stage {stageNumber}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{row.anchorIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Attention</span>
+                      <strong>{row.attentionKinds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Counts</span>
+                      <strong>{row.countSignalIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{row.deferredBoundarySummaryIds.length}</strong>
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-coverage-panel">
+              <span className="metric-label">Coverage summary</span>
+              <strong>{observationCoverage.summary.label}</strong>
+              <p>{observationCoverage.summary.summary}</p>
+              <div className="surface-index-count-grid">
+                <div>
+                  <span className="metric-label">Local hrefs</span>
+                  <strong>{observationCoverage.anchorCoverage.localHrefCount}</strong>
+                </div>
+                <div>
+                  <span className="metric-label">Count signals</span>
+                  <strong>
+                    {observationCoverage.countSignalCoverage.totalSignalCount}
+                  </strong>
+                </div>
+                <div>
+                  <span className="metric-label">Deferred boundaries</span>
+                  <strong>
+                    {
+                      observationCoverage.deferredBoundaryCoverage
+                        .totalBoundaryCount
+                    }
+                  </strong>
+                </div>
+                <div>
+                  <span className="metric-label">Attention rows</span>
+                  <strong>
+                    {observationCoverage.summary.counts.attentionCoverageRowCount}
+                  </strong>
+                </div>
+              </div>
+              <div className="observation-coverage-source-list">
+                {observationCoverage.sourceStageCoverageRows.map((row) => (
+                  <article key={row.sourceStageRowId}>
+                    <span className="event-type">
+                      {row.workflowGroups.map((group) => group.replace(/_/g, " ")).join(", ")}
+                    </span>
+                    <strong>{row.label}</strong>
+                    <p>{row.sourceContractLabels.join(", ")}</p>
+                    <div className="gap-reference-strip">
+                      {row.anchorIds.map((anchorId) => (
+                        <a key={`${row.sourceStageRowId}:${anchorId}`} href={`#${anchorId}`}>
+                          {anchorId}
+                        </a>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-coverage-attention-list">
+                {observationCoverage.attentionCoverageRows.map((row) => (
+                  <article key={row.attentionCoverageRowId}>
+                    <span className="event-type">
+                      Attention {row.order} · {row.kind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{row.label}</strong>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Rows</span>
+                        <strong>{row.observationRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.anchorIds.length}</strong>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-coverage-blind-spot-list">
+                {observationCoverage.blindSpotRows.map((row) => (
+                  <article key={row.blindSpotRowId}>
+                    <span className="event-type">
+                      {row.kind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{row.label}</strong>
+                    <p>{row.summary}</p>
+                    <div className="gap-reference-strip">
+                      {row.sourceDeferredBoundarySummaryIds.map((summaryId) => (
+                        <span key={`${row.blindSpotRowId}:${summaryId}`}>
+                          {summaryId.replace("review-observation-boundary:", "")}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p>{observationCoverage.staticCoverageSummary}</p>
             </aside>
           </div>
         </section>

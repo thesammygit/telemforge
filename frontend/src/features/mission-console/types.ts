@@ -2383,6 +2383,167 @@ export interface ReviewObservationLensView {
   sourceWalkthroughPath: ReviewWalkthroughPathView;
 }
 
+export type ReviewObservationBlindSpotKind =
+  | "absent_saved_review_state"
+  | "absent_identity_or_signoff"
+  | "absent_execution_or_scoring"
+  | "deferred_production_boundary";
+
+export interface ReviewObservationCoveragePhaseRowView {
+  phaseRowId: string;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  order: number;
+  label: string;
+  summary: string;
+  observationRowIds: string[];
+  sourceStageNumbers: number[];
+  anchorIds: string[];
+  attentionKinds: ReviewObservationAttentionKind[];
+  countSignalIds: string[];
+  deferredBoundarySummaryIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCoverageSourceStageRowView {
+  sourceStageRowId: string;
+  sourceStageNumber: number;
+  label: string;
+  observationRowIds: string[];
+  workflowGroups: ReviewSurfaceWorkflowGroupKind[];
+  sourceSchemas: string[];
+  sourceContractLabels: string[];
+  anchorIds: string[];
+  countSignalIds: string[];
+  deferredBoundarySummaryIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCoverageAttentionRowView {
+  attentionCoverageRowId: string;
+  sourceAttentionGroupId: string;
+  kind: ReviewObservationAttentionKind;
+  order: number;
+  label: string;
+  summary: string;
+  observationRowIds: string[];
+  anchorIds: string[];
+  countSignalIds: string[];
+  deferredBoundarySummaryIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCoverageAnchorSummaryView {
+  totalAnchorCount: number;
+  coveredObservationRowCount: number;
+  localHrefCount: number;
+  anchorIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+}
+
+export interface ReviewObservationCoverageCountSignalSummaryView {
+  totalSignalCount: number;
+  coveredObservationRowCount: number;
+  sourcePaths: string[];
+  signalIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCoverageDeferredBoundarySummaryView {
+  totalBoundaryCount: number;
+  affectedObservationRowIds: string[];
+  sourceAnchorIds: string[];
+  summaryIds: string[];
+  informationalOnly: true;
+  nonActionable: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCoverageBlindSpotRowView {
+  blindSpotRowId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  summary: string;
+  sourceObservationRowIds: string[];
+  sourceAnchorIds: string[];
+  sourceDeferredBoundarySummaryIds: string[];
+  staticReviewContext: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationCoverageSummaryView {
+  coverageId: "candidate-local-review-observation-coverage";
+  label: string;
+  summary: string;
+  defaultPhaseRowId: string;
+  defaultSourceStageRowId: string;
+  defaultAttentionCoverageRowId: string;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    phaseCoverageRowCount: number;
+    sourceStageCoverageRowCount: number;
+    attentionCoverageRowCount: number;
+    localAnchorCount: number;
+    countSignalCount: number;
+    deferredBoundaryCount: number;
+    blindSpotRowCount: number;
+    localOnlyCoverageRowCount: number;
+  };
+}
+
+export interface ReviewObservationCoverageView {
+  schema: "telemforge.review_observation_coverage.v1";
+  version: 1;
+  contractLabel: "local deterministic observation coverage matrix and static blind-spot map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationCoverageSummaryView;
+  phaseCoverageRows: ReviewObservationCoveragePhaseRowView[];
+  sourceStageCoverageRows: ReviewObservationCoverageSourceStageRowView[];
+  attentionCoverageRows: ReviewObservationCoverageAttentionRowView[];
+  anchorCoverage: ReviewObservationCoverageAnchorSummaryView;
+  countSignalCoverage: ReviewObservationCoverageCountSignalSummaryView;
+  deferredBoundaryCoverage: ReviewObservationCoverageDeferredBoundarySummaryView;
+  blindSpotRows: ReviewObservationCoverageBlindSpotRowView[];
+  staticCoverageSummary: string;
+  sourceObservationLens: ReviewObservationLensView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -2573,6 +2734,7 @@ export interface MissionConsoleView {
   reviewSurfaceIndex?: ReviewSurfaceIndexView;
   reviewWalkthroughPath?: ReviewWalkthroughPathView;
   reviewObservationLens?: ReviewObservationLensView;
+  reviewObservationCoverage?: ReviewObservationCoverageView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
