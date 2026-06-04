@@ -59,6 +59,7 @@ For each stage:
 30. [Review Surface Index And Local Navigation Map](steps/30-review-surface-index-and-local-navigation-map.md)
 31. [Review Walkthrough Path And Static Prompt Deck](steps/31-review-walkthrough-path-and-static-prompt-deck.md)
 32. [Review Observation Lens And Static Attention Map](steps/32-review-observation-lens-and-static-attention-map.md)
+33. [Review Observation Coverage And Static Blind-Spot Map](steps/33-review-observation-coverage-and-static-blind-spot-map.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
