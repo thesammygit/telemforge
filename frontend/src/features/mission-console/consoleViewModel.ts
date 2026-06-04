@@ -33,6 +33,7 @@ import { buildReviewActionQueue } from "../../lib/reviewActionQueue.ts";
 import { buildReviewActionWalkthrough } from "../../lib/reviewActionWalkthrough.ts";
 import { buildReviewBriefingBoard } from "../../lib/reviewBriefingBoard.ts";
 import { buildReviewDecisionRegister } from "../../lib/reviewDecisionRegister.ts";
+import { buildReviewGapResolution } from "../../lib/reviewGapResolution.ts";
 import { buildReviewGapTriage } from "../../lib/reviewGapTriage.ts";
 import { buildReviewHandoffCoverageMatrix } from "../../lib/reviewHandoffCoverageMatrix.ts";
 import { buildReviewHandoffRehearsal } from "../../lib/reviewHandoffRehearsal.ts";
@@ -139,6 +140,7 @@ export function buildMissionConsoleView(
     reviewHandoffRehearsal,
   );
   const reviewGapTriage = buildReviewGapTriage(reviewHandoffCoverageMatrix);
+  const reviewGapResolution = buildReviewGapResolution(reviewGapTriage);
 
   return {
     mission: {
@@ -171,6 +173,7 @@ export function buildMissionConsoleView(
     reviewHandoffRehearsal,
     reviewHandoffCoverageMatrix,
     reviewGapTriage,
+    reviewGapResolution,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

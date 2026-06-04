@@ -2015,6 +2015,54 @@ button {
   padding-top: 10px;
 }
 
+.gap-resolution-layout .gap-group {
+  display: grid;
+  gap: 10px;
+}
+
+.resolution-target-list {
+  display: grid;
+  gap: 8px;
+}
+
+.resolution-target-row,
+.resolution-summary-card {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 10px 12px;
+}
+
+.resolution-target-row strong,
+.resolution-summary-card strong {
+  display: block;
+  margin-top: 3px;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.25;
+}
+
+.resolution-target-row p,
+.resolution-summary-card p {
+  margin: 7px 0 0;
+  color: #52636f;
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.resolution-target-needs_static_local_proof {
+  border-left: 4px solid #a76a16;
+}
+
+.resolution-target-deferred_production_boundary {
+  border-left: 4px solid #66717b;
+}
+
+.resolution-target-static_proof_ready {
+  border-left: 4px solid #12745b;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

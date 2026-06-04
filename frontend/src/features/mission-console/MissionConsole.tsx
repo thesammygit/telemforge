@@ -1403,6 +1403,174 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewGapResolution ? (
+        <section
+          className="review-gap-section"
+          aria-label="Local review gap resolution"
+        >
+          <a id="review-gap-resolution" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 21 gap resolution</span>
+              <h2>Resolution proof checklist</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewGapResolution.readiness.verdict}`}
+            >
+              {view.reviewGapResolution.readiness.verdict.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewGapResolution.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Rows</span>
+              <strong>
+                {
+                  view.reviewGapResolution.readiness.counts
+                    .totalResolutionRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local targets</span>
+              <strong>
+                {
+                  view.reviewGapResolution.readiness.counts
+                    .localActionableRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Checklist</span>
+              <strong>
+                {
+                  view.reviewGapResolution.readiness.counts
+                    .evidenceTargetChecklistRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Proof refs</span>
+              <strong>
+                {
+                  view.reviewGapResolution.readiness.counts
+                    .proofCommandReferenceCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="gap-triage-layout gap-resolution-layout">
+            <div className="gap-group-list">
+              {view.reviewGapResolution.resolutionRows.map((row) => (
+                <article
+                  key={row.resolutionId}
+                  className={`gap-group gap-group-${row.category}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span
+                        className={`status-chip action-priority-chip-${row.priority}`}
+                      >
+                        {row.priority.toUpperCase()}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.summary}</p>
+                  <p className="action-next-step">
+                    {row.nextStaticLocalProofStep}
+                  </p>
+                  <div className="gap-reference-strip">
+                    {row.sourceMatrixRowIds.map((rowId) => (
+                      <span key={`${row.resolutionId}:${rowId}`}>{rowId}</span>
+                    ))}
+                    {row.sourceActionIds.map((actionId) => (
+                      <span key={`${row.resolutionId}:${actionId}`}>
+                        {actionId}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="gap-bucket-strip">
+                    {row.sourceBuckets.map((bucket) => (
+                      <span key={`${row.resolutionId}:${bucket.bucketId}`}>
+                        {bucket.label}: {bucket.count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="resolution-target-list">
+                    {row.evidenceTargetChecklistRows.map((target) => (
+                      <article
+                        key={target.targetRowId}
+                        className={`resolution-target-row resolution-target-${target.status}`}
+                      >
+                        <div>
+                          <span className="event-type">
+                            {target.status.replace(/_/g, " ")}
+                          </span>
+                          <strong>{target.label}</strong>
+                        </div>
+                        <p>{target.nextStaticLocalProofStep}</p>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="gap-proof-strip">
+                    {row.proofCommandReferences.map((command) => (
+                      <span key={`${row.resolutionId}:${command.commandId}`}>
+                        {command.label}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="gap-proof-panel">
+              <span className="metric-label">Resolution readiness</span>
+              <strong>{view.reviewGapResolution.readiness.label}</strong>
+              <p>{view.reviewGapResolution.readiness.summary}</p>
+              <p className="human-test-gate">
+                {view.reviewGapResolution.staticProofChecklistSummary}
+              </p>
+              <div className="resolution-summary-card">
+                <span className="metric-label">Top local blocker</span>
+                <strong>
+                  {view.reviewGapResolution.localResolutionSummary
+                    .topLocalBlockerLabel ?? "No local blockers"}
+                </strong>
+                <p>
+                  {
+                    view.reviewGapResolution.localResolutionSummary
+                      .nextStaticLocalProofStep
+                  }
+                </p>
+              </div>
+              <div className="coverage-command-list">
+                {view.reviewGapResolution.proofCommandReferences.map((command) => (
+                  <article key={command.commandId} className="coverage-command-row">
+                    <strong>{command.label}</strong>
+                    <code>{command.command}</code>
+                    <p>{command.purpose}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="gap-deferred-list">
+                {view.reviewGapResolution.deferredBoundaryNotes.map(
+                  (boundary) => (
+                    <article key={boundary.boundaryId}>
+                      <strong>{boundary.label}</strong>
+                      <p>{boundary.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

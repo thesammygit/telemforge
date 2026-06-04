@@ -311,6 +311,29 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewGapTriage?.staticProofChecklistSummary,
     "Proof commands are static repo-relative references for the reviewer; the mission console does not execute shell commands.",
   );
+  assert.ok(view.reviewGapResolution);
+  assert.equal(
+    view.reviewGapResolution?.schema,
+    "telemforge.review_gap_resolution.v1",
+  );
+  assert.equal(
+    view.reviewGapResolution?.readiness.verdict,
+    "local_resolution_targets_ready",
+  );
+  assert.equal(view.reviewGapResolution?.resolutionRows.length, 3);
+  assert.equal(
+    view.reviewGapResolution?.resolutionRows[0].sourceMatrixRowIds[0],
+    view.reviewGapTriage?.nextPassItems[0].sourceMatrixRowIds[0],
+  );
+  assert.equal(
+    view.reviewGapResolution?.resolutionRows[0].evidenceTargetChecklistRows[0]
+      .proofCommandIds[0],
+    "review-gap-resolution",
+  );
+  assert.equal(
+    view.reviewGapResolution?.staticProofChecklistSummary,
+    "Stage 21 proof commands are static repo-relative references only; the mission console does not execute commands or store reviewer progress.",
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -506,6 +529,14 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   );
   assert.equal(
     selectedView.reviewGapTriage?.nextPassItems[0].actionability,
+    "deferred_non_actionable",
+  );
+  assert.equal(
+    selectedView.reviewGapResolution?.readiness.verdict,
+    "deferred_production_only",
+  );
+  assert.equal(
+    selectedView.reviewGapResolution?.resolutionRows[0].actionability,
     "deferred_non_actionable",
   );
   assert.ok(

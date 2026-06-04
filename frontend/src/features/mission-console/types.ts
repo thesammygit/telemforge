@@ -741,6 +741,96 @@ export interface ReviewGapTriageView {
   sourceEvidenceReferences: string[];
 }
 
+export type ReviewGapResolutionReadinessVerdict =
+  | "local_resolution_targets_ready"
+  | "deferred_production_only"
+  | "ready_for_next_local_review";
+
+export type ReviewGapResolutionEvidenceTargetStatus =
+  | "needs_static_local_proof"
+  | "deferred_production_boundary"
+  | "static_proof_ready";
+
+export interface ReviewGapResolutionProofCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  source: "stage21_resolution" | ReviewGapTriageProofCommandReferenceView["source"];
+}
+
+export interface ReviewGapResolutionEvidenceTargetChecklistRowView {
+  targetRowId: string;
+  triageItemId: string;
+  label: string;
+  status: ReviewGapResolutionEvidenceTargetStatus;
+  actionability: ReviewGapTriageActionability;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  sourceBucketLabels: string[];
+  proofCommandIds: string[];
+  nextStaticLocalProofStep: string;
+}
+
+export interface ReviewGapResolutionPlaybookRowView {
+  resolutionId: string;
+  rank: number;
+  priority: ReviewGapTriagePriority;
+  category: ReviewGapTriageCategory;
+  actionability: ReviewGapTriageActionability;
+  label: string;
+  summary: string;
+  blockerSummary: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  sourceBuckets: ReviewHandoffCoverageSourceBucketView[];
+  proofCommandReferences: ReviewGapResolutionProofCommandReferenceView[];
+  evidenceTargetChecklistRows: ReviewGapResolutionEvidenceTargetChecklistRowView[];
+  nextStaticLocalProofStep: string;
+}
+
+export interface ReviewGapResolutionLocalSummaryView {
+  summaryId: string;
+  actionableRowCount: number;
+  topLocalBlockerLabel: string | null;
+  nextStaticLocalProofStep: string;
+}
+
+export interface ReviewGapResolutionDeferredBoundaryNoteView {
+  boundaryId: string;
+  label: string;
+  summary: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  deferredNotes: string[];
+  actionability: "deferred_non_actionable";
+}
+
+export interface ReviewGapResolutionView {
+  schema: "telemforge.review_gap_resolution.v1";
+  version: 1;
+  contractLabel: "local deterministic review gap resolution";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readiness: {
+    verdict: ReviewGapResolutionReadinessVerdict;
+    label: string;
+    summary: string;
+    counts: {
+      totalResolutionRowCount: number;
+      localActionableRowCount: number;
+      deferredProductionRowCount: number;
+      evidenceTargetChecklistRowCount: number;
+      proofCommandReferenceCount: number;
+      sourceMatrixRowCount: number;
+    };
+  };
+  resolutionRows: ReviewGapResolutionPlaybookRowView[];
+  evidenceTargetChecklistRows: ReviewGapResolutionEvidenceTargetChecklistRowView[];
+  proofCommandReferences: ReviewGapResolutionProofCommandReferenceView[];
+  localResolutionSummary: ReviewGapResolutionLocalSummaryView;
+  deferredBoundaryNotes: ReviewGapResolutionDeferredBoundaryNoteView[];
+  staticProofChecklistSummary: string;
+  sourceTriageItems: ReviewGapTriageNextPassItemView[];
+  sourceEvidenceReferences: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -919,6 +1009,7 @@ export interface MissionConsoleView {
   reviewHandoffRehearsal?: ReviewHandoffRehearsalView;
   reviewHandoffCoverageMatrix?: ReviewHandoffCoverageMatrixView;
   reviewGapTriage?: ReviewGapTriageView;
+  reviewGapResolution?: ReviewGapResolutionView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
