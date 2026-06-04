@@ -780,6 +780,31 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationCitations?.summary.counts.phaseCitationGroupCount,
     view.reviewObservationCoverage?.phaseCoverageRows.length,
   );
+  assert.ok(view.reviewObservationBoundaryLedger);
+  assert.equal(
+    view.reviewObservationBoundaryLedger?.schema,
+    "telemforge.review_observation_boundary_ledger.v1",
+  );
+  assert.equal(
+    view.reviewObservationBoundaryLedger?.sourceObservationCitations,
+    view.reviewObservationCitations,
+  );
+  assert.deepEqual(
+    view.reviewObservationBoundaryLedger?.boundaryRows.map((row) => [
+      row.sourceSummaryId,
+      row.sourceBoundaryCitationId,
+      row.relatedObservationRowIds.length,
+    ]),
+    view.reviewObservationCitations?.deferredBoundaryCitations.map((citation) => [
+      citation.sourceSummaryId,
+      citation.citationId,
+      citation.sourceObservationRowIds.length,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationBoundaryLedger?.summary.counts.sourceCitationRowCount,
+    view.reviewObservationCitations?.citationRows.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -797,6 +822,8 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
   assert.equal(view.reviewWalkthroughPath?.localStatus, "local-live");
   assert.equal(view.reviewObservationLens?.localStatus, "local-live");
   assert.equal(view.reviewObservationCoverage?.localStatus, "local-live");
+  assert.equal(view.reviewObservationCitations?.localStatus, "local-live");
+  assert.equal(view.reviewObservationBoundaryLedger?.localStatus, "local-live");
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
     view.reviewWalkthroughPath?.steps[0].localStatusLabel,

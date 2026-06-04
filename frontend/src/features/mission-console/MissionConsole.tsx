@@ -37,6 +37,7 @@ export function MissionConsole({
   const observationLens = view.reviewObservationLens;
   const observationCoverage = view.reviewObservationCoverage;
   const observationCitations = view.reviewObservationCitations;
+  const observationBoundaryLedger = view.reviewObservationBoundaryLedger;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -1292,6 +1293,181 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationCitations.staticCitationSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationBoundaryLedger ? (
+        <section
+          className="review-observation-boundary-ledger-section"
+          aria-label="Review observation deferred-boundary ledger"
+        >
+          <a id="review-observation-boundary-ledger" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 35 boundary ledger</span>
+              <h2>Deferred-boundary ledger and static non-goal map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationBoundaryLedger.localStatus}`}
+            >
+              {observationBoundaryLedger.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationBoundaryLedger.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Boundary rows</span>
+              <strong>
+                {observationBoundaryLedger.summary.counts.boundaryRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Observation refs</span>
+              <strong>
+                {
+                  observationBoundaryLedger.summary.counts
+                    .observationReferenceGroupCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Anchor refs</span>
+              <strong>
+                {
+                  observationBoundaryLedger.summary.counts
+                    .anchorReferenceGroupCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Non-goals</span>
+              <strong>
+                {observationBoundaryLedger.summary.counts.staticNonGoalNoteCount}
+              </strong>
+            </div>
+          </div>
+          <div className="observation-boundary-ledger-layout">
+            <div className="observation-boundary-ledger-row-list">
+              {observationBoundaryLedger.boundaryRows.map((row) => (
+                <article key={row.boundaryRowId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Deferred boundary · {row.sourceSummaryId.replace("review-observation-boundary:", "")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.relatedObservationRowIds.length} obs
+                    </span>
+                  </div>
+                  <p>{row.sourceSummary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{row.sourceAnchorIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stages</span>
+                      <strong>{row.relatedSourceStageNumbers.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Notes</span>
+                      <strong>{row.staticNonGoalNoteIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Actionable</span>
+                      <strong>{row.nonActionable ? "no" : "yes"}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.sourceAnchorHrefs.map((href) => (
+                      <a key={`${row.boundaryRowId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    {row.relatedSourceStageNumbers.map((stageNumber) => (
+                      <span key={`${row.boundaryRowId}:stage:${stageNumber}`}>
+                        Stage {stageNumber}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-boundary-ledger-panel">
+              <span className="metric-label">Ledger summary</span>
+              <strong>{observationBoundaryLedger.summary.label}</strong>
+              <p>{observationBoundaryLedger.summary.summary}</p>
+              <div className="observation-boundary-ledger-observation-list">
+                {observationBoundaryLedger.observationReferenceGroups.map(
+                  (group) => (
+                    <article key={group.observationGroupId}>
+                      <span className="event-type">
+                        Observation {group.observationNumber} · Stage{" "}
+                        {group.sourceStageNumber}
+                      </span>
+                      <strong>{group.label}</strong>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Boundaries</span>
+                          <strong>{group.boundaryRowIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Local anchor</span>
+                          <strong>
+                            {group.localAnchor.inPageOnly ? "in page" : "route"}
+                          </strong>
+                        </div>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-boundary-ledger-anchor-list">
+                {observationBoundaryLedger.anchorReferenceGroups.map((group) => (
+                  <article key={group.anchorGroupId}>
+                    <span className="event-type">Local anchor boundary</span>
+                    <strong>{group.label}</strong>
+                    <div className="gap-reference-strip">
+                      <a href={group.href}>{group.anchorId}</a>
+                      {group.relatedSourceStageNumbers.map((stageNumber) => (
+                        <span key={`${group.anchorGroupId}:${stageNumber}`}>
+                          Stage {stageNumber}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-boundary-ledger-source-list">
+                {observationBoundaryLedger.sourceStageBoundaryGroups.map(
+                  (group) => (
+                    <article key={group.sourceStageGroupId}>
+                      <span className="event-type">Source-stage boundary</span>
+                      <strong>{group.label}</strong>
+                      <p>{group.sourceContractLabels.join(", ")}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-boundary-ledger-non-goal-list">
+                {observationBoundaryLedger.staticNonGoalNotes.map((note) => (
+                  <article key={note.nonGoalNoteId}>
+                    <span className="event-type">
+                      {note.kind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                  </article>
+                ))}
+              </div>
+              <p>{observationBoundaryLedger.staticBoundarySummary}</p>
             </aside>
           </div>
         </section>

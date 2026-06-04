@@ -174,6 +174,7 @@ button {
 .review-observation-lens-section,
 .review-observation-coverage-section,
 .review-observation-citation-section,
+.review-observation-boundary-ledger-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -416,6 +417,7 @@ button {
 .review-observation-lens-section,
 .review-observation-coverage-section,
 .review-observation-citation-section,
+.review-observation-boundary-ledger-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -500,6 +502,10 @@ button {
 }
 
 .review-observation-citation-section {
+  padding: 18px;
+}
+
+.review-observation-boundary-ledger-section {
   padding: 18px;
 }
 
@@ -2462,6 +2468,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-boundary-ledger-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2516,7 +2529,13 @@ button {
 .observation-citation-source-list,
 .observation-citation-phase-list,
 .observation-citation-boundary-list,
-.observation-citation-blind-spot-list {
+.observation-citation-blind-spot-list,
+.observation-boundary-ledger-row-list,
+.observation-boundary-ledger-panel,
+.observation-boundary-ledger-observation-list,
+.observation-boundary-ledger-anchor-list,
+.observation-boundary-ledger-source-list,
+.observation-boundary-ledger-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2574,7 +2593,13 @@ button {
 .observation-citation-source-list article,
 .observation-citation-phase-list article,
 .observation-citation-boundary-list article,
-.observation-citation-blind-spot-list article {
+.observation-citation-blind-spot-list article,
+.observation-boundary-ledger-row-list article,
+.observation-boundary-ledger-panel,
+.observation-boundary-ledger-observation-list article,
+.observation-boundary-ledger-anchor-list article,
+.observation-boundary-ledger-source-list article,
+.observation-boundary-ledger-non-goal-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2591,7 +2616,8 @@ button {
 .walkthrough-path-step,
 .observation-row,
 .observation-coverage-row,
-.observation-citation-row {
+.observation-citation-row,
+.observation-boundary-ledger-row-list article {
   display: grid;
   gap: 10px;
 }
@@ -2817,7 +2843,13 @@ button {
 .observation-citation-source-list strong,
 .observation-citation-phase-list strong,
 .observation-citation-boundary-list strong,
-.observation-citation-blind-spot-list strong {
+.observation-citation-blind-spot-list strong,
+.observation-boundary-ledger-row-list h3,
+.observation-boundary-ledger-panel strong,
+.observation-boundary-ledger-observation-list strong,
+.observation-boundary-ledger-anchor-list strong,
+.observation-boundary-ledger-source-list strong,
+.observation-boundary-ledger-non-goal-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2867,7 +2899,13 @@ button {
 .observation-citation-panel p,
 .observation-citation-source-list p,
 .observation-citation-boundary-list p,
-.observation-citation-blind-spot-list p {
+.observation-citation-blind-spot-list p,
+.observation-boundary-ledger-row-list p,
+.observation-boundary-ledger-panel p,
+.observation-boundary-ledger-observation-list p,
+.observation-boundary-ledger-anchor-list p,
+.observation-boundary-ledger-source-list p,
+.observation-boundary-ledger-non-goal-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2903,7 +2941,11 @@ button {
 .observation-citation-source-list article,
 .observation-citation-phase-list article,
 .observation-citation-boundary-list article,
-.observation-citation-blind-spot-list article {
+.observation-citation-blind-spot-list article,
+.observation-boundary-ledger-observation-list article,
+.observation-boundary-ledger-anchor-list article,
+.observation-boundary-ledger-source-list article,
+.observation-boundary-ledger-non-goal-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
@@ -3026,7 +3068,11 @@ button {
 .observation-boundary-list,
 .observation-citation-source-list,
 .observation-citation-boundary-list,
-.observation-citation-blind-spot-list {
+.observation-citation-blind-spot-list,
+.observation-boundary-ledger-observation-list,
+.observation-boundary-ledger-anchor-list,
+.observation-boundary-ledger-source-list,
+.observation-boundary-ledger-non-goal-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3313,6 +3359,7 @@ button {
   .observation-lens-layout,
   .observation-coverage-layout,
   .observation-citation-layout,
+  .observation-boundary-ledger-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
