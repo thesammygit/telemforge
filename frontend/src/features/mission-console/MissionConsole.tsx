@@ -38,6 +38,8 @@ export function MissionConsole({
   const observationCoverage = view.reviewObservationCoverage;
   const observationCitations = view.reviewObservationCitations;
   const observationBoundaryLedger = view.reviewObservationBoundaryLedger;
+  const observationBoundaryWalkthrough =
+    view.reviewObservationBoundaryWalkthrough;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -1468,6 +1470,181 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationBoundaryLedger.staticBoundarySummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationBoundaryWalkthrough ? (
+        <section
+          className="review-observation-boundary-walkthrough-section"
+          aria-label="Review observation boundary walkthrough"
+        >
+          <a
+            id="review-observation-boundary-walkthrough"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 36 boundary walkthrough</span>
+              <h2>Boundary source path and static guardrails</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationBoundaryWalkthrough.localStatus}`}
+            >
+              {observationBoundaryWalkthrough.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationBoundaryWalkthrough.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Steps</span>
+              <strong>
+                {observationBoundaryWalkthrough.summary.counts.boundaryStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source paths</span>
+              <strong>
+                {
+                  observationBoundaryWalkthrough.summary.counts
+                    .sourcePathGroupCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Guardrails</span>
+              <strong>
+                {
+                  observationBoundaryWalkthrough.summary.counts
+                    .staticGuardrailGroupCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default focus</span>
+              <strong>
+                {observationBoundaryWalkthrough.defaultFocus.sourceSummaryId.replace(
+                  "review-observation-boundary:",
+                  "",
+                )}
+              </strong>
+            </div>
+          </div>
+          <div className="observation-boundary-walkthrough-layout">
+            <div className="observation-boundary-walkthrough-step-list">
+              {observationBoundaryWalkthrough.steps.map((step) => (
+                <article key={step.stepId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Step {step.stepNumber} ·{" "}
+                        {step.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{step.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {step.relatedObservationRowIds.length} obs
+                    </span>
+                  </div>
+                  <p>{step.sourceSummary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{step.sourceAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stages</span>
+                      <strong>{step.relatedSourceStageNumbers.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Source paths</span>
+                      <strong>{step.sourcePathGroupIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Guardrails</span>
+                      <strong>{step.staticGuardrailGroupIds.length}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {step.sourceAnchorHrefs.map((href) => (
+                      <a key={`${step.stepId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    {step.relatedSourceStageNumbers.map((stageNumber) => (
+                      <span key={`${step.stepId}:stage:${stageNumber}`}>
+                        Stage {stageNumber}
+                      </span>
+                    ))}
+                    {step.staticNonGoalNoteIds.map((noteId) => (
+                      <span key={`${step.stepId}:${noteId}`}>
+                        {noteId.replace(
+                          "review-observation-boundary-non-goal:",
+                          "",
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                  {step.staticNonGoalContexts.length ? (
+                    <div className="observation-boundary-walkthrough-context-list">
+                      {step.staticNonGoalContexts.map((context) => (
+                        <div key={`${step.stepId}:${context.nonGoalNoteId}`}>
+                          <span className="event-type">
+                            {context.kind.replace(/_/g, " ")}
+                          </span>
+                          <strong>{context.label}</strong>
+                          <p>{context.summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="observation-boundary-walkthrough-panel">
+              <span className="metric-label">Default source path</span>
+              <strong>{observationBoundaryWalkthrough.defaultFocus.label}</strong>
+              <p>{observationBoundaryWalkthrough.defaultFocus.summary}</p>
+              <div className="observation-boundary-walkthrough-source-list">
+                {observationBoundaryWalkthrough.sourcePathGroups.map((group) => (
+                  <article key={group.sourcePathGroupId}>
+                    <span className="event-type">
+                      Source Stage {group.sourceStageNumber}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <p>{group.sourceContractLabels.join(", ")}</p>
+                    <div className="gap-reference-strip">
+                      {group.anchorHrefs.map((href) => (
+                        <a key={`${group.sourcePathGroupId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{group.boundaryStepIds.length} steps</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-boundary-walkthrough-guardrail-list">
+                {observationBoundaryWalkthrough.staticGuardrailGroups.map(
+                  (group) => (
+                    <article key={group.guardrailGroupId}>
+                      <span className="event-type">
+                        {group.kind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{group.label}</strong>
+                      <p>{group.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <p>{observationBoundaryWalkthrough.staticWalkthroughSummary}</p>
             </aside>
           </div>
         </section>

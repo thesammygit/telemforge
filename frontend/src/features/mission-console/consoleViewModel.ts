@@ -51,6 +51,7 @@ import { buildReviewObservationLens } from "../../lib/reviewObservationLens.ts";
 import { buildReviewObservationCoverage } from "../../lib/reviewObservationCoverage.ts";
 import { buildReviewObservationCitations } from "../../lib/reviewObservationCitations.ts";
 import { buildReviewObservationBoundaryLedger } from "../../lib/reviewObservationBoundaryLedger.ts";
+import { buildReviewObservationBoundaryWalkthrough } from "../../lib/reviewObservationBoundaryWalkthrough.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -193,6 +194,8 @@ export function buildMissionConsoleView(
   );
   const reviewObservationBoundaryLedger =
     buildReviewObservationBoundaryLedger(reviewObservationCitations);
+  const reviewObservationBoundaryWalkthrough =
+    buildReviewObservationBoundaryWalkthrough(reviewObservationBoundaryLedger);
 
   return {
     mission: {
@@ -240,6 +243,7 @@ export function buildMissionConsoleView(
     reviewObservationCoverage,
     reviewObservationCitations,
     reviewObservationBoundaryLedger,
+    reviewObservationBoundaryWalkthrough,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

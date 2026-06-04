@@ -2873,6 +2873,156 @@ export interface ReviewObservationBoundaryLedgerView {
   sourceObservationCitations: ReviewObservationCitationTrailView;
 }
 
+export interface ReviewObservationBoundaryWalkthroughStaticContextView {
+  nonGoalNoteId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  summary: string;
+  staticReviewContext: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationBoundaryWalkthroughStepView {
+  stepId: string;
+  stepNumber: number;
+  sourceBoundaryRowId: string;
+  sourceBoundaryCitationId: string;
+  sourceSummaryId: string;
+  label: string;
+  sourceSummary: string;
+  sourceAnchorIds: string[];
+  sourceAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedCitationRowIds: string[];
+  relatedSourceStageNumbers: number[];
+  staticNonGoalNoteIds: string[];
+  sourcePathGroupIds: string[];
+  staticGuardrailGroupIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationBoundarySourcePathGroupView {
+  sourcePathGroupId: string;
+  sourceStageGroupId: string;
+  sourceMapRowId: string;
+  sourceStageNumber: number;
+  label: string;
+  sourceSchemas: string[];
+  sourceContractLabels: string[];
+  boundaryRowIds: string[];
+  boundaryStepIds: string[];
+  relatedObservationRowIds: string[];
+  anchorHrefs: string[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationBoundaryStaticGuardrailGroupView {
+  guardrailGroupId: string;
+  sourceNonGoalNoteId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  summary: string;
+  boundaryRowIds: string[];
+  boundaryStepIds: string[];
+  sourceObservationRowIds: string[];
+  sourceAnchorIds: string[];
+  localOnly: true;
+  staticReviewContext: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationBoundaryWalkthroughDefaultFocusView {
+  walkthroughId: "candidate-local-review-observation-boundary-walkthrough";
+  label: string;
+  summary: string;
+  defaultStepId: string;
+  sourceBoundaryRowId: string;
+  sourceSummaryId: string;
+  sourceAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedSourceStageNumbers: number[];
+  staticNonGoalNoteIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationBoundaryWalkthroughSummaryView {
+  walkthroughId: "candidate-local-review-observation-boundary-walkthrough";
+  label: string;
+  summary: string;
+  defaultStepId: string;
+  defaultSourcePathGroupId: string;
+  defaultStaticGuardrailGroupId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    boundaryStepCount: number;
+    sourcePathGroupCount: number;
+    staticGuardrailGroupCount: number;
+    sourceLedgerBoundaryRowCount: number;
+    sourceLedgerObservationReferenceGroupCount: number;
+    sourceLedgerAnchorReferenceGroupCount: number;
+  };
+}
+
+export interface ReviewObservationBoundaryWalkthroughView {
+  schema: "telemforge.review_observation_boundary_walkthrough.v1";
+  version: 1;
+  contractLabel: "local deterministic boundary walkthrough and static source path";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationBoundaryWalkthroughSummaryView;
+  defaultFocus: ReviewObservationBoundaryWalkthroughDefaultFocusView;
+  steps: ReviewObservationBoundaryWalkthroughStepView[];
+  sourcePathGroups: ReviewObservationBoundarySourcePathGroupView[];
+  staticGuardrailGroups: ReviewObservationBoundaryStaticGuardrailGroupView[];
+  staticWalkthroughSummary: string;
+  sourceObservationBoundaryLedger: ReviewObservationBoundaryLedgerView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -3066,6 +3216,7 @@ export interface MissionConsoleView {
   reviewObservationCoverage?: ReviewObservationCoverageView;
   reviewObservationCitations?: ReviewObservationCitationTrailView;
   reviewObservationBoundaryLedger?: ReviewObservationBoundaryLedgerView;
+  reviewObservationBoundaryWalkthrough?: ReviewObservationBoundaryWalkthroughView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

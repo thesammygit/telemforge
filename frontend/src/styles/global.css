@@ -175,6 +175,7 @@ button {
 .review-observation-coverage-section,
 .review-observation-citation-section,
 .review-observation-boundary-ledger-section,
+.review-observation-boundary-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -418,6 +419,7 @@ button {
 .review-observation-coverage-section,
 .review-observation-citation-section,
 .review-observation-boundary-ledger-section,
+.review-observation-boundary-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -506,6 +508,10 @@ button {
 }
 
 .review-observation-boundary-ledger-section {
+  padding: 18px;
+}
+
+.review-observation-boundary-walkthrough-section {
   padding: 18px;
 }
 
@@ -2475,6 +2481,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-boundary-walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2535,7 +2548,11 @@ button {
 .observation-boundary-ledger-observation-list,
 .observation-boundary-ledger-anchor-list,
 .observation-boundary-ledger-source-list,
-.observation-boundary-ledger-non-goal-list {
+.observation-boundary-ledger-non-goal-list,
+.observation-boundary-walkthrough-step-list,
+.observation-boundary-walkthrough-panel,
+.observation-boundary-walkthrough-source-list,
+.observation-boundary-walkthrough-guardrail-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2599,7 +2616,11 @@ button {
 .observation-boundary-ledger-observation-list article,
 .observation-boundary-ledger-anchor-list article,
 .observation-boundary-ledger-source-list article,
-.observation-boundary-ledger-non-goal-list article {
+.observation-boundary-ledger-non-goal-list article,
+.observation-boundary-walkthrough-step-list article,
+.observation-boundary-walkthrough-panel,
+.observation-boundary-walkthrough-source-list article,
+.observation-boundary-walkthrough-guardrail-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2617,7 +2638,8 @@ button {
 .observation-row,
 .observation-coverage-row,
 .observation-citation-row,
-.observation-boundary-ledger-row-list article {
+.observation-boundary-ledger-row-list article,
+.observation-boundary-walkthrough-step-list article {
   display: grid;
   gap: 10px;
 }
@@ -2849,7 +2871,12 @@ button {
 .observation-boundary-ledger-observation-list strong,
 .observation-boundary-ledger-anchor-list strong,
 .observation-boundary-ledger-source-list strong,
-.observation-boundary-ledger-non-goal-list strong {
+.observation-boundary-ledger-non-goal-list strong,
+.observation-boundary-walkthrough-step-list h3,
+.observation-boundary-walkthrough-panel strong,
+.observation-boundary-walkthrough-source-list strong,
+.observation-boundary-walkthrough-guardrail-list strong,
+.observation-boundary-walkthrough-context-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2905,11 +2932,27 @@ button {
 .observation-boundary-ledger-observation-list p,
 .observation-boundary-ledger-anchor-list p,
 .observation-boundary-ledger-source-list p,
-.observation-boundary-ledger-non-goal-list p {
+.observation-boundary-ledger-non-goal-list p,
+.observation-boundary-walkthrough-step-list p,
+.observation-boundary-walkthrough-panel p,
+.observation-boundary-walkthrough-source-list p,
+.observation-boundary-walkthrough-guardrail-list p,
+.observation-boundary-walkthrough-context-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
   line-height: 1.45;
+}
+
+.observation-boundary-walkthrough-context-list {
+  display: grid;
+  gap: 8px;
+}
+
+.observation-boundary-walkthrough-context-list div {
+  min-width: 0;
+  border-left: 3px solid #8997a1;
+  padding-left: 10px;
 }
 
 .evidence-coverage-group-list article,
@@ -3360,6 +3403,7 @@ button {
   .observation-coverage-layout,
   .observation-citation-layout,
   .observation-boundary-ledger-layout,
+  .observation-boundary-walkthrough-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
