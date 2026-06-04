@@ -749,6 +749,37 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationCoverage?.summary.counts.sourceStageCoverageRowCount,
     view.reviewObservationLens?.observationRows.length,
   );
+  assert.ok(view.reviewObservationCitations);
+  assert.equal(
+    view.reviewObservationCitations?.schema,
+    "telemforge.review_observation_citations.v1",
+  );
+  assert.equal(
+    view.reviewObservationCitations?.sourceObservationCoverage,
+    view.reviewObservationCoverage,
+  );
+  assert.deepEqual(
+    view.reviewObservationCitations?.citationRows.map((row) => [
+      row.sourceStageNumber,
+      row.workflowGroup,
+      row.localAnchor.anchorId,
+      row.sourceObservationRowId,
+    ]),
+    view.reviewObservationLens?.observationRows.map((row) => [
+      row.sourceStageNumber,
+      row.workflowGroup,
+      row.anchor.anchorId,
+      row.observationRowId,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationCitations?.summary.counts.sourceMapRowCount,
+    view.reviewObservationCoverage?.sourceStageCoverageRows.length,
+  );
+  assert.equal(
+    view.reviewObservationCitations?.summary.counts.phaseCitationGroupCount,
+    view.reviewObservationCoverage?.phaseCoverageRows.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {

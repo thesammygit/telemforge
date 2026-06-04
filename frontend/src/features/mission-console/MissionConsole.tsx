@@ -36,6 +36,7 @@ export function MissionConsole({
   const currentPlaybackFrame = playback?.currentFrame;
   const observationLens = view.reviewObservationLens;
   const observationCoverage = view.reviewObservationCoverage;
+  const observationCitations = view.reviewObservationCitations;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -1083,6 +1084,214 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationCoverage.staticCoverageSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationCitations ? (
+        <section
+          className="review-observation-citation-section"
+          aria-label="Review observation citation trail and local source map"
+        >
+          <a id="review-observation-citations" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 34 observation citations</span>
+              <h2>Observation citation trail and local source map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationCitations.localStatus}`}
+            >
+              {observationCitations.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationCitations.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Citation rows</span>
+              <strong>
+                {observationCitations.summary.counts.citationRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source map</span>
+              <strong>
+                {observationCitations.summary.counts.sourceMapRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Count refs</span>
+              <strong>
+                {observationCitations.summary.counts.countSignalCitationCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Boundary refs</span>
+              <strong>
+                {
+                  observationCitations.summary.counts
+                    .deferredBoundaryCitationCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-citation-layout">
+            <div className="observation-citation-row-list">
+              {observationCitations.citationRows.map((row) => (
+                <article
+                  key={row.citationRowId}
+                  className={`observation-citation-row observation-citation-row-${row.workflowGroup}`}
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Citation {row.observationNumber} · Stage{" "}
+                        {row.sourceStageNumber} ·{" "}
+                        {row.workflowGroup.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <a
+                      className="surface-index-anchor"
+                      href={row.localAnchor.href}
+                    >
+                      {row.localAnchor.anchorId}
+                    </a>
+                  </div>
+                  <p>{row.sourceContractLabel}</p>
+                  <div className="surface-index-label-strip">
+                    <span>{row.sourceSchema}</span>
+                    <span>{row.sourceReferenceId}</span>
+                    <span>{row.sourceCoveragePhaseRowId}</span>
+                    <span>{row.sourceCoverageStageRowId}</span>
+                  </div>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Count paths</span>
+                      <strong>{row.countSignalSourcePaths.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Boundaries</span>
+                      <strong>{row.deferredBoundarySummaryIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Local anchor</span>
+                      <strong>{row.localAnchor.inPageOnly ? "in page" : "route"}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Executable</span>
+                      <strong>{row.nonExecutable ? "no" : "yes"}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.countSignalSourcePaths.map((sourcePath) => (
+                      <span key={`${row.citationRowId}:${sourcePath}`}>
+                        {sourcePath}
+                      </span>
+                    ))}
+                    {row.deferredBoundarySummaryIds.map((summaryId) => (
+                      <span key={`${row.citationRowId}:${summaryId}`}>
+                        {summaryId.replace("review-observation-boundary:", "")}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-citation-panel">
+              <span className="metric-label">Citation summary</span>
+              <strong>{observationCitations.summary.label}</strong>
+              <p>{observationCitations.summary.summary}</p>
+              <div className="observation-citation-source-list">
+                {observationCitations.sourceMapRows.map((row) => (
+                  <article key={row.sourceMapRowId}>
+                    <span className="event-type">
+                      {row.workflowGroups.map((group) => group.replace(/_/g, " ")).join(", ")}
+                    </span>
+                    <strong>{row.label}</strong>
+                    <p>{row.sourceContractLabels.join(", ")}</p>
+                    <div className="gap-reference-strip">
+                      {row.anchorHrefs.map((href) => (
+                        <a key={`${row.sourceMapRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-citation-phase-list">
+                {observationCitations.phaseCitationGroups.map((group) => (
+                  <article key={group.phaseCitationGroupId}>
+                    <span className="event-type">
+                      Phase {group.order} ·{" "}
+                      {group.workflowGroup.replace(/_/g, " ")}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Rows</span>
+                        <strong>{group.citationRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stages</span>
+                        <strong>{group.sourceStageNumbers.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Counts</span>
+                        <strong>{group.countSignalCitationIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{group.deferredBoundaryCitationIds.length}</strong>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="surface-index-nav-grid">
+                {observationCitations.anchorCitationGroups.map((group) => (
+                  <a
+                    key={group.anchorCitationGroupId}
+                    className="surface-index-nav-chip"
+                    href={group.href}
+                  >
+                    {group.label}
+                  </a>
+                ))}
+              </div>
+              <div className="observation-citation-boundary-list">
+                {observationCitations.deferredBoundaryCitations.map((citation) => (
+                  <article key={citation.citationId}>
+                    <span className="event-type">Deferred boundary citation</span>
+                    <strong>{citation.label}</strong>
+                    <p>{citation.summaryReference}</p>
+                    <div className="gap-reference-strip">
+                      {citation.sourceAnchorIds.map((anchorId) => (
+                        <span key={`${citation.citationId}:${anchorId}`}>
+                          {anchorId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-citation-blind-spot-list">
+                {observationCitations.blindSpotCitationNotes.map((note) => (
+                  <article key={note.citationNoteId}>
+                    <span className="event-type">
+                      {note.kind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                  </article>
+                ))}
+              </div>
+              <p>{observationCitations.staticCitationSummary}</p>
             </aside>
           </div>
         </section>

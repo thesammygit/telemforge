@@ -2544,6 +2544,185 @@ export interface ReviewObservationCoverageView {
   sourceObservationLens: ReviewObservationLensView;
 }
 
+export interface ReviewObservationCitationCountSignalView {
+  citationId: string;
+  sourceSignalId: string;
+  sourceObservationRowId: string;
+  sourceStepId: string;
+  sourceSurfaceId: string;
+  label: string;
+  value: number;
+  sourcePath: string;
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCitationDeferredBoundaryView {
+  citationId: string;
+  sourceSummaryId: string;
+  sourceObservationRowIds: string[];
+  label: string;
+  summaryReference: string;
+  sourceAnchorIds: string[];
+  nonActionable: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCitationRowView {
+  citationRowId: string;
+  sourceObservationRowId: string;
+  sourceCoveragePhaseRowId: string;
+  sourceCoverageStageRowId: string;
+  observationNumber: number;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  sourceStageNumber: number;
+  label: string;
+  sourceSchema: string;
+  sourceContractLabel: string;
+  sourceReferenceId: string;
+  localAnchor: {
+    anchorId: string;
+    href: string;
+    label: string;
+    inPageOnly: true;
+  };
+  countSignalCitationIds: string[];
+  countSignalSourcePaths: string[];
+  deferredBoundaryCitationIds: string[];
+  deferredBoundarySummaryIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCitationPhaseGroupView {
+  phaseCitationGroupId: string;
+  sourceCoveragePhaseRowId: string;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  order: number;
+  label: string;
+  citationRowIds: string[];
+  sourceStageNumbers: number[];
+  anchorIds: string[];
+  countSignalCitationIds: string[];
+  deferredBoundaryCitationIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCitationAnchorGroupView {
+  anchorCitationGroupId: string;
+  anchorId: string;
+  href: string;
+  label: string;
+  citationRowIds: string[];
+  sourceStageNumbers: number[];
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+}
+
+export interface ReviewObservationCitationSourceMapRowView {
+  sourceMapRowId: string;
+  sourceCoverageStageRowId: string;
+  sourceStageNumber: number;
+  label: string;
+  workflowGroups: ReviewSurfaceWorkflowGroupKind[];
+  sourceSchemas: string[];
+  sourceContractLabels: string[];
+  citationRowIds: string[];
+  anchorHrefs: string[];
+  countSignalSourcePaths: string[];
+  deferredBoundarySummaryIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationCitationBlindSpotNoteView {
+  citationNoteId: string;
+  sourceBlindSpotRowId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  summary: string;
+  sourceObservationRowIds: string[];
+  sourceAnchorIds: string[];
+  sourceDeferredBoundarySummaryIds: string[];
+  staticReviewContext: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationCitationSummaryView {
+  citationTrailId: "candidate-local-review-observation-citation-trail";
+  label: string;
+  summary: string;
+  defaultCitationRowId: string;
+  defaultSourceMapRowId: string;
+  defaultPhaseCitationGroupId: string;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    citationRowCount: number;
+    sourceMapRowCount: number;
+    phaseCitationGroupCount: number;
+    anchorCitationGroupCount: number;
+    countSignalCitationCount: number;
+    deferredBoundaryCitationCount: number;
+    blindSpotCitationNoteCount: number;
+  };
+}
+
+export interface ReviewObservationCitationTrailView {
+  schema: "telemforge.review_observation_citations.v1";
+  version: 1;
+  contractLabel: "local deterministic observation citation trail and source map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationCitationSummaryView;
+  citationRows: ReviewObservationCitationRowView[];
+  sourceMapRows: ReviewObservationCitationSourceMapRowView[];
+  phaseCitationGroups: ReviewObservationCitationPhaseGroupView[];
+  anchorCitationGroups: ReviewObservationCitationAnchorGroupView[];
+  countSignalCitations: ReviewObservationCitationCountSignalView[];
+  deferredBoundaryCitations: ReviewObservationCitationDeferredBoundaryView[];
+  blindSpotCitationNotes: ReviewObservationCitationBlindSpotNoteView[];
+  staticCitationSummary: string;
+  sourceObservationCoverage: ReviewObservationCoverageView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -2735,6 +2914,7 @@ export interface MissionConsoleView {
   reviewWalkthroughPath?: ReviewWalkthroughPathView;
   reviewObservationLens?: ReviewObservationLensView;
   reviewObservationCoverage?: ReviewObservationCoverageView;
+  reviewObservationCitations?: ReviewObservationCitationTrailView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

@@ -173,6 +173,7 @@ button {
 .review-walkthrough-path-section,
 .review-observation-lens-section,
 .review-observation-coverage-section,
+.review-observation-citation-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -414,6 +415,7 @@ button {
 .review-walkthrough-path-section,
 .review-observation-lens-section,
 .review-observation-coverage-section,
+.review-observation-citation-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -494,6 +496,10 @@ button {
 }
 
 .review-observation-lens-section {
+  padding: 18px;
+}
+
+.review-observation-citation-section {
   padding: 18px;
 }
 
@@ -2449,6 +2455,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-citation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2497,7 +2510,13 @@ button {
 .observation-coverage-panel,
 .observation-coverage-source-list,
 .observation-coverage-attention-list,
-.observation-coverage-blind-spot-list {
+.observation-coverage-blind-spot-list,
+.observation-citation-row-list,
+.observation-citation-panel,
+.observation-citation-source-list,
+.observation-citation-phase-list,
+.observation-citation-boundary-list,
+.observation-citation-blind-spot-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2549,7 +2568,13 @@ button {
 .observation-coverage-panel,
 .observation-coverage-source-list article,
 .observation-coverage-attention-list article,
-.observation-coverage-blind-spot-list article {
+.observation-coverage-blind-spot-list article,
+.observation-citation-row,
+.observation-citation-panel,
+.observation-citation-source-list article,
+.observation-citation-phase-list article,
+.observation-citation-boundary-list article,
+.observation-citation-blind-spot-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2565,7 +2590,8 @@ button {
 .surface-index-row,
 .walkthrough-path-step,
 .observation-row,
-.observation-coverage-row {
+.observation-coverage-row,
+.observation-citation-row {
   display: grid;
   gap: 10px;
 }
@@ -2682,6 +2708,34 @@ button {
   border-left: 4px solid #172026;
 }
 
+.observation-citation-row-decision {
+  border-left: 4px solid #2368b5;
+}
+
+.observation-citation-row-action {
+  border-left: 4px solid #a76a16;
+}
+
+.observation-citation-row-readiness {
+  border-left: 4px solid #12745b;
+}
+
+.observation-citation-row-evidence {
+  border-left: 4px solid #184d88;
+}
+
+.observation-citation-row-proof {
+  border-left: 4px solid #6f4eb6;
+}
+
+.observation-citation-row-navigator {
+  border-left: 4px solid #52636f;
+}
+
+.observation-citation-row-reconciliation {
+  border-left: 4px solid #172026;
+}
+
 .evidence-coverage-row-unresolved_local_proof_gap,
 .proof-priority-row-unresolved_local_proof_gap,
 .proof-packet-row-unresolved_local_proof_gap,
@@ -2757,7 +2811,13 @@ button {
 .observation-row h3,
 .observation-panel strong,
 .observation-attention-list strong,
-.observation-boundary-list strong {
+.observation-boundary-list strong,
+.observation-citation-row h3,
+.observation-citation-panel strong,
+.observation-citation-source-list strong,
+.observation-citation-phase-list strong,
+.observation-citation-boundary-list strong,
+.observation-citation-blind-spot-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2802,7 +2862,12 @@ button {
 .observation-row p,
 .observation-panel p,
 .observation-attention-list p,
-.observation-boundary-list p {
+.observation-boundary-list p,
+.observation-citation-row p,
+.observation-citation-panel p,
+.observation-citation-source-list p,
+.observation-citation-boundary-list p,
+.observation-citation-blind-spot-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2834,7 +2899,11 @@ button {
 .walkthrough-prompt-group-list article,
 .walkthrough-deferred-list article,
 .observation-attention-list article,
-.observation-boundary-list article {
+.observation-boundary-list article,
+.observation-citation-source-list article,
+.observation-citation-phase-list article,
+.observation-citation-boundary-list article,
+.observation-citation-blind-spot-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
@@ -2954,7 +3023,10 @@ button {
 .walkthrough-prompt-group-list,
 .walkthrough-deferred-list,
 .observation-attention-list,
-.observation-boundary-list {
+.observation-boundary-list,
+.observation-citation-source-list,
+.observation-citation-boundary-list,
+.observation-citation-blind-spot-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3240,6 +3312,7 @@ button {
   .walkthrough-path-layout,
   .observation-lens-layout,
   .observation-coverage-layout,
+  .observation-citation-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
