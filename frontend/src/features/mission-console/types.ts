@@ -1649,6 +1649,193 @@ export interface ReviewProofPacketView {
   sourcePriority: ReviewProofPriorityView;
 }
 
+export type ReviewProofNavigatorLaneKind =
+  | "local_proof_gap"
+  | "ready_local_evidence"
+  | "deferred_production_scope";
+
+export type ReviewProofNavigatorPromptKind = "inspect_static_source_crosswalk";
+
+export interface ReviewProofNavigatorRowView {
+  navigatorRowId: string;
+  rank: number;
+  laneKind: ReviewProofNavigatorLaneKind;
+  laneLabel: string;
+  laneSummary: string;
+  packetId: string;
+  packetRank: number;
+  packetStatus: ReviewProofPriorityRowStatus;
+  priority: ReviewProofPriorityPriority;
+  actionability: ReviewProofPriorityActionability;
+  label: string;
+  summary: string;
+  sourcePriorityRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  staticHumanGateStepIds: string[];
+  sourceStaticReviewStepIds: string[];
+  deferredBoundaryMarkerIds: string[];
+  defaultRow: boolean;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofNavigatorLaneView {
+  laneId: string;
+  laneKind: ReviewProofNavigatorLaneKind;
+  order: number;
+  label: string;
+  summary: string;
+  rowCount: number;
+  navigatorRowIds: string[];
+  firstNavigatorRowId: string | null;
+  localOnly: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofNavigatorSourceCrosswalkRowView {
+  crosswalkRowId: string;
+  navigatorRowId: string;
+  packetId: string;
+  label: string;
+  summary: string;
+  laneKind: ReviewProofNavigatorLaneKind;
+  packetStatus: ReviewProofPriorityRowStatus;
+  sourcePriorityRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  staticHumanGateStepIds: string[];
+  sourceStaticReviewStepIds: string[];
+  repoRelativeReferences: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofNavigatorStaticInspectionPromptView {
+  promptId: string;
+  kind: ReviewProofNavigatorPromptKind;
+  label: string;
+  summary: string;
+  navigatorRowIds: string[];
+  packetIds: string[];
+  repoRelativeReferences: string[];
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  staticHumanGateStepIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  staticOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofNavigatorStaticCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  repoRelativeReference: string;
+  source: "stage28_navigator" | ReviewProofPacketStaticCommandReferenceView["source"];
+  navigatorRowIds: string[];
+  packetIds: string[];
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  staticHumanGateStepIds: string[];
+  localOnly: true;
+  staticOnly: true;
+  nonExecutable: true;
+}
+
+export interface ReviewProofNavigatorDeferredBoundaryMarkerView {
+  markerId: string;
+  navigatorRowId: string;
+  packetId: string;
+  label: string;
+  summary: string;
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofNavigatorSummaryView {
+  navigatorId: "candidate-local-review-proof-navigator";
+  label: string;
+  summary: string;
+  defaultNavigatorRowId: string;
+  defaultPacketId: string;
+  defaultLaneId: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalNavigatorRowCount: number;
+    localProofGapNavigatorRowCount: number;
+    readyLocalEvidenceNavigatorRowCount: number;
+    deferredProductionNavigatorRowCount: number;
+    reviewLaneCount: number;
+    sourceCrosswalkRowCount: number;
+    staticInspectionPromptCount: number;
+    staticCommandReferenceCount: number;
+    deferredBoundaryMarkerCount: number;
+    sourcePriorityRowCount: number;
+    sourceCoverageRowCount: number;
+    sourceTraceRowCount: number;
+    sourceOutcomeRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceResolutionRowCount: number;
+    sourceMatrixRowCount: number;
+    sourceActionCount: number;
+    evidenceTargetCount: number;
+    proofBucketCount: number;
+    staticHumanGateStepCount: number;
+  };
+}
+
+export interface ReviewProofNavigatorView {
+  schema: "telemforge.review_proof_navigator.v1";
+  version: 1;
+  contractLabel: "local deterministic review proof navigator and source crosswalk";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewProofNavigatorSummaryView;
+  navigatorRows: ReviewProofNavigatorRowView[];
+  defaultNavigatorRow: ReviewProofNavigatorRowView;
+  reviewLanes: ReviewProofNavigatorLaneView[];
+  sourceCrosswalkRows: ReviewProofNavigatorSourceCrosswalkRowView[];
+  staticInspectionPrompts: ReviewProofNavigatorStaticInspectionPromptView[];
+  staticCommandReferences: ReviewProofNavigatorStaticCommandReferenceView[];
+  deferredBoundaryMarkers: ReviewProofNavigatorDeferredBoundaryMarkerView[];
+  staticNavigatorSummary: string;
+  sourceProofPacket: ReviewProofPacketView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -1834,6 +2021,7 @@ export interface MissionConsoleView {
   reviewEvidenceCoverage?: ReviewEvidenceCoverageView;
   reviewProofPriority?: ReviewProofPriorityView;
   reviewProofPacket?: ReviewProofPacketView;
+  reviewProofNavigator?: ReviewProofNavigatorView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

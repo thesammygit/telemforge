@@ -2754,6 +2754,237 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewProofNavigator ? (
+        <section
+          className="review-proof-navigator-section"
+          aria-label="Review proof navigator source crosswalk"
+        >
+          <a id="review-proof-navigator" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 28 proof navigator</span>
+              <h2>Navigator and source crosswalk</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewProofNavigator.defaultNavigatorRow.packetStatus}`}
+            >
+              {view.reviewProofNavigator.defaultNavigatorRow.laneLabel}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewProofNavigator.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Navigator rows</span>
+              <strong>
+                {
+                  view.reviewProofNavigator.summary.counts
+                    .totalNavigatorRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local gaps</span>
+              <strong>
+                {
+                  view.reviewProofNavigator.summary.counts
+                    .localProofGapNavigatorRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Crosswalk rows</span>
+              <strong>
+                {
+                  view.reviewProofNavigator.summary.counts
+                    .sourceCrosswalkRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static prompts</span>
+              <strong>
+                {
+                  view.reviewProofNavigator.summary.counts
+                    .staticInspectionPromptCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="proof-navigator-layout">
+            <div className="proof-navigator-list">
+              {view.reviewProofNavigator.navigatorRows.map((row) => (
+                <article
+                  key={row.navigatorRowId}
+                  className={`proof-navigator-row proof-navigator-row-${row.packetStatus}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {row.priority} · {row.laneKind.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.laneSummary}</p>
+                  <p>{row.summary}</p>
+                  <div className="trace-source-grid">
+                    <div>
+                      <span className="metric-label">Proof packet</span>
+                      <div className="gap-reference-strip">
+                        <span>{row.packetId}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Priority row</span>
+                      <div className="gap-reference-strip">
+                        <span>{row.sourcePriorityRowId}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Coverage rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceCoverageRowIds.map((sourceId) => (
+                          <span key={`${row.navigatorRowId}:coverage:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Trace rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceTraceRowIds.map((sourceId) => (
+                          <span key={`${row.navigatorRowId}:trace:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="gap-proof-strip">
+                    {row.evidenceTargetIds.map((targetId) => (
+                      <span key={`${row.navigatorRowId}:target:${targetId}`}>
+                        {targetId}
+                      </span>
+                    ))}
+                    {row.proofBucketLabels.map((label) => (
+                      <span key={`${row.navigatorRowId}:bucket:${label}`}>
+                        {label.replace(/_/g, " ")}
+                      </span>
+                    ))}
+                    {row.staticHumanGateStepIds.map((stepId) => (
+                      <span key={`${row.navigatorRowId}:gate:${stepId}`}>
+                        {stepId}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="proof-navigator-panel">
+              <span className="metric-label">Default navigator row</span>
+              <strong>{view.reviewProofNavigator.defaultNavigatorRow.label}</strong>
+              <p>{view.reviewProofNavigator.summary.summary}</p>
+              <p>{view.reviewProofNavigator.staticNavigatorSummary}</p>
+              <div className="proof-navigator-lane-list">
+                {view.reviewProofNavigator.reviewLanes.map((lane) => (
+                  <article key={lane.laneId}>
+                    <span className="event-type">
+                      Lane {lane.order} · {lane.laneKind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{lane.label}</strong>
+                    <p>{lane.summary}</p>
+                    <div className="gap-reference-strip">
+                      {lane.navigatorRowIds.map((rowId) => (
+                        <span key={`${lane.laneId}:${rowId}`}>{rowId}</span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="proof-navigator-crosswalk-list">
+                {view.reviewProofNavigator.sourceCrosswalkRows.map((row) => (
+                  <article key={row.crosswalkRowId}>
+                    <span className="event-type">
+                      {row.laneKind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{row.label}</strong>
+                    <p>{row.summary}</p>
+                    <div className="gap-reference-strip">
+                      <span>{row.sourcePriorityRowId}</span>
+                      {row.sourceCoverageRowIds.map((sourceId) => (
+                        <span key={`${row.crosswalkRowId}:coverage:${sourceId}`}>
+                          {sourceId}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="proof-navigator-reference-list">
+                      {row.repoRelativeReferences.map((reference) => (
+                        <code key={`${row.crosswalkRowId}:${reference}`}>
+                          {reference}
+                        </code>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="proof-navigator-prompt-list">
+                {view.reviewProofNavigator.staticInspectionPrompts.map(
+                  (prompt) => (
+                    <article key={prompt.promptId}>
+                      <span className="event-type">
+                        {prompt.kind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{prompt.label}</strong>
+                      <p>{prompt.summary}</p>
+                      <div className="gap-reference-strip">
+                        {prompt.staticHumanGateStepIds.map((stepId) => (
+                          <span key={`${prompt.promptId}:${stepId}`}>
+                            {stepId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="proof-navigator-boundary-list">
+                {view.reviewProofNavigator.deferredBoundaryMarkers.map(
+                  (marker) => (
+                    <article key={marker.markerId}>
+                      <span className="event-type">
+                        {marker.actionability.replace(/_/g, " ")}
+                      </span>
+                      <strong>{marker.label}</strong>
+                      <p>{marker.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="proof-navigator-command-list">
+                {view.reviewProofNavigator.staticCommandReferences.map(
+                  (command) => (
+                    <article key={command.commandId}>
+                      <span className="event-type">
+                        {command.nonExecutable
+                          ? "static command reference"
+                          : "command"}
+                      </span>
+                      <strong>{command.label}</strong>
+                      <code>{command.repoRelativeReference}</code>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

@@ -167,6 +167,7 @@ button {
 .review-evidence-coverage-section,
 .review-proof-priority-section,
 .review-proof-packet-section,
+.review-proof-navigator-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -402,6 +403,7 @@ button {
 .review-evidence-coverage-section,
 .review-proof-priority-section,
 .review-proof-packet-section,
+.review-proof-navigator-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -462,6 +464,10 @@ button {
 }
 
 .review-proof-packet-section {
+  padding: 18px;
+}
+
+.review-proof-navigator-section {
   padding: 18px;
 }
 
@@ -2375,6 +2381,13 @@ button {
   margin-top: 16px;
 }
 
+.proof-navigator-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2392,7 +2405,15 @@ button {
 .proof-packet-observation-list,
 .proof-packet-gate-list,
 .proof-packet-command-list,
-.proof-packet-deferred-list {
+.proof-packet-deferred-list,
+.proof-navigator-list,
+.proof-navigator-panel,
+.proof-navigator-lane-list,
+.proof-navigator-crosswalk-list,
+.proof-navigator-prompt-list,
+.proof-navigator-boundary-list,
+.proof-navigator-command-list,
+.proof-navigator-reference-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2415,7 +2436,14 @@ button {
 .proof-packet-observation-list article,
 .proof-packet-gate-list article,
 .proof-packet-command-list article,
-.proof-packet-deferred-list article {
+.proof-packet-deferred-list article,
+.proof-navigator-row,
+.proof-navigator-panel,
+.proof-navigator-lane-list article,
+.proof-navigator-crosswalk-list article,
+.proof-navigator-prompt-list article,
+.proof-navigator-boundary-list article,
+.proof-navigator-command-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2425,26 +2453,30 @@ button {
 
 .evidence-coverage-row,
 .proof-priority-row,
-.proof-packet-row {
+.proof-packet-row,
+.proof-navigator-row {
   display: grid;
   gap: 10px;
 }
 
 .evidence-coverage-row-unresolved_local_proof_gap,
 .proof-priority-row-unresolved_local_proof_gap,
-.proof-packet-row-unresolved_local_proof_gap {
+.proof-packet-row-unresolved_local_proof_gap,
+.proof-navigator-row-unresolved_local_proof_gap {
   border-left: 4px solid #a76a16;
 }
 
 .evidence-coverage-row-ready_local_evidence,
 .proof-priority-row-ready_local_evidence,
-.proof-packet-row-ready_local_evidence {
+.proof-packet-row-ready_local_evidence,
+.proof-navigator-row-ready_local_evidence {
   border-left: 4px solid #12745b;
 }
 
 .evidence-coverage-row-deferred_production_scope,
 .proof-priority-row-deferred_production_scope,
-.proof-packet-row-deferred_production_scope {
+.proof-packet-row-deferred_production_scope,
+.proof-navigator-row-deferred_production_scope {
   border-left: 4px solid #66717b;
 }
 
@@ -2465,7 +2497,14 @@ button {
 .proof-packet-observation-list strong,
 .proof-packet-gate-list strong,
 .proof-packet-command-list strong,
-.proof-packet-deferred-list strong {
+.proof-packet-deferred-list strong,
+.proof-navigator-row h3,
+.proof-navigator-panel strong,
+.proof-navigator-lane-list strong,
+.proof-navigator-crosswalk-list strong,
+.proof-navigator-prompt-list strong,
+.proof-navigator-boundary-list strong,
+.proof-navigator-command-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2487,7 +2526,13 @@ button {
 .proof-packet-section-list p,
 .proof-packet-observation-list p,
 .proof-packet-gate-list p,
-.proof-packet-deferred-list p {
+.proof-packet-deferred-list p,
+.proof-navigator-row p,
+.proof-navigator-panel p,
+.proof-navigator-lane-list p,
+.proof-navigator-crosswalk-list p,
+.proof-navigator-prompt-list p,
+.proof-navigator-boundary-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2505,24 +2550,36 @@ button {
 .proof-packet-observation-list article,
 .proof-packet-gate-list article,
 .proof-packet-command-list article,
-.proof-packet-deferred-list article {
+.proof-packet-deferred-list article,
+.proof-navigator-lane-list article,
+.proof-navigator-crosswalk-list article,
+.proof-navigator-prompt-list article,
+.proof-navigator-boundary-list article,
+.proof-navigator-command-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
 }
 
 .proof-static-check-list,
-.proof-packet-command-list {
+.proof-packet-command-list,
+.proof-navigator-command-list {
   max-height: 320px;
   overflow: auto;
 }
 
 .proof-static-check-list code,
 .proof-packet-command-list code,
-.proof-packet-gate-list code {
+.proof-packet-gate-list code,
+.proof-navigator-command-list code,
+.proof-navigator-reference-list code {
   overflow-wrap: anywhere;
   color: #1e3a52;
   font-size: 0.8rem;
+}
+
+.proof-navigator-reference-list {
+  gap: 6px;
 }
 
 .replay-summary {
@@ -2761,6 +2818,7 @@ button {
   .evidence-coverage-layout,
   .proof-priority-layout,
   .proof-packet-layout,
+  .proof-navigator-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

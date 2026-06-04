@@ -494,6 +494,30 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       .sourcePriorityRowIds[0],
     view.reviewProofPriority?.defaultPriorityRow.priorityRowId,
   );
+  assert.ok(view.reviewProofNavigator);
+  assert.equal(
+    view.reviewProofNavigator?.schema,
+    "telemforge.review_proof_navigator.v1",
+  );
+  assert.equal(
+    view.reviewProofNavigator?.summary.defaultPacketId,
+    view.reviewProofPacket?.summary.defaultPacketId,
+  );
+  assert.equal(
+    view.reviewProofNavigator?.defaultNavigatorRow.packetId,
+    view.reviewProofPacket?.defaultPacket.packetId,
+  );
+  assert.equal(
+    view.reviewProofNavigator?.defaultNavigatorRow.sourcePriorityRowId,
+    view.reviewProofPriority?.defaultPriorityRow.priorityRowId,
+  );
+  assert.deepEqual(
+    view.reviewProofNavigator?.navigatorRows.map((row) => row.laneKind),
+    ["local_proof_gap", "local_proof_gap", "deferred_production_scope"],
+  );
+  assert.equal(view.reviewProofNavigator?.sourceCrosswalkRows.length, 3);
+  assert.equal(view.reviewProofNavigator?.staticInspectionPrompts.length, 3);
+  assert.equal(view.reviewProofNavigator?.deferredBoundaryMarkers.length, 1);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
