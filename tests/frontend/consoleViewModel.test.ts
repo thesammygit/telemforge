@@ -452,6 +452,25 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     "review-evidence-coverage",
   );
   assert.equal(view.reviewEvidenceCoverage?.deferredBoundaryRollups.length, 1);
+  assert.ok(view.reviewProofPriority);
+  assert.equal(
+    view.reviewProofPriority?.schema,
+    "telemforge.review_proof_priority.v1",
+  );
+  assert.equal(
+    view.reviewProofPriority?.summary.defaultPriorityRowId,
+    "priority-row:coverage-row:evidence-trace:review-pass-outcome:review-pass:resolution:next-pass-1:action:follow-up:decision:alert-lifecycle-handoff",
+  );
+  assert.equal(view.reviewProofPriority?.priorityRows.length, 3);
+  assert.equal(
+    view.reviewProofPriority?.defaultPriorityRow.sourceCoverageRowIds[0],
+    view.reviewEvidenceCoverage?.coverageRows[0].coverageRowId,
+  );
+  assert.equal(
+    view.reviewProofPriority?.staticCheckRadarGroups[0].sourceCoverageRowIds[0],
+    view.reviewEvidenceCoverage?.coverageRows[0].coverageRowId,
+  );
+  assert.equal(view.reviewProofPriority?.deferredBoundaryContexts.length, 1);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {

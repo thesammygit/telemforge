@@ -41,6 +41,7 @@ import { buildReviewPassReadiness } from "../../lib/reviewPassReadiness.ts";
 import { buildReviewPassOutcome } from "../../lib/reviewPassOutcome.ts";
 import { buildReviewEvidenceTrace } from "../../lib/reviewEvidenceTrace.ts";
 import { buildReviewEvidenceCoverage } from "../../lib/reviewEvidenceCoverage.ts";
+import { buildReviewProofPriority } from "../../lib/reviewProofPriority.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -150,6 +151,7 @@ export function buildMissionConsoleView(
   const reviewEvidenceTrace = buildReviewEvidenceTrace(reviewPassOutcome);
   const reviewEvidenceCoverage =
     buildReviewEvidenceCoverage(reviewEvidenceTrace);
+  const reviewProofPriority = buildReviewProofPriority(reviewEvidenceCoverage);
 
   return {
     mission: {
@@ -187,6 +189,7 @@ export function buildMissionConsoleView(
     reviewPassOutcome,
     reviewEvidenceTrace,
     reviewEvidenceCoverage,
+    reviewProofPriority,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

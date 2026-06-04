@@ -1290,6 +1290,171 @@ export interface ReviewEvidenceCoverageView {
   sourceTrace: ReviewEvidenceTraceView;
 }
 
+export type ReviewProofPriorityPriority = ReviewEvidenceCoveragePriority;
+
+export type ReviewProofPriorityRowStatus = ReviewEvidenceCoverageRowStatus;
+
+export type ReviewProofPriorityActionability =
+  ReviewEvidenceCoverageActionability;
+
+export interface ReviewProofPriorityProofCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  source:
+    | "stage26_priority"
+    | ReviewEvidenceCoverageProofCommandReferenceView["source"];
+}
+
+export interface ReviewProofPrioritySourceCoverageReferenceView {
+  coverageRowId: string;
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  sourceBucketLabels: string[];
+}
+
+export interface ReviewProofPriorityReasonView {
+  reasonId: string;
+  label: string;
+  summary: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  staticReviewStepIds: string[];
+}
+
+export interface ReviewProofPriorityRowView {
+  priorityRowId: string;
+  rank: number;
+  priority: ReviewProofPriorityPriority;
+  status: ReviewProofPriorityRowStatus;
+  actionability: ReviewProofPriorityActionability;
+  label: string;
+  summary: string;
+  rankingSummary: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  sourceBucketLabels: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  staticReviewStepIds: string[];
+  staticReviewSteps: ReviewEvidenceCoverageStaticReviewStepView[];
+  rankingReasons: ReviewProofPriorityReasonView[];
+  sourceCoverageReferences: ReviewProofPrioritySourceCoverageReferenceView[];
+  deferredBoundaryNotes: string[];
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPriorityStaticCheckReferenceView {
+  checkId: string;
+  proofCommandId: string;
+  label: string;
+  command: string;
+  purpose: string;
+  repoRelativeReference: string;
+  source:
+    | ReviewProofPriorityProofCommandReferenceView["source"]
+    | "unknown_static_reference";
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  staticReviewStepIds: string[];
+  localOnly: true;
+  staticOnly: true;
+  nonExecutable: true;
+}
+
+export interface ReviewProofPriorityStaticRadarGroupView {
+  radarGroupId: string;
+  priorityRowId: string;
+  proofBucketLabel: string;
+  label: string;
+  summary: string;
+  priority: ReviewProofPriorityPriority;
+  status: ReviewProofPriorityRowStatus;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  staticReviewStepIds: string[];
+  checks: ReviewProofPriorityStaticCheckReferenceView[];
+  localOnly: true;
+  staticOnly: true;
+  nonExecutable: true;
+}
+
+export interface ReviewProofPriorityDeferredBoundaryContextView {
+  boundaryId: string;
+  label: string;
+  summary: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPrioritySummaryView {
+  priorityId: "candidate-local-review-proof-priority";
+  label: string;
+  summary: string;
+  defaultPriorityRowId: string;
+  defaultStaticRadarGroupId: string;
+  defaultProofBucketLabel: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalPriorityRowCount: number;
+    unresolvedLocalProofGapCount: number;
+    readyLocalEvidenceRowCount: number;
+    deferredProductionScopeRowCount: number;
+    sourceCoverageRowCount: number;
+    sourceTraceRowCount: number;
+    sourceOutcomeRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceResolutionRowCount: number;
+    sourceMatrixRowCount: number;
+    sourceActionCount: number;
+    evidenceTargetCount: number;
+    proofBucketCount: number;
+    proofCommandReferenceCount: number;
+    staticRadarGroupCount: number;
+    staticCheckReferenceCount: number;
+    deferredBoundaryContextCount: number;
+  };
+}
+
+export interface ReviewProofPriorityView {
+  schema: "telemforge.review_proof_priority.v1";
+  version: 1;
+  contractLabel: "local deterministic review proof priority radar";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewProofPrioritySummaryView;
+  priorityRows: ReviewProofPriorityRowView[];
+  defaultPriorityRow: ReviewProofPriorityRowView;
+  staticCheckRadarGroups: ReviewProofPriorityStaticRadarGroupView[];
+  deferredBoundaryContexts: ReviewProofPriorityDeferredBoundaryContextView[];
+  proofCommandReferences: ReviewProofPriorityProofCommandReferenceView[];
+  staticCheckRadarSummary: string;
+  sourceCoverage: ReviewEvidenceCoverageView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -1473,6 +1638,7 @@ export interface MissionConsoleView {
   reviewPassOutcome?: ReviewPassOutcomeView;
   reviewEvidenceTrace?: ReviewEvidenceTraceView;
   reviewEvidenceCoverage?: ReviewEvidenceCoverageView;
+  reviewProofPriority?: ReviewProofPriorityView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

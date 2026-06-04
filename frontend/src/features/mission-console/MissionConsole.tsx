@@ -2331,6 +2331,231 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewProofPriority ? (
+        <section
+          className="review-proof-priority-section"
+          aria-label="Review proof priority radar"
+        >
+          <a id="review-proof-priority-radar" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 26 proof priority</span>
+              <h2>Proof priority lens and static check radar</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewProofPriority.defaultPriorityRow.status}`}
+            >
+              {view.reviewProofPriority.summary.defaultProofBucketLabel}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewProofPriority.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Priority rows</span>
+              <strong>
+                {
+                  view.reviewProofPriority.summary.counts
+                    .totalPriorityRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local gaps</span>
+              <strong>
+                {
+                  view.reviewProofPriority.summary.counts
+                    .unresolvedLocalProofGapCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static checks</span>
+              <strong>
+                {
+                  view.reviewProofPriority.summary.counts
+                    .staticCheckReferenceCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred context</span>
+              <strong>
+                {
+                  view.reviewProofPriority.summary.counts
+                    .deferredBoundaryContextCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="proof-priority-layout">
+            <div className="proof-priority-row-list">
+              {view.reviewProofPriority.priorityRows.map((row) => (
+                <article
+                  key={row.priorityRowId}
+                  className={`proof-priority-row proof-priority-row-${row.status}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {row.priority} · {row.actionability.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.rankingSummary}</p>
+                  <div className="trace-source-grid">
+                    <div>
+                      <span className="metric-label">Coverage rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceCoverageRowIds.map((sourceId) => (
+                          <span key={`${row.priorityRowId}:coverage:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Trace rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceTraceRowIds.map((sourceId) => (
+                          <span key={`${row.priorityRowId}:trace:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Outcome rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceOutcomeRowIds.map((sourceId) => (
+                          <span key={`${row.priorityRowId}:outcome:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Evidence targets</span>
+                      <div className="gap-reference-strip">
+                        {row.evidenceTargetIds.map((targetId) => (
+                          <span key={`${row.priorityRowId}:target:${targetId}`}>
+                            {targetId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="gap-proof-strip">
+                    {row.proofBucketLabels.map((label) => (
+                      <span key={`${row.priorityRowId}:proof-bucket:${label}`}>
+                        {label.replace(/_/g, " ")}
+                      </span>
+                    ))}
+                    {row.staticReviewStepIds.map((stepId) => (
+                      <span key={`${row.priorityRowId}:step:${stepId}`}>
+                        {stepId}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="proof-priority-reason-list">
+                    {row.rankingReasons.map((reason) => (
+                      <article key={reason.reasonId}>
+                        <span className="event-type">ranking reason</span>
+                        <strong>{reason.label}</strong>
+                        <p>{reason.summary}</p>
+                      </article>
+                    ))}
+                  </div>
+                  {row.deferredBoundaryNotes.length ? (
+                    <div className="proof-deferred-list">
+                      {row.deferredBoundaryNotes.map((note) => (
+                        <article key={`${row.priorityRowId}:${note}`}>
+                          <span className="event-type">deferred boundary</span>
+                          <p>{note}</p>
+                        </article>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="proof-priority-radar-panel">
+              <span className="metric-label">Default proof focus</span>
+              <strong>{view.reviewProofPriority.defaultPriorityRow.label}</strong>
+              <p>{view.reviewProofPriority.summary.summary}</p>
+              <p>{view.reviewProofPriority.staticCheckRadarSummary}</p>
+              <div className="proof-radar-group-list">
+                {view.reviewProofPriority.staticCheckRadarGroups.map((group) => (
+                  <article key={group.radarGroupId}>
+                    <span className="event-type">
+                      {group.priority} · {group.status.replace(/_/g, " ")}
+                    </span>
+                    <strong>{group.proofBucketLabel}</strong>
+                    <p>{group.summary}</p>
+                    <div className="gap-reference-strip">
+                      {group.sourceCoverageRowIds.map((sourceId) => (
+                        <span key={`${group.radarGroupId}:${sourceId}`}>
+                          {sourceId}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="proof-static-check-list">
+                      {group.checks.map((check) => (
+                        <article key={check.checkId}>
+                          <span className="event-type">
+                            {check.nonExecutable ? "static local check" : "check"}
+                          </span>
+                          <strong>{check.label}</strong>
+                          <code>{check.repoRelativeReference}</code>
+                        </article>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="proof-deferred-list">
+                {view.reviewProofPriority.deferredBoundaryContexts.map(
+                  (boundary) => (
+                    <article key={boundary.boundaryId}>
+                      <span className="event-type">
+                        {boundary.actionability.replace(/_/g, " ")}
+                      </span>
+                      <strong>{boundary.label}</strong>
+                      <p>{boundary.summary}</p>
+                      <div className="gap-reference-strip">
+                        {boundary.sourceCoverageRowIds.map((sourceId) => (
+                          <span key={`${boundary.boundaryId}:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="coverage-command-list">
+                {view.reviewProofPriority.proofCommandReferences.map(
+                  (command) => (
+                    <article
+                      key={command.commandId}
+                      className="coverage-command-row"
+                    >
+                      <strong>{command.label}</strong>
+                      <code>{command.command}</code>
+                      <p>{command.purpose}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">
