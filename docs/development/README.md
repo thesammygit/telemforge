@@ -55,6 +55,7 @@ For each stage:
 26. [Local Review Proof Priority And Static Check Radar](steps/26-local-review-proof-priority-and-static-check-radar.md)
 27. [Local Review Proof Packet And Human Test Gate](steps/27-local-review-proof-packet-and-human-test-gate.md)
 28. [Review Proof Navigator And Source Crosswalk](steps/28-review-proof-navigator-and-source-crosswalk.md)
+29. [Review Proof Chain Reconciliation And Local Consistency Map](steps/29-review-proof-chain-reconciliation-and-local-consistency-map.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
