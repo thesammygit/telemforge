@@ -61,6 +61,7 @@ For each stage:
 32. [Review Observation Lens And Static Attention Map](steps/32-review-observation-lens-and-static-attention-map.md)
 33. [Review Observation Coverage And Static Blind-Spot Map](steps/33-review-observation-coverage-and-static-blind-spot-map.md)
 34. [Review Observation Citation Trail And Local Source Map](steps/34-review-observation-citation-trail-and-local-source-map.md)
+35. [Review Observation Boundary Ledger And Static Deferred Map](steps/35-review-observation-boundary-ledger-and-static-deferred-map.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
