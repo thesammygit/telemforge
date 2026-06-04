@@ -552,6 +552,171 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewWalkthroughPath ? (
+        <section
+          className="review-walkthrough-path-section"
+          aria-label="Review walkthrough path and static prompt deck"
+        >
+          <a id="review-walkthrough-path" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 31 walkthrough path</span>
+              <h2>Review walkthrough path and static prompt deck</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${view.reviewWalkthroughPath.localStatus}`}
+            >
+              {view.reviewWalkthroughPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewWalkthroughPath.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Steps</span>
+              <strong>
+                {view.reviewWalkthroughPath.summary.counts.totalStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompt groups</span>
+              <strong>
+                {view.reviewWalkthroughPath.summary.counts.promptGroupCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Anchors</span>
+              <strong>
+                {view.reviewWalkthroughPath.summary.counts.localAnchorCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  view.reviewWalkthroughPath.summary.counts
+                    .deferredBoundaryNoteCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="walkthrough-path-layout">
+            <div className="walkthrough-path-step-list">
+              {view.reviewWalkthroughPath.steps.map((step) => (
+                <article
+                  key={step.stepId}
+                  className={`walkthrough-path-step walkthrough-path-step-${step.workflowGroup}`}
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Step {step.stepNumber} · Stage {step.sourceStageNumber} ·{" "}
+                        {step.workflowGroup.replace(/_/g, " ")}
+                      </span>
+                      <h3>{step.label}</h3>
+                    </div>
+                    <a className="surface-index-anchor" href={step.anchor.href}>
+                      {step.anchor.anchorId}
+                    </a>
+                  </div>
+                  <p>{step.summary}</p>
+                  <div className="surface-index-label-strip">
+                    <span>{step.sourceSchema}</span>
+                    <span>{step.sourceContractLabel}</span>
+                    <span>{step.localStatusLabel}</span>
+                    <span>{step.statusLabel.replace(/_/g, " ")}</span>
+                  </div>
+                  <div className="walkthrough-prompt-block">
+                    <span className="metric-label">Static prompt</span>
+                    <p>{step.staticInspectionPrompt}</p>
+                    <span className="metric-label">Expected observation</span>
+                    <p>{step.expectedObservation}</p>
+                  </div>
+                  <div className="surface-index-count-grid">
+                    {step.usefulCounts.map((sourceCount) => (
+                      <div
+                        key={`${step.stepId}:${sourceCount.sourcePath}:${sourceCount.label}`}
+                      >
+                        <span className="metric-label">{sourceCount.label}</span>
+                        <strong>{sourceCount.value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="walkthrough-path-panel">
+              <span className="metric-label">Static prompt deck</span>
+              <strong>{view.reviewWalkthroughPath.summary.label}</strong>
+              <p>{view.reviewWalkthroughPath.summary.summary}</p>
+              <div className="surface-index-nav-grid">
+                {view.reviewWalkthroughPath.anchorReferences.map((anchor) => (
+                  <a
+                    key={anchor.anchorId}
+                    className="surface-index-nav-chip"
+                    href={anchor.href}
+                  >
+                    {anchor.label}
+                  </a>
+                ))}
+              </div>
+              <div className="walkthrough-prompt-group-list">
+                {view.reviewWalkthroughPath.promptGroups.map((group) => (
+                  <article key={group.promptGroupId}>
+                    <span className="event-type">
+                      Phase {group.order} ·{" "}
+                      {group.workflowGroup.replace(/_/g, " ")}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <p>{group.staticInspectionPrompt}</p>
+                    <p>{group.expectedObservation}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Steps</span>
+                        <strong>{group.localCounts.stepCount}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{group.localCounts.anchorCount}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Schemas</span>
+                        <strong>{group.localCounts.sourceSchemaCount}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{group.localCounts.deferredBoundaryCount}</strong>
+                      </div>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p>{view.reviewWalkthroughPath.staticBoundarySummary}</p>
+              <div className="walkthrough-deferred-list">
+                {view.reviewWalkthroughPath.deferredBoundaryNotes.map((note) => (
+                  <article key={note.noteId}>
+                    <span className="event-type">
+                      {note.actionability.replace(/_/g, " ")}
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                    <div className="gap-reference-strip">
+                      {note.sourceAnchorIds.map((anchorId) => (
+                        <span key={`${note.noteId}:${anchorId}`}>
+                          {anchorId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       {view.reviewDecisionRegister ? (
         <section
           className="review-decision-section"

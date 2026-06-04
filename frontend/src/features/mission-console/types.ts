@@ -2134,6 +2134,106 @@ export interface ReviewSurfaceIndexView {
   sourceReconciliation: ReviewProofReconciliationView;
 }
 
+export interface ReviewWalkthroughLocalCountSummaryView {
+  stepCount: number;
+  anchorCount: number;
+  sourceSchemaCount: number;
+  sourceCountMetricCount: number;
+  deferredBoundaryCount: number;
+}
+
+export interface ReviewWalkthroughStepView {
+  stepId: string;
+  stepNumber: number;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  label: string;
+  summary: string;
+  sourceSurfaceId: string;
+  sourceStageNumber: number;
+  sourceSchema: string;
+  sourceContractLabel: string;
+  localStatusLabel: string;
+  statusLabel: string;
+  anchor: ReviewSurfaceAnchorReferenceView;
+  usefulCounts: ReviewSurfaceIndexSourceCountView[];
+  sourceLabels: string[];
+  staticInspectionPrompt: string;
+  expectedObservation: string;
+  deferredBoundaryCount: number;
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewWalkthroughPromptGroupView {
+  promptGroupId: string;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  order: number;
+  label: string;
+  summary: string;
+  staticInspectionPrompt: string;
+  expectedObservation: string;
+  stepIds: string[];
+  anchorIds: string[];
+  localCounts: ReviewWalkthroughLocalCountSummaryView;
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewWalkthroughDeferredBoundaryNoteView {
+  noteId: string;
+  label: string;
+  summary: string;
+  sourceStepIds: string[];
+  sourceSurfaceIds: string[];
+  sourceAnchorIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewWalkthroughSummaryView {
+  walkthroughId: "candidate-local-review-walkthrough-path";
+  label: string;
+  summary: string;
+  defaultStepId: string;
+  defaultAnchorId: string;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  counts: {
+    totalStepCount: number;
+    promptGroupCount: number;
+    localAnchorCount: number;
+    sourceSchemaCount: number;
+    sourceCountMetricCount: number;
+    deferredBoundaryNoteCount: number;
+    localOnlyStepCount: number;
+  };
+}
+
+export interface ReviewWalkthroughPathView {
+  schema: "telemforge.review_walkthrough_path.v1";
+  version: 1;
+  contractLabel: "local deterministic review walkthrough path and static prompt deck";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewWalkthroughSummaryView;
+  steps: ReviewWalkthroughStepView[];
+  promptGroups: ReviewWalkthroughPromptGroupView[];
+  anchorReferences: ReviewSurfaceAnchorReferenceView[];
+  deferredBoundaryNotes: ReviewWalkthroughDeferredBoundaryNoteView[];
+  staticBoundarySummary: string;
+  sourceSurfaceIndex: ReviewSurfaceIndexView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -2322,6 +2422,7 @@ export interface MissionConsoleView {
   reviewProofNavigator?: ReviewProofNavigatorView;
   reviewProofReconciliation?: ReviewProofReconciliationView;
   reviewSurfaceIndex?: ReviewSurfaceIndexView;
+  reviewWalkthroughPath?: ReviewWalkthroughPathView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

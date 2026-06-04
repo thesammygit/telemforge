@@ -646,6 +646,42 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewSurfaceIndex?.sourceReconciliation,
     view.reviewProofReconciliation,
   );
+  assert.ok(view.reviewWalkthroughPath);
+  assert.equal(
+    view.reviewWalkthroughPath?.schema,
+    "telemforge.review_walkthrough_path.v1",
+  );
+  assert.equal(
+    view.reviewWalkthroughPath?.sourceSurfaceIndex,
+    view.reviewSurfaceIndex,
+  );
+  assert.deepEqual(
+    view.reviewWalkthroughPath?.steps.map((step) => [
+      step.sourceStageNumber,
+      step.workflowGroup,
+      step.anchor.anchorId,
+    ]),
+    view.reviewSurfaceIndex?.rows.map((row) => [
+      row.stageNumber,
+      row.workflowGroup,
+      row.anchor.anchorId,
+    ]),
+  );
+  assert.deepEqual(
+    view.reviewWalkthroughPath?.promptGroups.map((group) => [
+      group.workflowGroup,
+      group.localCounts.stepCount,
+    ]),
+    [
+      ["decision", 2],
+      ["action", 3],
+      ["readiness", 4],
+      ["evidence", 3],
+      ["proof", 2],
+      ["navigator", 1],
+      ["reconciliation", 1],
+    ],
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -660,7 +696,12 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
 
   assert.equal(view.stream.state, "live");
   assert.equal(view.reviewSurfaceIndex?.localStatus, "local-live");
+  assert.equal(view.reviewWalkthroughPath?.localStatus, "local-live");
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
+  assert.equal(
+    view.reviewWalkthroughPath?.steps[0].localStatusLabel,
+    "Local live mode",
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {

@@ -170,6 +170,7 @@ button {
 .review-proof-navigator-section,
 .review-proof-reconciliation-section,
 .review-surface-index-section,
+.review-walkthrough-path-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -408,6 +409,7 @@ button {
 .review-proof-navigator-section,
 .review-proof-reconciliation-section,
 .review-surface-index-section,
+.review-walkthrough-path-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -480,6 +482,10 @@ button {
 }
 
 .review-surface-index-section {
+  padding: 18px;
+}
+
+.review-walkthrough-path-section {
   padding: 18px;
 }
 
@@ -2414,6 +2420,13 @@ button {
   margin-top: 16px;
 }
 
+.walkthrough-path-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2449,7 +2462,11 @@ button {
 .surface-index-row-list,
 .surface-index-panel,
 .surface-index-group-list,
-.surface-index-deferred-list {
+.surface-index-deferred-list,
+.walkthrough-path-step-list,
+.walkthrough-path-panel,
+.walkthrough-prompt-group-list,
+.walkthrough-deferred-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2488,7 +2505,11 @@ button {
 .surface-index-row,
 .surface-index-panel,
 .surface-index-group-list article,
-.surface-index-deferred-list article {
+.surface-index-deferred-list article,
+.walkthrough-path-step,
+.walkthrough-path-panel,
+.walkthrough-prompt-group-list article,
+.walkthrough-deferred-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2501,7 +2522,8 @@ button {
 .proof-packet-row,
 .proof-navigator-row,
 .proof-reconciliation-row,
-.surface-index-row {
+.surface-index-row,
+.walkthrough-path-step {
   display: grid;
   gap: 10px;
 }
@@ -2531,6 +2553,34 @@ button {
 }
 
 .surface-index-row-reconciliation {
+  border-left: 4px solid #172026;
+}
+
+.walkthrough-path-step-decision {
+  border-left: 4px solid #2368b5;
+}
+
+.walkthrough-path-step-action {
+  border-left: 4px solid #a76a16;
+}
+
+.walkthrough-path-step-readiness {
+  border-left: 4px solid #12745b;
+}
+
+.walkthrough-path-step-evidence {
+  border-left: 4px solid #184d88;
+}
+
+.walkthrough-path-step-proof {
+  border-left: 4px solid #6f4eb6;
+}
+
+.walkthrough-path-step-navigator {
+  border-left: 4px solid #52636f;
+}
+
+.walkthrough-path-step-reconciliation {
   border-left: 4px solid #172026;
 }
 
@@ -2601,7 +2651,11 @@ button {
 .surface-index-row h3,
 .surface-index-panel strong,
 .surface-index-group-list strong,
-.surface-index-deferred-list strong {
+.surface-index-deferred-list strong,
+.walkthrough-path-step h3,
+.walkthrough-path-panel strong,
+.walkthrough-prompt-group-list strong,
+.walkthrough-deferred-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2638,7 +2692,11 @@ button {
 .surface-index-row p,
 .surface-index-panel p,
 .surface-index-group-list p,
-.surface-index-deferred-list p {
+.surface-index-deferred-list p,
+.walkthrough-path-step p,
+.walkthrough-path-panel p,
+.walkthrough-prompt-group-list p,
+.walkthrough-deferred-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2666,10 +2724,21 @@ button {
 .proof-reconciliation-reference-list article,
 .proof-reconciliation-boundary-list article,
 .surface-index-group-list article,
-.surface-index-deferred-list article {
+.surface-index-deferred-list article,
+.walkthrough-prompt-group-list article,
+.walkthrough-deferred-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
+}
+
+.walkthrough-prompt-block {
+  display: grid;
+  gap: 6px;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 12px;
 }
 
 .surface-index-row-heading {
@@ -2770,6 +2839,12 @@ button {
 }
 
 .surface-index-deferred-list {
+  max-height: 340px;
+  overflow: auto;
+}
+
+.walkthrough-prompt-group-list,
+.walkthrough-deferred-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3052,6 +3127,7 @@ button {
   .proof-navigator-layout,
   .proof-reconciliation-layout,
   .surface-index-layout,
+  .walkthrough-path-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
