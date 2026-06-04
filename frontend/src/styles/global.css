@@ -162,6 +162,7 @@ button {
 .review-coverage-section,
 .review-gap-section,
 .review-pass-section,
+.review-outcome-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -392,6 +393,7 @@ button {
 .review-coverage-section,
 .review-gap-section,
 .review-pass-section,
+.review-outcome-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -432,6 +434,10 @@ button {
 }
 
 .review-pass-section {
+  padding: 18px;
+}
+
+.review-outcome-section {
   padding: 18px;
 }
 
@@ -1560,7 +1566,15 @@ button {
   color: #a76a16;
 }
 
+.action-status-local_proof_gaps_remaining {
+  color: #a76a16;
+}
+
 .action-status-ready_for_local_review_pass {
+  color: #12745b;
+}
+
+.action-status-local_pass_candidate {
   color: #12745b;
 }
 
@@ -2143,6 +2157,101 @@ button {
   background: #ffffff;
 }
 
+.review-outcome-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.review-outcome-row-list,
+.review-outcome-panel,
+.outcome-note-list,
+.outcome-gap-list,
+.outcome-deferred-ledger {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.review-outcome-row,
+.review-outcome-panel,
+.outcome-note-list article,
+.outcome-gap-list article,
+.outcome-deferred-ledger article {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.review-outcome-row {
+  display: grid;
+  gap: 10px;
+}
+
+.review-outcome-row-unresolved_local_proof_gap {
+  border-left: 4px solid #a76a16;
+}
+
+.review-outcome-row-ready_local_evidence {
+  border-left: 4px solid #12745b;
+}
+
+.review-outcome-row-deferred_production_scope {
+  border-left: 4px solid #66717b;
+}
+
+.review-outcome-row h3,
+.review-outcome-panel strong,
+.outcome-note-list strong,
+.outcome-gap-list strong,
+.outcome-deferred-ledger strong {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.review-outcome-row p,
+.review-outcome-panel p,
+.outcome-note-list p,
+.outcome-gap-list p,
+.outcome-deferred-ledger p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.outcome-proof-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.outcome-proof-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #12745b;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.outcome-note-list article,
+.outcome-gap-list article,
+.outcome-deferred-ledger article {
+  display: grid;
+  gap: 8px;
+  background: #ffffff;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2373,6 +2482,8 @@ button {
   .handoff-rehearsal-layout,
   .coverage-matrix-layout,
   .gap-triage-layout,
+  .review-pass-layout,
+  .review-outcome-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

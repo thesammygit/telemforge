@@ -1730,6 +1730,191 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewPassOutcome ? (
+        <section
+          className="review-outcome-section"
+          aria-label="Review-pass outcome board"
+        >
+          <a id="review-pass-outcome-board" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 23 review outcome</span>
+              <h2>Outcome board and deferred scope ledger</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewPassOutcome.candidateOutcome.verdict}`}
+            >
+              {view.reviewPassOutcome.candidateOutcome.verdict.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewPassOutcome.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Outcome rows</span>
+              <strong>
+                {
+                  view.reviewPassOutcome.candidateOutcome.counts
+                    .totalOutcomeRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Ready evidence</span>
+              <strong>
+                {
+                  view.reviewPassOutcome.candidateOutcome.counts
+                    .readyLocalEvidenceRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local gaps</span>
+              <strong>
+                {
+                  view.reviewPassOutcome.candidateOutcome.counts
+                    .unresolvedLocalProofGapCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  view.reviewPassOutcome.candidateOutcome.counts
+                    .deferredProductionScopeRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="review-outcome-layout">
+            <div className="review-outcome-row-list">
+              {view.reviewPassOutcome.outcomeRows.map((row) => (
+                <article
+                  key={row.outcomeRowId}
+                  className={`review-outcome-row review-outcome-row-${row.status}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {row.outcomeBucket.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.summary}</p>
+                  <p className="action-next-step">
+                    {row.nextStaticLocalReviewStep}
+                  </p>
+                  <div className="gap-reference-strip">
+                    {row.sourceReadinessRowIds.map((rowId) => (
+                      <span key={`${row.outcomeRowId}:${rowId}`}>{rowId}</span>
+                    ))}
+                    {row.sourceResolutionIds.map((resolutionId) => (
+                      <span key={`${row.outcomeRowId}:${resolutionId}`}>
+                        {resolutionId}
+                      </span>
+                    ))}
+                    {row.sourceMatrixRowIds.map((rowId) => (
+                      <span key={`${row.outcomeRowId}:${rowId}`}>{rowId}</span>
+                    ))}
+                    {row.sourceActionIds.map((actionId) => (
+                      <span key={`${row.outcomeRowId}:${actionId}`}>
+                        {actionId}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="gap-bucket-strip">
+                    {row.sourceBuckets.map((bucket) => (
+                      <span key={`${row.outcomeRowId}:${bucket.bucketId}`}>
+                        {bucket.label}: {bucket.count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="gap-proof-strip">
+                    {row.evidenceTargetIds.map((targetId) => (
+                      <span key={`${row.outcomeRowId}:${targetId}`}>
+                        {targetId}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="outcome-proof-list">
+                    {row.proofCommandReferences.map((command) => (
+                      <span key={`${row.outcomeRowId}:${command.commandId}`}>
+                        {command.commandId}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="review-outcome-panel">
+              <span className="metric-label">Candidate local outcome</span>
+              <strong>{view.reviewPassOutcome.candidateOutcome.label}</strong>
+              <p>{view.reviewPassOutcome.candidateOutcome.summary}</p>
+              <div className="outcome-note-list">
+                {view.reviewPassOutcome.staticVerdictNotes.map((note) => (
+                  <article key={note.noteId}>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="outcome-gap-list">
+                {view.reviewPassOutcome.localProofGapRows.map((gap) => (
+                  <article key={gap.gapRowId}>
+                    <span className="event-type">Local proof gap</span>
+                    <strong>{gap.label}</strong>
+                    <p>{gap.nextStaticLocalReviewStep}</p>
+                    <div className="gap-reference-strip">
+                      <span>{gap.sourceReadinessRowId}</span>
+                      {gap.evidenceTargetIds.map((targetId) => (
+                        <span key={`${gap.gapRowId}:${targetId}`}>
+                          {targetId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="outcome-deferred-ledger">
+                {view.reviewPassOutcome.deferredScopeLedgerRows.map((row) => (
+                  <article key={row.ledgerRowId}>
+                    <span className="event-type">
+                      {row.actionability.replace(/_/g, " ")}
+                    </span>
+                    <strong>{row.label}</strong>
+                    <p>{row.summary}</p>
+                    <div className="gap-reference-strip">
+                      {row.sourceReadinessRowIds.map((rowId) => (
+                        <span key={`${row.ledgerRowId}:${rowId}`}>{rowId}</span>
+                      ))}
+                      {row.evidenceTargetIds.map((targetId) => (
+                        <span key={`${row.ledgerRowId}:${targetId}`}>
+                          {targetId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="coverage-command-list">
+                {view.reviewPassOutcome.proofCommandReferences.map((command) => (
+                  <article key={command.commandId} className="coverage-command-row">
+                    <strong>{command.label}</strong>
+                    <code>{command.command}</code>
+                    <p>{command.purpose}</p>
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">
