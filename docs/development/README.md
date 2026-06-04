@@ -53,6 +53,7 @@ For each stage:
 24. [Review Evidence Trace Navigator And Local Proof Drilldown](steps/24-review-evidence-trace-navigator-and-local-proof-drilldown.md)
 25. [Review Evidence Coverage Map And Proof Gap Board](steps/25-review-evidence-coverage-map-and-proof-gap-board.md)
 26. [Local Review Proof Priority And Static Check Radar](steps/26-local-review-proof-priority-and-static-check-radar.md)
+27. [Local Review Proof Packet And Human Test Gate](steps/27-local-review-proof-packet-and-human-test-gate.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
