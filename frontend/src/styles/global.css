@@ -168,6 +168,7 @@ button {
 .review-proof-priority-section,
 .review-proof-packet-section,
 .review-proof-navigator-section,
+.review-proof-reconciliation-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -404,6 +405,7 @@ button {
 .review-proof-priority-section,
 .review-proof-packet-section,
 .review-proof-navigator-section,
+.review-proof-reconciliation-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -468,6 +470,10 @@ button {
 }
 
 .review-proof-navigator-section {
+  padding: 18px;
+}
+
+.review-proof-reconciliation-section {
   padding: 18px;
 }
 
@@ -2388,6 +2394,13 @@ button {
   margin-top: 16px;
 }
 
+.proof-reconciliation-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2413,7 +2426,13 @@ button {
 .proof-navigator-prompt-list,
 .proof-navigator-boundary-list,
 .proof-navigator-command-list,
-.proof-navigator-reference-list {
+.proof-navigator-reference-list,
+.proof-reconciliation-list,
+.proof-reconciliation-panel,
+.proof-reconciliation-bucket-list,
+.proof-reconciliation-reference-list,
+.proof-reconciliation-boundary-list,
+.proof-reconciliation-segment-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2443,7 +2462,12 @@ button {
 .proof-navigator-crosswalk-list article,
 .proof-navigator-prompt-list article,
 .proof-navigator-boundary-list article,
-.proof-navigator-command-list article {
+.proof-navigator-command-list article,
+.proof-reconciliation-row,
+.proof-reconciliation-panel,
+.proof-reconciliation-bucket-list article,
+.proof-reconciliation-reference-list article,
+.proof-reconciliation-boundary-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2454,7 +2478,8 @@ button {
 .evidence-coverage-row,
 .proof-priority-row,
 .proof-packet-row,
-.proof-navigator-row {
+.proof-navigator-row,
+.proof-reconciliation-row {
   display: grid;
   gap: 10px;
 }
@@ -2477,6 +2502,18 @@ button {
 .proof-priority-row-deferred_production_scope,
 .proof-packet-row-deferred_production_scope,
 .proof-navigator-row-deferred_production_scope {
+  border-left: 4px solid #66717b;
+}
+
+.proof-reconciliation-row-local_inspection_gap {
+  border-left: 4px solid #a76a16;
+}
+
+.proof-reconciliation-row-complete_local_chain {
+  border-left: 4px solid #12745b;
+}
+
+.proof-reconciliation-row-deferred_production_boundary {
   border-left: 4px solid #66717b;
 }
 
@@ -2504,7 +2541,13 @@ button {
 .proof-navigator-crosswalk-list strong,
 .proof-navigator-prompt-list strong,
 .proof-navigator-boundary-list strong,
-.proof-navigator-command-list strong {
+.proof-navigator-command-list strong,
+.proof-reconciliation-row h3,
+.proof-reconciliation-panel strong,
+.proof-reconciliation-bucket-list strong,
+.proof-reconciliation-reference-list strong,
+.proof-reconciliation-boundary-list strong,
+.proof-reconciliation-segment strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2532,7 +2575,12 @@ button {
 .proof-navigator-lane-list p,
 .proof-navigator-crosswalk-list p,
 .proof-navigator-prompt-list p,
-.proof-navigator-boundary-list p {
+.proof-navigator-boundary-list p,
+.proof-reconciliation-row p,
+.proof-reconciliation-panel p,
+.proof-reconciliation-bucket-list p,
+.proof-reconciliation-reference-list p,
+.proof-reconciliation-boundary-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2555,7 +2603,10 @@ button {
 .proof-navigator-crosswalk-list article,
 .proof-navigator-prompt-list article,
 .proof-navigator-boundary-list article,
-.proof-navigator-command-list article {
+.proof-navigator-command-list article,
+.proof-reconciliation-bucket-list article,
+.proof-reconciliation-reference-list article,
+.proof-reconciliation-boundary-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
@@ -2563,7 +2614,9 @@ button {
 
 .proof-static-check-list,
 .proof-packet-command-list,
-.proof-navigator-command-list {
+.proof-navigator-command-list,
+.proof-reconciliation-reference-list,
+.proof-reconciliation-segment-list {
   max-height: 320px;
   overflow: auto;
 }
@@ -2572,7 +2625,8 @@ button {
 .proof-packet-command-list code,
 .proof-packet-gate-list code,
 .proof-navigator-command-list code,
-.proof-navigator-reference-list code {
+.proof-navigator-reference-list code,
+.proof-reconciliation-reference-list code {
   overflow-wrap: anywhere;
   color: #1e3a52;
   font-size: 0.8rem;
@@ -2580,6 +2634,21 @@ button {
 
 .proof-navigator-reference-list {
   gap: 6px;
+}
+
+.proof-reconciliation-segment {
+  display: grid;
+  gap: 7px;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 8px;
+}
+
+.proof-reconciliation-segment-complete strong {
+  color: #12745b;
+}
+
+.proof-reconciliation-segment-gap strong {
+  color: #a76a16;
 }
 
 .replay-summary {
@@ -2819,6 +2888,7 @@ button {
   .proof-priority-layout,
   .proof-packet-layout,
   .proof-navigator-layout,
+  .proof-reconciliation-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

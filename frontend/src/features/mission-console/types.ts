@@ -1836,6 +1836,191 @@ export interface ReviewProofNavigatorView {
   sourceProofPacket: ReviewProofPacketView;
 }
 
+export type ReviewProofReconciliationBucketKind =
+  | "complete_local_chain"
+  | "local_inspection_gap"
+  | "deferred_production_boundary";
+
+export type ReviewProofReconciliationSegmentKind =
+  | "proof_packet"
+  | "priority"
+  | "coverage"
+  | "trace"
+  | "outcome"
+  | "readiness"
+  | "resolution"
+  | "matrix"
+  | "action"
+  | "evidence_target"
+  | "proof_command"
+  | "static_human_gate"
+  | "static_inspection_prompt"
+  | "deferred_boundary";
+
+export type ReviewProofReconciliationReferenceKind =
+  | "stage29_reconciliation_source"
+  | "source_crosswalk"
+  | "static_inspection_prompt"
+  | "static_command_reference";
+
+export interface ReviewProofReconciliationSegmentSummaryView {
+  segmentId: string;
+  reconciliationRowId: string;
+  navigatorRowId: string;
+  kind: ReviewProofReconciliationSegmentKind;
+  label: string;
+  sourceIds: string[];
+  complete: boolean;
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofReconciliationRowView {
+  reconciliationRowId: string;
+  navigatorRowId: string;
+  sourceCrosswalkRowId: string | null;
+  rank: number;
+  bucketKind: ReviewProofReconciliationBucketKind;
+  bucketLabel: string;
+  bucketSummary: string;
+  packetId: string;
+  laneKind: ReviewProofNavigatorLaneKind;
+  packetStatus: ReviewProofPriorityRowStatus;
+  priority: ReviewProofPriorityPriority;
+  actionability: ReviewProofPriorityActionability;
+  label: string;
+  summary: string;
+  sourcePriorityRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  staticHumanGateStepIds: string[];
+  sourceStaticReviewStepIds: string[];
+  staticInspectionPromptIds: string[];
+  deferredBoundaryMarkerIds: string[];
+  sourceChainSegments: ReviewProofReconciliationSegmentSummaryView[];
+  defaultRow: boolean;
+  localChainComplete: boolean;
+  localInspectionRequired: boolean;
+  deferredProductionBoundary: boolean;
+  informationalOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofReconciliationBucketView {
+  bucketId: string;
+  bucketKind: ReviewProofReconciliationBucketKind;
+  order: number;
+  label: string;
+  summary: string;
+  rowCount: number;
+  reconciliationRowIds: string[];
+  firstReconciliationRowId: string | null;
+  localOnly: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofReconciliationStaticReferenceView {
+  referenceId: string;
+  kind: ReviewProofReconciliationReferenceKind;
+  label: string;
+  summary: string;
+  repoRelativeReference: string;
+  reconciliationRowIds: string[];
+  navigatorRowIds: string[];
+  packetIds: string[];
+  proofCommandIds: string[];
+  staticHumanGateStepIds: string[];
+  staticInspectionPromptIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  staticOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofReconciliationDeferredBoundaryNoteView {
+  noteId: string;
+  markerId: string;
+  reconciliationRowId: string;
+  navigatorRowId: string;
+  packetId: string;
+  label: string;
+  summary: string;
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofReconciliationSummaryView {
+  reconciliationId: "candidate-local-review-proof-reconciliation";
+  label: string;
+  summary: string;
+  defaultReconciliationRowId: string;
+  defaultNavigatorRowId: string;
+  defaultPacketId: string;
+  defaultBucketId: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalReconciliationRowCount: number;
+    completeLocalChainRowCount: number;
+    localInspectionGapRowCount: number;
+    deferredProductionBoundaryRowCount: number;
+    sourceChainSegmentCount: number;
+    consistencyBucketCount: number;
+    staticReviewReferenceCount: number;
+    staticInspectionPromptCount: number;
+    proofCommandReferenceCount: number;
+    deferredBoundaryNoteCount: number;
+    sourcePriorityRowCount: number;
+    sourceCoverageRowCount: number;
+    sourceTraceRowCount: number;
+    sourceOutcomeRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceResolutionRowCount: number;
+    sourceMatrixRowCount: number;
+    sourceActionCount: number;
+    evidenceTargetCount: number;
+    proofBucketCount: number;
+    staticHumanGateStepCount: number;
+  };
+}
+
+export interface ReviewProofReconciliationView {
+  schema: "telemforge.review_proof_reconciliation.v1";
+  version: 1;
+  contractLabel: "local deterministic review proof-chain reconciliation map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewProofReconciliationSummaryView;
+  reconciliationRows: ReviewProofReconciliationRowView[];
+  defaultReconciliationRow: ReviewProofReconciliationRowView;
+  consistencyBuckets: ReviewProofReconciliationBucketView[];
+  sourceChainSegments: ReviewProofReconciliationSegmentSummaryView[];
+  staticReviewReferences: ReviewProofReconciliationStaticReferenceView[];
+  deferredBoundaryNotes: ReviewProofReconciliationDeferredBoundaryNoteView[];
+  staticReconciliationSummary: string;
+  sourceNavigator: ReviewProofNavigatorView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -2022,6 +2207,7 @@ export interface MissionConsoleView {
   reviewProofPriority?: ReviewProofPriorityView;
   reviewProofPacket?: ReviewProofPacketView;
   reviewProofNavigator?: ReviewProofNavigatorView;
+  reviewProofReconciliation?: ReviewProofReconciliationView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

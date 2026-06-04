@@ -2985,6 +2985,222 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewProofReconciliation ? (
+        <section
+          className="review-proof-reconciliation-section"
+          aria-label="Review proof-chain reconciliation map"
+        >
+          <a id="review-proof-reconciliation" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 29 proof reconciliation
+              </span>
+              <h2>Proof-chain consistency map</h2>
+            </div>
+            <span className="status-chip">
+              {
+                view.reviewProofReconciliation.defaultReconciliationRow
+                  .bucketLabel
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {view.reviewProofReconciliation.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Rows</span>
+              <strong>
+                {
+                  view.reviewProofReconciliation.summary.counts
+                    .totalReconciliationRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Inspection gaps</span>
+              <strong>
+                {
+                  view.reviewProofReconciliation.summary.counts
+                    .localInspectionGapRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  view.reviewProofReconciliation.summary.counts
+                    .deferredProductionBoundaryRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static refs</span>
+              <strong>
+                {
+                  view.reviewProofReconciliation.summary.counts
+                    .staticReviewReferenceCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="proof-reconciliation-layout">
+            <div className="proof-reconciliation-list">
+              {view.reviewProofReconciliation.reconciliationRows.map((row) => (
+                <article
+                  key={row.reconciliationRowId}
+                  className={`proof-reconciliation-row proof-reconciliation-row-${row.bucketKind}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {row.priority} · {row.bucketKind.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.bucketSummary}</p>
+                  <div className="trace-source-grid">
+                    <div>
+                      <span className="metric-label">Navigator row</span>
+                      <div className="gap-reference-strip">
+                        <span>{row.navigatorRowId}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Proof packet</span>
+                      <div className="gap-reference-strip">
+                        <span>{row.packetId}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Priority row</span>
+                      <div className="gap-reference-strip">
+                        <span>{row.sourcePriorityRowId}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Static prompts</span>
+                      <div className="gap-reference-strip">
+                        {row.staticInspectionPromptIds.map((promptId) => (
+                          <span
+                            key={`${row.reconciliationRowId}:prompt:${promptId}`}
+                          >
+                            {promptId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="proof-reconciliation-segment-list">
+                    {row.sourceChainSegments.map((segment) => (
+                      <div
+                        key={segment.segmentId}
+                        className={
+                          segment.complete
+                            ? "proof-reconciliation-segment proof-reconciliation-segment-complete"
+                            : "proof-reconciliation-segment proof-reconciliation-segment-gap"
+                        }
+                      >
+                        <span className="event-type">
+                          {segment.kind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{segment.label}</strong>
+                        <div className="gap-reference-strip">
+                          {segment.sourceIds.length ? (
+                            segment.sourceIds.map((sourceId) => (
+                              <span
+                                key={`${segment.segmentId}:${sourceId}`}
+                              >
+                                {sourceId}
+                              </span>
+                            ))
+                          ) : (
+                            <span>no local marker</span>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="proof-reconciliation-panel">
+              <span className="metric-label">Default reconciliation row</span>
+              <strong>
+                {
+                  view.reviewProofReconciliation.defaultReconciliationRow
+                    .label
+                }
+              </strong>
+              <p>{view.reviewProofReconciliation.summary.summary}</p>
+              <p>{view.reviewProofReconciliation.staticReconciliationSummary}</p>
+              <div className="proof-reconciliation-bucket-list">
+                {view.reviewProofReconciliation.consistencyBuckets.map(
+                  (bucket) => (
+                    <article key={bucket.bucketId}>
+                      <span className="event-type">
+                        Bucket {bucket.order} ·{" "}
+                        {bucket.bucketKind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{bucket.label}</strong>
+                      <p>{bucket.summary}</p>
+                      <div className="gap-reference-strip">
+                        {bucket.reconciliationRowIds.map((rowId) => (
+                          <span key={`${bucket.bucketId}:${rowId}`}>
+                            {rowId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="proof-reconciliation-reference-list">
+                {view.reviewProofReconciliation.staticReviewReferences.map(
+                  (reference) => (
+                    <article key={reference.referenceId}>
+                      <span className="event-type">
+                        {reference.kind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{reference.label}</strong>
+                      <p>{reference.summary}</p>
+                      <code>{reference.repoRelativeReference}</code>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="proof-reconciliation-boundary-list">
+                {view.reviewProofReconciliation.deferredBoundaryNotes.map(
+                  (note) => (
+                    <article key={note.noteId}>
+                      <span className="event-type">
+                        {note.actionability.replace(/_/g, " ")}
+                      </span>
+                      <strong>{note.label}</strong>
+                      <p>{note.summary}</p>
+                      <div className="gap-reference-strip">
+                        {note.evidenceTargetIds.map((targetId) => (
+                          <span key={`${note.noteId}:${targetId}`}>
+                            {targetId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

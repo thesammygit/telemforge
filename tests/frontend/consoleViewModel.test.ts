@@ -518,6 +518,42 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
   assert.equal(view.reviewProofNavigator?.sourceCrosswalkRows.length, 3);
   assert.equal(view.reviewProofNavigator?.staticInspectionPrompts.length, 3);
   assert.equal(view.reviewProofNavigator?.deferredBoundaryMarkers.length, 1);
+  assert.ok(view.reviewProofReconciliation);
+  assert.equal(
+    view.reviewProofReconciliation?.schema,
+    "telemforge.review_proof_reconciliation.v1",
+  );
+  assert.equal(
+    view.reviewProofReconciliation?.summary.defaultNavigatorRowId,
+    view.reviewProofNavigator?.summary.defaultNavigatorRowId,
+  );
+  assert.equal(
+    view.reviewProofReconciliation?.defaultReconciliationRow.navigatorRowId,
+    view.reviewProofNavigator?.defaultNavigatorRow.navigatorRowId,
+  );
+  assert.equal(
+    view.reviewProofReconciliation?.defaultReconciliationRow.sourcePriorityRowId,
+    view.reviewProofPriority?.defaultPriorityRow.priorityRowId,
+  );
+  assert.deepEqual(
+    view.reviewProofReconciliation?.reconciliationRows.map(
+      (row) => row.bucketKind,
+    ),
+    [
+      "local_inspection_gap",
+      "local_inspection_gap",
+      "deferred_production_boundary",
+    ],
+  );
+  assert.equal(
+    view.reviewProofReconciliation?.summary.counts.staticInspectionPromptCount,
+    view.reviewProofNavigator?.staticInspectionPrompts.length,
+  );
+  assert.equal(
+    view.reviewProofReconciliation?.summary.counts.proofCommandReferenceCount,
+    view.reviewProofNavigator?.staticCommandReferences.length,
+  );
+  assert.equal(view.reviewProofReconciliation?.deferredBoundaryNotes.length, 1);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
