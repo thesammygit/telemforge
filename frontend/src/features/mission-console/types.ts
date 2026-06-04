@@ -517,6 +517,66 @@ export interface ReviewActionWalkthroughView {
   deferredProductionBoundaryNotes: string[];
 }
 
+export type ReviewHandoffRehearsalReadinessVerdict =
+  | "blocked_by_local_follow_up"
+  | "deferred_production_scope_only"
+  | "ready_for_local_handoff_rehearsal";
+
+export type ReviewHandoffRehearsalMissingTargetStatus =
+  | "all_targets_resolved"
+  | "missing_targets";
+
+export interface ReviewHandoffRehearsalStepView {
+  stepId: string;
+  stepNumber: number;
+  actionId: string;
+  actionLabel: string;
+  actionSummary: string;
+  priority: ReviewActionPriority;
+  blockerCategory: ReviewActionBlockerCategory;
+  blocking: boolean;
+  checkpointCounts: ReviewActionWalkthroughCoverageView;
+  missingTargetStatus: ReviewHandoffRehearsalMissingTargetStatus;
+  missingTargets: ReviewActionWalkthroughMissingTargetView[];
+  reviewerPrompt: string;
+  expectedLocalOutcome: string;
+  nextLocalStep: string;
+  sourceEvidenceReferences: string[];
+}
+
+export interface ReviewHandoffRehearsalBlockerView {
+  blockerId: string;
+  actionId: string;
+  label: string;
+  reason: string;
+  nextLocalStep: string;
+}
+
+export interface ReviewHandoffRehearsalView {
+  schema: "telemforge.review_handoff_rehearsal.v1";
+  version: 1;
+  contractLabel: "local deterministic review handoff rehearsal";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readiness: {
+    verdict: ReviewHandoffRehearsalReadinessVerdict;
+    label: string;
+    summary: string;
+    counts: {
+      totalStepCount: number;
+      blockingStepCount: number;
+      missingTargetStepCount: number;
+      deferredProductionStepCount: number;
+      resolvedCheckpointCount: number;
+      missingCheckpointCount: number;
+    };
+  };
+  steps: ReviewHandoffRehearsalStepView[];
+  unresolvedLocalBlockers: ReviewHandoffRehearsalBlockerView[];
+  deferredProductionNotes: string[];
+  nextLocalPrompt: string;
+  sourceEvidenceReferences: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -692,6 +752,7 @@ export interface MissionConsoleView {
   reviewBriefingBoard?: ReviewBriefingBoardView;
   reviewActionQueue?: ReviewActionQueueView;
   reviewActionWalkthrough?: ReviewActionWalkthroughView;
+  reviewHandoffRehearsal?: ReviewHandoffRehearsalView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

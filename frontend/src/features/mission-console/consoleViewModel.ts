@@ -33,6 +33,7 @@ import { buildReviewActionQueue } from "../../lib/reviewActionQueue.ts";
 import { buildReviewActionWalkthrough } from "../../lib/reviewActionWalkthrough.ts";
 import { buildReviewBriefingBoard } from "../../lib/reviewBriefingBoard.ts";
 import { buildReviewDecisionRegister } from "../../lib/reviewDecisionRegister.ts";
+import { buildReviewHandoffRehearsal } from "../../lib/reviewHandoffRehearsal.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -124,6 +125,14 @@ export function buildMissionConsoleView(
     incidentReviewExport,
     selectedReviewActionId,
   );
+  const reviewHandoffRehearsal = buildReviewHandoffRehearsal(
+    reviewActionQueue,
+    reviewBriefingBoard,
+    replayPlayback,
+    runbook,
+    incidentReviewPacket,
+    incidentReviewExport,
+  );
 
   return {
     mission: {
@@ -153,6 +162,7 @@ export function buildMissionConsoleView(
     reviewBriefingBoard,
     reviewActionQueue,
     reviewActionWalkthrough,
+    reviewHandoffRehearsal,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

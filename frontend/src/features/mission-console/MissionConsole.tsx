@@ -963,6 +963,140 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewHandoffRehearsal ? (
+        <section
+          className="review-handoff-section"
+          aria-label="Local review handoff rehearsal"
+        >
+          <a id="review-handoff-rehearsal" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 18 handoff rehearsal</span>
+              <h2>Local review rehearsal script</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewHandoffRehearsal.readiness.verdict}`}
+            >
+              {view.reviewHandoffRehearsal.readiness.verdict.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="handoff-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewHandoffRehearsal.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Steps</span>
+              <strong>
+                {view.reviewHandoffRehearsal.readiness.counts.totalStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local blockers</span>
+              <strong>
+                {view.reviewHandoffRehearsal.readiness.counts.blockingStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Missing targets</span>
+              <strong>
+                {
+                  view.reviewHandoffRehearsal.readiness.counts
+                    .missingCheckpointCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="handoff-rehearsal-layout">
+            <div className="handoff-step-list">
+              {view.reviewHandoffRehearsal.steps.map((step) => (
+                <article
+                  key={step.stepId}
+                  className={`handoff-step handoff-step-${step.missingTargetStatus}`}
+                >
+                  <div className="handoff-step-heading">
+                    <span
+                      className={`status-chip action-priority-chip-${step.priority}`}
+                    >
+                      Step {step.stepNumber}
+                    </span>
+                    <div>
+                      <span className="event-type">
+                        {step.blockerCategory.replace(/_/g, " ")}
+                      </span>
+                      <h3>{step.actionLabel}</h3>
+                    </div>
+                  </div>
+                  <span className="walkthrough-selected-action-id">
+                    {step.actionId}
+                  </span>
+                  <p>{step.reviewerPrompt}</p>
+                  <p className="action-readiness-impact">
+                    {step.expectedLocalOutcome}
+                  </p>
+                  <p className="action-next-step">{step.nextLocalStep}</p>
+                  <div className="handoff-checkpoint-strip">
+                    <span>
+                      {step.checkpointCounts.resolvedTargetCount} resolved
+                    </span>
+                    <span>{step.checkpointCounts.missingTargetCount} missing</span>
+                    <span>{step.checkpointCounts.replayFrameCount} frames</span>
+                    <span>
+                      {step.checkpointCounts.runbookTargetCount} runbook targets
+                    </span>
+                    <span>{step.checkpointCounts.sourcePathCount} sources</span>
+                  </div>
+                  {step.missingTargets.length ? (
+                    <div className="handoff-missing-targets">
+                      {step.missingTargets.map((target) => (
+                        <article key={`${step.stepId}:${target.target}`}>
+                          <strong>{target.label}</strong>
+                          <p>{target.reason}</p>
+                        </article>
+                      ))}
+                    </div>
+                  ) : null}
+                  <div className="handoff-source-list">
+                    {step.sourceEvidenceReferences.map((source) => (
+                      <span key={`${step.stepId}:${source}`}>{source}</span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="handoff-readiness-panel rehearsal-readiness-panel">
+              <span className="metric-label">Rehearsal readiness</span>
+              <strong>{view.reviewHandoffRehearsal.readiness.label}</strong>
+              <p>{view.reviewHandoffRehearsal.readiness.summary}</p>
+              <p className="human-test-gate">
+                {view.reviewHandoffRehearsal.nextLocalPrompt}
+              </p>
+              {view.reviewHandoffRehearsal.unresolvedLocalBlockers.length ? (
+                <div className="handoff-blocker-list">
+                  {view.reviewHandoffRehearsal.unresolvedLocalBlockers.map(
+                    (blocker) => (
+                      <article key={blocker.blockerId}>
+                        <strong>{blocker.label}</strong>
+                        <p>{blocker.reason}</p>
+                      </article>
+                    ),
+                  )}
+                </div>
+              ) : (
+                <p className="empty-state">No local rehearsal blockers remain.</p>
+              )}
+              <div className="deferred-scope-list">
+                {view.reviewHandoffRehearsal.deferredProductionNotes.map(
+                  (note) => (
+                    <span key={note}>{note}</span>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

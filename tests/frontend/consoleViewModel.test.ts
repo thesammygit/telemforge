@@ -259,6 +259,20 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
   );
   assert.equal(view.reviewActionWalkthrough?.coverage.missingTargetCount, 0);
   assert.equal(view.reviewActionWalkthrough?.evidencePathRows.length, 3);
+  assert.ok(view.reviewHandoffRehearsal);
+  assert.equal(
+    view.reviewHandoffRehearsal?.schema,
+    "telemforge.review_handoff_rehearsal.v1",
+  );
+  assert.equal(
+    view.reviewHandoffRehearsal?.readiness.verdict,
+    "blocked_by_local_follow_up",
+  );
+  assert.equal(view.reviewHandoffRehearsal?.readiness.counts.totalStepCount, 3);
+  assert.equal(
+    view.reviewHandoffRehearsal?.unresolvedLocalBlockers.length,
+    2,
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -427,6 +441,14 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   assert.deepEqual(
     selectedView.reviewActionWalkthrough?.evidencePathRows.map((row) => row.target),
     ["review-decision-register"],
+  );
+  assert.equal(
+    selectedView.reviewHandoffRehearsal?.readiness.verdict,
+    "deferred_production_scope_only",
+  );
+  assert.equal(
+    selectedView.reviewHandoffRehearsal?.unresolvedLocalBlockers.length,
+    0,
   );
   assert.ok(
     selectedView.replayPlayback.scopeNotes.some((note) =>

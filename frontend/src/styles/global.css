@@ -158,6 +158,7 @@ button {
 .review-briefing-section,
 .review-action-section,
 .review-walkthrough-section,
+.review-handoff-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -384,6 +385,7 @@ button {
 .review-briefing-section,
 .review-action-section,
 .review-walkthrough-section,
+.review-handoff-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -408,6 +410,10 @@ button {
 }
 
 .review-walkthrough-section {
+  padding: 18px;
+}
+
+.review-handoff-section {
   padding: 18px;
 }
 
@@ -1512,6 +1518,124 @@ button {
   color: #12745b;
 }
 
+.action-status-ready_for_local_handoff_rehearsal {
+  color: #12745b;
+}
+
+.handoff-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(90px, 0.45fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.handoff-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.handoff-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.handoff-rehearsal-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.handoff-step-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.handoff-step {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.handoff-step-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.handoff-step-heading h3,
+.handoff-blocker-list strong,
+.handoff-missing-targets strong {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.handoff-step p,
+.handoff-blocker-list p,
+.handoff-missing-targets p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.handoff-checkpoint-strip,
+.handoff-source-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.handoff-checkpoint-strip span,
+.handoff-source-list span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #52636f;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.handoff-source-list span {
+  color: #184d88;
+}
+
+.handoff-missing-targets,
+.handoff-blocker-list {
+  display: grid;
+  gap: 8px;
+}
+
+.handoff-missing-targets article,
+.handoff-blocker-list article {
+  border-top: 1px solid #e2e9ee;
+  padding-top: 10px;
+}
+
+.rehearsal-readiness-panel {
+  gap: 12px;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1734,8 +1858,10 @@ button {
   .briefing-summary-grid,
   .action-summary-grid,
   .walkthrough-summary-grid,
+  .handoff-summary-grid,
   .action-queue-layout,
   .walkthrough-layout,
+  .handoff-rehearsal-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
@@ -1763,6 +1889,7 @@ button {
   .briefing-summary-grid,
   .action-summary-grid,
   .walkthrough-summary-grid,
+  .handoff-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,
