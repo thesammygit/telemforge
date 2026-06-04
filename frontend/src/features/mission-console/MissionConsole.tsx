@@ -1246,6 +1246,163 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewGapTriage ? (
+        <section
+          className="review-gap-section"
+          aria-label="Local review gap triage"
+        >
+          <a id="review-gap-triage" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 20 gap triage</span>
+              <h2>Next local review pass</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewGapTriage.readiness.verdict}`}
+            >
+              {view.reviewGapTriage.readiness.verdict.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewGapTriage.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Items</span>
+              <strong>{view.reviewGapTriage.readiness.counts.totalItemCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Local blockers</span>
+              <strong>
+                {view.reviewGapTriage.readiness.counts.localBlockerItemCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  view.reviewGapTriage.readiness.counts
+                    .deferredProductionItemCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Proof refs</span>
+              <strong>
+                {view.reviewGapTriage.readiness.counts.proofCommandCount}
+              </strong>
+            </div>
+          </div>
+          <div className="gap-triage-layout">
+            <div className="gap-group-list">
+              {view.reviewGapTriage.groups.map((group) => (
+                <article
+                  key={group.groupId}
+                  className={`gap-group gap-group-${group.category}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span
+                        className={`status-chip action-priority-chip-${group.priority}`}
+                      >
+                        {group.priority.toUpperCase()}
+                      </span>
+                      <h3>{group.label}</h3>
+                    </div>
+                    <strong>{group.itemCount}</strong>
+                  </div>
+                  <p>{group.summary}</p>
+                  <div className="gap-item-list">
+                    {group.items.map((item) => (
+                      <article
+                        key={item.itemId}
+                        className={`gap-item gap-item-${item.category}`}
+                      >
+                        <div className="gap-item-heading">
+                          <span className="gap-rank">#{item.rank}</span>
+                          <div>
+                            <span className="event-type">
+                              {item.category.replace(/_/g, " ")}
+                            </span>
+                            <h4>{item.label}</h4>
+                          </div>
+                        </div>
+                        <p>{item.summary}</p>
+                        <p className="action-next-step">{item.nextLocalStep}</p>
+                        <div className="gap-reference-strip">
+                          {item.sourceMatrixRowIds.map((rowId) => (
+                            <span key={`${item.itemId}:${rowId}`}>{rowId}</span>
+                          ))}
+                          {item.sourceActionIds.map((actionId) => (
+                            <span key={`${item.itemId}:${actionId}`}>
+                              {actionId}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="gap-bucket-strip">
+                          {item.sourceBuckets.map((bucket) => (
+                            <span key={`${item.itemId}:${bucket.bucketId}`}>
+                              {bucket.label}: {bucket.count}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="gap-proof-strip">
+                          {item.proofCommandReferences.map((command) => (
+                            <span key={`${item.itemId}:${command.commandId}`}>
+                              {command.label}
+                            </span>
+                          ))}
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="gap-proof-panel">
+              <span className="metric-label">Next-pass readiness</span>
+              <strong>{view.reviewGapTriage.readiness.label}</strong>
+              <p>{view.reviewGapTriage.readiness.summary}</p>
+              <p className="human-test-gate">
+                {view.reviewGapTriage.staticProofChecklistSummary}
+              </p>
+              <div className="coverage-command-list">
+                {view.reviewGapTriage.proofCommandReferences.map((command) => (
+                  <article key={command.commandId} className="coverage-command-row">
+                    <strong>{command.label}</strong>
+                    <code>{command.command}</code>
+                    <p>{command.purpose}</p>
+                  </article>
+                ))}
+              </div>
+              {view.reviewGapTriage.localBlockerSummaries.length ? (
+                <div className="gap-blocker-list">
+                  {view.reviewGapTriage.localBlockerSummaries.map((blocker) => (
+                    <article key={blocker.blockerId}>
+                      <strong>{blocker.label}</strong>
+                      <p>{blocker.reason}</p>
+                    </article>
+                  ))}
+                </div>
+              ) : (
+                <p className="empty-state">No local triage blockers remain.</p>
+              )}
+              <div className="gap-deferred-list">
+                {view.reviewGapTriage.deferredProductionBoundaries.map(
+                  (boundary) => (
+                    <article key={boundary.boundaryId}>
+                      <strong>{boundary.label}</strong>
+                      <p>{boundary.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

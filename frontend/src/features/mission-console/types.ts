@@ -644,6 +644,103 @@ export interface ReviewHandoffCoverageMatrixView {
   sourceEvidenceReferences: string[];
 }
 
+export type ReviewGapTriageCategory =
+  | "missing_target"
+  | "local_blocker"
+  | "ready_local_review"
+  | "deferred_production";
+
+export type ReviewGapTriagePriority = "p0" | "p1" | "p2";
+
+export type ReviewGapTriageReadinessVerdict =
+  | "local_blockers_ranked"
+  | "deferred_production_only"
+  | "ready_for_next_local_pass";
+
+export type ReviewGapTriageActionability =
+  | "local_actionable"
+  | "deferred_non_actionable";
+
+export interface ReviewGapTriageProofCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  source: "stage20_triage" | "stage19_matrix";
+}
+
+export interface ReviewGapTriageNextPassItemView {
+  itemId: string;
+  rank: number;
+  priority: ReviewGapTriagePriority;
+  category: ReviewGapTriageCategory;
+  actionability: ReviewGapTriageActionability;
+  label: string;
+  summary: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  blockerStatus: ReviewHandoffCoverageMatrixBlockerStatus;
+  blockerSummary: string;
+  sourceBuckets: ReviewHandoffCoverageSourceBucketView[];
+  proofCommandReferences: ReviewGapTriageProofCommandReferenceView[];
+  nextLocalStep: string;
+}
+
+export interface ReviewGapTriageGroupView {
+  groupId: string;
+  category: ReviewGapTriageCategory;
+  label: string;
+  summary: string;
+  priority: ReviewGapTriagePriority;
+  itemCount: number;
+  items: ReviewGapTriageNextPassItemView[];
+}
+
+export interface ReviewGapTriageLocalBlockerSummaryView {
+  blockerId: string;
+  category: "missing_target" | "local_blocker";
+  label: string;
+  reason: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  nextLocalStep: string;
+}
+
+export interface ReviewGapTriageDeferredBoundaryView {
+  boundaryId: string;
+  label: string;
+  summary: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  deferredNotes: string[];
+  actionability: "deferred_non_actionable";
+}
+
+export interface ReviewGapTriageView {
+  schema: "telemforge.review_gap_triage.v1";
+  version: 1;
+  contractLabel: "local deterministic review gap triage";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readiness: {
+    verdict: ReviewGapTriageReadinessVerdict;
+    label: string;
+    summary: string;
+    counts: {
+      totalItemCount: number;
+      localBlockerItemCount: number;
+      missingTargetItemCount: number;
+      deferredProductionItemCount: number;
+      sourceMatrixRowCount: number;
+      proofCommandCount: number;
+    };
+  };
+  groups: ReviewGapTriageGroupView[];
+  nextPassItems: ReviewGapTriageNextPassItemView[];
+  localBlockerSummaries: ReviewGapTriageLocalBlockerSummaryView[];
+  deferredProductionBoundaries: ReviewGapTriageDeferredBoundaryView[];
+  proofCommandReferences: ReviewGapTriageProofCommandReferenceView[];
+  staticProofChecklistSummary: string;
+  sourceMatrixRows: ReviewHandoffCoverageMatrixRowView[];
+  sourceEvidenceReferences: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -821,6 +918,7 @@ export interface MissionConsoleView {
   reviewActionWalkthrough?: ReviewActionWalkthroughView;
   reviewHandoffRehearsal?: ReviewHandoffRehearsalView;
   reviewHandoffCoverageMatrix?: ReviewHandoffCoverageMatrixView;
+  reviewGapTriage?: ReviewGapTriageView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

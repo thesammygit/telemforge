@@ -290,6 +290,27 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewHandoffCoverageMatrix?.readiness.counts.blockingRowCount,
     2,
   );
+  assert.ok(view.reviewGapTriage);
+  assert.equal(
+    view.reviewGapTriage?.schema,
+    "telemforge.review_gap_triage.v1",
+  );
+  assert.equal(view.reviewGapTriage?.readiness.verdict, "local_blockers_ranked");
+  assert.equal(view.reviewGapTriage?.groups.length, 2);
+  assert.equal(view.reviewGapTriage?.groups[0].category, "local_blocker");
+  assert.equal(view.reviewGapTriage?.groups[1].category, "deferred_production");
+  assert.equal(view.reviewGapTriage?.nextPassItems.length, 3);
+  assert.equal(
+    view.reviewGapTriage?.nextPassItems[0].sourceMatrixRowIds[0],
+    view.reviewHandoffCoverageMatrix?.rows[0].rowId,
+  );
+  assert.equal(view.reviewGapTriage?.proofCommandReferences[0].commandId, "review-gap-triage");
+  assert.equal(view.reviewGapTriage?.proofCommandReferences[0].source, "stage20_triage");
+  assert.equal(view.reviewGapTriage?.proofCommandReferences.at(-1)?.commandId, "public-repo-guard");
+  assert.equal(
+    view.reviewGapTriage?.staticProofChecklistSummary,
+    "Proof commands are static repo-relative references for the reviewer; the mission console does not execute shell commands.",
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -478,6 +499,14 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   assert.equal(
     selectedView.reviewHandoffCoverageMatrix?.unresolvedLocalBlockers.length,
     0,
+  );
+  assert.equal(
+    selectedView.reviewGapTriage?.readiness.verdict,
+    "deferred_production_only",
+  );
+  assert.equal(
+    selectedView.reviewGapTriage?.nextPassItems[0].actionability,
+    "deferred_non_actionable",
   );
   assert.ok(
     selectedView.replayPlayback.scopeNotes.some((note) =>

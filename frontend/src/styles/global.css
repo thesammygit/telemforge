@@ -159,6 +159,8 @@ button {
 .review-action-section,
 .review-walkthrough-section,
 .review-handoff-section,
+.review-coverage-section,
+.review-gap-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -386,6 +388,8 @@ button {
 .review-action-section,
 .review-walkthrough-section,
 .review-handoff-section,
+.review-coverage-section,
+.review-gap-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -414,6 +418,14 @@ button {
 }
 
 .review-handoff-section {
+  padding: 18px;
+}
+
+.review-coverage-section {
+  padding: 18px;
+}
+
+.review-gap-section {
   padding: 18px;
 }
 
@@ -1526,6 +1538,18 @@ button {
   color: #12745b;
 }
 
+.action-status-local_blockers_ranked {
+  color: #a76a16;
+}
+
+.action-status-deferred_production_only {
+  color: #66717b;
+}
+
+.action-status-ready_for_next_local_pass {
+  color: #12745b;
+}
+
 .handoff-summary-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(90px, 0.45fr));
@@ -1827,6 +1851,170 @@ button {
   line-height: 1.45;
 }
 
+.gap-summary-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) repeat(4, minmax(90px, 0.45fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.gap-summary-grid div {
+  min-width: 0;
+  padding: 13px 15px;
+  background: #fbfcfd;
+}
+
+.gap-summary-grid strong {
+  display: block;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+  color: #172026;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.gap-triage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.gap-group-list,
+.gap-item-list,
+.gap-proof-panel,
+.gap-blocker-list,
+.gap-deferred-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.gap-group,
+.gap-proof-panel {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.gap-group-missing_target {
+  border-left: 4px solid #c43535;
+}
+
+.gap-group-local_blocker {
+  border-left: 4px solid #a76a16;
+}
+
+.gap-group-ready_local_review {
+  border-left: 4px solid #12745b;
+}
+
+.gap-group-deferred_production {
+  border-left: 4px solid #66717b;
+}
+
+.gap-group-heading,
+.gap-item-heading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.gap-group-heading {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.gap-group-heading h3,
+.gap-item-heading h4,
+.gap-proof-panel strong,
+.gap-blocker-list strong,
+.gap-deferred-list strong {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.gap-group p,
+.gap-item p,
+.gap-proof-panel p,
+.gap-blocker-list p,
+.gap-deferred-list p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.gap-item {
+  display: grid;
+  gap: 9px;
+  min-width: 0;
+  border-top: 1px solid #e2e9ee;
+  padding-top: 12px;
+}
+
+.gap-rank {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #273640;
+  font-size: 0.76rem;
+  font-weight: 820;
+}
+
+.gap-reference-strip,
+.gap-bucket-strip,
+.gap-proof-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.gap-reference-strip span,
+.gap-bucket-strip span,
+.gap-proof-strip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #52636f;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.gap-reference-strip span {
+  color: #273640;
+}
+
+.gap-bucket-strip span {
+  color: #184d88;
+}
+
+.gap-proof-strip span {
+  color: #12745b;
+}
+
+.gap-blocker-list article,
+.gap-deferred-list article {
+  border-top: 1px solid #e2e9ee;
+  padding-top: 10px;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2051,10 +2239,12 @@ button {
   .walkthrough-summary-grid,
   .handoff-summary-grid,
   .coverage-summary-grid,
+  .gap-summary-grid,
   .action-queue-layout,
   .walkthrough-layout,
   .handoff-rehearsal-layout,
   .coverage-matrix-layout,
+  .gap-triage-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
@@ -2084,6 +2274,7 @@ button {
   .walkthrough-summary-grid,
   .handoff-summary-grid,
   .coverage-summary-grid,
+  .gap-summary-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,
