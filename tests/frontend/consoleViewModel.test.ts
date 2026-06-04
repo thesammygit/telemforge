@@ -334,6 +334,33 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewGapResolution?.staticProofChecklistSummary,
     "Stage 21 proof commands are static repo-relative references only; the mission console does not execute commands or store reviewer progress.",
   );
+  assert.ok(view.reviewPassReadiness);
+  assert.equal(
+    view.reviewPassReadiness?.schema,
+    "telemforge.review_pass_readiness.v1",
+  );
+  assert.equal(
+    view.reviewPassReadiness?.readiness.verdict,
+    "local_proof_targets_pending",
+  );
+  assert.equal(view.reviewPassReadiness?.readinessRows.length, 3);
+  assert.equal(view.reviewPassReadiness?.evidenceMapRows.length, 3);
+  assert.equal(
+    view.reviewPassReadiness?.readinessRows[0].sourceResolutionId,
+    view.reviewGapResolution?.resolutionRows[0].resolutionId,
+  );
+  assert.equal(
+    view.reviewPassReadiness?.evidenceMapRows[0].evidenceTargetId,
+    view.reviewGapResolution?.evidenceTargetChecklistRows[0].targetRowId,
+  );
+  assert.equal(
+    view.reviewPassReadiness?.proofCommandReferences[0].commandId,
+    "review-pass-readiness",
+  );
+  assert.equal(
+    view.reviewPassReadiness?.staticEvidenceMapSummary,
+    "Stage 22 evidence map rows are static repo-relative references only; the mission console does not execute proof commands or store reviewer progress.",
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {

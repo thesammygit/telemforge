@@ -1571,6 +1571,165 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewPassReadiness ? (
+        <section
+          className="review-pass-section"
+          aria-label="Review-pass readiness evidence map"
+        >
+          <a id="review-pass-readiness" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 22 review pass</span>
+              <h2>Readiness and evidence map</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewPassReadiness.readiness.verdict}`}
+            >
+              {view.reviewPassReadiness.readiness.verdict.replace(/_/g, " ")}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewPassReadiness.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Rows</span>
+              <strong>
+                {
+                  view.reviewPassReadiness.readiness.counts
+                    .totalReadinessRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local proof</span>
+              <strong>
+                {
+                  view.reviewPassReadiness.readiness.counts
+                    .localProofTargetCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence map</span>
+              <strong>
+                {view.reviewPassReadiness.readiness.counts.evidenceMapRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  view.reviewPassReadiness.readiness.counts
+                    .deferredProductionRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="review-pass-layout">
+            <div className="review-pass-row-list">
+              {view.reviewPassReadiness.readinessRows.map((row) => (
+                <article
+                  key={row.readinessRowId}
+                  className={`review-pass-row review-pass-row-${row.status}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span
+                        className={`status-chip action-priority-chip-${row.priority}`}
+                      >
+                        {row.priority.toUpperCase()}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.summary}</p>
+                  <p className="action-next-step">
+                    {row.nextStaticReviewPassStep}
+                  </p>
+                  <div className="gap-reference-strip">
+                    <span>{row.sourceResolutionId}</span>
+                    {row.sourceMatrixRowIds.map((rowId) => (
+                      <span key={`${row.readinessRowId}:${rowId}`}>{rowId}</span>
+                    ))}
+                    {row.sourceActionIds.map((actionId) => (
+                      <span key={`${row.readinessRowId}:${actionId}`}>
+                        {actionId}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="gap-bucket-strip">
+                    {row.sourceBuckets.map((bucket) => (
+                      <span key={`${row.readinessRowId}:${bucket.bucketId}`}>
+                        {bucket.label}: {bucket.count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="gap-proof-strip">
+                    {row.evidenceTargetIds.map((targetId) => (
+                      <span key={`${row.readinessRowId}:${targetId}`}>
+                        {targetId}
+                      </span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="review-pass-panel">
+              <span className="metric-label">Local pass readiness</span>
+              <strong>{view.reviewPassReadiness.readiness.label}</strong>
+              <p>{view.reviewPassReadiness.readiness.summary}</p>
+              <p className="human-test-gate">
+                {view.reviewPassReadiness.staticEvidenceMapSummary}
+              </p>
+              <div className="review-pass-evidence-map">
+                {view.reviewPassReadiness.evidenceMapRows.map((row) => (
+                  <article key={row.mapRowId} className="review-pass-map-row">
+                    <div>
+                      <span className="event-type">
+                        {row.status.replace(/_/g, " ")}
+                      </span>
+                      <strong>{row.label}</strong>
+                    </div>
+                    <p>{row.nextStaticReviewPassStep}</p>
+                    <div className="gap-reference-strip">
+                      <span>{row.sourceResolutionId}</span>
+                      <span>{row.evidenceTargetId}</span>
+                    </div>
+                    <div className="gap-proof-strip">
+                      {row.proofCommandIds.map((commandId) => (
+                        <span key={`${row.mapRowId}:${commandId}`}>
+                          {commandId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="coverage-command-list">
+                {view.reviewPassReadiness.proofCommandReferences.map((command) => (
+                  <article key={command.commandId} className="coverage-command-row">
+                    <strong>{command.label}</strong>
+                    <code>{command.command}</code>
+                    <p>{command.purpose}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="gap-deferred-list">
+                {view.reviewPassReadiness.deferredBoundaryNotes.map((boundary) => (
+                  <article key={boundary.boundaryId}>
+                    <strong>{boundary.label}</strong>
+                    <p>{boundary.summary}</p>
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

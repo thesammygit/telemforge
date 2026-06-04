@@ -37,6 +37,7 @@ import { buildReviewGapResolution } from "../../lib/reviewGapResolution.ts";
 import { buildReviewGapTriage } from "../../lib/reviewGapTriage.ts";
 import { buildReviewHandoffCoverageMatrix } from "../../lib/reviewHandoffCoverageMatrix.ts";
 import { buildReviewHandoffRehearsal } from "../../lib/reviewHandoffRehearsal.ts";
+import { buildReviewPassReadiness } from "../../lib/reviewPassReadiness.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -141,6 +142,7 @@ export function buildMissionConsoleView(
   );
   const reviewGapTriage = buildReviewGapTriage(reviewHandoffCoverageMatrix);
   const reviewGapResolution = buildReviewGapResolution(reviewGapTriage);
+  const reviewPassReadiness = buildReviewPassReadiness(reviewGapResolution);
 
   return {
     mission: {
@@ -174,6 +176,7 @@ export function buildMissionConsoleView(
     reviewHandoffCoverageMatrix,
     reviewGapTriage,
     reviewGapResolution,
+    reviewPassReadiness,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

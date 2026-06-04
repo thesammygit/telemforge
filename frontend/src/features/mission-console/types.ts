@@ -831,6 +831,112 @@ export interface ReviewGapResolutionView {
   sourceEvidenceReferences: string[];
 }
 
+export type ReviewPassReadinessVerdict =
+  | "local_proof_targets_pending"
+  | "deferred_production_only"
+  | "ready_for_local_review_pass";
+
+export type ReviewPassReadinessRowStatus =
+  | "needs_local_proof"
+  | "static_proof_ready"
+  | "deferred_production_boundary";
+
+export type ReviewPassChecklistItemStatus =
+  | "local_proof_required"
+  | "static_reference_ready"
+  | "deferred_non_actionable";
+
+export interface ReviewPassProofCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  source:
+    | "stage22_readiness"
+    | ReviewGapResolutionProofCommandReferenceView["source"];
+}
+
+export interface ReviewPassReadinessRowView {
+  readinessRowId: string;
+  sourceResolutionId: string;
+  rank: number;
+  priority: ReviewGapTriagePriority;
+  status: ReviewPassReadinessRowStatus;
+  actionability: ReviewGapTriageActionability;
+  label: string;
+  summary: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  sourceBuckets: ReviewHandoffCoverageSourceBucketView[];
+  proofCommandReferences: ReviewPassProofCommandReferenceView[];
+  nextStaticReviewPassStep: string;
+}
+
+export interface ReviewPassEvidenceMapRowView {
+  mapRowId: string;
+  readinessRowId: string;
+  sourceResolutionId: string;
+  evidenceTargetId: string;
+  label: string;
+  status: ReviewPassReadinessRowStatus;
+  actionability: ReviewGapTriageActionability;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  sourceBucketLabels: string[];
+  proofCommandIds: string[];
+  nextStaticReviewPassStep: string;
+}
+
+export interface ReviewPassChecklistItemView {
+  itemId: string;
+  label: string;
+  status: ReviewPassChecklistItemStatus;
+  sourceReadinessRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  nextStaticReviewPassStep: string;
+}
+
+export interface ReviewPassDeferredBoundaryNoteView {
+  boundaryId: string;
+  label: string;
+  summary: string;
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  deferredNotes: string[];
+  actionability: "deferred_non_actionable";
+}
+
+export interface ReviewPassReadinessView {
+  schema: "telemforge.review_pass_readiness.v1";
+  version: 1;
+  contractLabel: "local deterministic review-pass readiness";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readiness: {
+    verdict: ReviewPassReadinessVerdict;
+    label: string;
+    summary: string;
+    counts: {
+      totalReadinessRowCount: number;
+      localActionableRowCount: number;
+      localProofTargetCount: number;
+      staticProofReadyRowCount: number;
+      deferredProductionRowCount: number;
+      evidenceMapRowCount: number;
+      proofCommandReferenceCount: number;
+      sourceResolutionRowCount: number;
+      sourceMatrixRowCount: number;
+    };
+  };
+  readinessRows: ReviewPassReadinessRowView[];
+  evidenceMapRows: ReviewPassEvidenceMapRowView[];
+  staticReviewPassChecklist: ReviewPassChecklistItemView[];
+  proofCommandReferences: ReviewPassProofCommandReferenceView[];
+  deferredBoundaryNotes: ReviewPassDeferredBoundaryNoteView[];
+  staticEvidenceMapSummary: string;
+  sourceResolutionRows: ReviewGapResolutionPlaybookRowView[];
+  sourceEvidenceTargetChecklistRows: ReviewGapResolutionEvidenceTargetChecklistRowView[];
+  sourceEvidenceReferences: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -1010,6 +1116,7 @@ export interface MissionConsoleView {
   reviewHandoffCoverageMatrix?: ReviewHandoffCoverageMatrixView;
   reviewGapTriage?: ReviewGapTriageView;
   reviewGapResolution?: ReviewGapResolutionView;
+  reviewPassReadiness?: ReviewPassReadinessView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

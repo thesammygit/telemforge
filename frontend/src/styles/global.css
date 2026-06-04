@@ -161,6 +161,7 @@ button {
 .review-handoff-section,
 .review-coverage-section,
 .review-gap-section,
+.review-pass-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -390,6 +391,7 @@ button {
 .review-handoff-section,
 .review-coverage-section,
 .review-gap-section,
+.review-pass-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -426,6 +428,10 @@ button {
 }
 
 .review-gap-section {
+  padding: 18px;
+}
+
+.review-pass-section {
   padding: 18px;
 }
 
@@ -1550,6 +1556,14 @@ button {
   color: #12745b;
 }
 
+.action-status-local_proof_targets_pending {
+  color: #a76a16;
+}
+
+.action-status-ready_for_local_review_pass {
+  color: #12745b;
+}
+
 .handoff-summary-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.5fr) repeat(3, minmax(90px, 0.45fr));
@@ -2061,6 +2075,72 @@ button {
 
 .resolution-target-static_proof_ready {
   border-left: 4px solid #12745b;
+}
+
+.review-pass-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.review-pass-row-list,
+.review-pass-panel,
+.review-pass-evidence-map {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.review-pass-row,
+.review-pass-panel,
+.review-pass-map-row {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.review-pass-row {
+  display: grid;
+  gap: 10px;
+}
+
+.review-pass-row-needs_local_proof {
+  border-left: 4px solid #a76a16;
+}
+
+.review-pass-row-static_proof_ready {
+  border-left: 4px solid #12745b;
+}
+
+.review-pass-row-deferred_production_boundary {
+  border-left: 4px solid #66717b;
+}
+
+.review-pass-row h3,
+.review-pass-panel strong,
+.review-pass-map-row strong {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.review-pass-row p,
+.review-pass-panel p,
+.review-pass-map-row p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.review-pass-map-row {
+  display: grid;
+  gap: 8px;
+  background: #ffffff;
 }
 
 .replay-summary {
