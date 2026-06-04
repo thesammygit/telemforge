@@ -51,6 +51,7 @@ For each stage:
 22. [Review Pass Readiness Summary And Local Evidence Map](steps/22-review-pass-readiness-summary-and-local-evidence-map.md)
 23. [Review Pass Outcome Board And Deferred Scope Ledger](steps/23-review-pass-outcome-board-and-deferred-scope-ledger.md)
 24. [Review Evidence Trace Navigator And Local Proof Drilldown](steps/24-review-evidence-trace-navigator-and-local-proof-drilldown.md)
+25. [Review Evidence Coverage Map And Proof Gap Board](steps/25-review-evidence-coverage-map-and-proof-gap-board.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
