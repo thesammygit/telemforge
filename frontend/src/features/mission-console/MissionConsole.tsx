@@ -2556,6 +2556,204 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewProofPacket ? (
+        <section
+          className="review-proof-packet-section"
+          aria-label="Review proof packet human gate"
+        >
+          <a id="review-proof-packet-gate" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 27 proof packet</span>
+              <h2>Local proof packet and static human gate</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewProofPacket.defaultPacket.status}`}
+            >
+              {view.reviewProofPacket.defaultPacket.proofBucketLabels[0]}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewProofPacket.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Packets</span>
+              <strong>
+                {view.reviewProofPacket.summary.counts.totalPacketCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Expected observations</span>
+              <strong>
+                {
+                  view.reviewProofPacket.summary.counts
+                    .expectedObservationCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static gate steps</span>
+              <strong>
+                {
+                  view.reviewProofPacket.summary.counts
+                    .staticHumanGateStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Command references</span>
+              <strong>
+                {
+                  view.reviewProofPacket.summary.counts
+                    .staticCommandReferenceCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="proof-packet-layout">
+            <div className="proof-packet-list">
+              {view.reviewProofPacket.packets.map((packet) => (
+                <article
+                  key={packet.packetId}
+                  className={`proof-packet-row proof-packet-row-${packet.status}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {packet.priority} ·{" "}
+                        {packet.actionability.replace(/_/g, " ")}
+                      </span>
+                      <h3>{packet.label}</h3>
+                    </div>
+                    <strong>#{packet.rank}</strong>
+                  </div>
+                  <p>{packet.summary}</p>
+                  <div className="trace-source-grid">
+                    <div>
+                      <span className="metric-label">Priority row</span>
+                      <div className="gap-reference-strip">
+                        <span>{packet.sourcePriorityRowId}</span>
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Coverage rows</span>
+                      <div className="gap-reference-strip">
+                        {packet.sourceCoverageRowIds.map((sourceId) => (
+                          <span key={`${packet.packetId}:coverage:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Trace rows</span>
+                      <div className="gap-reference-strip">
+                        {packet.sourceTraceRowIds.map((sourceId) => (
+                          <span key={`${packet.packetId}:trace:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Evidence targets</span>
+                      <div className="gap-reference-strip">
+                        {packet.evidenceTargetIds.map((targetId) => (
+                          <span key={`${packet.packetId}:target:${targetId}`}>
+                            {targetId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="proof-packet-section-list">
+                    {packet.sections.map((section) => (
+                      <article key={section.sectionId}>
+                        <span className="event-type">
+                          {section.kind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{section.label}</strong>
+                        <p>{section.summary}</p>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="proof-packet-observation-list">
+                    {packet.expectedObservations.map((observation) => (
+                      <article key={observation.observationId}>
+                        <span className="event-type">
+                          {observation.kind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{observation.label}</strong>
+                        <p>{observation.summary}</p>
+                      </article>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="proof-packet-gate-panel">
+              <span className="metric-label">Default packet gate</span>
+              <strong>{view.reviewProofPacket.defaultPacket.label}</strong>
+              <p>{view.reviewProofPacket.summary.summary}</p>
+              <p>{view.reviewProofPacket.staticHumanGateSummary}</p>
+              <div className="proof-packet-gate-list">
+                {view.reviewProofPacket.defaultPacket.staticHumanGateSteps.map(
+                  (step) => (
+                    <article key={step.gateStepId}>
+                      <span className="event-type">
+                        {step.kind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{step.label}</strong>
+                      <p>{step.summary}</p>
+                      <code>{step.repoRelativeReference}</code>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="proof-packet-command-list">
+                {view.reviewProofPacket.defaultPacket.staticCommandReferences.map(
+                  (command) => (
+                    <article
+                      key={`${view.reviewProofPacket.defaultPacket.packetId}:${command.commandId}`}
+                    >
+                      <span className="event-type">
+                        {command.nonExecutable
+                          ? "static command reference"
+                          : "command"}
+                      </span>
+                      <strong>{command.label}</strong>
+                      <code>{command.repoRelativeReference}</code>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="proof-packet-deferred-list">
+                {view.reviewProofPacket.deferredBoundaryContexts.map(
+                  (boundary) => (
+                    <article key={boundary.boundaryId}>
+                      <span className="event-type">
+                        {boundary.actionability.replace(/_/g, " ")}
+                      </span>
+                      <strong>{boundary.label}</strong>
+                      <p>{boundary.summary}</p>
+                      <div className="gap-reference-strip">
+                        {boundary.sourcePriorityRowIds.map((sourceId) => (
+                          <span key={`${boundary.boundaryId}:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

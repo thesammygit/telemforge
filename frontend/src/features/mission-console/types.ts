@@ -1455,6 +1455,200 @@ export interface ReviewProofPriorityView {
   sourceCoverage: ReviewEvidenceCoverageView;
 }
 
+export type ReviewProofPacketSectionKind =
+  | "source_evidence_chain"
+  | "expected_local_observations"
+  | "static_human_gate"
+  | "deferred_boundary_context";
+
+export type ReviewProofPacketObservationKind =
+  | "source_chain_visible"
+  | "priority_reason_visible"
+  | "static_reference_visible"
+  | "deferred_boundary_visible";
+
+export type ReviewProofPacketHumanGateStepKind =
+  | "inspect_source_chain"
+  | "compare_expected_observations"
+  | "confirm_non_executing_gate";
+
+export interface ReviewProofPacketEvidenceChainView {
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  staticReviewStepIds: string[];
+}
+
+export interface ReviewProofPacketSectionView {
+  sectionId: string;
+  kind: ReviewProofPacketSectionKind;
+  label: string;
+  summary: string;
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  evidenceTargetIds: string[];
+  localOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPacketExpectedObservationView {
+  observationId: string;
+  kind: ReviewProofPacketObservationKind;
+  label: string;
+  summary: string;
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  staticReviewStepIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPacketStaticCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  repoRelativeReference: string;
+  source:
+    | "stage27_proof_packet"
+    | ReviewProofPriorityProofCommandReferenceView["source"]
+    | "unknown_static_reference";
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  staticReviewStepIds: string[];
+  localOnly: true;
+  staticOnly: true;
+  nonExecutable: true;
+}
+
+export interface ReviewProofPacketHumanGateStepView {
+  gateStepId: string;
+  kind: ReviewProofPacketHumanGateStepKind;
+  label: string;
+  summary: string;
+  repoRelativeReference: string;
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  expectedObservationIds: string[];
+  localOnly: true;
+  sourceBacked: true;
+  staticOnly: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPacketDeferredBoundaryContextView {
+  boundaryId: string;
+  label: string;
+  summary: string;
+  sourcePriorityRowIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPacketRowView {
+  packetId: string;
+  rank: number;
+  priority: ReviewProofPriorityPriority;
+  status: ReviewProofPriorityRowStatus;
+  actionability: ReviewProofPriorityActionability;
+  label: string;
+  summary: string;
+  sourcePriorityRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  staticReviewStepIds: string[];
+  sourceEvidenceChain: ReviewProofPacketEvidenceChainView;
+  sections: ReviewProofPacketSectionView[];
+  expectedObservations: ReviewProofPacketExpectedObservationView[];
+  staticHumanGateSteps: ReviewProofPacketHumanGateStepView[];
+  staticCommandReferences: ReviewProofPacketStaticCommandReferenceView[];
+  deferredBoundaryContext: ReviewProofPacketDeferredBoundaryContextView[];
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewProofPacketSummaryView {
+  packetSetId: "candidate-local-review-proof-packet";
+  label: string;
+  summary: string;
+  defaultPacketId: string;
+  defaultPriorityRowId: string;
+  defaultCoverageRowId: string;
+  defaultHumanGateStepId: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalPacketCount: number;
+    unresolvedLocalProofGapPacketCount: number;
+    readyLocalEvidencePacketCount: number;
+    deferredProductionScopePacketCount: number;
+    sourcePriorityRowCount: number;
+    sourceCoverageRowCount: number;
+    sourceTraceRowCount: number;
+    sourceOutcomeRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceResolutionRowCount: number;
+    sourceMatrixRowCount: number;
+    sourceActionCount: number;
+    evidenceTargetCount: number;
+    proofBucketCount: number;
+    packetSectionCount: number;
+    expectedObservationCount: number;
+    staticHumanGateStepCount: number;
+    staticCommandReferenceCount: number;
+    deferredBoundaryContextCount: number;
+  };
+}
+
+export interface ReviewProofPacketView {
+  schema: "telemforge.review_proof_packet.v1";
+  version: 1;
+  contractLabel: "local deterministic review proof packet and static human test gate";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewProofPacketSummaryView;
+  packets: ReviewProofPacketRowView[];
+  defaultPacket: ReviewProofPacketRowView;
+  deferredBoundaryContexts: ReviewProofPacketDeferredBoundaryContextView[];
+  proofCommandReferences: ReviewProofPacketStaticCommandReferenceView[];
+  staticHumanGateSummary: string;
+  sourcePriority: ReviewProofPriorityView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -1639,6 +1833,7 @@ export interface MissionConsoleView {
   reviewEvidenceTrace?: ReviewEvidenceTraceView;
   reviewEvidenceCoverage?: ReviewEvidenceCoverageView;
   reviewProofPriority?: ReviewProofPriorityView;
+  reviewProofPacket?: ReviewProofPacketView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

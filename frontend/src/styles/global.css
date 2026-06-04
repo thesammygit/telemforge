@@ -166,6 +166,7 @@ button {
 .review-trace-section,
 .review-evidence-coverage-section,
 .review-proof-priority-section,
+.review-proof-packet-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -400,6 +401,7 @@ button {
 .review-trace-section,
 .review-evidence-coverage-section,
 .review-proof-priority-section,
+.review-proof-packet-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -456,6 +458,10 @@ button {
 }
 
 .review-proof-priority-section {
+  padding: 18px;
+}
+
+.review-proof-packet-section {
   padding: 18px;
 }
 
@@ -2362,6 +2368,13 @@ button {
   margin-top: 16px;
 }
 
+.proof-packet-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(340px, 0.85fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2372,7 +2385,14 @@ button {
 .proof-priority-reason-list,
 .proof-radar-group-list,
 .proof-static-check-list,
-.proof-deferred-list {
+.proof-deferred-list,
+.proof-packet-list,
+.proof-packet-gate-panel,
+.proof-packet-section-list,
+.proof-packet-observation-list,
+.proof-packet-gate-list,
+.proof-packet-command-list,
+.proof-packet-deferred-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2388,7 +2408,14 @@ button {
 .proof-priority-reason-list article,
 .proof-radar-group-list article,
 .proof-static-check-list article,
-.proof-deferred-list article {
+.proof-deferred-list article,
+.proof-packet-row,
+.proof-packet-gate-panel,
+.proof-packet-section-list article,
+.proof-packet-observation-list article,
+.proof-packet-gate-list article,
+.proof-packet-command-list article,
+.proof-packet-deferred-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2397,23 +2424,27 @@ button {
 }
 
 .evidence-coverage-row,
-.proof-priority-row {
+.proof-priority-row,
+.proof-packet-row {
   display: grid;
   gap: 10px;
 }
 
 .evidence-coverage-row-unresolved_local_proof_gap,
-.proof-priority-row-unresolved_local_proof_gap {
+.proof-priority-row-unresolved_local_proof_gap,
+.proof-packet-row-unresolved_local_proof_gap {
   border-left: 4px solid #a76a16;
 }
 
 .evidence-coverage-row-ready_local_evidence,
-.proof-priority-row-ready_local_evidence {
+.proof-priority-row-ready_local_evidence,
+.proof-packet-row-ready_local_evidence {
   border-left: 4px solid #12745b;
 }
 
 .evidence-coverage-row-deferred_production_scope,
-.proof-priority-row-deferred_production_scope {
+.proof-priority-row-deferred_production_scope,
+.proof-packet-row-deferred_production_scope {
   border-left: 4px solid #66717b;
 }
 
@@ -2427,7 +2458,14 @@ button {
 .proof-priority-reason-list strong,
 .proof-radar-group-list strong,
 .proof-static-check-list strong,
-.proof-deferred-list strong {
+.proof-deferred-list strong,
+.proof-packet-row h3,
+.proof-packet-gate-panel strong,
+.proof-packet-section-list strong,
+.proof-packet-observation-list strong,
+.proof-packet-gate-list strong,
+.proof-packet-command-list strong,
+.proof-packet-deferred-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2443,7 +2481,13 @@ button {
 .proof-priority-radar-panel p,
 .proof-priority-reason-list p,
 .proof-radar-group-list p,
-.proof-deferred-list p {
+.proof-deferred-list p,
+.proof-packet-row p,
+.proof-packet-gate-panel p,
+.proof-packet-section-list p,
+.proof-packet-observation-list p,
+.proof-packet-gate-list p,
+.proof-packet-deferred-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2456,18 +2500,26 @@ button {
 .proof-priority-reason-list article,
 .proof-radar-group-list article,
 .proof-static-check-list article,
-.proof-deferred-list article {
+.proof-deferred-list article,
+.proof-packet-section-list article,
+.proof-packet-observation-list article,
+.proof-packet-gate-list article,
+.proof-packet-command-list article,
+.proof-packet-deferred-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
 }
 
-.proof-static-check-list {
+.proof-static-check-list,
+.proof-packet-command-list {
   max-height: 320px;
   overflow: auto;
 }
 
-.proof-static-check-list code {
+.proof-static-check-list code,
+.proof-packet-command-list code,
+.proof-packet-gate-list code {
   overflow-wrap: anywhere;
   color: #1e3a52;
   font-size: 0.8rem;
@@ -2708,6 +2760,7 @@ button {
   .review-trace-layout,
   .evidence-coverage-layout,
   .proof-priority-layout,
+  .proof-packet-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

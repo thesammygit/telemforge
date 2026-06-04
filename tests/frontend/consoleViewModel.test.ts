@@ -471,6 +471,29 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewEvidenceCoverage?.coverageRows[0].coverageRowId,
   );
   assert.equal(view.reviewProofPriority?.deferredBoundaryContexts.length, 1);
+  assert.ok(view.reviewProofPacket);
+  assert.equal(
+    view.reviewProofPacket?.schema,
+    "telemforge.review_proof_packet.v1",
+  );
+  assert.equal(
+    view.reviewProofPacket?.summary.defaultPriorityRowId,
+    view.reviewProofPriority?.summary.defaultPriorityRowId,
+  );
+  assert.equal(
+    view.reviewProofPacket?.defaultPacket.sourcePriorityRowId,
+    view.reviewProofPriority?.defaultPriorityRow.priorityRowId,
+  );
+  assert.equal(
+    view.reviewProofPacket?.defaultPacket.sourceEvidenceChain
+      .sourceCoverageRowIds[0],
+    view.reviewEvidenceCoverage?.coverageRows[0].coverageRowId,
+  );
+  assert.equal(
+    view.reviewProofPacket?.defaultPacket.staticHumanGateSteps[0]
+      .sourcePriorityRowIds[0],
+    view.reviewProofPriority?.defaultPriorityRow.priorityRowId,
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
