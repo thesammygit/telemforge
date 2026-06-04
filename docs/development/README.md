@@ -47,6 +47,7 @@ For each stage:
 18. [Local Review Handoff Rehearsal And Readiness Script](steps/18-local-review-handoff-rehearsal-and-readiness-script.md)
 19. [Local Review Coverage Matrix And Command Checklist](steps/19-local-review-coverage-matrix-and-command-checklist.md)
 20. [Review Gap Triage And Next-Pass Plan](steps/20-review-gap-triage-and-next-pass-plan.md)
+21. [Review Gap Resolution Playbook And Evidence Target Checklist](steps/21-review-gap-resolution-playbook-and-evidence-target-checklist.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
