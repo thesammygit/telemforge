@@ -577,6 +577,73 @@ export interface ReviewHandoffRehearsalView {
   sourceEvidenceReferences: string[];
 }
 
+export type ReviewHandoffCoverageMatrixReadinessVerdict =
+  | "blocked_by_local_follow_up"
+  | "deferred_production_scope_only"
+  | "ready_for_local_review";
+
+export type ReviewHandoffCoverageMatrixBlockerStatus =
+  | "blocked"
+  | "deferred"
+  | "clear";
+
+export interface ReviewHandoffCoverageSourceBucketView {
+  bucketId: string;
+  label: string;
+  count: number;
+  summary: string;
+}
+
+export interface ReviewHandoffCoverageMatrixRowView {
+  rowId: string;
+  rowNumber: number;
+  actionId: string;
+  rehearsalStepId: string;
+  rehearsalStepLabel: string;
+  readinessVerdict: ReviewHandoffCoverageMatrixReadinessVerdict;
+  readinessLabel: string;
+  blockerStatus: ReviewHandoffCoverageMatrixBlockerStatus;
+  blockerSummary: string;
+  targetCoverageCounts: ReviewActionWalkthroughCoverageView;
+  sourceCoverageBuckets: ReviewHandoffCoverageSourceBucketView[];
+  nextLocalStep: string;
+  sourceEvidenceReferences: string[];
+}
+
+export interface ReviewHandoffCoverageCommandView {
+  commandId: string;
+  command: string;
+  label: string;
+  purpose: string;
+}
+
+export interface ReviewHandoffCoverageMatrixView {
+  schema: "telemforge.review_handoff_coverage_matrix.v1";
+  version: 1;
+  contractLabel: "local deterministic review coverage matrix";
+  localStatus: ReplayPlaybackView["localStatus"];
+  readiness: {
+    verdict: ReviewHandoffCoverageMatrixReadinessVerdict;
+    label: string;
+    summary: string;
+    counts: {
+      totalRowCount: number;
+      blockingRowCount: number;
+      missingTargetRowCount: number;
+      deferredProductionRowCount: number;
+      resolvedTargetCount: number;
+      missingTargetCount: number;
+      sourceEvidenceReferenceCount: number;
+    };
+  };
+  rows: ReviewHandoffCoverageMatrixRowView[];
+  localVerificationCommands: ReviewHandoffCoverageCommandView[];
+  unresolvedLocalBlockers: ReviewHandoffRehearsalBlockerView[];
+  deferredProductionNotes: string[];
+  nextLocalPrompt: string;
+  sourceEvidenceReferences: string[];
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -753,6 +820,7 @@ export interface MissionConsoleView {
   reviewActionQueue?: ReviewActionQueueView;
   reviewActionWalkthrough?: ReviewActionWalkthroughView;
   reviewHandoffRehearsal?: ReviewHandoffRehearsalView;
+  reviewHandoffCoverageMatrix?: ReviewHandoffCoverageMatrixView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

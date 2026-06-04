@@ -273,6 +273,23 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewHandoffRehearsal?.unresolvedLocalBlockers.length,
     2,
   );
+  assert.ok(view.reviewHandoffCoverageMatrix);
+  assert.equal(
+    view.reviewHandoffCoverageMatrix?.schema,
+    "telemforge.review_handoff_coverage_matrix.v1",
+  );
+  assert.equal(
+    view.reviewHandoffCoverageMatrix?.readiness.verdict,
+    "blocked_by_local_follow_up",
+  );
+  assert.equal(
+    view.reviewHandoffCoverageMatrix?.readiness.counts.totalRowCount,
+    3,
+  );
+  assert.equal(
+    view.reviewHandoffCoverageMatrix?.readiness.counts.blockingRowCount,
+    2,
+  );
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
@@ -448,6 +465,18 @@ test("buildMissionConsoleView selects a completed Stage 13 playback frame", () =
   );
   assert.equal(
     selectedView.reviewHandoffRehearsal?.unresolvedLocalBlockers.length,
+    0,
+  );
+  assert.equal(
+    selectedView.reviewHandoffCoverageMatrix?.readiness.verdict,
+    "deferred_production_scope_only",
+  );
+  assert.equal(
+    selectedView.reviewHandoffCoverageMatrix?.readiness.counts.totalRowCount,
+    1,
+  );
+  assert.equal(
+    selectedView.reviewHandoffCoverageMatrix?.unresolvedLocalBlockers.length,
     0,
   );
   assert.ok(

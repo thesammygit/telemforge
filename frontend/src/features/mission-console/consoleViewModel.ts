@@ -33,6 +33,7 @@ import { buildReviewActionQueue } from "../../lib/reviewActionQueue.ts";
 import { buildReviewActionWalkthrough } from "../../lib/reviewActionWalkthrough.ts";
 import { buildReviewBriefingBoard } from "../../lib/reviewBriefingBoard.ts";
 import { buildReviewDecisionRegister } from "../../lib/reviewDecisionRegister.ts";
+import { buildReviewHandoffCoverageMatrix } from "../../lib/reviewHandoffCoverageMatrix.ts";
 import { buildReviewHandoffRehearsal } from "../../lib/reviewHandoffRehearsal.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -133,6 +134,9 @@ export function buildMissionConsoleView(
     incidentReviewPacket,
     incidentReviewExport,
   );
+  const reviewHandoffCoverageMatrix = buildReviewHandoffCoverageMatrix(
+    reviewHandoffRehearsal,
+  );
 
   return {
     mission: {
@@ -163,6 +167,7 @@ export function buildMissionConsoleView(
     reviewActionQueue,
     reviewActionWalkthrough,
     reviewHandoffRehearsal,
+    reviewHandoffCoverageMatrix,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

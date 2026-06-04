@@ -1097,6 +1097,155 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewHandoffCoverageMatrix ? (
+        <section
+          className="review-coverage-section"
+          aria-label="Local review coverage matrix"
+        >
+          <a id="review-coverage-matrix" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 19 coverage matrix</span>
+              <h2>Local review coverage matrix</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewHandoffCoverageMatrix.readiness.verdict}`}
+            >
+              {view.reviewHandoffCoverageMatrix.readiness.verdict.replace(
+                /_/g,
+                " ",
+              )}
+            </span>
+          </div>
+          <div className="coverage-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewHandoffCoverageMatrix.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Rows</span>
+              <strong>{view.reviewHandoffCoverageMatrix.readiness.counts.totalRowCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Blocking rows</span>
+              <strong>{view.reviewHandoffCoverageMatrix.readiness.counts.blockingRowCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Missing targets</span>
+              <strong>{view.reviewHandoffCoverageMatrix.readiness.counts.missingTargetCount}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Source refs</span>
+              <strong>
+                {
+                  view.reviewHandoffCoverageMatrix.readiness.counts
+                    .sourceEvidenceReferenceCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="coverage-matrix-layout">
+            <div className="coverage-row-list">
+              {view.reviewHandoffCoverageMatrix.rows.map((row) => (
+                <article
+                  key={row.rowId}
+                  className={`coverage-row coverage-row-${row.blockerStatus}`}
+                >
+                  <div className="coverage-row-heading">
+                    <span
+                      className={`status-chip action-status-${row.readinessVerdict}`}
+                    >
+                      Row {row.rowNumber}
+                    </span>
+                    <div>
+                      <span className="event-type">
+                        {row.blockerStatus.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.rehearsalStepLabel}</h3>
+                    </div>
+                  </div>
+                  <span className="walkthrough-selected-action-id">
+                    {row.actionId}
+                  </span>
+                  <p>{row.blockerSummary}</p>
+                  <p className="action-readiness-impact">{row.nextLocalStep}</p>
+                  <div className="coverage-checkpoint-strip">
+                    <span>
+                      {row.targetCoverageCounts.resolvedTargetCount} resolved
+                    </span>
+                    <span>{row.targetCoverageCounts.missingTargetCount} missing</span>
+                    <span>{row.targetCoverageCounts.replayFrameCount} frames</span>
+                    <span>
+                      {row.targetCoverageCounts.runbookTargetCount} runbook targets
+                    </span>
+                    <span>{row.targetCoverageCounts.packetReferenceCount} packet refs</span>
+                    <span>
+                      {row.targetCoverageCounts.exportReferenceCount} export refs
+                    </span>
+                    <span>{row.targetCoverageCounts.sourcePathCount} source paths</span>
+                  </div>
+                  <div className="coverage-source-buckets">
+                    {row.sourceCoverageBuckets.map((bucket) => (
+                      <span key={`${row.rowId}:${bucket.bucketId}`}>
+                        {bucket.label}: {bucket.count}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="handoff-source-list">
+                    {row.sourceEvidenceReferences.map((source) => (
+                      <span key={`${row.rowId}:${source}`}>{source}</span>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="coverage-readiness-panel rehearsal-readiness-panel">
+              <span className="metric-label">Matrix readiness</span>
+              <strong>{view.reviewHandoffCoverageMatrix.readiness.label}</strong>
+              <p>{view.reviewHandoffCoverageMatrix.readiness.summary}</p>
+              <p className="human-test-gate">
+                {view.reviewHandoffCoverageMatrix.nextLocalPrompt}
+              </p>
+              <div className="coverage-command-list">
+                {view.reviewHandoffCoverageMatrix.localVerificationCommands.map(
+                  (command) => (
+                    <article
+                      key={command.commandId}
+                      className="coverage-command-row"
+                    >
+                      <strong>{command.label}</strong>
+                      <code>{command.command}</code>
+                      <p>{command.purpose}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              {view.reviewHandoffCoverageMatrix.unresolvedLocalBlockers.length ? (
+                <div className="coverage-blocker-list">
+                  {view.reviewHandoffCoverageMatrix.unresolvedLocalBlockers.map(
+                    (blocker) => (
+                      <article key={blocker.blockerId}>
+                        <strong>{blocker.label}</strong>
+                        <p>{blocker.reason}</p>
+                      </article>
+                    ),
+                  )}
+                </div>
+              ) : (
+                <p className="empty-state">No local coverage blockers remain.</p>
+              )}
+              <div className="deferred-scope-list">
+                {view.reviewHandoffCoverageMatrix.deferredProductionNotes.map(
+                  (note) => (
+                    <span key={note}>{note}</span>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">
