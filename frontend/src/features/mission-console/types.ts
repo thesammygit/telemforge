@@ -1150,6 +1150,146 @@ export interface ReviewEvidenceTraceView {
   sourceOutcome: ReviewPassOutcomeView;
 }
 
+export type ReviewEvidenceCoverageRowStatus = ReviewPassOutcomeRowStatus;
+
+export type ReviewEvidenceCoveragePriority = "p0" | "p1" | "p2";
+
+export type ReviewEvidenceCoverageActionability =
+  | "local_review_required"
+  | "local_evidence_ready"
+  | "deferred_non_actionable";
+
+export interface ReviewEvidenceCoverageProofCommandReferenceView
+  extends ReviewHandoffCoverageCommandView {
+  source:
+    | "stage25_coverage"
+    | ReviewEvidenceTraceProofCommandReferenceView["source"];
+}
+
+export interface ReviewEvidenceCoverageStaticReviewStepView {
+  stepId: string;
+  label: string;
+  summary: string;
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  repoRelativeReference: string;
+  nonExecutable: true;
+}
+
+export interface ReviewEvidenceCoverageRowView {
+  coverageRowId: string;
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  rank: number;
+  status: ReviewEvidenceCoverageRowStatus;
+  actionability: ReviewEvidenceCoverageActionability;
+  label: string;
+  summary: string;
+  sourceBucketLabels: string[];
+  proofBucketLabels: string[];
+  proofCommandIds: string[];
+  nextStaticReviewSteps: ReviewEvidenceCoverageStaticReviewStepView[];
+  deferredBoundaryNotes: string[];
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewEvidenceCoverageGroupView {
+  groupId: string;
+  status: ReviewEvidenceCoverageRowStatus;
+  proofBucketLabel: string;
+  summary: string;
+  priority: ReviewEvidenceCoveragePriority;
+  rowCount: number;
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  nextStaticReviewStepIds: string[];
+  rows: ReviewEvidenceCoverageRowView[];
+}
+
+export interface ReviewEvidenceCoverageBucketRowView {
+  bucketRowId: string;
+  status: ReviewEvidenceCoverageRowStatus;
+  sourceBucketLabel: string;
+  proofBucketLabel: string;
+  rowCount: number;
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  evidenceTargetIds: string[];
+  proofCommandIds: string[];
+  nextStaticReviewStepIds: string[];
+}
+
+export interface ReviewEvidenceCoverageDeferredBoundaryRollupView {
+  boundaryId: string;
+  label: string;
+  summary: string;
+  sourceTraceRowIds: string[];
+  sourceOutcomeRowIds: string[];
+  sourceReadinessRowIds: string[];
+  sourceResolutionIds: string[];
+  sourceMatrixRowIds: string[];
+  sourceActionIds: string[];
+  evidenceTargetIds: string[];
+  actionability: "deferred_non_actionable";
+  nextStaticLocalReviewStep: string;
+  nonActionable: true;
+}
+
+export interface ReviewEvidenceCoverageSummaryView {
+  coverageId: "candidate-local-review-evidence-coverage";
+  label: string;
+  summary: string;
+  defaultCoverageRowId: string;
+  defaultCoverageGroupId: string;
+  defaultProofBucketLabel: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalCoverageRowCount: number;
+    unresolvedLocalProofGapCount: number;
+    readyLocalEvidenceRowCount: number;
+    deferredProductionScopeRowCount: number;
+    sourceTraceRowCount: number;
+    sourceOutcomeRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceResolutionRowCount: number;
+    sourceMatrixRowCount: number;
+    evidenceTargetCount: number;
+    sourceBucketLabelCount: number;
+    proofBucketCount: number;
+    proofCommandReferenceCount: number;
+    staticReviewStepCount: number;
+    bucketRowCount: number;
+    deferredBoundaryNoteCount: number;
+  };
+}
+
+export interface ReviewEvidenceCoverageView {
+  schema: "telemforge.review_evidence_coverage.v1";
+  version: 1;
+  contractLabel: "local deterministic review evidence coverage map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewEvidenceCoverageSummaryView;
+  coverageRows: ReviewEvidenceCoverageRowView[];
+  coverageGroups: ReviewEvidenceCoverageGroupView[];
+  bucketRows: ReviewEvidenceCoverageBucketRowView[];
+  staticReviewSteps: ReviewEvidenceCoverageStaticReviewStepView[];
+  deferredBoundaryRollups: ReviewEvidenceCoverageDeferredBoundaryRollupView[];
+  proofCommandReferences: ReviewEvidenceCoverageProofCommandReferenceView[];
+  staticProofChecklistSummary: string;
+  sourceTrace: ReviewEvidenceTraceView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -1332,6 +1472,7 @@ export interface MissionConsoleView {
   reviewPassReadiness?: ReviewPassReadinessView;
   reviewPassOutcome?: ReviewPassOutcomeView;
   reviewEvidenceTrace?: ReviewEvidenceTraceView;
+  reviewEvidenceCoverage?: ReviewEvidenceCoverageView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

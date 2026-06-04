@@ -164,6 +164,7 @@ button {
 .review-pass-section,
 .review-outcome-section,
 .review-trace-section,
+.review-evidence-coverage-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -396,6 +397,7 @@ button {
 .review-pass-section,
 .review-outcome-section,
 .review-trace-section,
+.review-evidence-coverage-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -444,6 +446,10 @@ button {
 }
 
 .review-trace-section {
+  padding: 18px;
+}
+
+.review-evidence-coverage-section {
   padding: 18px;
 }
 
@@ -2336,6 +2342,82 @@ button {
   background: #ffffff;
 }
 
+.evidence-coverage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.evidence-coverage-row-list,
+.evidence-coverage-panel,
+.evidence-coverage-group-list,
+.evidence-coverage-bucket-list,
+.evidence-static-step-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.evidence-coverage-row,
+.evidence-coverage-panel,
+.evidence-coverage-group-list article,
+.evidence-coverage-bucket-list article,
+.evidence-static-step-list article {
+  min-width: 0;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fbfcfd;
+  padding: 14px 16px;
+}
+
+.evidence-coverage-row {
+  display: grid;
+  gap: 10px;
+}
+
+.evidence-coverage-row-unresolved_local_proof_gap {
+  border-left: 4px solid #a76a16;
+}
+
+.evidence-coverage-row-ready_local_evidence {
+  border-left: 4px solid #12745b;
+}
+
+.evidence-coverage-row-deferred_production_scope {
+  border-left: 4px solid #66717b;
+}
+
+.evidence-coverage-row h3,
+.evidence-coverage-panel strong,
+.evidence-coverage-group-list strong,
+.evidence-coverage-bucket-list strong,
+.evidence-static-step-list strong {
+  margin: 3px 0 0;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.25;
+}
+
+.evidence-coverage-row p,
+.evidence-coverage-panel p,
+.evidence-coverage-group-list p,
+.evidence-coverage-bucket-list p,
+.evidence-static-step-list p {
+  margin: 0;
+  color: #52636f;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.evidence-coverage-group-list article,
+.evidence-coverage-bucket-list article,
+.evidence-static-step-list article {
+  display: grid;
+  gap: 8px;
+  background: #ffffff;
+}
+
 .replay-summary {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -2569,6 +2651,7 @@ button {
   .review-pass-layout,
   .review-outcome-layout,
   .review-trace-layout,
+  .evidence-coverage-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

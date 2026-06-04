@@ -2070,6 +2070,267 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewEvidenceCoverage ? (
+        <section
+          className="review-evidence-coverage-section"
+          aria-label="Review evidence coverage map"
+        >
+          <a id="review-evidence-coverage-map" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 25 evidence coverage</span>
+              <h2>Coverage map and proof-gap board</h2>
+            </div>
+            <span
+              className={`status-chip action-status-${view.reviewEvidenceCoverage.coverageRows[0].status}`}
+            >
+              {view.reviewEvidenceCoverage.summary.defaultProofBucketLabel}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewEvidenceCoverage.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Coverage rows</span>
+              <strong>
+                {
+                  view.reviewEvidenceCoverage.summary.counts
+                    .totalCoverageRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local gaps</span>
+              <strong>
+                {
+                  view.reviewEvidenceCoverage.summary.counts
+                    .unresolvedLocalProofGapCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source buckets</span>
+              <strong>
+                {
+                  view.reviewEvidenceCoverage.summary.counts
+                    .sourceBucketLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static steps</span>
+              <strong>
+                {
+                  view.reviewEvidenceCoverage.summary.counts
+                    .staticReviewStepCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="evidence-coverage-layout">
+            <div className="evidence-coverage-row-list">
+              {view.reviewEvidenceCoverage.coverageRows.map((row) => (
+                <article
+                  key={row.coverageRowId}
+                  className={`evidence-coverage-row evidence-coverage-row-${row.status}`}
+                >
+                  <div className="gap-group-heading">
+                    <div>
+                      <span className="status-chip">
+                        {row.actionability.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <strong>#{row.rank}</strong>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="trace-source-grid">
+                    <div>
+                      <span className="metric-label">Trace rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceTraceRowIds.map((sourceId) => (
+                          <span key={`${row.coverageRowId}:trace:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Outcome rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceOutcomeRowIds.map((sourceId) => (
+                          <span key={`${row.coverageRowId}:outcome:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Readiness rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceReadinessRowIds.map((sourceId) => (
+                          <span
+                            key={`${row.coverageRowId}:readiness:${sourceId}`}
+                          >
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Resolution rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceResolutionIds.map((sourceId) => (
+                          <span
+                            key={`${row.coverageRowId}:resolution:${sourceId}`}
+                          >
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Coverage rows</span>
+                      <div className="gap-reference-strip">
+                        {row.sourceMatrixRowIds.map((sourceId) => (
+                          <span key={`${row.coverageRowId}:matrix:${sourceId}`}>
+                            {sourceId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                    <div>
+                      <span className="metric-label">Evidence targets</span>
+                      <div className="gap-reference-strip">
+                        {row.evidenceTargetIds.map((targetId) => (
+                          <span key={`${row.coverageRowId}:target:${targetId}`}>
+                            {targetId}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="gap-bucket-strip">
+                    {row.sourceBucketLabels.map((label) => (
+                      <span key={`${row.coverageRowId}:source-bucket:${label}`}>
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="gap-proof-strip">
+                    {row.proofBucketLabels.map((label) => (
+                      <span key={`${row.coverageRowId}:proof-bucket:${label}`}>
+                        {label.replace(/_/g, " ")}
+                      </span>
+                    ))}
+                    {row.proofCommandIds.map((commandId) => (
+                      <span key={`${row.coverageRowId}:proof:${commandId}`}>
+                        {commandId}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="evidence-static-step-list">
+                    {row.nextStaticReviewSteps.map((step) => (
+                      <article key={step.stepId}>
+                        <span className="event-type">
+                          {step.nonExecutable ? "static check" : "check"}
+                        </span>
+                        <strong>{step.label}</strong>
+                        <p>{step.summary}</p>
+                        <div className="gap-reference-strip">
+                          <span>{step.repoRelativeReference}</span>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
+                  {row.deferredBoundaryNotes.length ? (
+                    <div className="trace-deferred-list">
+                      {row.deferredBoundaryNotes.map((note) => (
+                        <article key={`${row.coverageRowId}:${note}`}>
+                          <span className="event-type">deferred boundary</span>
+                          <p>{note}</p>
+                        </article>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="evidence-coverage-panel">
+              <span className="metric-label">Default coverage focus</span>
+              <strong>
+                {view.reviewEvidenceCoverage.summary.defaultProofBucketLabel}
+              </strong>
+              <p>{view.reviewEvidenceCoverage.summary.summary}</p>
+              <p>{view.reviewEvidenceCoverage.staticProofChecklistSummary}</p>
+              <div className="evidence-coverage-group-list">
+                {view.reviewEvidenceCoverage.coverageGroups.map((group) => (
+                  <article key={group.groupId}>
+                    <span className="event-type">
+                      {group.priority} · {group.status.replace(/_/g, " ")}
+                    </span>
+                    <strong>{group.proofBucketLabel}</strong>
+                    <p>{group.summary}</p>
+                    <div className="gap-reference-strip">
+                      {group.sourceTraceRowIds.map((traceId) => (
+                        <span key={`${group.groupId}:${traceId}`}>{traceId}</span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="evidence-coverage-bucket-list">
+                {view.reviewEvidenceCoverage.bucketRows.map((bucket) => (
+                  <article key={bucket.bucketRowId}>
+                    <span className="event-type">
+                      {bucket.proofBucketLabel}
+                    </span>
+                    <strong>{bucket.sourceBucketLabel}</strong>
+                    <p>{bucket.rowCount} coverage row(s)</p>
+                  </article>
+                ))}
+              </div>
+              <div className="trace-deferred-list">
+                {view.reviewEvidenceCoverage.deferredBoundaryRollups.map(
+                  (rollup) => (
+                    <article key={rollup.boundaryId}>
+                      <span className="event-type">
+                        {rollup.actionability.replace(/_/g, " ")}
+                      </span>
+                      <strong>{rollup.label}</strong>
+                      <p>{rollup.summary}</p>
+                      <div className="gap-reference-strip">
+                        {rollup.sourceTraceRowIds.map((traceId) => (
+                          <span key={`${rollup.boundaryId}:${traceId}`}>
+                            {traceId}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="coverage-command-list">
+                {view.reviewEvidenceCoverage.proofCommandReferences.map(
+                  (command) => (
+                    <article
+                      key={command.commandId}
+                      className="coverage-command-row"
+                    >
+                      <strong>{command.label}</strong>
+                      <code>{command.command}</code>
+                      <p>{command.purpose}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       <section className="incident-section" aria-label="Fault incident timeline">
         <a id="fault-incident-timeline" className="section-anchor" />
         <div className="section-heading">

@@ -416,6 +416,42 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     "review-evidence-trace",
   );
   assert.equal(view.reviewEvidenceTrace?.deferredBoundaryNotes.length, 1);
+  assert.ok(view.reviewEvidenceCoverage);
+  assert.equal(
+    view.reviewEvidenceCoverage?.schema,
+    "telemforge.review_evidence_coverage.v1",
+  );
+  assert.equal(
+    view.reviewEvidenceCoverage?.summary.defaultCoverageRowId,
+    "coverage-row:evidence-trace:review-pass-outcome:review-pass:resolution:next-pass-1:action:follow-up:decision:alert-lifecycle-handoff",
+  );
+  assert.equal(view.reviewEvidenceCoverage?.coverageRows.length, 3);
+  assert.equal(view.reviewEvidenceCoverage?.coverageGroups[0].rowCount, 2);
+  assert.equal(
+    view.reviewEvidenceCoverage?.coverageRows[0].sourceTraceRowIds[0],
+    view.reviewEvidenceTrace?.traceRows[0].traceRowId,
+  );
+  assert.equal(
+    view.reviewEvidenceCoverage?.coverageRows[0].sourceOutcomeRowIds[0],
+    view.reviewPassOutcome?.outcomeRows[0].outcomeRowId,
+  );
+  assert.equal(
+    view.reviewEvidenceCoverage?.coverageRows[0].sourceReadinessRowIds[0],
+    view.reviewPassReadiness?.readinessRows[0].readinessRowId,
+  );
+  assert.equal(
+    view.reviewEvidenceCoverage?.coverageRows[0].sourceResolutionIds[0],
+    view.reviewGapResolution?.resolutionRows[0].resolutionId,
+  );
+  assert.equal(
+    view.reviewEvidenceCoverage?.coverageRows[0].sourceMatrixRowIds[0],
+    view.reviewHandoffCoverageMatrix?.rows[0].rowId,
+  );
+  assert.equal(
+    view.reviewEvidenceCoverage?.proofCommandReferences[0].commandId,
+    "review-evidence-coverage",
+  );
+  assert.equal(view.reviewEvidenceCoverage?.deferredBoundaryRollups.length, 1);
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
