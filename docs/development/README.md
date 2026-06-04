@@ -45,6 +45,7 @@ For each stage:
 16. [Review Action Queue And Handoff Readiness](steps/16-review-action-queue-and-handoff-readiness.md)
 17. [Action Evidence Walkthrough And Local Handoff Path](steps/17-action-evidence-walkthrough-and-local-handoff-path.md)
 18. [Local Review Handoff Rehearsal And Readiness Script](steps/18-local-review-handoff-rehearsal-and-readiness-script.md)
+19. [Local Review Coverage Matrix And Command Checklist](steps/19-local-review-coverage-matrix-and-command-checklist.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
