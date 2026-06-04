@@ -554,6 +554,113 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewProofNavigator?.staticCommandReferences.length,
   );
   assert.equal(view.reviewProofReconciliation?.deferredBoundaryNotes.length, 1);
+  assert.ok(view.reviewSurfaceIndex);
+  assert.equal(
+    view.reviewSurfaceIndex?.schema,
+    "telemforge.review_surface_index.v1",
+  );
+  assert.deepEqual(
+    view.reviewSurfaceIndex?.rows.map((row) => [
+      row.stageNumber,
+      row.workflowGroup,
+      row.anchor.anchorId,
+    ]),
+    [
+      [14, "decision", "review-decision-register"],
+      [15, "decision", "review-briefing-board"],
+      [16, "action", "review-action-queue"],
+      [17, "action", "review-action-walkthrough"],
+      [18, "action", "review-handoff-rehearsal"],
+      [19, "readiness", "review-coverage-matrix"],
+      [20, "readiness", "review-gap-triage"],
+      [21, "readiness", "review-gap-resolution"],
+      [22, "readiness", "review-pass-readiness"],
+      [23, "evidence", "review-pass-outcome-board"],
+      [24, "evidence", "review-evidence-trace-navigator"],
+      [25, "evidence", "review-evidence-coverage-map"],
+      [26, "proof", "review-proof-priority-radar"],
+      [27, "proof", "review-proof-packet-gate"],
+      [28, "navigator", "review-proof-navigator"],
+      [29, "reconciliation", "review-proof-reconciliation"],
+    ],
+  );
+  assert.deepEqual(
+    view.reviewSurfaceIndex?.workflowGroups.map((group) => [
+      group.workflowGroup,
+      group.rowCount,
+      group.anchorIds[0],
+    ]),
+    [
+      ["decision", 2, "review-decision-register"],
+      ["action", 3, "review-action-queue"],
+      ["readiness", 4, "review-coverage-matrix"],
+      ["evidence", 3, "review-pass-outcome-board"],
+      ["proof", 2, "review-proof-priority-radar"],
+      ["navigator", 1, "review-proof-navigator"],
+      ["reconciliation", 1, "review-proof-reconciliation"],
+    ],
+  );
+  assert.deepEqual(
+    view.reviewSurfaceIndex?.anchorReferences.map((anchor) => anchor.anchorId),
+    [
+      "review-decision-register",
+      "review-briefing-board",
+      "review-action-queue",
+      "review-action-walkthrough",
+      "review-handoff-rehearsal",
+      "review-coverage-matrix",
+      "review-gap-triage",
+      "review-gap-resolution",
+      "review-pass-readiness",
+      "review-pass-outcome-board",
+      "review-evidence-trace-navigator",
+      "review-evidence-coverage-map",
+      "review-proof-priority-radar",
+      "review-proof-packet-gate",
+      "review-proof-navigator",
+      "review-proof-reconciliation",
+    ],
+  );
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.totalSurfaceCount, 16);
+  assert.equal(
+    view.reviewSurfaceIndex?.summary.counts.workflowGroupCount,
+    7,
+  );
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.localAnchorCount, 16);
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.decisionSurfaceCount, 2);
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.actionSurfaceCount, 3);
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.readinessSurfaceCount, 4);
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.evidenceSurfaceCount, 3);
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.proofSurfaceCount, 2);
+  assert.equal(view.reviewSurfaceIndex?.summary.counts.navigatorSurfaceCount, 1);
+  assert.equal(
+    view.reviewSurfaceIndex?.summary.counts.reconciliationSurfaceCount,
+    1,
+  );
+  assert.equal(view.reviewSurfaceIndex?.deferredBoundaryNotes.length, 7);
+  assert.equal(
+    view.reviewSurfaceIndex?.deferredBoundaryNotes[0].sourceSurfaceIds[0],
+    "review-decision-register",
+  );
+  assert.equal(
+    view.reviewSurfaceIndex?.sourceReconciliation,
+    view.reviewProofReconciliation,
+  );
+});
+
+test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
+  const liveStream = {
+    ...buildFixtureStreamConnection(stage07ConsoleFixture),
+    state: "live" as const,
+    label: "Live review stream",
+    detail: "Connected to the local websocket",
+  };
+
+  const view = buildMissionConsoleView(stage07ConsoleFixture, "thermal", liveStream);
+
+  assert.equal(view.stream.state, "live");
+  assert.equal(view.reviewSurfaceIndex?.localStatus, "local-live");
+  assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
 });
 
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {

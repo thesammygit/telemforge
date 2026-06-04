@@ -169,6 +169,7 @@ button {
 .review-proof-packet-section,
 .review-proof-navigator-section,
 .review-proof-reconciliation-section,
+.review-surface-index-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -406,6 +407,7 @@ button {
 .review-proof-packet-section,
 .review-proof-navigator-section,
 .review-proof-reconciliation-section,
+.review-surface-index-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -474,6 +476,10 @@ button {
 }
 
 .review-proof-reconciliation-section {
+  padding: 18px;
+}
+
+.review-surface-index-section {
   padding: 18px;
 }
 
@@ -2401,6 +2407,13 @@ button {
   margin-top: 16px;
 }
 
+.surface-index-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2432,7 +2445,11 @@ button {
 .proof-reconciliation-bucket-list,
 .proof-reconciliation-reference-list,
 .proof-reconciliation-boundary-list,
-.proof-reconciliation-segment-list {
+.proof-reconciliation-segment-list,
+.surface-index-row-list,
+.surface-index-panel,
+.surface-index-group-list,
+.surface-index-deferred-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2467,7 +2484,11 @@ button {
 .proof-reconciliation-panel,
 .proof-reconciliation-bucket-list article,
 .proof-reconciliation-reference-list article,
-.proof-reconciliation-boundary-list article {
+.proof-reconciliation-boundary-list article,
+.surface-index-row,
+.surface-index-panel,
+.surface-index-group-list article,
+.surface-index-deferred-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2479,9 +2500,38 @@ button {
 .proof-priority-row,
 .proof-packet-row,
 .proof-navigator-row,
-.proof-reconciliation-row {
+.proof-reconciliation-row,
+.surface-index-row {
   display: grid;
   gap: 10px;
+}
+
+.surface-index-row-decision {
+  border-left: 4px solid #2368b5;
+}
+
+.surface-index-row-action {
+  border-left: 4px solid #a76a16;
+}
+
+.surface-index-row-readiness {
+  border-left: 4px solid #12745b;
+}
+
+.surface-index-row-evidence {
+  border-left: 4px solid #184d88;
+}
+
+.surface-index-row-proof {
+  border-left: 4px solid #6f4eb6;
+}
+
+.surface-index-row-navigator {
+  border-left: 4px solid #52636f;
+}
+
+.surface-index-row-reconciliation {
+  border-left: 4px solid #172026;
 }
 
 .evidence-coverage-row-unresolved_local_proof_gap,
@@ -2547,7 +2597,11 @@ button {
 .proof-reconciliation-bucket-list strong,
 .proof-reconciliation-reference-list strong,
 .proof-reconciliation-boundary-list strong,
-.proof-reconciliation-segment strong {
+.proof-reconciliation-segment strong,
+.surface-index-row h3,
+.surface-index-panel strong,
+.surface-index-group-list strong,
+.surface-index-deferred-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2580,7 +2634,11 @@ button {
 .proof-reconciliation-panel p,
 .proof-reconciliation-bucket-list p,
 .proof-reconciliation-reference-list p,
-.proof-reconciliation-boundary-list p {
+.proof-reconciliation-boundary-list p,
+.surface-index-row p,
+.surface-index-panel p,
+.surface-index-group-list p,
+.surface-index-deferred-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2606,10 +2664,114 @@ button {
 .proof-navigator-command-list article,
 .proof-reconciliation-bucket-list article,
 .proof-reconciliation-reference-list article,
-.proof-reconciliation-boundary-list article {
+.proof-reconciliation-boundary-list article,
+.surface-index-group-list article,
+.surface-index-deferred-list article {
   display: grid;
   gap: 8px;
   background: #ffffff;
+}
+
+.surface-index-row-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: start;
+}
+
+.surface-index-anchor {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  max-width: 280px;
+  overflow-wrap: anywhere;
+  border: 1px solid #bfd4e5;
+  border-radius: 999px;
+  background: #eef6ff;
+  color: #184d88;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 780;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.surface-index-anchor:hover {
+  background: #ddecff;
+}
+
+.surface-index-label-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.surface-index-label-strip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  border: 1px solid #d7e1e8;
+  border-radius: 999px;
+  background: #ffffff;
+  color: #273640;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 760;
+}
+
+.surface-index-nav-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.surface-index-nav-chip {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  border: 1px solid #bfd4e5;
+  border-radius: 999px;
+  background: #eef6ff;
+  color: #184d88;
+  padding: 0 10px;
+  font-size: 0.76rem;
+  font-weight: 780;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.surface-index-nav-chip:hover {
+  background: #ddecff;
+}
+
+.surface-index-count-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  overflow: hidden;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #d7e1e8;
+}
+
+.surface-index-count-grid div {
+  min-width: 0;
+  padding: 10px 12px;
+  background: #ffffff;
+}
+
+.surface-index-count-grid strong {
+  display: block;
+  margin-top: 3px;
+  color: #172026;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.surface-index-deferred-list {
+  max-height: 340px;
+  overflow: auto;
 }
 
 .proof-static-check-list,
@@ -2889,6 +3051,7 @@ button {
   .proof-packet-layout,
   .proof-navigator-layout,
   .proof-reconciliation-layout,
+  .surface-index-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
@@ -2919,10 +3082,15 @@ button {
   .handoff-summary-grid,
   .coverage-summary-grid,
   .gap-summary-grid,
+  .surface-index-count-grid,
   .trend-grid,
   .subsystem-rail,
   .channel-row,
   .alert-row {
+    grid-template-columns: 1fr;
+  }
+
+  .surface-index-row-heading {
     grid-template-columns: 1fr;
   }
 

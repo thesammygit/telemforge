@@ -2021,6 +2021,119 @@ export interface ReviewProofReconciliationView {
   sourceNavigator: ReviewProofNavigatorView;
 }
 
+export type ReviewSurfaceWorkflowGroupKind =
+  | "decision"
+  | "action"
+  | "readiness"
+  | "evidence"
+  | "proof"
+  | "navigator"
+  | "reconciliation";
+
+export interface ReviewSurfaceAnchorReferenceView {
+  anchorId: string;
+  href: `#${string}`;
+  label: string;
+  resolvesTo: "mission_console_section";
+  localOnly: true;
+  routeFree: true;
+}
+
+export interface ReviewSurfaceIndexSourceCountView {
+  label: string;
+  value: number;
+  sourcePath: string;
+}
+
+export interface ReviewSurfaceIndexRowView {
+  surfaceId: string;
+  stageNumber: number;
+  localOrder: number;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  label: string;
+  summary: string;
+  sourceSchema: string;
+  sourceContractLabel: string;
+  localStatus: ReplayPlaybackView["localStatus"];
+  localStatusLabel: string;
+  statusLabel: string;
+  anchor: ReviewSurfaceAnchorReferenceView;
+  sourceLabels: string[];
+  sourceCounts: ReviewSurfaceIndexSourceCountView[];
+  sourceSurfaceId: string;
+  deferredBoundaryCount: number;
+  localOnly: true;
+  informationalOnly: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+}
+
+export interface ReviewSurfaceWorkflowGroupView {
+  groupId: string;
+  workflowGroup: ReviewSurfaceWorkflowGroupKind;
+  order: number;
+  label: string;
+  summary: string;
+  rowCount: number;
+  rowIds: string[];
+  anchorIds: string[];
+  localOnly: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewSurfaceDeferredBoundaryNoteView {
+  noteId: string;
+  label: string;
+  summary: string;
+  sourceSurfaceIds: string[];
+  sourceAnchorIds: string[];
+  actionability: "deferred_non_actionable";
+  nonActionable: true;
+  informationalOnly: true;
+  nonCertifying: true;
+}
+
+export interface ReviewSurfaceIndexSummaryView {
+  indexId: "candidate-local-review-surface-index";
+  label: string;
+  summary: string;
+  defaultSurfaceId: string;
+  defaultAnchorId: string;
+  informationalOnly: true;
+  nonCertifying: true;
+  counts: {
+    totalSurfaceCount: number;
+    workflowGroupCount: number;
+    localAnchorCount: number;
+    sourceSchemaCount: number;
+    sourceCountMetricCount: number;
+    deferredBoundaryNoteCount: number;
+    decisionSurfaceCount: number;
+    actionSurfaceCount: number;
+    readinessSurfaceCount: number;
+    evidenceSurfaceCount: number;
+    proofSurfaceCount: number;
+    navigatorSurfaceCount: number;
+    reconciliationSurfaceCount: number;
+  };
+}
+
+export interface ReviewSurfaceIndexView {
+  schema: "telemforge.review_surface_index.v1";
+  version: 1;
+  contractLabel: "local deterministic review surface index and navigation map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewSurfaceIndexSummaryView;
+  rows: ReviewSurfaceIndexRowView[];
+  workflowGroups: ReviewSurfaceWorkflowGroupView[];
+  anchorReferences: ReviewSurfaceAnchorReferenceView[];
+  deferredBoundaryNotes: ReviewSurfaceDeferredBoundaryNoteView[];
+  staticBoundarySummary: string;
+  sourceReconciliation: ReviewProofReconciliationView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -2208,6 +2321,7 @@ export interface MissionConsoleView {
   reviewProofPacket?: ReviewProofPacketView;
   reviewProofNavigator?: ReviewProofNavigatorView;
   reviewProofReconciliation?: ReviewProofReconciliationView;
+  reviewSurfaceIndex?: ReviewSurfaceIndexView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

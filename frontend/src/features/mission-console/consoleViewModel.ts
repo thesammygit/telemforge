@@ -45,6 +45,7 @@ import { buildReviewProofPriority } from "../../lib/reviewProofPriority.ts";
 import { buildReviewProofPacket } from "../../lib/reviewProofPacket.ts";
 import { buildReviewProofNavigator } from "../../lib/reviewProofNavigator.ts";
 import { buildReviewProofReconciliation } from "../../lib/reviewProofReconciliation.ts";
+import { buildReviewSurfaceIndex } from "../../lib/reviewSurfaceIndex.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -159,6 +160,24 @@ export function buildMissionConsoleView(
   const reviewProofNavigator = buildReviewProofNavigator(reviewProofPacket);
   const reviewProofReconciliation =
     buildReviewProofReconciliation(reviewProofNavigator);
+  const reviewSurfaceIndex = buildReviewSurfaceIndex({
+    reviewDecisionRegister,
+    reviewBriefingBoard,
+    reviewActionQueue,
+    reviewActionWalkthrough,
+    reviewHandoffRehearsal,
+    reviewHandoffCoverageMatrix,
+    reviewGapTriage,
+    reviewGapResolution,
+    reviewPassReadiness,
+    reviewPassOutcome,
+    reviewEvidenceTrace,
+    reviewEvidenceCoverage,
+    reviewProofPriority,
+    reviewProofPacket,
+    reviewProofNavigator,
+    reviewProofReconciliation,
+  });
 
   return {
     mission: {
@@ -200,6 +219,7 @@ export function buildMissionConsoleView(
     reviewProofPacket,
     reviewProofNavigator,
     reviewProofReconciliation,
+    reviewSurfaceIndex,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

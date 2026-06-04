@@ -405,6 +405,153 @@ export function MissionConsole({
         </section>
       ) : null}
 
+      {view.reviewSurfaceIndex ? (
+        <section
+          className="review-surface-index-section"
+          aria-label="Review surface index and local navigation map"
+        >
+          <a id="review-surface-index" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 30 surface index</span>
+              <h2>Review surface index and local navigation map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${view.reviewSurfaceIndex.localStatus}`}
+            >
+              {view.reviewSurfaceIndex.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{view.reviewSurfaceIndex.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Surfaces</span>
+              <strong>
+                {view.reviewSurfaceIndex.summary.counts.totalSurfaceCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Groups</span>
+              <strong>
+                {view.reviewSurfaceIndex.summary.counts.workflowGroupCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Anchors</span>
+              <strong>
+                {view.reviewSurfaceIndex.summary.counts.localAnchorCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred</span>
+              <strong>
+                {
+                  view.reviewSurfaceIndex.summary.counts
+                    .deferredBoundaryNoteCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="surface-index-layout">
+            <div className="surface-index-row-list">
+              {view.reviewSurfaceIndex.rows.map((row) => (
+                <article
+                  key={row.surfaceId}
+                  className={`surface-index-row surface-index-row-${row.workflowGroup}`}
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Stage {row.stageNumber} ·{" "}
+                        {row.workflowGroup.replace(/_/g, " ")}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <a className="surface-index-anchor" href={row.anchor.href}>
+                      {row.anchor.anchorId}
+                    </a>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="surface-index-label-strip">
+                    <span>{row.sourceSchema}</span>
+                    <span>{row.sourceContractLabel}</span>
+                    <span>{row.localStatusLabel}</span>
+                    <span>{row.statusLabel.replace(/_/g, " ")}</span>
+                  </div>
+                  <div className="surface-index-count-grid">
+                    {row.sourceCounts.map((sourceCount) => (
+                      <div
+                        key={`${row.surfaceId}:${sourceCount.sourcePath}:${sourceCount.label}`}
+                      >
+                        <span className="metric-label">{sourceCount.label}</span>
+                        <strong>{sourceCount.value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                </article>
+              ))}
+            </div>
+            <aside className="surface-index-panel">
+              <span className="metric-label">Workflow groups</span>
+              <strong>{view.reviewSurfaceIndex.summary.label}</strong>
+              <p>{view.reviewSurfaceIndex.summary.summary}</p>
+              <div className="surface-index-nav-grid">
+                {view.reviewSurfaceIndex.anchorReferences.map((anchor) => (
+                  <a
+                    key={anchor.anchorId}
+                    className="surface-index-nav-chip"
+                    href={anchor.href}
+                  >
+                    {anchor.label}
+                  </a>
+                ))}
+              </div>
+              <div className="surface-index-group-list">
+                {view.reviewSurfaceIndex.workflowGroups.map((group) => (
+                  <article key={group.groupId}>
+                    <span className="event-type">
+                      Group {group.order} ·{" "}
+                      {group.workflowGroup.replace(/_/g, " ")}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <p>{group.summary}</p>
+                    <div className="gap-reference-strip">
+                      {group.anchorIds.map((anchorId) => (
+                        <span key={`${group.groupId}:${anchorId}`}>
+                          {anchorId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <p>{view.reviewSurfaceIndex.staticBoundarySummary}</p>
+              <div className="surface-index-deferred-list">
+                {view.reviewSurfaceIndex.deferredBoundaryNotes.map((note) => (
+                  <article key={note.noteId}>
+                    <span className="event-type">
+                      {note.actionability.replace(/_/g, " ")}
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                    <div className="gap-reference-strip">
+                      {note.sourceAnchorIds.map((anchorId) => (
+                        <span key={`${note.noteId}:${anchorId}`}>
+                          {anchorId}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
       {view.reviewDecisionRegister ? (
         <section
           className="review-decision-section"
