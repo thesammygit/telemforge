@@ -65,6 +65,7 @@ import { buildReviewObservationHandoffDriftGuard } from "../../lib/reviewObserva
 import { buildReviewObservationHandoffCalibration } from "../../lib/reviewObservationHandoffCalibration.ts";
 import { buildReviewObservationHandoffSynthesis } from "../../lib/reviewObservationHandoffSynthesis.ts";
 import { buildReviewObservationHandoffRelayTrail } from "../../lib/reviewObservationHandoffRelayTrail.ts";
+import { buildReviewObservationHandoffSourceCrosswalk } from "../../lib/reviewObservationHandoffSourceCrosswalk.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -244,6 +245,10 @@ export function buildMissionConsoleView(
     buildReviewObservationHandoffRelayTrail(
       reviewObservationHandoffSynthesis,
     );
+  const reviewObservationHandoffSourceCrosswalk =
+    buildReviewObservationHandoffSourceCrosswalk(
+      reviewObservationHandoffRelayTrail,
+    );
 
   return {
     mission: {
@@ -305,6 +310,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffCalibration,
     reviewObservationHandoffSynthesis,
     reviewObservationHandoffRelayTrail,
+    reviewObservationHandoffSourceCrosswalk,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

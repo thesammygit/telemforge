@@ -5215,6 +5215,155 @@ export interface ReviewObservationHandoffRelayTrailView {
   sourceObservationHandoffSynthesis: ReviewObservationHandoffSynthesisView;
 }
 
+export interface ReviewObservationHandoffSourceCrosswalkStaticNonGoalFlagsView
+  extends ReviewObservationHandoffRelayTrailStaticNonGoalFlagsView {
+  noSavedSourceInspectionState: true;
+  noSavedAnchorState: true;
+}
+
+export interface ReviewObservationHandoffSourceCrosswalkRowView {
+  sourceCrosswalkRowId: string;
+  rowNumber: number;
+  label: string;
+  summary: string;
+  anchorNote: string;
+  sourceRelayStepId: string;
+  sourceRelayStepIds: string[];
+  sourceSynthesisRowIds: string[];
+  sourceInspectionReferenceIds: string[];
+  sourceKinds: ReviewObservationHandoffRelayTrailSourceInspectionReferenceView["sourceKind"][];
+  sourceIds: string[];
+  sourceLabels: string[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  sourceCalibrationCardIds: string[];
+  sourceAlignmentNoteIds: string[];
+  sourceCueIds: string[];
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepIds: string[];
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceCrosswalkStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceCrosswalkStaticAnchorNoteEntryView {
+  staticAnchorNoteEntryId: string;
+  anchorOrder: number;
+  sourceStaticInspectionNoteId: string;
+  sourceStaticInspectionNoteIds: string[];
+  sourceRelayNoteId: string;
+  sourceRelayNoteIds: string[];
+  matchedSourceCrosswalkRowIds: string[];
+  sourceAlignmentNoteId: string;
+  sourceAlignmentNoteIds: string[];
+  sourceAnchorTargetIds: string[];
+  sourceAnchorOrder: number;
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceCrosswalkStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceCrosswalkSummaryView {
+  sourceCrosswalkId: "candidate-local-review-observation-handoff-source-crosswalk";
+  label: string;
+  summary: string;
+  defaultRelayContext: {
+    defaultRelayStepId: string;
+    defaultSynthesisRowId: string;
+    defaultCalibrationCardId: string;
+    defaultCueId: string;
+    defaultDebriefPromptId: string;
+    defaultAnchorTargetId: string;
+    sourceRelayTrailSummary: string;
+    sourceSynthesisSummary: string;
+    sourceCalibrationSummary: string;
+    sourceDriftGuardSummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    sourceCrosswalkRowCount: number;
+    staticAnchorNoteCount: number;
+    sourceRelayStepCount: number;
+    sourceStaticInspectionNoteCount: number;
+    sourceInspectionReferenceCount: number;
+    sourceSynthesisRowCount: number;
+    sourceCalibrationCardCount: number;
+    sourceAlignmentNoteCount: number;
+    sourceCueCount: number;
+    sourceDebriefPromptCount: number;
+    sourceFollowUpMapEntryCount: number;
+    sourcePathStepCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    localOnlySourceCrosswalkRowCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffSourceCrosswalkView {
+  schema: "telemforge.review_observation_handoff_source_crosswalk.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff source crosswalk and static anchor notes";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffSourceCrosswalkSummaryView;
+  defaultSourceCrosswalkRow: ReviewObservationHandoffSourceCrosswalkRowView;
+  sourceCrosswalkRows: ReviewObservationHandoffSourceCrosswalkRowView[];
+  staticAnchorNotes: ReviewObservationHandoffSourceCrosswalkStaticAnchorNoteEntryView[];
+  staticSourceCrosswalkSummary: string;
+  sourceReviewObservationHandoffRelayTrail: ReviewObservationHandoffRelayTrailView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -5422,6 +5571,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffCalibration?: ReviewObservationHandoffCalibrationView;
   reviewObservationHandoffSynthesis?: ReviewObservationHandoffSynthesisView;
   reviewObservationHandoffRelayTrail?: ReviewObservationHandoffRelayTrailView;
+  reviewObservationHandoffSourceCrosswalk?: ReviewObservationHandoffSourceCrosswalkView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

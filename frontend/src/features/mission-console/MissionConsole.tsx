@@ -58,6 +58,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSynthesis;
   const observationHandoffRelayTrail =
     view.reviewObservationHandoffRelayTrail;
+  const observationHandoffSourceCrosswalk =
+    view.reviewObservationHandoffSourceCrosswalk;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -3872,6 +3874,193 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffRelayTrail.staticRelayTrailSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceCrosswalk ? (
+        <section
+          className="review-observation-handoff-source-crosswalk-section"
+          aria-label="Review observation handoff source crosswalk"
+        >
+          <a
+            id="review-observation-handoff-source-crosswalk"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 50 observation handoff source crosswalk
+              </span>
+              <h2>Source crosswalk and static anchor notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceCrosswalk.localStatus}`}
+            >
+              {observationHandoffSourceCrosswalk.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffSourceCrosswalk.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Crosswalk rows</span>
+              <strong>
+                {
+                  observationHandoffSourceCrosswalk.summary.counts
+                    .sourceCrosswalkRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Anchor notes</span>
+              <strong>
+                {
+                  observationHandoffSourceCrosswalk.summary.counts
+                    .staticAnchorNoteCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default relay</span>
+              <strong>
+                {
+                  observationHandoffSourceCrosswalk.summary.defaultRelayContext
+                    .defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-crosswalk-layout">
+            <div className="observation-handoff-source-crosswalk-row-list">
+              {observationHandoffSourceCrosswalk.sourceCrosswalkRows.map(
+                (row) => (
+                  <article key={row.sourceCrosswalkRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Row {row.rowNumber} - {row.sourceCueIds[0]}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceInspectionReferenceIds.length} sources
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Evidence callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gap points</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchor state</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedAnchorState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.localAnchorHrefs.map((href) => (
+                        <a key={`${row.sourceCrosswalkRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceRelayStepId}</span>
+                      <span>{row.sourceSynthesisRowIds[0]}</span>
+                      <span>{row.sourceCalibrationCardIds[0]}</span>
+                      <span>{row.sourceDebriefPromptIds[0]}</span>
+                      <span>{row.sourcePathStepIds[0]}</span>
+                      <span>{row.sourceAgendaSectionIds[0]}</span>
+                      <span>{row.sourcePromptGroupIds[0]}</span>
+                      <span>{row.sourceCoverageRowIds[0]}</span>
+                      <span>{row.sourceHandoffCardIds[0]}</span>
+                    </div>
+                    <div className="observation-handoff-source-crosswalk-source-list">
+                      {row.sourceInspectionReferenceIds.map((referenceId, index) => (
+                        <div key={`${row.sourceCrosswalkRowId}:${referenceId}`}>
+                          <span className="event-type">
+                            {row.sourceKinds[index]?.replace(/_/g, " ")}
+                          </span>
+                          <strong>{row.sourceLabels[index]}</strong>
+                          <p>{row.sourceIds[index]}</p>
+                        </div>
+                      ))}
+                    </div>
+                    <p>{row.anchorNote}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-crosswalk-panel">
+              <span className="metric-label">Default relay context</span>
+              <strong>
+                {observationHandoffSourceCrosswalk.defaultSourceCrosswalkRow.label}
+              </strong>
+              <p>{observationHandoffSourceCrosswalk.summary.summary}</p>
+              <div className="observation-handoff-source-crosswalk-anchor-list">
+                {observationHandoffSourceCrosswalk.staticAnchorNotes.map(
+                  (note) => (
+                    <article key={note.staticAnchorNoteEntryId}>
+                      <span className="event-type">
+                        Anchor {note.anchorOrder} - {note.anchorTargetId}
+                      </span>
+                      <strong>{note.label}</strong>
+                      <p>{note.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={note.localAnchorHref}>
+                          {note.anchorTargetId}
+                        </a>
+                        <span>{note.sourceStaticInspectionNoteId}</span>
+                        <span>{note.sourceRelayNoteId}</span>
+                        <span>{note.sourceAlignmentNoteId}</span>
+                        <span>
+                          {note.matchedSourceCrosswalkRowIds.length} crosswalk
+                          rows
+                        </span>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-crosswalk-non-goal-list">
+                {[
+                  "No saved reviewer notes",
+                  "No saved relay progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved synthesis state",
+                  "No saved calibration state",
+                  "No saved drift state",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceCrosswalk
+                    .staticSourceCrosswalkSummary
+                }
+              </p>
             </aside>
           </div>
         </section>
