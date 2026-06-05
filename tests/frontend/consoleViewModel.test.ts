@@ -1587,6 +1587,90 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       .staticReviewCueCount,
     view.reviewObservationHandoffSourceWalkthrough?.staticReviewPrompts.length,
   );
+  assert.ok(view.reviewObservationHandoffSourceReadiness);
+  assert.equal(
+    view.reviewObservationHandoffSourceReadiness?.schema,
+    "telemforge.review_observation_handoff_source_readiness.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadiness
+      ?.sourceReviewObservationHandoffSourceReadout,
+    view.reviewObservationHandoffSourceReadout,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSourceReadiness?.sourceReadinessRows.map(
+      (row) => [
+        row.sourceReadoutRowId,
+        row.sourceWalkthroughSectionId,
+        row.sourceCrosswalkRowId,
+        row.sourceRelayStepId,
+        row.sourceInspectionReferenceIds,
+        row.sourceKinds,
+        row.sourceIds,
+        row.sourceLabels,
+        row.localAnchorHrefs,
+        row.anchorTargetIds,
+        row.sourceSynthesisRowIds,
+        row.sourceCalibrationCardIds,
+        row.sourceAlignmentNoteIds,
+        row.sourceCueIds,
+        row.sourceDebriefPromptIds,
+        row.sourceFollowUpMapEntryIds,
+        row.sourcePathStepIds,
+        row.sourceAgendaSectionIds,
+        row.sourcePromptGroupIds,
+        row.sourceCoverageRowIds,
+        row.sourceHandoffCardIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.matchedStaticReviewCueIds,
+      ],
+    ),
+    view.reviewObservationHandoffSourceReadout?.sourceReadoutRows.map((row) => [
+      row.sourceReadoutRowId,
+      row.sourceWalkthroughSectionId,
+      row.sourceCrosswalkRowId,
+      row.sourceRelayStepId,
+      row.sourceInspectionReferenceIds,
+      row.sourceKinds,
+      row.sourceIds,
+      row.sourceLabels,
+      row.localAnchorHrefs,
+      row.anchorTargetIds,
+      row.sourceSynthesisRowIds,
+      row.sourceCalibrationCardIds,
+      row.sourceAlignmentNoteIds,
+      row.sourceCueIds,
+      row.sourceDebriefPromptIds,
+      row.sourceFollowUpMapEntryIds,
+      row.sourcePathStepIds,
+      row.sourceAgendaSectionIds,
+      row.sourcePromptGroupIds,
+      row.sourceCoverageRowIds,
+      row.sourceHandoffCardIds,
+      row.evidenceCallbackIds,
+      row.gapDiscussionPointIds,
+      row.deferredScopeReminderIds,
+      view.reviewObservationHandoffSourceReadout?.staticReviewCues
+        .filter((cue) =>
+          cue.matchedSourceWalkthroughSectionIds.includes(
+            row.sourceWalkthroughSectionId,
+          ),
+        )
+        .map((cue) => cue.staticReviewCueRowId),
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadiness?.summary.counts
+      .sourceReadinessRowCount,
+    view.reviewObservationHandoffSourceReadout?.sourceReadoutRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadiness?.summary.counts
+      .staticReviewCheckCount,
+    view.reviewObservationHandoffSourceReadout?.staticReviewCues.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -1726,6 +1810,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadout
       ?.sourceReviewObservationHandoffSourceWalkthrough,
     view.reviewObservationHandoffSourceWalkthrough,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadiness?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadiness
+      ?.sourceReviewObservationHandoffSourceReadout,
+    view.reviewObservationHandoffSourceReadout,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

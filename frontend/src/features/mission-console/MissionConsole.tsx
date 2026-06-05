@@ -64,6 +64,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceWalkthrough;
   const observationHandoffSourceReadout =
     view.reviewObservationHandoffSourceReadout;
+  const observationHandoffSourceReadiness =
+    view.reviewObservationHandoffSourceReadiness;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -4479,6 +4481,233 @@ export function MissionConsole({
               </div>
               <p>
                 {observationHandoffSourceReadout.staticSourceReadoutSummary}
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadiness ? (
+        <section
+          className="review-observation-handoff-source-readiness-section"
+          aria-label="Review observation handoff source readiness"
+        >
+          <a
+            id="review-observation-handoff-source-readiness"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 53 observation handoff source readiness
+              </span>
+              <h2>Source readiness and static review checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadiness.localStatus}`}
+            >
+              {observationHandoffSourceReadiness.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffSourceReadiness.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Readiness rows</span>
+              <strong>
+                {
+                  observationHandoffSourceReadiness.summary.counts
+                    .sourceReadinessRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static checks</span>
+              <strong>
+                {
+                  observationHandoffSourceReadiness.summary.counts
+                    .staticReviewCheckCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default source</span>
+              <strong>
+                {
+                  observationHandoffSourceReadiness.summary
+                    .defaultSourceReadoutContext.defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-layout">
+            <div className="observation-handoff-source-readiness-row-list">
+              {observationHandoffSourceReadiness.sourceReadinessRows.map(
+                (row) => (
+                  <article key={row.sourceReadinessRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Row {row.rowNumber} - {row.sourceCueIds[0]}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedStaticReviewCueIds.length} checks
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.localAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gap prompts</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved readiness</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedSourceReadinessProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.localAnchorHrefs.map((href) => (
+                        <a key={`${row.sourceReadinessRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceReadoutRowId}</span>
+                      <span>{row.sourceWalkthroughSectionId}</span>
+                      <span>{row.sourceCrosswalkRowId}</span>
+                      <span>{row.sourceRelayStepId}</span>
+                      <span>{row.sourceSynthesisRowIds[0]}</span>
+                      <span>{row.sourceCalibrationCardIds[0]}</span>
+                      <span>{row.sourceAlignmentNoteIds[0]}</span>
+                      <span>{row.sourceDebriefPromptIds[0]}</span>
+                      <span>{row.sourcePathStepIds[0]}</span>
+                      <span>{row.sourceAgendaSectionIds[0]}</span>
+                      <span>{row.sourcePromptGroupIds[0]}</span>
+                      <span>{row.sourceCoverageRowIds[0]}</span>
+                      <span>{row.sourceHandoffCardIds[0]}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-source-list">
+                      {row.sourceInspectionReferenceIds.map(
+                        (referenceId, index) => (
+                          <div key={`${row.sourceReadinessRowId}:${referenceId}`}>
+                            <span className="event-type">
+                              {row.sourceKinds[index]?.replace(/_/g, " ")}
+                            </span>
+                            <strong>{row.sourceLabels[index]}</strong>
+                            <p>{row.sourceIds[index]}</p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <div className="observation-handoff-source-readiness-check-list">
+                      {row.matchedStaticReviewCueIds.map((cueId) => (
+                        <article key={`${row.sourceReadinessRowId}:${cueId}`}>
+                          <span className="event-type">Matched cue</span>
+                          <strong>{cueId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{row.readinessCue}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-panel">
+              <span className="metric-label">Default readiness context</span>
+              <strong>
+                {
+                  observationHandoffSourceReadiness.defaultSourceReadinessRow
+                    .label
+                }
+              </strong>
+              <p>{observationHandoffSourceReadiness.summary.summary}</p>
+              <div className="observation-handoff-source-readiness-static-check-list">
+                {observationHandoffSourceReadiness.staticReviewChecks.map(
+                  (check) => (
+                    <article key={check.staticReviewCheckRowId}>
+                      <span className="event-type">
+                        Check {check.checkOrder} - {check.anchorTargetId}
+                      </span>
+                      <strong>{check.label}</strong>
+                      <p>{check.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={check.localAnchorHref}>
+                          {check.anchorTargetId}
+                        </a>
+                        <span>{check.sourceStaticReviewCueRowId}</span>
+                        <span>
+                          {check.matchedSourceReadoutRowIds.length} readouts
+                        </span>
+                        <span>
+                          {check.matchedSourceWalkthroughSectionIds.length}{" "}
+                          sections
+                        </span>
+                        <span>
+                          {check.matchedSourceCrosswalkRowIds.length} crosswalks
+                        </span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{check.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{check.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{check.deferredScopeReminderIds.length}</strong>
+                        </div>
+                      </div>
+                      <p>{check.check}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-non-goal-list">
+                {[
+                  "No saved reviewer notes",
+                  "No saved source readiness progress",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadiness
+                    .staticSourceReadinessSummary
+                }
               </p>
             </aside>
           </div>

@@ -5682,6 +5682,170 @@ export interface ReviewObservationHandoffSourceReadoutView {
   sourceReviewObservationHandoffSourceWalkthrough: ReviewObservationHandoffSourceWalkthroughView;
 }
 
+export interface ReviewObservationHandoffSourceReadinessStaticNonGoalFlagsView
+  extends ReviewObservationHandoffSourceReadoutStaticNonGoalFlagsView {
+  noSavedSourceReadinessProgress: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessRowView {
+  sourceReadinessRowId: string;
+  rowNumber: number;
+  label: string;
+  summary: string;
+  readinessCue: string;
+  sourceReadoutRowId: string;
+  sourceReadoutRowIds: string[];
+  sourceWalkthroughSectionId: string;
+  sourceWalkthroughSectionIds: string[];
+  sourceCrosswalkRowId: string;
+  sourceCrosswalkRowIds: string[];
+  sourceRelayStepId: string;
+  sourceRelayStepIds: string[];
+  sourceInspectionReferenceIds: string[];
+  sourceKinds: ReviewObservationHandoffSourceCrosswalkRowView["sourceKinds"];
+  sourceIds: string[];
+  sourceLabels: string[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  sourceSynthesisRowIds: string[];
+  sourceCalibrationCardIds: string[];
+  sourceAlignmentNoteIds: string[];
+  sourceCueIds: string[];
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepIds: string[];
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  matchedStaticReviewCueIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessStaticReviewCheckRowView {
+  staticReviewCheckRowId: string;
+  checkOrder: number;
+  sourceStaticReviewCueRowId: string;
+  sourceStaticReviewCueRowIds: string[];
+  matchedSourceReadoutRowIds: string[];
+  matchedSourceWalkthroughSectionIds: string[];
+  matchedSourceCrosswalkRowIds: string[];
+  sourceRelayStepIds: string[];
+  sourceLocalAnchorHrefs: string[];
+  sourceAnchorTargetIds: string[];
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  check: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessSummaryView {
+  sourceReadinessId: "candidate-local-review-observation-handoff-source-readiness";
+  label: string;
+  summary: string;
+  defaultSourceReadoutContext: {
+    defaultSourceReadoutRowId: string;
+    defaultSourceWalkthroughSectionId: string;
+    defaultSourceCrosswalkRowId: string;
+    defaultRelayStepId: string;
+    defaultSynthesisRowId: string;
+    defaultCalibrationCardId: string;
+    defaultCueId: string;
+    defaultDebriefPromptId: string;
+    defaultAnchorTargetId: string;
+    sourceReadoutSummary: string;
+    sourceWalkthroughSummary: string;
+    sourceCrosswalkSummary: string;
+    sourceRelayTrailSummary: string;
+    sourceSynthesisSummary: string;
+    sourceCalibrationSummary: string;
+    sourceDriftGuardSummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    sourceReadinessRowCount: number;
+    staticReviewCheckCount: number;
+    sourceReadoutRowCount: number;
+    staticReviewCueCount: number;
+    sourceWalkthroughSectionCount: number;
+    sourceCrosswalkRowCount: number;
+    sourceInspectionReferenceCount: number;
+    sourceSynthesisRowCount: number;
+    sourceCalibrationCardCount: number;
+    sourceAlignmentNoteCount: number;
+    sourceCueCount: number;
+    sourceDebriefPromptCount: number;
+    sourceFollowUpMapEntryCount: number;
+    sourcePathStepCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    matchedStaticReviewCueCount: number;
+    localOnlySourceReadinessRowCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffSourceReadinessView {
+  schema: "telemforge.review_observation_handoff_source_readiness.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff source readiness board and static review checks";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffSourceReadinessSummaryView;
+  defaultSourceReadinessRow: ReviewObservationHandoffSourceReadinessRowView;
+  sourceReadinessRows: ReviewObservationHandoffSourceReadinessRowView[];
+  staticReviewChecks: ReviewObservationHandoffSourceReadinessStaticReviewCheckRowView[];
+  staticSourceReadinessSummary: string;
+  sourceReviewObservationHandoffSourceReadout: ReviewObservationHandoffSourceReadoutView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -5892,6 +6056,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffSourceCrosswalk?: ReviewObservationHandoffSourceCrosswalkView;
   reviewObservationHandoffSourceWalkthrough?: ReviewObservationHandoffSourceWalkthroughView;
   reviewObservationHandoffSourceReadout?: ReviewObservationHandoffSourceReadoutView;
+  reviewObservationHandoffSourceReadiness?: ReviewObservationHandoffSourceReadinessView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
