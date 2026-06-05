@@ -60,6 +60,8 @@ export function MissionConsole({
     view.reviewObservationHandoffRelayTrail;
   const observationHandoffSourceCrosswalk =
     view.reviewObservationHandoffSourceCrosswalk;
+  const observationHandoffSourceWalkthrough =
+    view.reviewObservationHandoffSourceWalkthrough;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -4059,6 +4061,223 @@ export function MissionConsole({
                 {
                   observationHandoffSourceCrosswalk
                     .staticSourceCrosswalkSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceWalkthrough ? (
+        <section
+          className="review-observation-handoff-source-walkthrough-section"
+          aria-label="Review observation handoff source walkthrough"
+        >
+          <a
+            id="review-observation-handoff-source-walkthrough"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 51 observation handoff source walkthrough
+              </span>
+              <h2>Source walkthrough and static review prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceWalkthrough.localStatus}`}
+            >
+              {observationHandoffSourceWalkthrough.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffSourceWalkthrough.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Walkthrough sections</span>
+              <strong>
+                {
+                  observationHandoffSourceWalkthrough.summary.counts
+                    .walkthroughSectionCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review prompts</span>
+              <strong>
+                {
+                  observationHandoffSourceWalkthrough.summary.counts
+                    .staticReviewPromptCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default source</span>
+              <strong>
+                {
+                  observationHandoffSourceWalkthrough.summary
+                    .defaultSourceCrosswalkContext.defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-walkthrough-layout">
+            <div className="observation-handoff-source-walkthrough-section-list">
+              {observationHandoffSourceWalkthrough.walkthroughSections.map(
+                (section) => (
+                  <article key={section.sourceWalkthroughSectionId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Section {section.sectionNumber} -{" "}
+                          {section.sourceCueIds[0]}
+                        </span>
+                        <h3>{section.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {section.sourceInspectionReferenceIds.length} sources
+                      </span>
+                    </div>
+                    <p>{section.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{section.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gap prompts</span>
+                        <strong>{section.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>
+                          {section.deferredScopeReminderIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved progress</span>
+                        <strong>
+                          {section.staticNonGoalFlags
+                            .noSavedSourceWalkthroughProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {section.localAnchorHrefs.map((href) => (
+                        <a
+                          key={`${section.sourceWalkthroughSectionId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{section.sourceCrosswalkRowId}</span>
+                      <span>{section.sourceRelayStepId}</span>
+                      <span>{section.sourceSynthesisRowIds[0]}</span>
+                      <span>{section.sourceCalibrationCardIds[0]}</span>
+                      <span>{section.sourceAlignmentNoteIds[0]}</span>
+                      <span>{section.sourceDebriefPromptIds[0]}</span>
+                      <span>{section.sourcePathStepIds[0]}</span>
+                      <span>{section.sourceAgendaSectionIds[0]}</span>
+                      <span>{section.sourcePromptGroupIds[0]}</span>
+                      <span>{section.sourceCoverageRowIds[0]}</span>
+                      <span>{section.sourceHandoffCardIds[0]}</span>
+                    </div>
+                    <div className="observation-handoff-source-walkthrough-reference-list">
+                      {section.sourceInspectionReferenceIds.map(
+                        (referenceId, index) => (
+                          <div
+                            key={`${section.sourceWalkthroughSectionId}:${referenceId}`}
+                          >
+                            <span className="event-type">
+                              {section.sourceKinds[index]?.replace(/_/g, " ")}
+                            </span>
+                            <strong>{section.sourceLabels[index]}</strong>
+                            <p>{section.sourceIds[index]}</p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <p>{section.reviewPrompt}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-walkthrough-panel">
+              <span className="metric-label">Default walkthrough context</span>
+              <strong>
+                {observationHandoffSourceWalkthrough.defaultWalkthroughSection.label}
+              </strong>
+              <p>{observationHandoffSourceWalkthrough.summary.summary}</p>
+              <div className="observation-handoff-source-walkthrough-prompt-list">
+                {observationHandoffSourceWalkthrough.staticReviewPrompts.map(
+                  (prompt) => (
+                    <article key={prompt.staticReviewPromptRowId}>
+                      <span className="event-type">
+                        Prompt {prompt.promptOrder} - {prompt.anchorTargetId}
+                      </span>
+                      <strong>{prompt.label}</strong>
+                      <p>{prompt.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={prompt.localAnchorHref}>
+                          {prompt.anchorTargetId}
+                        </a>
+                        <span>{prompt.sourceStaticAnchorNoteId}</span>
+                        <span>{prompt.sourceStaticInspectionNoteId}</span>
+                        <span>{prompt.sourceRelayNoteId}</span>
+                        <span>
+                          {prompt.matchedSourceWalkthroughSectionIds.length}{" "}
+                          sections
+                        </span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{prompt.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{prompt.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>
+                            {prompt.deferredScopeReminderIds.length}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{prompt.prompt}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-walkthrough-non-goal-list">
+                {[
+                  "No saved reviewer notes",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceWalkthrough
+                    .staticSourceWalkthroughSummary
                 }
               </p>
             </aside>

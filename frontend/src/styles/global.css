@@ -190,6 +190,7 @@ button {
 .review-observation-handoff-synthesis-section,
 .review-observation-handoff-relay-trail-section,
 .review-observation-handoff-source-crosswalk-section,
+.review-observation-handoff-source-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -448,6 +449,7 @@ button {
 .review-observation-handoff-synthesis-section,
 .review-observation-handoff-relay-trail-section,
 .review-observation-handoff-source-crosswalk-section,
+.review-observation-handoff-source-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2662,6 +2664,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-source-walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2797,7 +2806,12 @@ button {
 .observation-handoff-source-crosswalk-panel,
 .observation-handoff-source-crosswalk-source-list,
 .observation-handoff-source-crosswalk-anchor-list,
-.observation-handoff-source-crosswalk-non-goal-list {
+.observation-handoff-source-crosswalk-non-goal-list,
+.observation-handoff-source-walkthrough-section-list,
+.observation-handoff-source-walkthrough-panel,
+.observation-handoff-source-walkthrough-reference-list,
+.observation-handoff-source-walkthrough-prompt-list,
+.observation-handoff-source-walkthrough-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2936,7 +2950,12 @@ button {
 .observation-handoff-source-crosswalk-panel,
 .observation-handoff-source-crosswalk-source-list div,
 .observation-handoff-source-crosswalk-anchor-list article,
-.observation-handoff-source-crosswalk-non-goal-list div {
+.observation-handoff-source-crosswalk-non-goal-list div,
+.observation-handoff-source-walkthrough-section-list article,
+.observation-handoff-source-walkthrough-panel,
+.observation-handoff-source-walkthrough-reference-list div,
+.observation-handoff-source-walkthrough-prompt-list article,
+.observation-handoff-source-walkthrough-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2967,7 +2986,8 @@ button {
 .observation-handoff-calibration-card-list article,
 .observation-handoff-synthesis-row-list article,
 .observation-handoff-relay-trail-step-list article,
-.observation-handoff-source-crosswalk-row-list article {
+.observation-handoff-source-crosswalk-row-list article,
+.observation-handoff-source-walkthrough-section-list article {
   display: grid;
   gap: 10px;
 }
@@ -3024,6 +3044,10 @@ button {
 
 .observation-handoff-source-crosswalk-row-list article {
   border-left: 4px solid #12745b;
+}
+
+.observation-handoff-source-walkthrough-section-list article {
+  border-left: 4px solid #2368b5;
 }
 
 .surface-index-row-decision {
@@ -4033,6 +4057,7 @@ button {
   .observation-handoff-synthesis-layout,
   .observation-handoff-relay-trail-layout,
   .observation-handoff-source-crosswalk-layout,
+  .observation-handoff-source-walkthrough-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
