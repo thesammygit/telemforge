@@ -70,6 +70,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadinessRehearsal;
   const observationHandoffSourceReadinessQuestionBoard =
     view.reviewObservationHandoffSourceReadinessQuestionBoard;
+  const observationHandoffSourceReadinessResponseMatrix =
+    view.reviewObservationHandoffSourceReadinessResponseMatrix;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -5207,6 +5209,267 @@ export function MissionConsole({
                 {
                   observationHandoffSourceReadinessQuestionBoard
                     .staticSourceReadinessQuestionBoardSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadinessResponseMatrix ? (
+        <section
+          className="review-observation-handoff-source-readiness-response-matrix-section"
+          aria-label="Review observation handoff source readiness response matrix"
+        >
+          <a
+            id="review-observation-handoff-source-readiness-response-matrix"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 56 source readiness response matrix
+              </span>
+              <h2>Response matrix and static evidence notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadinessResponseMatrix.localStatus}`}
+            >
+              {observationHandoffSourceReadinessResponseMatrix.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffSourceReadinessResponseMatrix.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Response rows</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseMatrix.summary.counts
+                    .responseRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence notes</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseMatrix.summary.counts
+                    .staticEvidenceNoteCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default response</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseMatrix.summary
+                    .defaultResponseContext.defaultResponseRowId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-response-matrix-layout">
+            <div className="observation-handoff-source-readiness-response-row-list">
+              {observationHandoffSourceReadinessResponseMatrix.responseRows.map(
+                (row) => (
+                  <article key={row.sourceReadinessResponseRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Response {row.responseOrder} - {row.sourceCueIds[0]}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedStaticFollowUpPromptRowIds.length} notes
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.localAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gap prompts</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved response</span>
+                        <strong>
+                          {row.staticNonGoalFlags
+                            .noSavedSourceReadinessResponseProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.localAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.sourceReadinessResponseRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceReadinessQuestionRowId}</span>
+                      <span>{row.sourceReadinessRehearsalPromptRowId}</span>
+                      <span>{row.sourceReadinessRowId}</span>
+                      <span>{row.sourceReadoutRowId}</span>
+                      <span>{row.sourceWalkthroughSectionId}</span>
+                      <span>{row.sourceCrosswalkRowId}</span>
+                      <span>{row.sourceRelayStepId}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-response-source-list">
+                      {row.sourceInspectionReferenceIds.map(
+                        (referenceId, index) => (
+                          <div
+                            key={`${row.sourceReadinessResponseRowId}:${referenceId}`}
+                          >
+                            <span className="event-type">
+                              {row.sourceKinds[index]?.replace(/_/g, " ")}
+                            </span>
+                            <strong>{row.sourceLabels[index]}</strong>
+                            <p>{row.sourceIds[index]}</p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <div className="observation-handoff-source-readiness-response-note-list">
+                      {row.matchedStaticFollowUpPromptRowIds.map(
+                        (promptId) => (
+                          <article
+                            key={`${row.sourceReadinessResponseRowId}:${promptId}`}
+                          >
+                            <span className="event-type">
+                              Static evidence note
+                            </span>
+                            <strong>{promptId}</strong>
+                          </article>
+                        ),
+                      )}
+                      {row.staticReviewCueIds.map((cueId) => (
+                        <article
+                          key={`${row.sourceReadinessResponseRowId}:${cueId}`}
+                        >
+                          <span className="event-type">Static cue</span>
+                          <strong>{cueId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{row.reviewerPromptText}</p>
+                    <p>{row.followUpQuestionText}</p>
+                    <p>{row.responseNoteCue}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-response-matrix-panel">
+              <span className="metric-label">Default response context</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseMatrix
+                    .defaultResponseRow.label
+                }
+              </strong>
+              <p>
+                {observationHandoffSourceReadinessResponseMatrix.summary.summary}
+              </p>
+              <div className="observation-handoff-source-readiness-static-evidence-note-list">
+                {observationHandoffSourceReadinessResponseMatrix.staticEvidenceNotes.map(
+                  (note) => (
+                    <article
+                      key={note.sourceReadinessStaticEvidenceNoteRowId}
+                    >
+                      <span className="event-type">
+                        Evidence note {note.evidenceNoteOrder} -{" "}
+                        {note.anchorTargetId}
+                      </span>
+                      <strong>{note.label}</strong>
+                      <p>{note.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={note.localAnchorHref}>
+                          {note.anchorTargetId}
+                        </a>
+                        <span>
+                          {note.sourceReadinessStaticFollowUpPromptRowId}
+                        </span>
+                        <span>{note.matchedQuestionRowIds.length} questions</span>
+                        <span>
+                          {note.matchedRehearsalPromptRowIds.length} rehearsals
+                        </span>
+                        <span>
+                          {note.matchedSourceReadinessRowIds.length} readiness
+                        </span>
+                        <span>
+                          {note.matchedSourceReadoutRowIds.length} readouts
+                        </span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{note.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>
+                            {note.gapDiscussionPointIds.length}
+                          </strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>
+                            {note.deferredScopeReminderIds.length}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{note.reviewerPromptText}</p>
+                      <p>{note.followUpPromptText}</p>
+                      <p>{note.responseNoteCue}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-response-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved source readiness response progress",
+                  "No saved source readiness question progress",
+                  "No saved source readiness rehearsal progress",
+                  "No saved source readiness progress",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadinessResponseMatrix
+                    .staticSourceReadinessResponseMatrixSummary
                 }
               </p>
             </aside>
