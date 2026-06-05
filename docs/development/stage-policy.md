@@ -92,8 +92,8 @@ Executor must:
 
 ## Current Transition
 
-Stage 09 is review-ready/completed for automation-branch development. It proved
-bounded websocket behavior, a benchmark envelope, a target-scale Rust stream
-fanout candidate, sustained-load evidence, and a local live-console binding.
+Stage 48 is review-ready/completed for automation-branch development. It proved
+a deterministic local observation handoff synthesis map and static relay notes
+over the Stage 47 calibration board.
 
-New work should begin in Stage 10 unless a focused Stage 09 regression is found.
+New work should begin in Stage 49 unless a focused Stage 48 regression is found.

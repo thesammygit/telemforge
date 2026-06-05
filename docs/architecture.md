@@ -92,5 +92,7 @@ guarantees:
 - Stage 12 is review-ready/completed for automation-branch development with a local incident review packet and deterministic evidence export payload.
 - Stage 13 is review-ready/completed for automation-branch development with replay playback frames and a compact review timeline in the mission console.
 - Stage 14 is review-ready/completed for automation-branch development with a deterministic local review decision register and handoff checklist tied to replay, runbook, packet, and export evidence.
+- Stages 15 through 27 are review-ready/completed for automation-branch development with deterministic local review briefing, action, proof, and handoff readiness surfaces that stay local-only and non-persistent.
+- Stages 28 through 48 are review-ready/completed for automation-branch development with deterministic local proof navigation, observation, and handoff synthesis surfaces, culminating in a Stage 48 relay-note synthesis map over the Stage 47 calibration board.
 - Stage 02 telemetry contracts and Stage 03 simulation remain the source of the API's baseline telemetry data behavior.
 - Broad production load claims, Rust control-plane replacement, a full animated replay engine, background anomaly daemons, scheduled faults, PostgreSQL runtime wiring, auth/collaboration identity, persistent reviewer notes, external ticketing or messaging, deploy, release, and publish behavior remain deferred.

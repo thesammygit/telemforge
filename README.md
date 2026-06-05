@@ -78,7 +78,7 @@ docs/       Architecture, local runbook, readiness docs, staged development path
 
 ## Current Scope
 
-Implemented through the current Stage 14 review-ready slices:
+Implemented through the current Stage 48 review-ready slices:
 
 - telemetry contracts and fixture examples;
 - deterministic simulation artifacts;
@@ -93,15 +93,18 @@ Implemented through the current Stage 14 review-ready slices:
 - deterministic scenario runbook playback and compact guided mission-console review states;
 - incident review packets plus deterministic local evidence export payloads;
 - replay playback frames and a compact review timeline tied back to runbook and packet evidence;
-- a deterministic local review decision register and handoff checklist for the existing thermal-alert review flow.
+- a deterministic local review decision register and handoff checklist for the existing thermal-alert review flow;
+- deterministic local review briefing, action, proof, and handoff surfaces through Stage 27, including the briefing board, action queue, walkthrough path, readiness script, coverage matrix, gap triage/resolution, readiness summary, outcome board, proof packet, and human test gate;
+- deterministic local review proof, observation, and handoff surfaces through Stage 48, including proof navigation/crosswalks, surface indexing, walkthroughs, observation lens/coverage/citations/boundaries/storyline, and the handoff deck, coverage, questions, agenda, path, dry run, debrief, continuity, drift, calibration, and synthesis views;
+- local review and handoff surfaces remain deterministic, local-only, non-persistent, and non-certifying by design.
 
 Deferred:
 
-- manual fast-forward of `main` after Stage 09 review;
+- manual fast-forward of `main` remains a separate human integration gate after automation-branch review;
 - any production claim for broad load behavior, live operations, or Rust control-plane replacement;
 - a fuller animated replay engine beyond the current compact local timeline;
 - scheduled fault workflows;
 - PostgreSQL runtime profile;
-- authentication, saved reviewer sessions, collaboration identity, or persistent reviewer notes;
-- external ticketing, messaging, or cloud-backed handoff workflows;
+- authentication, saved reviewer sessions, saved review progress, saved synthesis/calibration/drift state, collaboration identity, or persistent reviewer notes;
+- signoff/audit retention, owner assignment, report or handoff package export, external ticketing, messaging, or cloud-backed handoff workflows;
 - publishing releases, packages, or container images.
