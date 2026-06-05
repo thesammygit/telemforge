@@ -41,6 +41,7 @@ export function MissionConsole({
   const observationBoundaryWalkthrough =
     view.reviewObservationBoundaryWalkthrough;
   const observationStoryline = view.reviewObservationStoryline;
+  const observationHandoffDeck = view.reviewObservationHandoffDeck;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -1818,6 +1819,196 @@ export function MissionConsole({
                 )}
               </div>
               <p>{observationStoryline.staticStorylineSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffDeck ? (
+        <section
+          className="review-observation-handoff-deck-section"
+          aria-label="Review observation handoff deck"
+        >
+          <a id="review-observation-handoff-deck" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 38 observation handoff deck</span>
+              <h2>Static review path and handoff cards</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffDeck.localStatus}`}
+            >
+              {observationHandoffDeck.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffDeck.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Cards</span>
+              <strong>
+                {observationHandoffDeck.summary.counts.handoffCardCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Checkpoints</span>
+              <strong>
+                {
+                  observationHandoffDeck.summary.counts
+                    .reviewPathCheckpointCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompts</span>
+              <strong>
+                {
+                  observationHandoffDeck.summary.counts
+                    .sourceStagePromptCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Opening</span>
+              <strong>
+                {observationHandoffDeck.defaultReviewContext.sourceSummaryId.replace(
+                  "review-observation-boundary:",
+                  "",
+                )}
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-deck-layout">
+            <div className="observation-handoff-card-list">
+              {observationHandoffDeck.cards.map((card) => (
+                <article key={card.cardId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Card {card.cardNumber} ·{" "}
+                        {card.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{card.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {card.sourceStagePromptIds.length} prompts
+                    </span>
+                  </div>
+                  <p>{card.sourceSummary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{card.localAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Observations</span>
+                      <strong>{card.relatedObservationRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stages</span>
+                      <strong>{card.relatedSourceStageNumbers.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Reminders</span>
+                      <strong>{card.guardrailReminderIds.length}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {card.localAnchorHrefs.map((href) => (
+                      <a key={`${card.cardId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    {card.relatedSourceStageNumbers.map((stageNumber) => (
+                      <span key={`${card.cardId}:stage:${stageNumber}`}>
+                        Stage {stageNumber}
+                      </span>
+                    ))}
+                    <span>{card.priorSurfacePromptIds.length} prior refs</span>
+                  </div>
+                  {card.staticNonGoalContexts.length ? (
+                    <div className="observation-handoff-context-list">
+                      {card.staticNonGoalContexts.map((context) => (
+                        <div key={`${card.cardId}:${context.nonGoalNoteId}`}>
+                          <span className="event-type">
+                            {context.kind.replace(/_/g, " ")}
+                          </span>
+                          <strong>{context.label}</strong>
+                          <p>{context.summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-deck-panel">
+              <span className="metric-label">Default review context</span>
+              <strong>{observationHandoffDeck.defaultReviewContext.label}</strong>
+              <p>{observationHandoffDeck.defaultReviewContext.summary}</p>
+              <div className="observation-handoff-checkpoint-list">
+                {observationHandoffDeck.reviewPathCheckpoints.map(
+                  (checkpoint) => (
+                    <article key={checkpoint.checkpointId}>
+                      <span className="event-type">
+                        {checkpoint.relatedObservationRowIds.length} observations
+                      </span>
+                      <strong>{checkpoint.label}</strong>
+                      <p>{checkpoint.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-prompt-list">
+                {observationHandoffDeck.sourceStagePrompts.map((prompt) => (
+                  <article key={prompt.promptId}>
+                    <span className="event-type">
+                      Source Stage {prompt.sourceStageNumber}
+                    </span>
+                    <strong>{prompt.label}</strong>
+                    <p>{prompt.prompt}</p>
+                    <div className="gap-reference-strip">
+                      {prompt.sourceAnchorHrefs.map((href) => (
+                        <a key={`${prompt.promptId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{prompt.segmentIds.length} cards</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-guardrail-list">
+                {observationHandoffDeck.guardrailReminders.map((reminder) => (
+                  <article key={reminder.reminderId}>
+                    <span className="event-type">
+                      {reminder.kind.replace(/_/g, " ")}
+                    </span>
+                    <strong>{reminder.label}</strong>
+                    <p>{reminder.reminder}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-prior-surface-list">
+                {observationHandoffDeck.priorSurfacePrompts.map((prompt) => (
+                  <article key={prompt.promptId}>
+                    <span className="event-type">
+                      Stage {prompt.sourceStageNumber}
+                    </span>
+                    <strong>{prompt.label}</strong>
+                    <p>{prompt.prompt}</p>
+                    <a href={prompt.anchorHref}>
+                      {prompt.anchorHref.replace("#", "")}
+                    </a>
+                  </article>
+                ))}
+              </div>
+              <p>{observationHandoffDeck.staticHandoffSummary}</p>
             </aside>
           </div>
         </section>

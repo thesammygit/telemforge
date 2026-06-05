@@ -855,6 +855,31 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationStoryline?.summary.counts.storylineSegmentCount,
     view.reviewObservationBoundaryWalkthrough?.steps.length,
   );
+  assert.ok(view.reviewObservationHandoffDeck);
+  assert.equal(
+    view.reviewObservationHandoffDeck?.schema,
+    "telemforge.review_observation_handoff_deck.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffDeck?.sourceObservationStoryline,
+    view.reviewObservationStoryline,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffDeck?.cards.map((card) => [
+      card.sourceSegmentId,
+      card.sourceSummaryId,
+      card.relatedObservationRowIds.length,
+    ]),
+    view.reviewObservationStoryline?.segments.map((segment) => [
+      segment.segmentId,
+      segment.sourceSummaryId,
+      segment.relatedObservationRowIds.length,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffDeck?.summary.counts.handoffCardCount,
+    view.reviewObservationStoryline?.segments.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -879,6 +904,7 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     "local-live",
   );
   assert.equal(view.reviewObservationStoryline?.localStatus, "local-live");
+  assert.equal(view.reviewObservationHandoffDeck?.localStatus, "local-live");
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
     view.reviewWalkthroughPath?.steps[0].localStatusLabel,

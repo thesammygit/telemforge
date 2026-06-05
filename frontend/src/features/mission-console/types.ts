@@ -3189,6 +3189,199 @@ export interface ReviewObservationStorylineView {
   sourceObservationBoundaryWalkthrough: ReviewObservationBoundaryWalkthroughView;
 }
 
+export interface ReviewObservationHandoffDeckCardView {
+  cardId: string;
+  cardNumber: number;
+  sourceSegmentId: string;
+  sourceStepId: string;
+  sourceBoundaryRowId: string;
+  sourceBoundaryCitationId: string;
+  sourceSummaryId: string;
+  label: string;
+  sourceSummary: string;
+  localAnchorIds: string[];
+  localAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedCitationRowIds: string[];
+  relatedSourceStageNumbers: number[];
+  sourceStageEvidenceGroupIds: string[];
+  sourceStagePromptIds: string[];
+  guardrailReminderIds: string[];
+  priorSurfacePromptIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDeckReviewPathCheckpointView {
+  checkpointId: string;
+  cardId: string;
+  sourceSegmentId: string;
+  label: string;
+  summary: string;
+  localAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  sourceStagePromptIds: string[];
+  guardrailReminderIds: string[];
+  priorSurfacePromptIds: string[];
+  manualReviewOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDeckSourceStagePromptView {
+  promptId: string;
+  sourceStageEvidenceGroupId: string;
+  sourcePathGroupId: string;
+  sourceStageGroupId: string;
+  sourceMapRowId: string;
+  sourceStageNumber: number;
+  label: string;
+  prompt: string;
+  sourceSchemas: string[];
+  sourceContractLabels: string[];
+  segmentIds: string[];
+  relatedObservationRowIds: string[];
+  sourceAnchorHrefs: string[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationHandoffDeckGuardrailReminderView {
+  reminderId: string;
+  sourceGuardrailReferenceId: string;
+  sourceNonGoalNoteId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  reminder: string;
+  sourceObservationRowIds: string[];
+  sourceAnchorIds: string[];
+  segmentIds: string[];
+  localOnly: true;
+  staticReviewContext: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDeckPriorSurfacePromptView {
+  promptId: string;
+  sourcePriorSurfaceReferenceId: string;
+  sourceSegmentId: string;
+  sourceStageNumber: number;
+  surfaceId: ReviewObservationStorylinePriorSurfaceReferenceView["surfaceId"];
+  label: string;
+  anchorHref: string;
+  sourceIds: string[];
+  prompt: string;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationHandoffDeckDefaultReviewContextView {
+  defaultReviewContextId: "candidate-local-review-observation-handoff-deck-default";
+  label: string;
+  summary: string;
+  defaultHandoffCardId: string;
+  sourceOpeningSegmentId: string;
+  sourceStepId: string;
+  sourceBoundaryRowId: string;
+  sourceSummaryId: string;
+  localAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedSourceStageNumbers: number[];
+  localOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationHandoffDeckSummaryView {
+  deckId: "candidate-local-review-observation-handoff-deck";
+  label: string;
+  summary: string;
+  defaultHandoffCardId: string;
+  defaultReviewContextId: "candidate-local-review-observation-handoff-deck-default";
+  defaultSourceStagePromptId: string;
+  defaultGuardrailReminderId: string;
+  defaultPriorSurfacePromptId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    handoffCardCount: number;
+    reviewPathCheckpointCount: number;
+    sourceStagePromptCount: number;
+    guardrailReminderCount: number;
+    priorSurfacePromptCount: number;
+    sourceStorylineSegmentCount: number;
+    sourceStageEvidenceGroupCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffDeckView {
+  schema: "telemforge.review_observation_handoff_deck.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff deck and static review path";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffDeckSummaryView;
+  defaultReviewContext: ReviewObservationHandoffDeckDefaultReviewContextView;
+  cards: ReviewObservationHandoffDeckCardView[];
+  reviewPathCheckpoints: ReviewObservationHandoffDeckReviewPathCheckpointView[];
+  sourceStagePrompts: ReviewObservationHandoffDeckSourceStagePromptView[];
+  guardrailReminders: ReviewObservationHandoffDeckGuardrailReminderView[];
+  priorSurfacePrompts: ReviewObservationHandoffDeckPriorSurfacePromptView[];
+  staticHandoffSummary: string;
+  sourceObservationStoryline: ReviewObservationStorylineView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -3384,6 +3577,7 @@ export interface MissionConsoleView {
   reviewObservationBoundaryLedger?: ReviewObservationBoundaryLedgerView;
   reviewObservationBoundaryWalkthrough?: ReviewObservationBoundaryWalkthroughView;
   reviewObservationStoryline?: ReviewObservationStorylineView;
+  reviewObservationHandoffDeck?: ReviewObservationHandoffDeckView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
