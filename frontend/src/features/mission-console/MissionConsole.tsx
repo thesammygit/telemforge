@@ -62,6 +62,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceCrosswalk;
   const observationHandoffSourceWalkthrough =
     view.reviewObservationHandoffSourceWalkthrough;
+  const observationHandoffSourceReadout =
+    view.reviewObservationHandoffSourceReadout;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -4279,6 +4281,204 @@ export function MissionConsole({
                   observationHandoffSourceWalkthrough
                     .staticSourceWalkthroughSummary
                 }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadout ? (
+        <section
+          className="review-observation-handoff-source-readout-section"
+          aria-label="Review observation handoff source readout"
+        >
+          <a
+            id="review-observation-handoff-source-readout"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 52 observation handoff source readout
+              </span>
+              <h2>Source readout and static review cues</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadout.localStatus}`}
+            >
+              {observationHandoffSourceReadout.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffSourceReadout.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Readout rows</span>
+              <strong>
+                {
+                  observationHandoffSourceReadout.summary.counts
+                    .sourceReadoutRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review cues</span>
+              <strong>
+                {
+                  observationHandoffSourceReadout.summary.counts
+                    .staticReviewCueCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default source</span>
+              <strong>
+                {
+                  observationHandoffSourceReadout.summary
+                    .defaultSourceWalkthroughContext.defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readout-layout">
+            <div className="observation-handoff-source-readout-row-list">
+              {observationHandoffSourceReadout.sourceReadoutRows.map((row) => (
+                <article key={row.sourceReadoutRowId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Row {row.rowNumber} - {row.sourceCueIds[0]}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.sourceInspectionReferenceIds.length} sources
+                    </span>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Callbacks</span>
+                      <strong>{row.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap prompts</span>
+                      <strong>{row.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{row.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved readout</span>
+                      <strong>
+                        {row.staticNonGoalFlags.noSavedSourceReadoutProgress
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.localAnchorHrefs.map((href) => (
+                      <a key={`${row.sourceReadoutRowId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{row.sourceWalkthroughSectionId}</span>
+                    <span>{row.sourceCrosswalkRowId}</span>
+                    <span>{row.sourceRelayStepId}</span>
+                    <span>{row.sourceSynthesisRowIds[0]}</span>
+                    <span>{row.sourceCalibrationCardIds[0]}</span>
+                    <span>{row.sourceAlignmentNoteIds[0]}</span>
+                    <span>{row.sourceDebriefPromptIds[0]}</span>
+                    <span>{row.sourcePathStepIds[0]}</span>
+                    <span>{row.sourceAgendaSectionIds[0]}</span>
+                    <span>{row.sourcePromptGroupIds[0]}</span>
+                    <span>{row.sourceCoverageRowIds[0]}</span>
+                    <span>{row.sourceHandoffCardIds[0]}</span>
+                  </div>
+                  <div className="observation-handoff-source-readout-source-list">
+                    {row.sourceInspectionReferenceIds.map(
+                      (referenceId, index) => (
+                        <div key={`${row.sourceReadoutRowId}:${referenceId}`}>
+                          <span className="event-type">
+                            {row.sourceKinds[index]?.replace(/_/g, " ")}
+                          </span>
+                          <strong>{row.sourceLabels[index]}</strong>
+                          <p>{row.sourceIds[index]}</p>
+                        </div>
+                      ),
+                    )}
+                  </div>
+                  <p>{row.readoutCue}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-source-readout-panel">
+              <span className="metric-label">Default readout context</span>
+              <strong>
+                {observationHandoffSourceReadout.defaultSourceReadoutRow.label}
+              </strong>
+              <p>{observationHandoffSourceReadout.summary.summary}</p>
+              <div className="observation-handoff-source-readout-cue-list">
+                {observationHandoffSourceReadout.staticReviewCues.map((cue) => (
+                  <article key={cue.staticReviewCueRowId}>
+                    <span className="event-type">
+                      Cue {cue.cueOrder} - {cue.anchorTargetId}
+                    </span>
+                    <strong>{cue.label}</strong>
+                    <p>{cue.summary}</p>
+                    <div className="gap-reference-strip">
+                      <a href={cue.localAnchorHref}>{cue.anchorTargetId}</a>
+                      <span>{cue.sourceStaticReviewPromptId}</span>
+                      <span>{cue.sourceStaticAnchorNoteId}</span>
+                      <span>{cue.sourceStaticInspectionNoteId}</span>
+                      <span>{cue.sourceRelayNoteId}</span>
+                      <span>
+                        {cue.matchedSourceWalkthroughSectionIds.length}{" "}
+                        sections
+                      </span>
+                    </div>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{cue.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{cue.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{cue.deferredScopeReminderIds.length}</strong>
+                      </div>
+                    </div>
+                    <p>{cue.cue}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-source-readout-non-goal-list">
+                {[
+                  "No saved reviewer notes",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {observationHandoffSourceReadout.staticSourceReadoutSummary}
               </p>
             </aside>
           </div>
