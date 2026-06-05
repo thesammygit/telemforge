@@ -74,6 +74,7 @@ For each stage:
 45. [Review Observation Handoff Continuity Snapshot And Static Next-Pass Map](steps/45-review-observation-handoff-continuity-snapshot-and-static-next-pass-map.md)
 46. [Review Observation Handoff Drift Guard And Static Regression Map](steps/46-review-observation-handoff-drift-guard-and-static-regression-map.md)
 47. [Review Observation Handoff Calibration Board And Static Alignment Notes](steps/47-review-observation-handoff-calibration-board-and-static-alignment-notes.md)
+48. [Review Observation Handoff Synthesis Map And Static Relay Notes](steps/48-review-observation-handoff-synthesis-map-and-static-relay-notes.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
