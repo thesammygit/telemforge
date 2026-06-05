@@ -65,6 +65,7 @@ For each stage:
 36. [Review Observation Boundary Walkthrough And Static Source Path](steps/36-review-observation-boundary-walkthrough-and-static-source-path.md)
 37. [Review Observation Storyline And Static Evidence Path](steps/37-review-observation-storyline-and-static-evidence-path.md)
 38. [Review Observation Handoff Deck And Static Review Path](steps/38-review-observation-handoff-deck-and-static-review-path.md)
+39. [Review Observation Handoff Coverage And Static Gap Map](steps/39-review-observation-handoff-coverage-and-static-gap-map.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
