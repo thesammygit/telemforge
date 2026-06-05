@@ -67,6 +67,7 @@ For each stage:
 38. [Review Observation Handoff Deck And Static Review Path](steps/38-review-observation-handoff-deck-and-static-review-path.md)
 39. [Review Observation Handoff Coverage And Static Gap Map](steps/39-review-observation-handoff-coverage-and-static-gap-map.md)
 40. [Review Observation Handoff Questions And Static Prompt Rail](steps/40-review-observation-handoff-questions-and-static-prompt-rail.md)
+41. [Review Observation Handoff Agenda And Static Facilitation Guide](steps/41-review-observation-handoff-agenda-and-static-facilitation-guide.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
