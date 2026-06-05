@@ -45,6 +45,7 @@ export function MissionConsole({
   const observationHandoffCoverage = view.reviewObservationHandoffCoverage;
   const observationHandoffQuestions = view.reviewObservationHandoffQuestions;
   const observationHandoffAgenda = view.reviewObservationHandoffAgenda;
+  const observationHandoffPath = view.reviewObservationHandoffPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2538,6 +2539,159 @@ export function MissionConsole({
                 )}
               </div>
               <p>{observationHandoffAgenda.staticFacilitationGuideSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffPath ? (
+        <section
+          className="review-observation-handoff-path-section"
+          aria-label="Review observation handoff path"
+        >
+          <a id="review-observation-handoff-path" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 42 observation handoff path
+              </span>
+              <h2>Static anchor map and handoff path</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffPath.localStatus}`}
+            >
+              {observationHandoffPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffPath.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Path steps</span>
+              <strong>
+                {observationHandoffPath.summary.counts.pathStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Anchors</span>
+              <strong>
+                {observationHandoffPath.summary.counts.anchorMapEntryCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source prompts</span>
+              <strong>
+                {
+                  observationHandoffPath.summary.counts
+                    .sourceFacilitationPromptCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-path-layout">
+            <div className="observation-handoff-path-step-list">
+              {observationHandoffPath.pathSteps.map((step) => (
+                <article key={step.pathStepId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Path step {step.stepNumber} -{" "}
+                        {step.sourceSummaryReference.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{step.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {step.anchorTargetIds.length} anchors
+                    </span>
+                  </div>
+                  <p>{step.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Facilitation</span>
+                      <strong>
+                        {step.relatedFacilitationPromptIds.length}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Evidence</span>
+                      <strong>{step.relatedEvidenceStopIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gaps</span>
+                      <strong>
+                        {step.relatedGapDiscussionPointIds.length}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>
+                        {step.relatedDeferredScopeReminderIds.length}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {step.localAnchorHrefs.map((href) => (
+                      <a key={`${step.pathStepId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{step.sourceCoverageRowId}</span>
+                  </div>
+                  <div className="observation-handoff-path-reference-list">
+                    {step.sourceReferences.map((reference) => (
+                      <div key={reference.referenceId}>
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{step.staticReviewPrompt}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-path-panel">
+              <span className="metric-label">Default path step</span>
+              <strong>{observationHandoffPath.defaultPathStep.label}</strong>
+              <p>{observationHandoffPath.summary.summary}</p>
+              <div className="observation-handoff-anchor-map-list">
+                {observationHandoffPath.anchorMapEntries.map((entry) => (
+                  <article key={entry.anchorEntryId}>
+                    <span className="event-type">
+                      Anchor {entry.anchorOrder} - {entry.anchorTargetId}
+                    </span>
+                    <strong>{entry.label}</strong>
+                    <p>{entry.summary}</p>
+                    <div className="gap-reference-strip">
+                      <a href={entry.localAnchorHref}>
+                        {entry.anchorTargetId}
+                      </a>
+                      <span>{entry.sourcePromptGroupId}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-path-non-goal-list">
+                {[
+                  "No saved path progress",
+                  "No route changes",
+                  "No command execution",
+                  "No exports or signoff",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffPath.staticAnchorMapSummary}</p>
             </aside>
           </div>
         </section>

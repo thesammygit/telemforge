@@ -181,6 +181,7 @@ button {
 .review-observation-handoff-coverage-section,
 .review-observation-handoff-questions-section,
 .review-observation-handoff-agenda-section,
+.review-observation-handoff-path-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -430,6 +431,7 @@ button {
 .review-observation-handoff-coverage-section,
 .review-observation-handoff-questions-section,
 .review-observation-handoff-agenda-section,
+.review-observation-handoff-path-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -542,6 +544,10 @@ button {
 }
 
 .review-observation-handoff-agenda-section {
+  padding: 18px;
+}
+
+.review-observation-handoff-path-section {
   padding: 18px;
 }
 
@@ -2553,6 +2559,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-path-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2644,7 +2657,11 @@ button {
 .observation-handoff-facilitation-prompt-list,
 .observation-handoff-evidence-stop-list,
 .observation-handoff-gap-discussion-list,
-.observation-handoff-agenda-deferred-list {
+.observation-handoff-agenda-deferred-list,
+.observation-handoff-path-step-list,
+.observation-handoff-path-panel,
+.observation-handoff-anchor-map-list,
+.observation-handoff-path-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2739,7 +2756,11 @@ button {
 .observation-handoff-facilitation-prompt-list article,
 .observation-handoff-evidence-stop-list article,
 .observation-handoff-gap-discussion-list article,
-.observation-handoff-agenda-deferred-list article {
+.observation-handoff-agenda-deferred-list article,
+.observation-handoff-path-step-list article,
+.observation-handoff-path-panel,
+.observation-handoff-anchor-map-list article,
+.observation-handoff-path-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2761,7 +2782,8 @@ button {
 .observation-boundary-walkthrough-step-list article,
 .observation-storyline-segment-list article,
 .observation-handoff-card-list article,
-.observation-handoff-coverage-row-list article {
+.observation-handoff-coverage-row-list article,
+.observation-handoff-path-step-list article {
   display: grid;
   gap: 10px;
 }
@@ -3052,7 +3074,12 @@ button {
 .observation-handoff-evidence-stop-list strong,
 .observation-handoff-gap-discussion-list strong,
 .observation-handoff-agenda-deferred-list strong,
-.observation-handoff-agenda-context-list strong {
+.observation-handoff-agenda-context-list strong,
+.observation-handoff-path-step-list h3,
+.observation-handoff-path-panel strong,
+.observation-handoff-anchor-map-list strong,
+.observation-handoff-path-reference-list strong,
+.observation-handoff-path-non-goal-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -3145,7 +3172,11 @@ button {
 .observation-handoff-evidence-stop-list p,
 .observation-handoff-gap-discussion-list p,
 .observation-handoff-agenda-deferred-list p,
-.observation-handoff-agenda-context-list p {
+.observation-handoff-agenda-context-list p,
+.observation-handoff-path-step-list p,
+.observation-handoff-path-panel p,
+.observation-handoff-anchor-map-list p,
+.observation-handoff-path-reference-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -3178,6 +3209,11 @@ button {
 }
 
 .observation-handoff-agenda-context-list {
+  display: grid;
+  gap: 8px;
+}
+
+.observation-handoff-path-reference-list {
   display: grid;
   gap: 8px;
 }
@@ -3218,6 +3254,12 @@ button {
   padding-left: 10px;
 }
 
+.observation-handoff-path-reference-list div {
+  min-width: 0;
+  border-left: 3px solid #6f4eb6;
+  padding-left: 10px;
+}
+
 .observation-handoff-prompt-group-list,
 .observation-handoff-questions-panel,
 .observation-handoff-review-question-list,
@@ -3229,7 +3271,10 @@ button {
 .observation-handoff-facilitation-prompt-list,
 .observation-handoff-evidence-stop-list,
 .observation-handoff-gap-discussion-list,
-.observation-handoff-agenda-deferred-list {
+.observation-handoff-agenda-deferred-list,
+.observation-handoff-path-step-list,
+.observation-handoff-path-panel,
+.observation-handoff-anchor-map-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3688,6 +3733,7 @@ button {
   .observation-handoff-coverage-layout,
   .observation-handoff-questions-layout,
   .observation-handoff-agenda-layout,
+  .observation-handoff-path-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

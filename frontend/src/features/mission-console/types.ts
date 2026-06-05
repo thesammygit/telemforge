@@ -3922,6 +3922,150 @@ export interface ReviewObservationHandoffAgendaView {
   sourceObservationHandoffQuestions: ReviewObservationHandoffQuestionsView;
 }
 
+export type ReviewObservationHandoffPathSourceKind =
+  | "agenda_section"
+  | "prompt_group"
+  | "coverage_row"
+  | "handoff_card";
+
+export interface ReviewObservationHandoffPathStaticNonGoalFlagsView {
+  noSavedPathProgress: true;
+  noSavedAgendaProgress: true;
+  noSavedQuestionAnswers: true;
+  noSavedSelections: true;
+  noRouteChanges: true;
+  noCommandExecution: true;
+  noExports: true;
+  noSignoff: true;
+  noOwnerAssignment: true;
+  noScoring: true;
+  noCertification: true;
+}
+
+export interface ReviewObservationHandoffPathSourceReferenceView {
+  referenceId: string;
+  sourceKind: ReviewObservationHandoffPathSourceKind;
+  sourceId: string;
+  label: string;
+}
+
+export interface ReviewObservationHandoffPathStepView {
+  pathStepId: string;
+  stepNumber: number;
+  label: string;
+  summary: string;
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceReferences: ReviewObservationHandoffPathSourceReferenceView[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  relatedReviewQuestionIds: string[];
+  relatedEvidencePromptIds: string[];
+  relatedGapPromptIds: string[];
+  relatedDeferredScopePromptIds: string[];
+  relatedFacilitationPromptIds: string[];
+  relatedEvidenceStopIds: string[];
+  relatedGapDiscussionPointIds: string[];
+  relatedDeferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticReviewPrompt: string;
+  staticNonGoalFlags: ReviewObservationHandoffPathStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffPathAnchorMapEntryView {
+  anchorEntryId: string;
+  sourcePathStepId: string;
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  anchorOrder: number;
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  relatedFacilitationPromptIds: string[];
+  relatedEvidenceStopIds: string[];
+  relatedGapDiscussionPointIds: string[];
+  relatedDeferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffPathStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffPathSummaryView {
+  pathId: "candidate-local-review-observation-handoff-path";
+  label: string;
+  summary: string;
+  defaultPathStepId: string;
+  defaultAnchorTargetId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    pathStepCount: number;
+    anchorMapEntryCount: number;
+    sourceAgendaSectionCount: number;
+    sourceFacilitationPromptCount: number;
+    sourceEvidenceStopCount: number;
+    sourceGapDiscussionPointCount: number;
+    sourceDeferredScopeReminderCount: number;
+    localOnlyPathStepCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffPathView {
+  schema: "telemforge.review_observation_handoff_path.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff path and static anchor map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffPathSummaryView;
+  defaultPathStep: ReviewObservationHandoffPathStepView;
+  pathSteps: ReviewObservationHandoffPathStepView[];
+  anchorMapEntries: ReviewObservationHandoffPathAnchorMapEntryView[];
+  staticAnchorMapSummary: string;
+  sourceObservationHandoffAgenda: ReviewObservationHandoffAgendaView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -4121,6 +4265,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffCoverage?: ReviewObservationHandoffCoverageView;
   reviewObservationHandoffQuestions?: ReviewObservationHandoffQuestionsView;
   reviewObservationHandoffAgenda?: ReviewObservationHandoffAgendaView;
+  reviewObservationHandoffPath?: ReviewObservationHandoffPathView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
