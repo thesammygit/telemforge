@@ -60,6 +60,7 @@ import { buildReviewObservationHandoffAgenda } from "../../lib/reviewObservation
 import { buildReviewObservationHandoffPath } from "../../lib/reviewObservationHandoffPath.ts";
 import { buildReviewObservationHandoffDryRun } from "../../lib/reviewObservationHandoffDryRun.ts";
 import { buildReviewObservationHandoffDebrief } from "../../lib/reviewObservationHandoffDebrief.ts";
+import { buildReviewObservationHandoffContinuity } from "../../lib/reviewObservationHandoffContinuity.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -221,6 +222,8 @@ export function buildMissionConsoleView(
     buildReviewObservationHandoffDryRun(reviewObservationHandoffPath);
   const reviewObservationHandoffDebrief =
     buildReviewObservationHandoffDebrief(reviewObservationHandoffDryRun);
+  const reviewObservationHandoffContinuity =
+    buildReviewObservationHandoffContinuity(reviewObservationHandoffDebrief);
 
   return {
     mission: {
@@ -277,6 +280,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffPath,
     reviewObservationHandoffDryRun,
     reviewObservationHandoffDebrief,
+    reviewObservationHandoffContinuity,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

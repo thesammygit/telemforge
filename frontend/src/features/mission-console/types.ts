@@ -4362,6 +4362,172 @@ export interface ReviewObservationHandoffDebriefView {
   sourceObservationHandoffDryRun: ReviewObservationHandoffDryRunView;
 }
 
+export interface ReviewObservationHandoffContinuityStaticNonGoalFlagsView {
+  noSavedDebriefNotes: true;
+  noSavedReviewerProgress: true;
+  noSavedContinuityProgress: true;
+  noSavedFollowUpProgress: true;
+  noSavedFollowUpOwnership: true;
+  noSavedDryRunProgress: true;
+  noSavedRehearsalSessions: true;
+  noSavedPathProgress: true;
+  noSavedAgendaProgress: true;
+  noSavedQuestionAnswers: true;
+  noSavedSelections: true;
+  noPersistence: true;
+  noRouteChanges: true;
+  noCommandExecution: true;
+  noExports: true;
+  noSignoff: true;
+  noAuditRetention: true;
+  noOwnerAssignment: true;
+  noScoring: true;
+  noCertification: true;
+  noMeetingWorkflow: true;
+  noExternalTicketing: true;
+  noHandoffPackageGeneration: true;
+  noTaskLaunchers: true;
+  noRunnableChecklists: true;
+}
+
+export interface ReviewObservationHandoffContinuityCardView {
+  continuityCardId: string;
+  cardNumber: number;
+  label: string;
+  summary: string;
+  continuityPrompt: string;
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceReferences: ReviewObservationHandoffPathSourceReferenceView[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffContinuityStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffContinuityNextPassMapEntryView {
+  nextPassMapEntryId: string;
+  nextPassOrder: number;
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryId: string;
+  sourceFollowUpMapEntryIds: string[];
+  sourceAnchorCoverageEntryId: string;
+  sourceAnchorCoverageEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAnchorOrder: number;
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffContinuityStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffContinuitySummaryView {
+  continuityId: "candidate-local-review-observation-handoff-continuity";
+  label: string;
+  summary: string;
+  defaultContinuityCardId: string;
+  defaultDebriefPromptId: string;
+  defaultCueId: string;
+  defaultAnchorTargetId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    continuityCardCount: number;
+    nextPassMapEntryCount: number;
+    sourceDebriefPromptCount: number;
+    sourceFollowUpMapEntryCount: number;
+    sourceCueCount: number;
+    sourcePathStepCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    localOnlyContinuityCardCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffContinuityView {
+  schema: "telemforge.review_observation_handoff_continuity.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff continuity snapshot and static next-pass map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffContinuitySummaryView;
+  defaultContinuityCard: ReviewObservationHandoffContinuityCardView;
+  continuityCards: ReviewObservationHandoffContinuityCardView[];
+  nextPassMapEntries: ReviewObservationHandoffContinuityNextPassMapEntryView[];
+  staticContinuitySummary: string;
+  sourceObservationHandoffDebrief: ReviewObservationHandoffDebriefView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -4564,6 +4730,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffPath?: ReviewObservationHandoffPathView;
   reviewObservationHandoffDryRun?: ReviewObservationHandoffDryRunView;
   reviewObservationHandoffDebrief?: ReviewObservationHandoffDebriefView;
+  reviewObservationHandoffContinuity?: ReviewObservationHandoffContinuityView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

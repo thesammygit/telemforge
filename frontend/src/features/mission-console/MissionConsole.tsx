@@ -48,6 +48,8 @@ export function MissionConsole({
   const observationHandoffPath = view.reviewObservationHandoffPath;
   const observationHandoffDryRun = view.reviewObservationHandoffDryRun;
   const observationHandoffDebrief = view.reviewObservationHandoffDebrief;
+  const observationHandoffContinuity =
+    view.reviewObservationHandoffContinuity;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2997,6 +2999,176 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffDebrief.staticDebriefSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffContinuity ? (
+        <section
+          className="review-observation-handoff-continuity-section"
+          aria-label="Review observation handoff continuity"
+        >
+          <a
+            id="review-observation-handoff-continuity"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 45 observation handoff continuity
+              </span>
+              <h2>Continuity snapshot and static next-pass map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffContinuity.localStatus}`}
+            >
+              {observationHandoffContinuity.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffContinuity.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Continuity cards</span>
+              <strong>
+                {
+                  observationHandoffContinuity.summary.counts
+                    .continuityCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Next-pass map</span>
+              <strong>
+                {
+                  observationHandoffContinuity.summary.counts
+                    .nextPassMapEntryCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default debrief</span>
+              <strong>
+                {
+                  observationHandoffContinuity.summary
+                    .defaultDebriefPromptId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-continuity-layout">
+            <div className="observation-handoff-continuity-card-list">
+              {observationHandoffContinuity.continuityCards.map((card) => (
+                <article key={card.continuityCardId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Card {card.cardNumber} - {card.sourceCueId}
+                      </span>
+                      <h3>{card.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {card.sourceFollowUpMapEntryIds.length} follow-ups
+                    </span>
+                  </div>
+                  <p>{card.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{card.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{card.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{card.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved progress</span>
+                      <strong>
+                        {card.staticNonGoalFlags.noSavedContinuityProgress
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {card.localAnchorHrefs.map((href) => (
+                      <a key={`${card.continuityCardId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{card.sourceDebriefPromptId}</span>
+                    <span>{card.sourcePathStepId}</span>
+                    <span>{card.sourceAgendaSectionId}</span>
+                  </div>
+                  <div className="observation-handoff-continuity-source-list">
+                    {card.sourceReferences.map((reference) => (
+                      <div
+                        key={`${card.continuityCardId}:${reference.referenceId}`}
+                      >
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{card.continuityPrompt}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-continuity-panel">
+              <span className="metric-label">Default continuity card</span>
+              <strong>
+                {observationHandoffContinuity.defaultContinuityCard.label}
+              </strong>
+              <p>{observationHandoffContinuity.summary.summary}</p>
+              <div className="observation-handoff-continuity-next-pass-list">
+                {observationHandoffContinuity.nextPassMapEntries.map(
+                  (entry) => (
+                    <article key={entry.nextPassMapEntryId}>
+                      <span className="event-type">
+                        Next pass {entry.nextPassOrder} -{" "}
+                        {entry.anchorTargetId}
+                      </span>
+                      <strong>{entry.label}</strong>
+                      <p>{entry.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={entry.localAnchorHref}>
+                          {entry.anchorTargetId}
+                        </a>
+                        <span>{entry.sourceFollowUpMapEntryId}</span>
+                        <span>{entry.sourceDebriefPromptId}</span>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-continuity-non-goal-list">
+                {[
+                  "No saved debrief notes",
+                  "No saved reviewer progress",
+                  "No saved continuity progress",
+                  "No saved follow-up ownership",
+                  "No routes or task launchers",
+                  "No runnable checklists",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffContinuity.staticContinuitySummary}</p>
             </aside>
           </div>
         </section>
