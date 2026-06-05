@@ -4066,6 +4066,146 @@ export interface ReviewObservationHandoffPathView {
   sourceObservationHandoffAgenda: ReviewObservationHandoffAgendaView;
 }
 
+export interface ReviewObservationHandoffDryRunStaticNonGoalFlagsView {
+  noSavedDryRunProgress: true;
+  noSavedRehearsalSessions: true;
+  noSavedPathProgress: true;
+  noSavedAgendaProgress: true;
+  noSavedQuestionAnswers: true;
+  noSavedSelections: true;
+  noRouteChanges: true;
+  noCommandExecution: true;
+  noExports: true;
+  noSignoff: true;
+  noOwnerAssignment: true;
+  noScoring: true;
+  noCertification: true;
+  noMeetingWorkflow: true;
+}
+
+export interface ReviewObservationHandoffDryRunCueView {
+  cueId: string;
+  cueNumber: number;
+  label: string;
+  summary: string;
+  dryRunPrompt: string;
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceReferences: ReviewObservationHandoffPathSourceReferenceView[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  facilitationPromptIds: string[];
+  reviewQuestionIds: string[];
+  evidencePromptIds: string[];
+  gapPromptIds: string[];
+  deferredScopePromptIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffDryRunStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDryRunCueAnchorCoverageEntryView {
+  cueAnchorCoverageEntryId: string;
+  coverageOrder: number;
+  sourceCueId: string;
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAnchorEntryId: string;
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceAnchorOrder: number;
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffDryRunStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDryRunSummaryView {
+  dryRunId: "candidate-local-review-observation-handoff-dry-run";
+  label: string;
+  summary: string;
+  defaultCueId: string;
+  defaultAnchorTargetId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    dryRunCueCount: number;
+    cueAnchorCoverageEntryCount: number;
+    sourcePathStepCount: number;
+    sourceAnchorMapEntryCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    localOnlyCueCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffDryRunView {
+  schema: "telemforge.review_observation_handoff_dry_run.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff dry-run cue sheet";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffDryRunSummaryView;
+  defaultCue: ReviewObservationHandoffDryRunCueView;
+  cues: ReviewObservationHandoffDryRunCueView[];
+  cueAnchorCoverageEntries: ReviewObservationHandoffDryRunCueAnchorCoverageEntryView[];
+  staticDryRunSummary: string;
+  sourceObservationHandoffPath: ReviewObservationHandoffPathView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -4266,6 +4406,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffQuestions?: ReviewObservationHandoffQuestionsView;
   reviewObservationHandoffAgenda?: ReviewObservationHandoffAgendaView;
   reviewObservationHandoffPath?: ReviewObservationHandoffPathView;
+  reviewObservationHandoffDryRun?: ReviewObservationHandoffDryRunView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

@@ -46,6 +46,7 @@ export function MissionConsole({
   const observationHandoffQuestions = view.reviewObservationHandoffQuestions;
   const observationHandoffAgenda = view.reviewObservationHandoffAgenda;
   const observationHandoffPath = view.reviewObservationHandoffPath;
+  const observationHandoffDryRun = view.reviewObservationHandoffDryRun;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2692,6 +2693,158 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffPath.staticAnchorMapSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffDryRun ? (
+        <section
+          className="review-observation-handoff-dry-run-section"
+          aria-label="Review observation handoff dry run"
+        >
+          <a id="review-observation-handoff-dry-run" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 43 observation handoff dry run
+              </span>
+              <h2>Static cue sheet and anchor rehearsal coverage</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffDryRun.localStatus}`}
+            >
+              {observationHandoffDryRun.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffDryRun.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Cues</span>
+              <strong>
+                {observationHandoffDryRun.summary.counts.dryRunCueCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Coverage</span>
+              <strong>
+                {
+                  observationHandoffDryRun.summary.counts
+                    .cueAnchorCoverageEntryCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default anchor</span>
+              <strong>
+                {observationHandoffDryRun.summary.defaultAnchorTargetId}
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-dry-run-layout">
+            <div className="observation-handoff-dry-run-cue-list">
+              {observationHandoffDryRun.cues.map((cue) => (
+                <article key={cue.cueId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Cue {cue.cueNumber} -{" "}
+                        {cue.sourceSummaryReference.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{cue.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {cue.anchorTargetIds.length} anchors
+                    </span>
+                  </div>
+                  <p>{cue.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{cue.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{cue.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{cue.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Persistent</span>
+                      <strong>{cue.nonPersistent ? "no" : "yes"}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {cue.localAnchorHrefs.map((href) => (
+                      <a key={`${cue.cueId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{cue.sourcePathStepId}</span>
+                  </div>
+                  <div className="observation-handoff-dry-run-source-list">
+                    {cue.sourceReferences.map((reference) => (
+                      <div key={`${cue.cueId}:${reference.referenceId}`}>
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{cue.dryRunPrompt}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-dry-run-panel">
+              <span className="metric-label">Default dry-run cue</span>
+              <strong>{observationHandoffDryRun.defaultCue.label}</strong>
+              <p>{observationHandoffDryRun.summary.summary}</p>
+              <div className="observation-handoff-dry-run-coverage-list">
+                {observationHandoffDryRun.cueAnchorCoverageEntries.map(
+                  (entry) => (
+                    <article key={entry.cueAnchorCoverageEntryId}>
+                      <span className="event-type">
+                        Coverage {entry.coverageOrder} -{" "}
+                        {entry.anchorTargetId}
+                      </span>
+                      <strong>{entry.label}</strong>
+                      <p>{entry.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={entry.localAnchorHref}>
+                          {entry.anchorTargetId}
+                        </a>
+                        <span>{entry.sourceAnchorEntryId}</span>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-dry-run-non-goal-list">
+                {[
+                  "No saved dry-run progress",
+                  "No saved rehearsal sessions",
+                  "No route changes",
+                  "No meeting workflow",
+                  "No command execution",
+                  "No exports or signoff",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffDryRun.staticDryRunSummary}</p>
             </aside>
           </div>
         </section>

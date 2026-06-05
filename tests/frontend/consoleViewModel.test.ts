@@ -1013,6 +1013,49 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       0,
     ),
   );
+  assert.ok(view.reviewObservationHandoffDryRun);
+  assert.equal(
+    view.reviewObservationHandoffDryRun?.schema,
+    "telemforge.review_observation_handoff_dry_run.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffDryRun?.sourceObservationHandoffPath,
+    view.reviewObservationHandoffPath,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffDryRun?.cues.map((cue) => [
+      cue.sourcePathStepId,
+      cue.sourceAgendaSectionId,
+      cue.sourcePromptGroupId,
+      cue.sourceCoverageRowId,
+      cue.sourceHandoffCardId,
+      cue.localAnchorHrefs,
+      cue.anchorTargetIds,
+      cue.evidenceCallbackIds,
+      cue.gapDiscussionPointIds,
+      cue.deferredScopeReminderIds,
+    ]),
+    view.reviewObservationHandoffPath?.pathSteps.map((step) => [
+      step.pathStepId,
+      step.sourceAgendaSectionId,
+      step.sourcePromptGroupId,
+      step.sourceCoverageRowId,
+      step.sourceHandoffCardId,
+      step.localAnchorHrefs,
+      step.anchorTargetIds,
+      step.relatedEvidenceStopIds,
+      step.relatedGapDiscussionPointIds,
+      step.relatedDeferredScopeReminderIds,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffDryRun?.summary.counts.dryRunCueCount,
+    view.reviewObservationHandoffPath?.pathSteps.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffDryRun?.summary.counts.cueAnchorCoverageEntryCount,
+    view.reviewObservationHandoffPath?.anchorMapEntries.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -1065,6 +1108,14 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
   assert.equal(
     view.reviewObservationHandoffPath?.sourceObservationHandoffAgenda,
     view.reviewObservationHandoffAgenda,
+  );
+  assert.equal(
+    view.reviewObservationHandoffDryRun?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffDryRun?.sourceObservationHandoffPath,
+    view.reviewObservationHandoffPath,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

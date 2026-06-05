@@ -182,6 +182,7 @@ button {
 .review-observation-handoff-questions-section,
 .review-observation-handoff-agenda-section,
 .review-observation-handoff-path-section,
+.review-observation-handoff-dry-run-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -432,6 +433,7 @@ button {
 .review-observation-handoff-questions-section,
 .review-observation-handoff-agenda-section,
 .review-observation-handoff-path-section,
+.review-observation-handoff-dry-run-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -548,6 +550,10 @@ button {
 }
 
 .review-observation-handoff-path-section {
+  padding: 18px;
+}
+
+.review-observation-handoff-dry-run-section {
   padding: 18px;
 }
 
@@ -2566,6 +2572,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-dry-run-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2661,7 +2674,12 @@ button {
 .observation-handoff-path-step-list,
 .observation-handoff-path-panel,
 .observation-handoff-anchor-map-list,
-.observation-handoff-path-non-goal-list {
+.observation-handoff-path-non-goal-list,
+.observation-handoff-dry-run-cue-list,
+.observation-handoff-dry-run-panel,
+.observation-handoff-dry-run-source-list,
+.observation-handoff-dry-run-coverage-list,
+.observation-handoff-dry-run-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2760,7 +2778,12 @@ button {
 .observation-handoff-path-step-list article,
 .observation-handoff-path-panel,
 .observation-handoff-anchor-map-list article,
-.observation-handoff-path-non-goal-list div {
+.observation-handoff-path-non-goal-list div,
+.observation-handoff-dry-run-cue-list article,
+.observation-handoff-dry-run-panel,
+.observation-handoff-dry-run-source-list div,
+.observation-handoff-dry-run-coverage-list article,
+.observation-handoff-dry-run-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2783,7 +2806,8 @@ button {
 .observation-storyline-segment-list article,
 .observation-handoff-card-list article,
 .observation-handoff-coverage-row-list article,
-.observation-handoff-path-step-list article {
+.observation-handoff-path-step-list article,
+.observation-handoff-dry-run-cue-list article {
   display: grid;
   gap: 10px;
 }
@@ -2808,6 +2832,10 @@ button {
 
 .observation-handoff-deferred-prompt-list article {
   border-left: 4px solid #8997a1;
+}
+
+.observation-handoff-dry-run-cue-list article {
+  border-left: 4px solid #184d88;
 }
 
 .surface-index-row-decision {
@@ -3079,7 +3107,12 @@ button {
 .observation-handoff-path-panel strong,
 .observation-handoff-anchor-map-list strong,
 .observation-handoff-path-reference-list strong,
-.observation-handoff-path-non-goal-list strong {
+.observation-handoff-path-non-goal-list strong,
+.observation-handoff-dry-run-cue-list h3,
+.observation-handoff-dry-run-panel strong,
+.observation-handoff-dry-run-source-list strong,
+.observation-handoff-dry-run-coverage-list strong,
+.observation-handoff-dry-run-non-goal-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -3176,7 +3209,11 @@ button {
 .observation-handoff-path-step-list p,
 .observation-handoff-path-panel p,
 .observation-handoff-anchor-map-list p,
-.observation-handoff-path-reference-list p {
+.observation-handoff-path-reference-list p,
+.observation-handoff-dry-run-cue-list p,
+.observation-handoff-dry-run-panel p,
+.observation-handoff-dry-run-source-list p,
+.observation-handoff-dry-run-coverage-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -3214,6 +3251,11 @@ button {
 }
 
 .observation-handoff-path-reference-list {
+  display: grid;
+  gap: 8px;
+}
+
+.observation-handoff-dry-run-source-list {
   display: grid;
   gap: 8px;
 }
@@ -3260,6 +3302,12 @@ button {
   padding-left: 10px;
 }
 
+.observation-handoff-dry-run-source-list div {
+  min-width: 0;
+  border-left: 3px solid #184d88;
+  padding-left: 10px;
+}
+
 .observation-handoff-prompt-group-list,
 .observation-handoff-questions-panel,
 .observation-handoff-review-question-list,
@@ -3274,7 +3322,10 @@ button {
 .observation-handoff-agenda-deferred-list,
 .observation-handoff-path-step-list,
 .observation-handoff-path-panel,
-.observation-handoff-anchor-map-list {
+.observation-handoff-anchor-map-list,
+.observation-handoff-dry-run-cue-list,
+.observation-handoff-dry-run-panel,
+.observation-handoff-dry-run-coverage-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3734,6 +3785,7 @@ button {
   .observation-handoff-questions-layout,
   .observation-handoff-agenda-layout,
   .observation-handoff-path-layout,
+  .observation-handoff-dry-run-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
