@@ -50,6 +50,8 @@ export function MissionConsole({
   const observationHandoffDebrief = view.reviewObservationHandoffDebrief;
   const observationHandoffContinuity =
     view.reviewObservationHandoffContinuity;
+  const observationHandoffDriftGuard =
+    view.reviewObservationHandoffDriftGuard;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -3169,6 +3171,178 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffContinuity.staticContinuitySummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffDriftGuard ? (
+        <section
+          className="review-observation-handoff-drift-guard-section"
+          aria-label="Review observation handoff drift guard"
+        >
+          <a
+            id="review-observation-handoff-drift-guard"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 46 observation handoff drift guard
+              </span>
+              <h2>Drift guard and static regression map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffDriftGuard.localStatus}`}
+            >
+              {observationHandoffDriftGuard.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffDriftGuard.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Drift rows</span>
+              <strong>
+                {
+                  observationHandoffDriftGuard.summary.counts
+                    .driftGuardRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Regression map</span>
+              <strong>
+                {
+                  observationHandoffDriftGuard.summary.counts
+                    .staticRegressionMapEntryCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default cue</span>
+              <strong>
+                {
+                  observationHandoffDriftGuard.summary
+                    .defaultContinuityContext.defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-drift-guard-layout">
+            <div className="observation-handoff-drift-guard-row-list">
+              {observationHandoffDriftGuard.driftGuardRows.map((row) => (
+                <article key={row.driftGuardRowId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Row {row.rowNumber} - {row.sourceCueId}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.anchorTargetIds.length} anchors
+                    </span>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{row.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{row.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{row.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved drift</span>
+                      <strong>
+                        {row.staticNonGoalFlags.noSavedDriftState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.localAnchorHrefs.map((href) => (
+                      <a key={`${row.driftGuardRowId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{row.sourceDebriefPromptId}</span>
+                    <span>{row.sourcePathStepId}</span>
+                    <span>{row.sourceHandoffCardId}</span>
+                  </div>
+                  <div className="observation-handoff-drift-guard-source-list">
+                    {row.sourceReferences.map((reference) => (
+                      <div
+                        key={`${row.driftGuardRowId}:${reference.referenceId}`}
+                      >
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{row.guardPrompt}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-drift-guard-panel">
+              <span className="metric-label">Default continuity context</span>
+              <strong>
+                {observationHandoffDriftGuard.defaultDriftGuardRow.label}
+              </strong>
+              <p>{observationHandoffDriftGuard.summary.summary}</p>
+              <div className="observation-handoff-drift-guard-regression-list">
+                {observationHandoffDriftGuard.staticRegressionMapEntries.map(
+                  (entry) => (
+                    <article key={entry.staticRegressionMapEntryId}>
+                      <span className="event-type">
+                        Regression {entry.regressionOrder} -{" "}
+                        {entry.anchorTargetId}
+                      </span>
+                      <strong>{entry.label}</strong>
+                      <p>{entry.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={entry.localAnchorHref}>
+                          {entry.anchorTargetId}
+                        </a>
+                        <span>{entry.sourceFollowUpMapEntryId}</span>
+                        <span>{entry.sourceAnchorCoverageEntryId}</span>
+                        <span>{entry.sourceDebriefPromptId}</span>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-drift-guard-non-goal-list">
+                {[
+                  "No saved drift state",
+                  "No saved review sessions",
+                  "No saved debrief notes",
+                  "No saved continuity progress",
+                  "No saved follow-up ownership",
+                  "No routes or task launchers",
+                  "No runnable checklists",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffDriftGuard.staticDriftGuardSummary}</p>
             </aside>
           </div>
         </section>

@@ -185,6 +185,7 @@ button {
 .review-observation-handoff-dry-run-section,
 .review-observation-handoff-debrief-section,
 .review-observation-handoff-continuity-section,
+.review-observation-handoff-drift-guard-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -438,6 +439,7 @@ button {
 .review-observation-handoff-dry-run-section,
 .review-observation-handoff-debrief-section,
 .review-observation-handoff-continuity-section,
+.review-observation-handoff-drift-guard-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -566,6 +568,10 @@ button {
 }
 
 .review-observation-handoff-continuity-section {
+  padding: 18px;
+}
+
+.review-observation-handoff-drift-guard-section {
   padding: 18px;
 }
 
@@ -2605,6 +2611,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-drift-guard-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2715,7 +2728,12 @@ button {
 .observation-handoff-continuity-panel,
 .observation-handoff-continuity-source-list,
 .observation-handoff-continuity-next-pass-list,
-.observation-handoff-continuity-non-goal-list {
+.observation-handoff-continuity-non-goal-list,
+.observation-handoff-drift-guard-row-list,
+.observation-handoff-drift-guard-panel,
+.observation-handoff-drift-guard-source-list,
+.observation-handoff-drift-guard-regression-list,
+.observation-handoff-drift-guard-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2829,7 +2847,12 @@ button {
 .observation-handoff-continuity-panel,
 .observation-handoff-continuity-source-list div,
 .observation-handoff-continuity-next-pass-list article,
-.observation-handoff-continuity-non-goal-list div {
+.observation-handoff-continuity-non-goal-list div,
+.observation-handoff-drift-guard-row-list article,
+.observation-handoff-drift-guard-panel,
+.observation-handoff-drift-guard-source-list div,
+.observation-handoff-drift-guard-regression-list article,
+.observation-handoff-drift-guard-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2855,7 +2878,8 @@ button {
 .observation-handoff-path-step-list article,
 .observation-handoff-dry-run-cue-list article,
 .observation-handoff-debrief-prompt-list article,
-.observation-handoff-continuity-card-list article {
+.observation-handoff-continuity-card-list article,
+.observation-handoff-drift-guard-row-list article {
   display: grid;
   gap: 10px;
 }
@@ -2892,6 +2916,10 @@ button {
 
 .observation-handoff-continuity-card-list article {
   border-left: 4px solid #2368b5;
+}
+
+.observation-handoff-drift-guard-row-list article {
+  border-left: 4px solid #12745b;
 }
 
 .surface-index-row-decision {
@@ -3178,7 +3206,12 @@ button {
 .observation-handoff-continuity-panel strong,
 .observation-handoff-continuity-source-list strong,
 .observation-handoff-continuity-next-pass-list strong,
-.observation-handoff-continuity-non-goal-list strong {
+.observation-handoff-continuity-non-goal-list strong,
+.observation-handoff-drift-guard-row-list h3,
+.observation-handoff-drift-guard-panel strong,
+.observation-handoff-drift-guard-source-list strong,
+.observation-handoff-drift-guard-regression-list strong,
+.observation-handoff-drift-guard-non-goal-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -3287,7 +3320,11 @@ button {
 .observation-handoff-continuity-card-list p,
 .observation-handoff-continuity-panel p,
 .observation-handoff-continuity-source-list p,
-.observation-handoff-continuity-next-pass-list p {
+.observation-handoff-continuity-next-pass-list p,
+.observation-handoff-drift-guard-row-list p,
+.observation-handoff-drift-guard-panel p,
+.observation-handoff-drift-guard-source-list p,
+.observation-handoff-drift-guard-regression-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -3421,7 +3458,10 @@ button {
 .observation-handoff-debrief-follow-up-list,
 .observation-handoff-continuity-card-list,
 .observation-handoff-continuity-panel,
-.observation-handoff-continuity-next-pass-list {
+.observation-handoff-continuity-next-pass-list,
+.observation-handoff-drift-guard-row-list,
+.observation-handoff-drift-guard-panel,
+.observation-handoff-drift-guard-regression-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3884,6 +3924,7 @@ button {
   .observation-handoff-dry-run-layout,
   .observation-handoff-debrief-layout,
   .observation-handoff-continuity-layout,
+  .observation-handoff-drift-guard-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

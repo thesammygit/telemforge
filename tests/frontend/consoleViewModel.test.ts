@@ -1158,6 +1158,56 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationHandoffContinuity?.summary.counts.nextPassMapEntryCount,
     view.reviewObservationHandoffDebrief?.followUpMapEntries.length,
   );
+  assert.ok(view.reviewObservationHandoffDriftGuard);
+  assert.equal(
+    view.reviewObservationHandoffDriftGuard?.schema,
+    "telemforge.review_observation_handoff_drift_guard.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffDriftGuard?.sourceObservationHandoffContinuity,
+    view.reviewObservationHandoffContinuity,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffDriftGuard?.driftGuardRows.map((row) => [
+      row.sourceCueId,
+      row.sourceDebriefPromptId,
+      row.sourceFollowUpMapEntryIds,
+      row.sourcePathStepId,
+      row.sourceAgendaSectionId,
+      row.sourcePromptGroupId,
+      row.sourceCoverageRowId,
+      row.sourceHandoffCardId,
+      row.localAnchorHrefs,
+      row.anchorTargetIds,
+      row.evidenceCallbackIds,
+      row.gapDiscussionPointIds,
+      row.deferredScopeReminderIds,
+    ]),
+    view.reviewObservationHandoffContinuity?.continuityCards.map((card) => [
+      card.sourceCueId,
+      card.sourceDebriefPromptId,
+      card.sourceFollowUpMapEntryIds,
+      card.sourcePathStepId,
+      card.sourceAgendaSectionId,
+      card.sourcePromptGroupId,
+      card.sourceCoverageRowId,
+      card.sourceHandoffCardId,
+      card.localAnchorHrefs,
+      card.anchorTargetIds,
+      card.evidenceCallbackIds,
+      card.gapDiscussionPointIds,
+      card.deferredScopeReminderIds,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffDriftGuard?.summary.counts.driftGuardRowCount,
+    view.reviewObservationHandoffContinuity?.continuityCards.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffDriftGuard?.summary.counts
+      .staticRegressionMapEntryCount,
+    view.reviewObservationHandoffContinuity?.nextPassMapEntries.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -1234,6 +1284,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
   assert.equal(
     view.reviewObservationHandoffContinuity?.sourceObservationHandoffDebrief,
     view.reviewObservationHandoffDebrief,
+  );
+  assert.equal(
+    view.reviewObservationHandoffDriftGuard?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffDriftGuard
+      ?.sourceObservationHandoffContinuity,
+    view.reviewObservationHandoffContinuity,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

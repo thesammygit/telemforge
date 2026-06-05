@@ -4528,6 +4528,183 @@ export interface ReviewObservationHandoffContinuityView {
   sourceObservationHandoffDebrief: ReviewObservationHandoffDebriefView;
 }
 
+export interface ReviewObservationHandoffDriftGuardStaticNonGoalFlagsView {
+  noSavedDriftState: true;
+  noSavedReviewSessions: true;
+  noSavedReviewerProgress: true;
+  noSavedDebriefNotes: true;
+  noSavedContinuityProgress: true;
+  noSavedFollowUpProgress: true;
+  noSavedFollowUpOwnership: true;
+  noSavedDryRunProgress: true;
+  noSavedRehearsalSessions: true;
+  noSavedPathProgress: true;
+  noSavedAgendaProgress: true;
+  noSavedQuestionAnswers: true;
+  noSavedSelections: true;
+  noPersistence: true;
+  noLocalStorage: true;
+  noRouteChanges: true;
+  noCommandExecution: true;
+  noExports: true;
+  noSignoff: true;
+  noAuditRetention: true;
+  noOwnerAssignment: true;
+  noScoring: true;
+  noCertification: true;
+  noMeetingWorkflow: true;
+  noExternalTicketing: true;
+  noReportAuthoring: true;
+  noHandoffPackageGeneration: true;
+  noTaskLaunchers: true;
+  noRunnableChecklists: true;
+}
+
+export interface ReviewObservationHandoffDriftGuardRowView {
+  driftGuardRowId: string;
+  rowNumber: number;
+  label: string;
+  summary: string;
+  guardPrompt: string;
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceReferences: ReviewObservationHandoffPathSourceReferenceView[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffDriftGuardStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDriftGuardStaticRegressionMapEntryView {
+  staticRegressionMapEntryId: string;
+  regressionOrder: number;
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryId: string;
+  sourceFollowUpMapEntryIds: string[];
+  sourceAnchorCoverageEntryId: string;
+  sourceAnchorCoverageEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAnchorOrder: number;
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffDriftGuardStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDriftGuardSummaryView {
+  driftGuardId: "candidate-local-review-observation-handoff-drift-guard";
+  label: string;
+  summary: string;
+  defaultContinuityContext: {
+    defaultContinuityCardId: string;
+    defaultDebriefPromptId: string;
+    defaultCueId: string;
+    defaultAnchorTargetId: string;
+    sourceContinuitySummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    driftGuardRowCount: number;
+    staticRegressionMapEntryCount: number;
+    sourceContinuityCardCount: number;
+    sourceNextPassMapEntryCount: number;
+    sourceCueCount: number;
+    sourceDebriefPromptCount: number;
+    sourceFollowUpMapEntryCount: number;
+    sourcePathStepCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    localOnlyDriftGuardRowCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffDriftGuardView {
+  schema: "telemforge.review_observation_handoff_drift_guard.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff drift guard and static regression map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffDriftGuardSummaryView;
+  defaultDriftGuardRow: ReviewObservationHandoffDriftGuardRowView;
+  driftGuardRows: ReviewObservationHandoffDriftGuardRowView[];
+  staticRegressionMapEntries: ReviewObservationHandoffDriftGuardStaticRegressionMapEntryView[];
+  staticDriftGuardSummary: string;
+  sourceObservationHandoffContinuity: ReviewObservationHandoffContinuityView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -4731,6 +4908,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffDryRun?: ReviewObservationHandoffDryRunView;
   reviewObservationHandoffDebrief?: ReviewObservationHandoffDebriefView;
   reviewObservationHandoffContinuity?: ReviewObservationHandoffContinuityView;
+  reviewObservationHandoffDriftGuard?: ReviewObservationHandoffDriftGuardView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
