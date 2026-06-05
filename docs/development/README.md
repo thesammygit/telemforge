@@ -82,6 +82,7 @@ For each stage:
 53. [Review Observation Handoff Source Readiness Board And Static Review Checks](steps/53-review-observation-handoff-source-readiness-board-and-static-review-checks.md)
 54. [Review Observation Handoff Source Readiness Rehearsal And Static Reviewer Prompts](steps/54-review-observation-handoff-source-readiness-rehearsal-and-static-reviewer-prompts.md)
 55. [Review Observation Handoff Source Readiness Question Board And Static Follow-Up Prompts](steps/55-review-observation-handoff-source-readiness-question-board-and-static-follow-up-prompts.md)
+56. [Review Observation Handoff Source Readiness Response Matrix And Static Evidence Notes](steps/56-review-observation-handoff-source-readiness-response-matrix-and-static-evidence-notes.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
