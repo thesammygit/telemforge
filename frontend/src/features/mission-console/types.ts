@@ -3023,6 +3023,172 @@ export interface ReviewObservationBoundaryWalkthroughView {
   sourceObservationBoundaryLedger: ReviewObservationBoundaryLedgerView;
 }
 
+export interface ReviewObservationStorylinePriorSurfaceReferenceView {
+  referenceId: string;
+  sourceStageNumber: number;
+  surfaceId:
+    | "review-observation-citations"
+    | "review-observation-boundary-ledger"
+    | "review-observation-boundary-walkthrough";
+  label: string;
+  anchorHref: string;
+  sourceIds: string[];
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationStorylineSegmentView {
+  segmentId: string;
+  segmentNumber: number;
+  sourceStepId: string;
+  sourceBoundaryRowId: string;
+  sourceBoundaryCitationId: string;
+  sourceSummaryId: string;
+  label: string;
+  sourceSummary: string;
+  sourceAnchorIds: string[];
+  sourceAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedCitationRowIds: string[];
+  relatedSourceStageNumbers: number[];
+  staticNonGoalNoteIds: string[];
+  sourcePathGroupIds: string[];
+  sourceStageEvidenceGroupIds: string[];
+  staticGuardrailGroupIds: string[];
+  staticGuardrailReferenceIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  priorSurfaceReferences: ReviewObservationStorylinePriorSurfaceReferenceView[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationStorylineSourceStageEvidenceGroupView {
+  evidenceGroupId: string;
+  sourcePathGroupId: string;
+  sourceStageGroupId: string;
+  sourceMapRowId: string;
+  sourceStageNumber: number;
+  label: string;
+  sourceSchemas: string[];
+  sourceContractLabels: string[];
+  sourceBoundaryRowIds: string[];
+  sourceStepIds: string[];
+  segmentIds: string[];
+  relatedObservationRowIds: string[];
+  sourceAnchorHrefs: string[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationStorylineStaticGuardrailReferenceView {
+  guardrailReferenceId: string;
+  sourceGuardrailGroupId: string;
+  sourceNonGoalNoteId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  summary: string;
+  sourceBoundaryRowIds: string[];
+  sourceStepIds: string[];
+  segmentIds: string[];
+  sourceObservationRowIds: string[];
+  sourceAnchorIds: string[];
+  localOnly: true;
+  staticReviewContext: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationStorylineDefaultOpeningView {
+  storylineId: "candidate-local-review-observation-storyline";
+  label: string;
+  summary: string;
+  defaultOpeningSegmentId: string;
+  sourceStepId: string;
+  sourceBoundaryRowId: string;
+  sourceSummaryId: string;
+  sourceAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedSourceStageNumbers: number[];
+  staticGuardrailReferenceIds: string[];
+  priorSurfaceReferences: ReviewObservationStorylinePriorSurfaceReferenceView[];
+  localOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationStorylineSummaryView {
+  storylineId: "candidate-local-review-observation-storyline";
+  label: string;
+  summary: string;
+  defaultOpeningSegmentId: string;
+  defaultSourceStageEvidenceGroupId: string;
+  defaultStaticGuardrailReferenceId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    storylineSegmentCount: number;
+    sourceStageEvidenceGroupCount: number;
+    staticGuardrailReferenceCount: number;
+    priorSurfaceReferenceCount: number;
+    sourceWalkthroughStepCount: number;
+    sourceBoundaryLedgerRowCount: number;
+  };
+}
+
+export interface ReviewObservationStorylineView {
+  schema: "telemforge.review_observation_storyline.v1";
+  version: 1;
+  contractLabel: "local deterministic observation storyline and static evidence path";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationStorylineSummaryView;
+  defaultOpening: ReviewObservationStorylineDefaultOpeningView;
+  segments: ReviewObservationStorylineSegmentView[];
+  sourceStageEvidenceGroups: ReviewObservationStorylineSourceStageEvidenceGroupView[];
+  staticGuardrailReferences: ReviewObservationStorylineStaticGuardrailReferenceView[];
+  staticStorylineSummary: string;
+  sourceObservationBoundaryWalkthrough: ReviewObservationBoundaryWalkthroughView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -3217,6 +3383,7 @@ export interface MissionConsoleView {
   reviewObservationCitations?: ReviewObservationCitationTrailView;
   reviewObservationBoundaryLedger?: ReviewObservationBoundaryLedgerView;
   reviewObservationBoundaryWalkthrough?: ReviewObservationBoundaryWalkthroughView;
+  reviewObservationStoryline?: ReviewObservationStorylineView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

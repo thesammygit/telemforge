@@ -40,6 +40,7 @@ export function MissionConsole({
   const observationBoundaryLedger = view.reviewObservationBoundaryLedger;
   const observationBoundaryWalkthrough =
     view.reviewObservationBoundaryWalkthrough;
+  const observationStoryline = view.reviewObservationStoryline;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -1645,6 +1646,178 @@ export function MissionConsole({
                 )}
               </div>
               <p>{observationBoundaryWalkthrough.staticWalkthroughSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationStoryline ? (
+        <section
+          className="review-observation-storyline-section"
+          aria-label="Review observation storyline"
+        >
+          <a id="review-observation-storyline" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 37 observation storyline</span>
+              <h2>Static evidence path and prior surfaces</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationStoryline.localStatus}`}
+            >
+              {observationStoryline.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationStoryline.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Segments</span>
+              <strong>
+                {observationStoryline.summary.counts.storylineSegmentCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source stages</span>
+              <strong>
+                {
+                  observationStoryline.summary.counts
+                    .sourceStageEvidenceGroupCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Guardrails</span>
+              <strong>
+                {
+                  observationStoryline.summary.counts
+                    .staticGuardrailReferenceCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Opening</span>
+              <strong>
+                {observationStoryline.defaultOpening.sourceSummaryId.replace(
+                  "review-observation-boundary:",
+                  "",
+                )}
+              </strong>
+            </div>
+          </div>
+          <div className="observation-storyline-layout">
+            <div className="observation-storyline-segment-list">
+              {observationStoryline.segments.map((segment) => (
+                <article key={segment.segmentId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Segment {segment.segmentNumber} ·{" "}
+                        {segment.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{segment.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {segment.priorSurfaceReferences.length} refs
+                    </span>
+                  </div>
+                  <p>{segment.sourceSummary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{segment.sourceAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Observations</span>
+                      <strong>{segment.relatedObservationRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stages</span>
+                      <strong>{segment.relatedSourceStageNumbers.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Guardrails</span>
+                      <strong>{segment.staticGuardrailReferenceIds.length}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {segment.sourceAnchorHrefs.map((href) => (
+                      <a key={`${segment.segmentId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    {segment.relatedSourceStageNumbers.map((stageNumber) => (
+                      <span key={`${segment.segmentId}:stage:${stageNumber}`}>
+                        Stage {stageNumber}
+                      </span>
+                    ))}
+                    {segment.priorSurfaceReferences.map((reference) => (
+                      <a
+                        key={reference.referenceId}
+                        href={reference.anchorHref}
+                      >
+                        Stage {reference.sourceStageNumber}
+                      </a>
+                    ))}
+                  </div>
+                  {segment.staticNonGoalContexts.length ? (
+                    <div className="observation-storyline-context-list">
+                      {segment.staticNonGoalContexts.map((context) => (
+                        <div key={`${segment.segmentId}:${context.nonGoalNoteId}`}>
+                          <span className="event-type">
+                            {context.kind.replace(/_/g, " ")}
+                          </span>
+                          <strong>{context.label}</strong>
+                          <p>{context.summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="observation-storyline-panel">
+              <span className="metric-label">Opening context</span>
+              <strong>{observationStoryline.defaultOpening.label}</strong>
+              <p>{observationStoryline.defaultOpening.summary}</p>
+              <div className="observation-storyline-source-list">
+                {observationStoryline.sourceStageEvidenceGroups.map((group) => (
+                  <article key={group.evidenceGroupId}>
+                    <span className="event-type">
+                      Source Stage {group.sourceStageNumber}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <p>{group.sourceContractLabels.join(", ")}</p>
+                    <div className="gap-reference-strip">
+                      {group.sourceAnchorHrefs.map((href) => (
+                        <a key={`${group.evidenceGroupId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{group.segmentIds.length} segments</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-storyline-guardrail-list">
+                {observationStoryline.staticGuardrailReferences.map(
+                  (reference) => (
+                    <article key={reference.guardrailReferenceId}>
+                      <span className="event-type">
+                        {reference.kind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{reference.label}</strong>
+                      <p>{reference.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <p>{observationStoryline.staticStorylineSummary}</p>
             </aside>
           </div>
         </section>

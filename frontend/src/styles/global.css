@@ -176,6 +176,7 @@ button {
 .review-observation-citation-section,
 .review-observation-boundary-ledger-section,
 .review-observation-boundary-walkthrough-section,
+.review-observation-storyline-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -420,6 +421,7 @@ button {
 .review-observation-citation-section,
 .review-observation-boundary-ledger-section,
 .review-observation-boundary-walkthrough-section,
+.review-observation-storyline-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -512,6 +514,10 @@ button {
 }
 
 .review-observation-boundary-walkthrough-section {
+  padding: 18px;
+}
+
+.review-observation-storyline-section {
   padding: 18px;
 }
 
@@ -2488,6 +2494,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-storyline-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2552,7 +2565,11 @@ button {
 .observation-boundary-walkthrough-step-list,
 .observation-boundary-walkthrough-panel,
 .observation-boundary-walkthrough-source-list,
-.observation-boundary-walkthrough-guardrail-list {
+.observation-boundary-walkthrough-guardrail-list,
+.observation-storyline-segment-list,
+.observation-storyline-panel,
+.observation-storyline-source-list,
+.observation-storyline-guardrail-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2620,7 +2637,11 @@ button {
 .observation-boundary-walkthrough-step-list article,
 .observation-boundary-walkthrough-panel,
 .observation-boundary-walkthrough-source-list article,
-.observation-boundary-walkthrough-guardrail-list article {
+.observation-boundary-walkthrough-guardrail-list article,
+.observation-storyline-segment-list article,
+.observation-storyline-panel,
+.observation-storyline-source-list article,
+.observation-storyline-guardrail-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2639,7 +2660,8 @@ button {
 .observation-coverage-row,
 .observation-citation-row,
 .observation-boundary-ledger-row-list article,
-.observation-boundary-walkthrough-step-list article {
+.observation-boundary-walkthrough-step-list article,
+.observation-storyline-segment-list article {
   display: grid;
   gap: 10px;
 }
@@ -2876,7 +2898,12 @@ button {
 .observation-boundary-walkthrough-panel strong,
 .observation-boundary-walkthrough-source-list strong,
 .observation-boundary-walkthrough-guardrail-list strong,
-.observation-boundary-walkthrough-context-list strong {
+.observation-boundary-walkthrough-context-list strong,
+.observation-storyline-segment-list h3,
+.observation-storyline-panel strong,
+.observation-storyline-source-list strong,
+.observation-storyline-guardrail-list strong,
+.observation-storyline-context-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -2937,7 +2964,12 @@ button {
 .observation-boundary-walkthrough-panel p,
 .observation-boundary-walkthrough-source-list p,
 .observation-boundary-walkthrough-guardrail-list p,
-.observation-boundary-walkthrough-context-list p {
+.observation-boundary-walkthrough-context-list p,
+.observation-storyline-segment-list p,
+.observation-storyline-panel p,
+.observation-storyline-source-list p,
+.observation-storyline-guardrail-list p,
+.observation-storyline-context-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -2949,9 +2981,20 @@ button {
   gap: 8px;
 }
 
+.observation-storyline-context-list {
+  display: grid;
+  gap: 8px;
+}
+
 .observation-boundary-walkthrough-context-list div {
   min-width: 0;
   border-left: 3px solid #8997a1;
+  padding-left: 10px;
+}
+
+.observation-storyline-context-list div {
+  min-width: 0;
+  border-left: 3px solid #12745b;
   padding-left: 10px;
 }
 
@@ -3404,6 +3447,7 @@ button {
   .observation-citation-layout,
   .observation-boundary-ledger-layout,
   .observation-boundary-walkthrough-layout,
+  .observation-storyline-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
