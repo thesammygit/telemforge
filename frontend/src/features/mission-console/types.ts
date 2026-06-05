@@ -3729,6 +3729,199 @@ export interface ReviewObservationHandoffQuestionsView {
   sourceObservationHandoffCoverage: ReviewObservationHandoffCoverageView;
 }
 
+export interface ReviewObservationHandoffAgendaSectionView {
+  sectionId: string;
+  sectionNumber: number;
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  label: string;
+  goal: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHrefs: string[];
+  relatedReviewQuestionIds: string[];
+  relatedEvidencePromptIds: string[];
+  relatedGapPromptIds: string[];
+  relatedDeferredScopePromptIds: string[];
+  facilitationPromptIds: string[];
+  evidenceStopIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffAgendaFacilitationPromptView {
+  promptId: string;
+  sectionId: string;
+  sourcePromptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceReviewQuestionId: string;
+  label: string;
+  prompt: string;
+  localAnchorHrefs: string[];
+  relatedReviewQuestionIds: string[];
+  relatedEvidencePromptIds: string[];
+  relatedGapPromptIds: string[];
+  relatedDeferredScopePromptIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffAgendaEvidenceStopView {
+  stopId: string;
+  sectionId: string;
+  sourcePromptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceEvidencePromptId: string;
+  label: string;
+  summary: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHrefs: string[];
+  relatedReviewQuestionIds: string[];
+  relatedEvidencePromptIds: string[];
+  relatedGapPromptIds: string[];
+  relatedDeferredScopePromptIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffAgendaGapDiscussionPointView {
+  pointId: string;
+  sectionId: string;
+  sourcePromptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceGapPromptId: string;
+  label: string;
+  discussionPoint: string;
+  localAnchorHrefs: string[];
+  relatedReviewQuestionIds: string[];
+  relatedEvidencePromptIds: string[];
+  relatedGapPromptIds: string[];
+  relatedDeferredScopePromptIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffAgendaDeferredScopeReminderView {
+  reminderId: string;
+  sectionId: string;
+  sourcePromptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceDeferredScopePromptId: string;
+  label: string;
+  reminder: string;
+  localAnchorHrefs: string[];
+  relatedReviewQuestionIds: string[];
+  relatedEvidencePromptIds: string[];
+  relatedGapPromptIds: string[];
+  relatedDeferredScopePromptIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffAgendaSummaryView {
+  agendaId: "candidate-local-review-observation-handoff-agenda";
+  label: string;
+  summary: string;
+  defaultAgendaSectionId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    agendaSectionCount: number;
+    facilitationPromptCount: number;
+    evidenceStopCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    sourcePromptGroupCount: number;
+    sourceReviewQuestionCount: number;
+    sourceEvidencePromptCount: number;
+    sourceGapPromptCount: number;
+    sourceDeferredScopePromptCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffAgendaView {
+  schema: "telemforge.review_observation_handoff_agenda.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff agenda and static facilitation guide";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffAgendaSummaryView;
+  defaultAgendaSection: ReviewObservationHandoffAgendaSectionView;
+  sections: ReviewObservationHandoffAgendaSectionView[];
+  facilitationPrompts: ReviewObservationHandoffAgendaFacilitationPromptView[];
+  evidenceStops: ReviewObservationHandoffAgendaEvidenceStopView[];
+  gapDiscussionPoints: ReviewObservationHandoffAgendaGapDiscussionPointView[];
+  deferredScopeReminders: ReviewObservationHandoffAgendaDeferredScopeReminderView[];
+  staticFacilitationGuideSummary: string;
+  sourceObservationHandoffQuestions: ReviewObservationHandoffQuestionsView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -3927,6 +4120,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffDeck?: ReviewObservationHandoffDeckView;
   reviewObservationHandoffCoverage?: ReviewObservationHandoffCoverageView;
   reviewObservationHandoffQuestions?: ReviewObservationHandoffQuestionsView;
+  reviewObservationHandoffAgenda?: ReviewObservationHandoffAgendaView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

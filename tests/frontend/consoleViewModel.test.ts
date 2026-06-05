@@ -936,6 +936,39 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationHandoffQuestions?.summary.counts.promptGroupCount,
     view.reviewObservationHandoffCoverage?.coverageRows.length,
   );
+  assert.ok(view.reviewObservationHandoffAgenda);
+  assert.equal(
+    view.reviewObservationHandoffAgenda?.schema,
+    "telemforge.review_observation_handoff_agenda.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffAgenda?.sourceObservationHandoffQuestions,
+    view.reviewObservationHandoffQuestions,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffAgenda?.sections.map((section) => [
+      section.sourcePromptGroupId,
+      section.sourceCoverageRowId,
+      section.sourceHandoffCardId,
+      section.relatedReviewQuestionIds,
+      section.relatedEvidencePromptIds,
+      section.relatedGapPromptIds,
+      section.relatedDeferredScopePromptIds,
+    ]),
+    view.reviewObservationHandoffQuestions?.promptGroups.map((group) => [
+      group.promptGroupId,
+      group.sourceCoverageRowId,
+      group.sourceHandoffCardId,
+      group.reviewQuestionIds,
+      group.evidencePromptIds,
+      group.gapPromptIds,
+      group.deferredScopePromptIds,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffAgenda?.summary.counts.agendaSectionCount,
+    view.reviewObservationHandoffQuestions?.promptGroups.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -972,6 +1005,14 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
   assert.equal(
     view.reviewObservationHandoffQuestions?.sourceObservationHandoffCoverage,
     view.reviewObservationHandoffCoverage,
+  );
+  assert.equal(
+    view.reviewObservationHandoffAgenda?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffAgenda?.sourceObservationHandoffQuestions,
+    view.reviewObservationHandoffQuestions,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

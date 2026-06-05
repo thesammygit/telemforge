@@ -44,6 +44,7 @@ export function MissionConsole({
   const observationHandoffDeck = view.reviewObservationHandoffDeck;
   const observationHandoffCoverage = view.reviewObservationHandoffCoverage;
   const observationHandoffQuestions = view.reviewObservationHandoffQuestions;
+  const observationHandoffAgenda = view.reviewObservationHandoffAgenda;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2363,6 +2364,180 @@ export function MissionConsole({
                 )}
               </div>
               <p>{observationHandoffQuestions.staticPromptRailSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffAgenda ? (
+        <section
+          className="review-observation-handoff-agenda-section"
+          aria-label="Review observation handoff agenda"
+        >
+          <a id="review-observation-handoff-agenda" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 41 observation handoff agenda
+              </span>
+              <h2>Static facilitation guide and evidence stops</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffAgenda.localStatus}`}
+            >
+              {observationHandoffAgenda.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffAgenda.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Sections</span>
+              <strong>
+                {observationHandoffAgenda.summary.counts.agendaSectionCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Facilitation</span>
+              <strong>
+                {
+                  observationHandoffAgenda.summary.counts
+                    .facilitationPromptCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence stops</span>
+              <strong>
+                {observationHandoffAgenda.summary.counts.evidenceStopCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Gap points</span>
+              <strong>
+                {
+                  observationHandoffAgenda.summary.counts
+                    .gapDiscussionPointCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-agenda-layout">
+            <div className="observation-handoff-agenda-section-list">
+              {observationHandoffAgenda.sections.map((section) => (
+                <article key={section.sectionId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Agenda section {section.sectionNumber} -{" "}
+                        {section.sourceSummaryReference.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{section.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {section.facilitationPromptIds.length} prompts
+                    </span>
+                  </div>
+                  <p>{section.goal}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Questions</span>
+                      <strong>{section.relatedReviewQuestionIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Evidence</span>
+                      <strong>{section.relatedEvidencePromptIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gaps</span>
+                      <strong>{section.relatedGapPromptIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>
+                        {section.relatedDeferredScopePromptIds.length}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {section.localAnchorHrefs.map((href) => (
+                      <a key={`${section.sectionId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{section.sourceCoverageRowId}</span>
+                  </div>
+                  {section.staticNonGoalContexts.length ? (
+                    <div className="observation-handoff-agenda-context-list">
+                      {section.staticNonGoalContexts.map((context) => (
+                        <div
+                          key={`${section.sectionId}:${context.nonGoalNoteId}`}
+                        >
+                          <span className="event-type">
+                            {context.kind.replace(/_/g, " ")}
+                          </span>
+                          <strong>{context.label}</strong>
+                          <p>{context.summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-agenda-panel">
+              <span className="metric-label">Default agenda section</span>
+              <strong>{observationHandoffAgenda.defaultAgendaSection.label}</strong>
+              <p>{observationHandoffAgenda.summary.summary}</p>
+              <div className="observation-handoff-facilitation-prompt-list">
+                {observationHandoffAgenda.facilitationPrompts.map((prompt) => (
+                  <article key={prompt.promptId}>
+                    <span className="event-type">
+                      {prompt.relatedGapPromptIds.length} gap points -{" "}
+                      {prompt.relatedDeferredScopePromptIds.length} deferred
+                    </span>
+                    <strong>{prompt.label}</strong>
+                    <p>{prompt.prompt}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-evidence-stop-list">
+                {observationHandoffAgenda.evidenceStops.map((stop) => (
+                  <article key={stop.stopId}>
+                    <span className="event-type">
+                      {stop.localAnchorHrefs.length} anchors
+                    </span>
+                    <strong>{stop.label}</strong>
+                    <p>{stop.summary}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-gap-discussion-list">
+                {observationHandoffAgenda.gapDiscussionPoints.map((point) => (
+                  <article key={point.pointId}>
+                    <span className="event-type">Gap discussion</span>
+                    <strong>{point.label}</strong>
+                    <p>{point.discussionPoint}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-agenda-deferred-list">
+                {observationHandoffAgenda.deferredScopeReminders.map(
+                  (reminder) => (
+                    <article key={reminder.reminderId}>
+                      <span className="event-type">Deferred scope</span>
+                      <strong>{reminder.label}</strong>
+                      <p>{reminder.reminder}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <p>{observationHandoffAgenda.staticFacilitationGuideSummary}</p>
             </aside>
           </div>
         </section>
