@@ -1314,6 +1314,63 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       .staticRelayNoteCount,
     view.reviewObservationHandoffCalibration?.staticAlignmentNotes.length,
   );
+  assert.ok(view.reviewObservationHandoffRelayTrail);
+  assert.equal(
+    view.reviewObservationHandoffRelayTrail?.schema,
+    "telemforge.review_observation_handoff_relay_trail.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffRelayTrail
+      ?.sourceObservationHandoffSynthesis,
+    view.reviewObservationHandoffSynthesis,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffRelayTrail?.relaySteps.map((step) => [
+      step.sourceSynthesisRowId,
+      step.sourceCalibrationCardId,
+      step.sourceAlignmentNoteIds,
+      step.sourceCueId,
+      step.sourceDebriefPromptId,
+      step.sourceFollowUpMapEntryIds,
+      step.sourcePathStepId,
+      step.sourceAgendaSectionId,
+      step.sourcePromptGroupId,
+      step.sourceCoverageRowId,
+      step.sourceHandoffCardId,
+      step.localAnchorHrefs,
+      step.anchorTargetIds,
+      step.evidenceCallbackIds,
+      step.gapDiscussionPointIds,
+      step.deferredScopeReminderIds,
+    ]),
+    view.reviewObservationHandoffSynthesis?.synthesisRows.map((row) => [
+      row.synthesisRowId,
+      row.sourceCalibrationCardId,
+      row.sourceAlignmentNoteIds,
+      row.sourceCueId,
+      row.sourceDebriefPromptId,
+      row.sourceFollowUpMapEntryIds,
+      row.sourcePathStepId,
+      row.sourceAgendaSectionId,
+      row.sourcePromptGroupId,
+      row.sourceCoverageRowId,
+      row.sourceHandoffCardId,
+      row.localAnchorHrefs,
+      row.anchorTargetIds,
+      row.evidenceCallbackIds,
+      row.gapDiscussionPointIds,
+      row.deferredScopeReminderIds,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffRelayTrail?.summary.counts.relayStepCount,
+    view.reviewObservationHandoffSynthesis?.synthesisRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffRelayTrail?.summary.counts
+      .staticInspectionNoteCount,
+    view.reviewObservationHandoffSynthesis?.staticRelayNotes.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -1417,6 +1474,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSynthesis
       ?.sourceObservationHandoffCalibration,
     view.reviewObservationHandoffCalibration,
+  );
+  assert.equal(
+    view.reviewObservationHandoffRelayTrail?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffRelayTrail
+      ?.sourceObservationHandoffSynthesis,
+    view.reviewObservationHandoffSynthesis,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

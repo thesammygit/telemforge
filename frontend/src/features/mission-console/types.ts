@@ -5031,6 +5031,190 @@ export interface ReviewObservationHandoffSynthesisView {
   sourceObservationHandoffCalibration: ReviewObservationHandoffCalibrationView;
 }
 
+export interface ReviewObservationHandoffRelayTrailStaticNonGoalFlagsView
+  extends ReviewObservationHandoffSynthesisStaticNonGoalFlagsView {
+  noSavedReviewerNotes: true;
+  noSavedRelayProgress: true;
+  noSavedInspectionState: true;
+}
+
+export interface ReviewObservationHandoffRelayTrailSourceInspectionReferenceView {
+  referenceId: string;
+  sourceKind:
+    | ReviewObservationHandoffSynthesisSourceCrosswalkReferenceView["sourceKind"]
+    | "synthesis_row"
+    | "static_relay_note";
+  sourceId: string;
+  label: string;
+  localAnchorHref?: string;
+  anchorTargetId?: string;
+}
+
+export interface ReviewObservationHandoffRelayTrailStepView {
+  relayStepId: string;
+  stepNumber: number;
+  label: string;
+  summary: string;
+  inspectionNote: string;
+  sourceSynthesisRowId: string;
+  sourceSynthesisRowIds: string[];
+  sourceCalibrationCardId: string;
+  sourceCalibrationCardIds: string[];
+  sourceAlignmentNoteIds: string[];
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceReferences: ReviewObservationHandoffPathSourceReferenceView[];
+  sourceInspectionReferences: ReviewObservationHandoffRelayTrailSourceInspectionReferenceView[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffRelayTrailStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffRelayTrailStaticInspectionNoteEntryView {
+  staticInspectionNoteEntryId: string;
+  inspectionOrder: number;
+  sourceRelayNoteId: string;
+  sourceRelayNoteIds: string[];
+  sourceAlignmentNoteId: string;
+  sourceAlignmentNoteIds: string[];
+  matchedSourceSynthesisRowIds: string[];
+  sourceCalibrationCardIds: string[];
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryId: string;
+  sourceFollowUpMapEntryIds: string[];
+  sourceAnchorCoverageEntryId: string;
+  sourceAnchorCoverageEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAnchorOrder: number;
+  sourceAnchorTargetIds: string[];
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceInspectionReferences: ReviewObservationHandoffRelayTrailSourceInspectionReferenceView[];
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffRelayTrailStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffRelayTrailSummaryView {
+  relayTrailId: "candidate-local-review-observation-handoff-relay-trail";
+  label: string;
+  summary: string;
+  defaultSynthesisContext: {
+    defaultSynthesisRowId: string;
+    defaultCalibrationCardId: string;
+    defaultDriftGuardRowId: string;
+    defaultCueId: string;
+    defaultDebriefPromptId: string;
+    defaultAnchorTargetId: string;
+    sourceSynthesisSummary: string;
+    sourceCalibrationSummary: string;
+    sourceDriftGuardSummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    relayStepCount: number;
+    staticInspectionNoteCount: number;
+    sourceSynthesisRowCount: number;
+    sourceStaticRelayNoteCount: number;
+    sourceCalibrationCardCount: number;
+    sourceAlignmentNoteCount: number;
+    sourceCueCount: number;
+    sourceDebriefPromptCount: number;
+    sourceFollowUpMapEntryCount: number;
+    sourcePathStepCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    localOnlyRelayStepCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffRelayTrailView {
+  schema: "telemforge.review_observation_handoff_relay_trail.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff relay trail and static inspection notes";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffRelayTrailSummaryView;
+  defaultRelayStep: ReviewObservationHandoffRelayTrailStepView;
+  relaySteps: ReviewObservationHandoffRelayTrailStepView[];
+  staticInspectionNotes: ReviewObservationHandoffRelayTrailStaticInspectionNoteEntryView[];
+  staticRelayTrailSummary: string;
+  sourceObservationHandoffSynthesis: ReviewObservationHandoffSynthesisView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -5237,6 +5421,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffDriftGuard?: ReviewObservationHandoffDriftGuardView;
   reviewObservationHandoffCalibration?: ReviewObservationHandoffCalibrationView;
   reviewObservationHandoffSynthesis?: ReviewObservationHandoffSynthesisView;
+  reviewObservationHandoffRelayTrail?: ReviewObservationHandoffRelayTrailView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

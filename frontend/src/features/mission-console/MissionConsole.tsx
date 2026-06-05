@@ -56,6 +56,8 @@ export function MissionConsole({
     view.reviewObservationHandoffCalibration;
   const observationHandoffSynthesis =
     view.reviewObservationHandoffSynthesis;
+  const observationHandoffRelayTrail =
+    view.reviewObservationHandoffRelayTrail;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -3692,6 +3694,184 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffSynthesis.staticSynthesisSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffRelayTrail ? (
+        <section
+          className="review-observation-handoff-relay-trail-section"
+          aria-label="Review observation handoff relay trail"
+        >
+          <a
+            id="review-observation-handoff-relay-trail"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 49 observation handoff relay trail
+              </span>
+              <h2>Relay trail and static inspection notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffRelayTrail.localStatus}`}
+            >
+              {observationHandoffRelayTrail.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffRelayTrail.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Relay steps</span>
+              <strong>
+                {observationHandoffRelayTrail.summary.counts.relayStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Inspection notes</span>
+              <strong>
+                {
+                  observationHandoffRelayTrail.summary.counts
+                    .staticInspectionNoteCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default cue</span>
+              <strong>
+                {
+                  observationHandoffRelayTrail.summary.defaultSynthesisContext
+                    .defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-relay-trail-layout">
+            <div className="observation-handoff-relay-trail-step-list">
+              {observationHandoffRelayTrail.relaySteps.map((step) => (
+                <article key={step.relayStepId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Step {step.stepNumber} - {step.sourceCueId}
+                      </span>
+                      <h3>{step.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {step.sourceAlignmentNoteIds.length} inspection anchors
+                    </span>
+                  </div>
+                  <p>{step.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{step.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{step.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{step.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Relay progress</span>
+                      <strong>
+                        {step.staticNonGoalFlags.noSavedRelayProgress
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {step.localAnchorHrefs.map((href) => (
+                      <a key={`${step.relayStepId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{step.sourceSynthesisRowId}</span>
+                    <span>{step.sourceCalibrationCardId}</span>
+                    <span>{step.sourceDebriefPromptId}</span>
+                    <span>{step.sourcePathStepId}</span>
+                    <span>{step.sourceAgendaSectionId}</span>
+                    <span>{step.sourcePromptGroupId}</span>
+                    <span>{step.sourceCoverageRowId}</span>
+                    <span>{step.sourceHandoffCardId}</span>
+                  </div>
+                  <div className="observation-handoff-relay-trail-reference-list">
+                    {step.sourceInspectionReferences.map((reference) => (
+                      <div
+                        key={`${step.relayStepId}:${reference.referenceId}`}
+                      >
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{step.inspectionNote}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-relay-trail-panel">
+              <span className="metric-label">Default synthesis context</span>
+              <strong>{observationHandoffRelayTrail.defaultRelayStep.label}</strong>
+              <p>{observationHandoffRelayTrail.summary.summary}</p>
+              <div className="observation-handoff-relay-trail-inspection-list">
+                {observationHandoffRelayTrail.staticInspectionNotes.map(
+                  (note) => (
+                    <article key={note.staticInspectionNoteEntryId}>
+                      <span className="event-type">
+                        Inspection {note.inspectionOrder} -{" "}
+                        {note.anchorTargetId}
+                      </span>
+                      <strong>{note.label}</strong>
+                      <p>{note.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={note.localAnchorHref}>
+                          {note.anchorTargetId}
+                        </a>
+                        <span>{note.sourceRelayNoteId}</span>
+                        <span>{note.sourceAlignmentNoteId}</span>
+                        <span>
+                          {note.matchedSourceSynthesisRowIds.length} synthesis
+                          rows
+                        </span>
+                        <span>{note.sourceFollowUpMapEntryId}</span>
+                        <span>{note.sourceDebriefPromptId}</span>
+                        <span>{note.sourcePathStepId}</span>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-relay-trail-non-goal-list">
+                {[
+                  "No saved reviewer notes",
+                  "No saved relay progress",
+                  "No saved inspection state",
+                  "No saved synthesis state",
+                  "No saved calibration state",
+                  "No saved drift state",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffRelayTrail.staticRelayTrailSummary}</p>
             </aside>
           </div>
         </section>
