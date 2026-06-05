@@ -68,6 +68,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadiness;
   const observationHandoffSourceReadinessRehearsal =
     view.reviewObservationHandoffSourceReadinessRehearsal;
+  const observationHandoffSourceReadinessQuestionBoard =
+    view.reviewObservationHandoffSourceReadinessQuestionBoard;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -4947,6 +4949,264 @@ export function MissionConsole({
                 {
                   observationHandoffSourceReadinessRehearsal
                     .staticSourceReadinessRehearsalSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadinessQuestionBoard ? (
+        <section
+          className="review-observation-handoff-source-readiness-question-board-section"
+          aria-label="Review observation handoff source readiness question board"
+        >
+          <a
+            id="review-observation-handoff-source-readiness-question-board"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 55 source readiness question board
+              </span>
+              <h2>Question board and static follow-up prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadinessQuestionBoard.localStatus}`}
+            >
+              {observationHandoffSourceReadinessQuestionBoard.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffSourceReadinessQuestionBoard.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Question rows</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessQuestionBoard.summary.counts
+                    .questionRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up prompts</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessQuestionBoard.summary.counts
+                    .staticFollowUpPromptCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default question</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessQuestionBoard.summary
+                    .defaultQuestionContext.defaultQuestionRowId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-question-board-layout">
+            <div className="observation-handoff-source-readiness-question-row-list">
+              {observationHandoffSourceReadinessQuestionBoard.questionRows.map(
+                (row) => (
+                  <article key={row.sourceReadinessQuestionRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Question {row.questionOrder} - {row.sourceCueIds[0]}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedStaticReviewerPromptCheckRowIds.length}{" "}
+                        prompts
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.localAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gap prompts</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved answers</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedReviewerAnswers
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.localAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.sourceReadinessQuestionRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceReadinessRehearsalPromptRowId}</span>
+                      <span>{row.sourceReadinessRowId}</span>
+                      <span>{row.sourceReadoutRowId}</span>
+                      <span>{row.sourceWalkthroughSectionId}</span>
+                      <span>{row.sourceCrosswalkRowId}</span>
+                      <span>{row.sourceRelayStepId}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-question-source-list">
+                      {row.sourceInspectionReferenceIds.map(
+                        (referenceId, index) => (
+                          <div
+                            key={`${row.sourceReadinessQuestionRowId}:${referenceId}`}
+                          >
+                            <span className="event-type">
+                              {row.sourceKinds[index]?.replace(/_/g, " ")}
+                            </span>
+                            <strong>{row.sourceLabels[index]}</strong>
+                            <p>{row.sourceIds[index]}</p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <div className="observation-handoff-source-readiness-question-check-list">
+                      {row.matchedStaticReviewerPromptCheckRowIds.map(
+                        (checkId) => (
+                          <article
+                            key={`${row.sourceReadinessQuestionRowId}:${checkId}`}
+                          >
+                            <span className="event-type">
+                              Matched prompt
+                            </span>
+                            <strong>{checkId}</strong>
+                          </article>
+                        ),
+                      )}
+                      {row.staticReviewCueIds.map((cueId) => (
+                        <article
+                          key={`${row.sourceReadinessQuestionRowId}:${cueId}`}
+                        >
+                          <span className="event-type">Static cue</span>
+                          <strong>{cueId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{row.reviewerPrompt}</p>
+                    <p>{row.followUpQuestion}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-question-board-panel">
+              <span className="metric-label">Default question context</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessQuestionBoard
+                    .defaultQuestionRow.label
+                }
+              </strong>
+              <p>
+                {observationHandoffSourceReadinessQuestionBoard.summary.summary}
+              </p>
+              <div className="observation-handoff-source-readiness-static-follow-up-list">
+                {observationHandoffSourceReadinessQuestionBoard.staticFollowUpPrompts.map(
+                  (prompt) => (
+                    <article
+                      key={prompt.sourceReadinessStaticFollowUpPromptRowId}
+                    >
+                      <span className="event-type">
+                        Follow-up {prompt.followUpOrder} -{" "}
+                        {prompt.anchorTargetId}
+                      </span>
+                      <strong>{prompt.label}</strong>
+                      <p>{prompt.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={prompt.localAnchorHref}>
+                          {prompt.anchorTargetId}
+                        </a>
+                        <span>
+                          {prompt.sourceStaticReviewerPromptCheckRowId}
+                        </span>
+                        <span>
+                          {prompt.matchedRehearsalPromptRowIds.length}{" "}
+                          rehearsals
+                        </span>
+                        <span>
+                          {prompt.matchedSourceReadinessRowIds.length}{" "}
+                          readiness
+                        </span>
+                        <span>
+                          {prompt.matchedSourceReadoutRowIds.length} readouts
+                        </span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{prompt.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>
+                            {prompt.gapDiscussionPointIds.length}
+                          </strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>
+                            {prompt.deferredScopeReminderIds.length}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{prompt.reviewerPrompt}</p>
+                      <p>{prompt.followUpPrompt}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-question-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved source readiness question progress",
+                  "No saved source readiness rehearsal progress",
+                  "No saved source readiness progress",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadinessQuestionBoard
+                    .staticSourceReadinessQuestionBoardSummary
                 }
               </p>
             </aside>
