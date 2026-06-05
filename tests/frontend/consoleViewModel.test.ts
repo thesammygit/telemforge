@@ -905,6 +905,37 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationHandoffCoverage?.summary.counts.coverageRowCount,
     view.reviewObservationHandoffDeck?.cards.length,
   );
+  assert.ok(view.reviewObservationHandoffQuestions);
+  assert.equal(
+    view.reviewObservationHandoffQuestions?.schema,
+    "telemforge.review_observation_handoff_questions.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffQuestions?.sourceObservationHandoffCoverage,
+    view.reviewObservationHandoffCoverage,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffQuestions?.promptGroups.map((group) => [
+      group.sourceCoverageRowId,
+      group.sourceHandoffCardId,
+      group.sourceSummaryReference.sourceSummaryId,
+      group.relatedCoverageRowIds,
+      group.relatedGapNoteIds,
+      group.relatedDeferredScopeIds,
+    ]),
+    view.reviewObservationHandoffCoverage?.coverageRows.map((row) => [
+      row.coverageRowId,
+      row.sourceHandoffCardId,
+      row.sourceSummaryCoverage.sourceSummaryId,
+      [row.coverageRowId],
+      row.staticGapNoteIds,
+      row.deferredScopeReminderIds,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffQuestions?.summary.counts.promptGroupCount,
+    view.reviewObservationHandoffCoverage?.coverageRows.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -933,6 +964,14 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
   assert.equal(
     view.reviewObservationHandoffCoverage?.localStatus,
     "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffQuestions?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffQuestions?.sourceObservationHandoffCoverage,
+    view.reviewObservationHandoffCoverage,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

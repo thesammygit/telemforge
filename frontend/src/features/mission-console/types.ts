@@ -3540,6 +3540,195 @@ export interface ReviewObservationHandoffCoverageView {
   sourceObservationHandoffDeck: ReviewObservationHandoffDeckView;
 }
 
+export interface ReviewObservationHandoffQuestionsSourceSummaryReferenceView {
+  sourceSummaryId: string;
+  sourceHandoffCardId: string;
+  sourceCoverageRowId: string;
+  label: string;
+  sourceSummary: string;
+  coverageLabel: string;
+}
+
+export interface ReviewObservationHandoffQuestionsPromptGroupView {
+  promptGroupId: string;
+  groupNumber: number;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  label: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  relatedCoverageRowIds: string[];
+  relatedGapNoteIds: string[];
+  relatedDeferredScopeIds: string[];
+  reviewQuestionIds: string[];
+  evidencePromptIds: string[];
+  gapPromptIds: string[];
+  deferredScopePromptIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffQuestionView {
+  questionId: string;
+  promptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  label: string;
+  question: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHrefs: string[];
+  relatedCoverageRowIds: string[];
+  relatedGapNoteIds: string[];
+  relatedDeferredScopeIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffEvidencePromptView {
+  promptId: string;
+  promptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  label: string;
+  prompt: string;
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHrefs: string[];
+  relatedCoverageRowIds: string[];
+  relatedGapNoteIds: string[];
+  relatedDeferredScopeIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffGapPromptView {
+  promptId: string;
+  promptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceGapNoteId: string;
+  label: string;
+  prompt: string;
+  localAnchorHrefs: string[];
+  relatedCoverageRowIds: string[];
+  relatedGapNoteIds: string[];
+  relatedDeferredScopeIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffDeferredScopePromptView {
+  promptId: string;
+  promptGroupId: string;
+  sourceCoverageRowId: string;
+  sourceHandoffCardId: string;
+  sourceDeferredScopeId: string;
+  label: string;
+  prompt: string;
+  localAnchorHrefs: string[];
+  relatedCoverageRowIds: string[];
+  relatedGapNoteIds: string[];
+  relatedDeferredScopeIds: string[];
+  explanatoryOnly: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffQuestionsSummaryView {
+  promptRailId: "candidate-local-review-observation-handoff-questions";
+  label: string;
+  summary: string;
+  defaultPromptGroupId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    promptGroupCount: number;
+    reviewQuestionCount: number;
+    evidencePromptCount: number;
+    gapPromptCount: number;
+    deferredScopePromptCount: number;
+    sourceCoverageRowCount: number;
+    sourceStaticGapNoteCount: number;
+    sourceCoverageGroupCount: number;
+    sourceDeferredScopeReminderCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffQuestionsView {
+  schema: "telemforge.review_observation_handoff_questions.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff questions and static prompt rail";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffQuestionsSummaryView;
+  defaultPromptGroup: ReviewObservationHandoffQuestionsPromptGroupView;
+  promptGroups: ReviewObservationHandoffQuestionsPromptGroupView[];
+  reviewQuestions: ReviewObservationHandoffQuestionView[];
+  evidencePrompts: ReviewObservationHandoffEvidencePromptView[];
+  gapPrompts: ReviewObservationHandoffGapPromptView[];
+  deferredScopePrompts: ReviewObservationHandoffDeferredScopePromptView[];
+  staticPromptRailSummary: string;
+  sourceObservationHandoffCoverage: ReviewObservationHandoffCoverageView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -3737,6 +3926,7 @@ export interface MissionConsoleView {
   reviewObservationStoryline?: ReviewObservationStorylineView;
   reviewObservationHandoffDeck?: ReviewObservationHandoffDeckView;
   reviewObservationHandoffCoverage?: ReviewObservationHandoffCoverageView;
+  reviewObservationHandoffQuestions?: ReviewObservationHandoffQuestionsView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

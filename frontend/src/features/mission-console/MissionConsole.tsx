@@ -43,6 +43,7 @@ export function MissionConsole({
   const observationStoryline = view.reviewObservationStoryline;
   const observationHandoffDeck = view.reviewObservationHandoffDeck;
   const observationHandoffCoverage = view.reviewObservationHandoffCoverage;
+  const observationHandoffQuestions = view.reviewObservationHandoffQuestions;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2187,6 +2188,181 @@ export function MissionConsole({
                 )}
               </div>
               <p>{observationHandoffCoverage.staticCoverageSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffQuestions ? (
+        <section
+          className="review-observation-handoff-questions-section"
+          aria-label="Review observation handoff questions"
+        >
+          <a
+            id="review-observation-handoff-questions"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 40 observation handoff questions
+              </span>
+              <h2>Static prompt rail and manual review questions</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffQuestions.localStatus}`}
+            >
+              {observationHandoffQuestions.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffQuestions.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Groups</span>
+              <strong>
+                {observationHandoffQuestions.summary.counts.promptGroupCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Questions</span>
+              <strong>
+                {observationHandoffQuestions.summary.counts.reviewQuestionCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Gap prompts</span>
+              <strong>
+                {observationHandoffQuestions.summary.counts.gapPromptCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred prompts</span>
+              <strong>
+                {
+                  observationHandoffQuestions.summary.counts
+                    .deferredScopePromptCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-questions-layout">
+            <div className="observation-handoff-prompt-group-list">
+              {observationHandoffQuestions.promptGroups.map((group) => (
+                <article key={group.promptGroupId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Prompt group {group.groupNumber} ·{" "}
+                        {group.sourceSummaryReference.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{group.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {group.reviewQuestionIds.length} questions
+                    </span>
+                  </div>
+                  <p>{group.sourceSummaryReference.sourceSummary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{group.localAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap notes</span>
+                      <strong>{group.relatedGapNoteIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{group.relatedDeferredScopeIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Evidence</span>
+                      <strong>{group.evidencePromptIds.length}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {group.localAnchorHrefs.map((href) => (
+                      <a key={`${group.promptGroupId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{group.relatedCoverageRowIds.length} coverage row</span>
+                    <span>{group.relatedObservationRowIds.length} observations</span>
+                  </div>
+                  {group.staticNonGoalContexts.length ? (
+                    <div className="observation-handoff-questions-context-list">
+                      {group.staticNonGoalContexts.map((context) => (
+                        <div
+                          key={`${group.promptGroupId}:${context.nonGoalNoteId}`}
+                        >
+                          <span className="event-type">
+                            {context.kind.replace(/_/g, " ")}
+                          </span>
+                          <strong>{context.label}</strong>
+                          <p>{context.summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-questions-panel">
+              <span className="metric-label">Default prompt group</span>
+              <strong>{observationHandoffQuestions.defaultPromptGroup.label}</strong>
+              <p>{observationHandoffQuestions.summary.summary}</p>
+              <div className="observation-handoff-review-question-list">
+                {observationHandoffQuestions.reviewQuestions.map((question) => (
+                  <article key={question.questionId}>
+                    <span className="event-type">
+                      {question.relatedGapNoteIds.length} gap notes ·{" "}
+                      {question.relatedDeferredScopeIds.length} deferred
+                    </span>
+                    <strong>{question.label}</strong>
+                    <p>{question.question}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-evidence-prompt-list">
+                {observationHandoffQuestions.evidencePrompts.map((prompt) => (
+                  <article key={prompt.promptId}>
+                    <span className="event-type">
+                      {prompt.localAnchorHrefs.length} anchors
+                    </span>
+                    <strong>{prompt.label}</strong>
+                    <p>{prompt.prompt}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-gap-prompt-list">
+                {observationHandoffQuestions.gapPrompts.map((prompt) => (
+                  <article key={prompt.promptId}>
+                    <span className="event-type">
+                      {prompt.relatedDeferredScopeIds.length} deferred refs
+                    </span>
+                    <strong>{prompt.label}</strong>
+                    <p>{prompt.prompt}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-deferred-prompt-list">
+                {observationHandoffQuestions.deferredScopePrompts.map(
+                  (prompt) => (
+                    <article key={prompt.promptId}>
+                      <span className="event-type">Deferred scope</span>
+                      <strong>{prompt.label}</strong>
+                      <p>{prompt.prompt}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <p>{observationHandoffQuestions.staticPromptRailSummary}</p>
             </aside>
           </div>
         </section>
