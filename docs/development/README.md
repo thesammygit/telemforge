@@ -78,6 +78,7 @@ For each stage:
 49. [Review Observation Handoff Relay Trail And Static Inspection Notes](steps/49-review-observation-handoff-relay-trail-and-static-inspection-notes.md)
 50. [Review Observation Handoff Source Crosswalk And Static Anchor Notes](steps/50-review-observation-handoff-source-crosswalk-and-static-anchor-notes.md)
 51. [Review Observation Handoff Source Walkthrough And Static Review Prompts](steps/51-review-observation-handoff-source-walkthrough-and-static-review-prompts.md)
+52. [Review Observation Handoff Source Readout And Static Review Cues](steps/52-review-observation-handoff-source-readout-and-static-review-cues.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
