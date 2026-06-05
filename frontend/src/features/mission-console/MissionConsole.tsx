@@ -54,6 +54,8 @@ export function MissionConsole({
     view.reviewObservationHandoffDriftGuard;
   const observationHandoffCalibration =
     view.reviewObservationHandoffCalibration;
+  const observationHandoffSynthesis =
+    view.reviewObservationHandoffSynthesis;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -3521,6 +3523,175 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffCalibration.staticCalibrationSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSynthesis ? (
+        <section
+          className="review-observation-handoff-synthesis-section"
+          aria-label="Review observation handoff synthesis"
+        >
+          <a
+            id="review-observation-handoff-synthesis"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 48 observation handoff synthesis
+              </span>
+              <h2>Synthesis map and static relay notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSynthesis.localStatus}`}
+            >
+              {observationHandoffSynthesis.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffSynthesis.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Synthesis rows</span>
+              <strong>
+                {observationHandoffSynthesis.summary.counts.synthesisRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Relay notes</span>
+              <strong>
+                {
+                  observationHandoffSynthesis.summary.counts
+                    .staticRelayNoteCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default cue</span>
+              <strong>
+                {
+                  observationHandoffSynthesis.summary
+                    .defaultCalibrationContext.defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-synthesis-layout">
+            <div className="observation-handoff-synthesis-row-list">
+              {observationHandoffSynthesis.synthesisRows.map((row) => (
+                <article key={row.synthesisRowId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Row {row.rowNumber} - {row.sourceCueId}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.sourceAlignmentNoteIds.length} relay notes
+                    </span>
+                  </div>
+                  <p>{row.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{row.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{row.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{row.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved synthesis</span>
+                      <strong>
+                        {row.staticNonGoalFlags.noSavedSynthesisState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.localAnchorHrefs.map((href) => (
+                      <a key={`${row.synthesisRowId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{row.sourceCalibrationCardId}</span>
+                    <span>{row.sourceDebriefPromptId}</span>
+                    <span>{row.sourcePathStepId}</span>
+                    <span>{row.sourceAgendaSectionId}</span>
+                    <span>{row.sourcePromptGroupId}</span>
+                    <span>{row.sourceCoverageRowId}</span>
+                    <span>{row.sourceHandoffCardId}</span>
+                  </div>
+                  <div className="observation-handoff-synthesis-crosswalk-list">
+                    {row.sourceCrosswalkReferences.map((reference) => (
+                      <div
+                        key={`${row.synthesisRowId}:${reference.referenceId}`}
+                      >
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{row.relayThreadNote}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-synthesis-panel">
+              <span className="metric-label">Default calibration context</span>
+              <strong>{observationHandoffSynthesis.defaultSynthesisRow.label}</strong>
+              <p>{observationHandoffSynthesis.summary.summary}</p>
+              <div className="observation-handoff-synthesis-relay-list">
+                {observationHandoffSynthesis.staticRelayNotes.map((note) => (
+                  <article key={note.staticRelayNoteEntryId}>
+                    <span className="event-type">
+                      Relay {note.relayOrder} - {note.anchorTargetId}
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                    <div className="gap-reference-strip">
+                      <a href={note.localAnchorHref}>{note.anchorTargetId}</a>
+                      <span>{note.sourceAlignmentNoteId}</span>
+                      <span>
+                        {note.sourceCalibrationCardIds.length} calibration cards
+                      </span>
+                      <span>{note.sourceFollowUpMapEntryId}</span>
+                      <span>{note.sourceDebriefPromptId}</span>
+                      <span>{note.sourcePathStepId}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-synthesis-non-goal-list">
+                {[
+                  "No saved synthesis state",
+                  "No saved calibration state",
+                  "No saved drift state",
+                  "No saved reviewer progress",
+                  "No routes or task launchers",
+                  "No runnable checklists",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffSynthesis.staticSynthesisSummary}</p>
             </aside>
           </div>
         </section>

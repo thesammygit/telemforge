@@ -1261,6 +1261,59 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       .staticAlignmentNoteCount,
     view.reviewObservationHandoffDriftGuard?.staticRegressionMapEntries.length,
   );
+  assert.ok(view.reviewObservationHandoffSynthesis);
+  assert.equal(
+    view.reviewObservationHandoffSynthesis?.schema,
+    "telemforge.review_observation_handoff_synthesis.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSynthesis
+      ?.sourceObservationHandoffCalibration,
+    view.reviewObservationHandoffCalibration,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSynthesis?.synthesisRows.map((row) => [
+      row.sourceCalibrationCardId,
+      row.sourceCueId,
+      row.sourceDebriefPromptId,
+      row.sourceFollowUpMapEntryIds,
+      row.sourcePathStepId,
+      row.sourceAgendaSectionId,
+      row.sourcePromptGroupId,
+      row.sourceCoverageRowId,
+      row.sourceHandoffCardId,
+      row.localAnchorHrefs,
+      row.anchorTargetIds,
+      row.evidenceCallbackIds,
+      row.gapDiscussionPointIds,
+      row.deferredScopeReminderIds,
+    ]),
+    view.reviewObservationHandoffCalibration?.calibrationCards.map((card) => [
+      card.calibrationCardId,
+      card.sourceCueId,
+      card.sourceDebriefPromptId,
+      card.sourceFollowUpMapEntryIds,
+      card.sourcePathStepId,
+      card.sourceAgendaSectionId,
+      card.sourcePromptGroupId,
+      card.sourceCoverageRowId,
+      card.sourceHandoffCardId,
+      card.localAnchorHrefs,
+      card.anchorTargetIds,
+      card.evidenceCallbackIds,
+      card.gapDiscussionPointIds,
+      card.deferredScopeReminderIds,
+    ]),
+  );
+  assert.equal(
+    view.reviewObservationHandoffSynthesis?.summary.counts.synthesisRowCount,
+    view.reviewObservationHandoffCalibration?.calibrationCards.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSynthesis?.summary.counts
+      .staticRelayNoteCount,
+    view.reviewObservationHandoffCalibration?.staticAlignmentNotes.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -1355,6 +1408,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffCalibration
       ?.sourceObservationHandoffDriftGuard,
     view.reviewObservationHandoffDriftGuard,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSynthesis?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSynthesis
+      ?.sourceObservationHandoffCalibration,
+    view.reviewObservationHandoffCalibration,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
