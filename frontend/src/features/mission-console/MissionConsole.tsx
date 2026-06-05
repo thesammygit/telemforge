@@ -42,6 +42,7 @@ export function MissionConsole({
     view.reviewObservationBoundaryWalkthrough;
   const observationStoryline = view.reviewObservationStoryline;
   const observationHandoffDeck = view.reviewObservationHandoffDeck;
+  const observationHandoffCoverage = view.reviewObservationHandoffCoverage;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2009,6 +2010,183 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffDeck.staticHandoffSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffCoverage ? (
+        <section
+          className="review-observation-handoff-coverage-section"
+          aria-label="Review observation handoff coverage"
+        >
+          <a
+            id="review-observation-handoff-coverage"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 39 observation handoff coverage
+              </span>
+              <h2>Static gap map and source coverage</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffCoverage.localStatus}`}
+            >
+              {observationHandoffCoverage.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffCoverage.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Rows</span>
+              <strong>
+                {observationHandoffCoverage.summary.counts.coverageRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Gap notes</span>
+              <strong>
+                {observationHandoffCoverage.summary.counts.staticGapNoteCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source groups</span>
+              <strong>
+                {
+                  observationHandoffCoverage.summary.counts
+                    .sourceCoverageGroupCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Deferred reminders</span>
+              <strong>
+                {
+                  observationHandoffCoverage.summary.counts
+                    .deferredScopeReminderCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-coverage-layout">
+            <div className="observation-handoff-coverage-row-list">
+              {observationHandoffCoverage.coverageRows.map((row) => (
+                <article key={row.coverageRowId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Coverage {row.rowNumber} ·{" "}
+                        {row.sourceSummaryCoverage.sourceSummaryId.replace(
+                          "review-observation-boundary:",
+                          "",
+                        )}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.staticGapNoteIds.length} gap note
+                    </span>
+                  </div>
+                  <p>{row.sourceSummaryCoverage.sourceSummary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{row.localAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Observations</span>
+                      <strong>{row.relatedObservationRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Prompts</span>
+                      <strong>{row.sourceStagePromptIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{row.deferredScopeReminderIds.length}</strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.localAnchorHrefs.map((href) => (
+                      <a key={`${row.coverageRowId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{row.guardrailReminderIds.length} guardrails</span>
+                    <span>{row.priorSurfacePromptIds.length} prior refs</span>
+                  </div>
+                  {row.staticNonGoalContexts.length ? (
+                    <div className="observation-handoff-coverage-context-list">
+                      {row.staticNonGoalContexts.map((context) => (
+                        <div key={`${row.coverageRowId}:${context.nonGoalNoteId}`}>
+                          <span className="event-type">
+                            {context.kind.replace(/_/g, " ")}
+                          </span>
+                          <strong>{context.label}</strong>
+                          <p>{context.summary}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-coverage-panel">
+              <span className="metric-label">Default coverage row</span>
+              <strong>{observationHandoffCoverage.defaultCoverageRow.label}</strong>
+              <p>{observationHandoffCoverage.summary.summary}</p>
+              <div className="observation-handoff-gap-note-list">
+                {observationHandoffCoverage.staticGapNotes.map((note) => (
+                  <article key={note.gapNoteId}>
+                    <span className="event-type">
+                      {note.relatedObservationRowIds.length} observations
+                    </span>
+                    <strong>{note.label}</strong>
+                    <p>{note.summary}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-source-coverage-list">
+                {observationHandoffCoverage.sourceCoverageGroups.map((group) => (
+                  <article key={group.sourceCoverageGroupId}>
+                    <span className="event-type">
+                      Source Stage {group.sourceStageNumber}
+                    </span>
+                    <strong>{group.label}</strong>
+                    <p>{group.summary}</p>
+                    <div className="gap-reference-strip">
+                      {group.sourceAnchorHrefs.map((href) => (
+                        <a
+                          key={`${group.sourceCoverageGroupId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{group.coverageRowIds.length} rows</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-deferred-scope-list">
+                {observationHandoffCoverage.deferredScopeReminders.map(
+                  (reminder) => (
+                    <article key={reminder.reminderId}>
+                      <span className="event-type">
+                        {reminder.kind.replace(/_/g, " ")}
+                      </span>
+                      <strong>{reminder.label}</strong>
+                      <p>{reminder.summary}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <p>{observationHandoffCoverage.staticCoverageSummary}</p>
             </aside>
           </div>
         </section>

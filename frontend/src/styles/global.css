@@ -178,6 +178,7 @@ button {
 .review-observation-boundary-walkthrough-section,
 .review-observation-storyline-section,
 .review-observation-handoff-deck-section,
+.review-observation-handoff-coverage-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -424,6 +425,7 @@ button {
 .review-observation-boundary-walkthrough-section,
 .review-observation-storyline-section,
 .review-observation-handoff-deck-section,
+.review-observation-handoff-coverage-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -524,6 +526,10 @@ button {
 }
 
 .review-observation-handoff-deck-section {
+  padding: 18px;
+}
+
+.review-observation-handoff-coverage-section {
   padding: 18px;
 }
 
@@ -2514,6 +2520,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-coverage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2588,7 +2601,12 @@ button {
 .observation-handoff-checkpoint-list,
 .observation-handoff-source-prompt-list,
 .observation-handoff-guardrail-list,
-.observation-handoff-prior-surface-list {
+.observation-handoff-prior-surface-list,
+.observation-handoff-coverage-row-list,
+.observation-handoff-coverage-panel,
+.observation-handoff-gap-note-list,
+.observation-handoff-source-coverage-list,
+.observation-handoff-deferred-scope-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2666,7 +2684,12 @@ button {
 .observation-handoff-checkpoint-list article,
 .observation-handoff-source-prompt-list article,
 .observation-handoff-guardrail-list article,
-.observation-handoff-prior-surface-list article {
+.observation-handoff-prior-surface-list article,
+.observation-handoff-coverage-row-list article,
+.observation-handoff-coverage-panel,
+.observation-handoff-gap-note-list article,
+.observation-handoff-source-coverage-list article,
+.observation-handoff-deferred-scope-list article {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2687,7 +2710,8 @@ button {
 .observation-boundary-ledger-row-list article,
 .observation-boundary-walkthrough-step-list article,
 .observation-storyline-segment-list article,
-.observation-handoff-card-list article {
+.observation-handoff-card-list article,
+.observation-handoff-coverage-row-list article {
   display: grid;
   gap: 10px;
 }
@@ -2936,7 +2960,13 @@ button {
 .observation-handoff-source-prompt-list strong,
 .observation-handoff-guardrail-list strong,
 .observation-handoff-prior-surface-list strong,
-.observation-handoff-context-list strong {
+.observation-handoff-context-list strong,
+.observation-handoff-coverage-row-list h3,
+.observation-handoff-coverage-panel strong,
+.observation-handoff-gap-note-list strong,
+.observation-handoff-source-coverage-list strong,
+.observation-handoff-deferred-scope-list strong,
+.observation-handoff-coverage-context-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -3009,7 +3039,13 @@ button {
 .observation-handoff-source-prompt-list p,
 .observation-handoff-guardrail-list p,
 .observation-handoff-prior-surface-list p,
-.observation-handoff-context-list p {
+.observation-handoff-context-list p,
+.observation-handoff-coverage-row-list p,
+.observation-handoff-coverage-panel p,
+.observation-handoff-gap-note-list p,
+.observation-handoff-source-coverage-list p,
+.observation-handoff-deferred-scope-list p,
+.observation-handoff-coverage-context-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -3031,6 +3067,11 @@ button {
   gap: 8px;
 }
 
+.observation-handoff-coverage-context-list {
+  display: grid;
+  gap: 8px;
+}
+
 .observation-boundary-walkthrough-context-list div {
   min-width: 0;
   border-left: 3px solid #8997a1;
@@ -3046,6 +3087,12 @@ button {
 .observation-handoff-context-list div {
   min-width: 0;
   border-left: 3px solid #a76a16;
+  padding-left: 10px;
+}
+
+.observation-handoff-coverage-context-list div {
+  min-width: 0;
+  border-left: 3px solid #184d88;
   padding-left: 10px;
 }
 
@@ -3500,6 +3547,7 @@ button {
   .observation-boundary-walkthrough-layout,
   .observation-storyline-layout,
   .observation-handoff-deck-layout,
+  .observation-handoff-coverage-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

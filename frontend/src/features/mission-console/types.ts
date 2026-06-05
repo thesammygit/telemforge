@@ -3382,6 +3382,164 @@ export interface ReviewObservationHandoffDeckView {
   sourceObservationStoryline: ReviewObservationStorylineView;
 }
 
+export interface ReviewObservationHandoffCoverageSourceSummaryCoverageView {
+  sourceSummaryId: string;
+  sourceHandoffCardId: string;
+  label: string;
+  sourceSummary: string;
+  coverageLabel: string;
+  coveredByLocalCard: true;
+  localOnly: true;
+  sourceBacked: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationHandoffCoverageRowView {
+  coverageRowId: string;
+  rowNumber: number;
+  sourceHandoffCardId: string;
+  sourceSegmentId: string;
+  label: string;
+  sourceSummaryCoverage: ReviewObservationHandoffCoverageSourceSummaryCoverageView;
+  localAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  sourceStagePromptIds: string[];
+  guardrailReminderIds: string[];
+  priorSurfacePromptIds: string[];
+  staticGapNoteIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffCoverageStaticGapNoteView {
+  gapNoteId: string;
+  coverageRowId: string;
+  sourceHandoffCardId: string;
+  label: string;
+  summary: string;
+  localAnchorHrefs: string[];
+  relatedObservationRowIds: string[];
+  sourceStagePromptIds: string[];
+  guardrailReminderIds: string[];
+  priorSurfacePromptIds: string[];
+  explanatoryOnly: true;
+  notAReadinessScore: true;
+  notACertification: true;
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationHandoffCoverageSourceCoverageGroupView {
+  sourceCoverageGroupId: string;
+  sourceStagePromptId: string;
+  sourceStageNumber: number;
+  label: string;
+  summary: string;
+  sourceAnchorHrefs: string[];
+  coverageRowIds: string[];
+  relatedObservationRowIds: string[];
+  sourceSchemas: string[];
+  sourceContractLabels: string[];
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+}
+
+export interface ReviewObservationHandoffCoverageDeferredScopeReminderView {
+  reminderId: string;
+  sourceNonGoalNoteId: string;
+  kind: ReviewObservationBlindSpotKind;
+  label: string;
+  summary: string;
+  coverageRowIds: string[];
+  sourceHandoffCardIds: string[];
+  relatedObservationRowIds: string[];
+  localAnchorHrefs: string[];
+  localOnly: true;
+  inPageOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffCoverageSummaryView {
+  coverageId: "candidate-local-review-observation-handoff-coverage";
+  label: string;
+  summary: string;
+  defaultCoverageRowId: string;
+  defaultStaticGapNoteId: string;
+  defaultSourceCoverageGroupId: string;
+  defaultDeferredScopeReminderId: string;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    coverageRowCount: number;
+    staticGapNoteCount: number;
+    sourceCoverageGroupCount: number;
+    deferredScopeReminderCount: number;
+    sourceHandoffCardCount: number;
+    sourceStagePromptCount: number;
+    guardrailReminderCount: number;
+    priorSurfacePromptCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffCoverageView {
+  schema: "telemforge.review_observation_handoff_coverage.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff coverage and static gap map";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffCoverageSummaryView;
+  defaultCoverageRow: ReviewObservationHandoffCoverageRowView;
+  coverageRows: ReviewObservationHandoffCoverageRowView[];
+  staticGapNotes: ReviewObservationHandoffCoverageStaticGapNoteView[];
+  sourceCoverageGroups: ReviewObservationHandoffCoverageSourceCoverageGroupView[];
+  deferredScopeReminders: ReviewObservationHandoffCoverageDeferredScopeReminderView[];
+  staticCoverageSummary: string;
+  sourceObservationHandoffDeck: ReviewObservationHandoffDeckView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -3578,6 +3736,7 @@ export interface MissionConsoleView {
   reviewObservationBoundaryWalkthrough?: ReviewObservationBoundaryWalkthroughView;
   reviewObservationStoryline?: ReviewObservationStorylineView;
   reviewObservationHandoffDeck?: ReviewObservationHandoffDeckView;
+  reviewObservationHandoffCoverage?: ReviewObservationHandoffCoverageView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
