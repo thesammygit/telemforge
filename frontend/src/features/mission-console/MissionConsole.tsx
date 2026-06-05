@@ -66,6 +66,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadout;
   const observationHandoffSourceReadiness =
     view.reviewObservationHandoffSourceReadiness;
+  const observationHandoffSourceReadinessRehearsal =
+    view.reviewObservationHandoffSourceReadinessRehearsal;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -4707,6 +4709,244 @@ export function MissionConsole({
                 {
                   observationHandoffSourceReadiness
                     .staticSourceReadinessSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadinessRehearsal ? (
+        <section
+          className="review-observation-handoff-source-readiness-rehearsal-section"
+          aria-label="Review observation handoff source readiness rehearsal"
+        >
+          <a
+            id="review-observation-handoff-source-readiness-rehearsal"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 54 source readiness rehearsal
+              </span>
+              <h2>Readiness rehearsal and reviewer prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadinessRehearsal.localStatus}`}
+            >
+              {observationHandoffSourceReadinessRehearsal.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffSourceReadinessRehearsal.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Rehearsal prompts</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessRehearsal.summary.counts
+                    .rehearsalPromptRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Reviewer checks</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessRehearsal.summary.counts
+                    .staticReviewerPromptCheckCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default readiness</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessRehearsal.summary
+                    .defaultSourceReadinessContext.defaultSourceReadinessRowId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-rehearsal-layout">
+            <div className="observation-handoff-source-readiness-rehearsal-prompt-list">
+              {observationHandoffSourceReadinessRehearsal.rehearsalPromptRows.map(
+                (row) => (
+                  <article key={row.sourceReadinessRehearsalPromptRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Prompt {row.promptOrder} - {row.sourceCueIds[0]}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedStaticReviewCheckIds.length} checks
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.localAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gap prompts</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved rehearsal</span>
+                        <strong>
+                          {row.staticNonGoalFlags
+                            .noSavedSourceReadinessRehearsalProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.localAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.sourceReadinessRehearsalPromptRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceReadinessRowId}</span>
+                      <span>{row.sourceReadoutRowId}</span>
+                      <span>{row.sourceWalkthroughSectionId}</span>
+                      <span>{row.sourceCrosswalkRowId}</span>
+                      <span>{row.sourceRelayStepId}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-rehearsal-source-list">
+                      {row.sourceInspectionReferenceIds.map(
+                        (referenceId, index) => (
+                          <div
+                            key={`${row.sourceReadinessRehearsalPromptRowId}:${referenceId}`}
+                          >
+                            <span className="event-type">
+                              {row.sourceKinds[index]?.replace(/_/g, " ")}
+                            </span>
+                            <strong>{row.sourceLabels[index]}</strong>
+                            <p>{row.sourceIds[index]}</p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <div className="observation-handoff-source-readiness-rehearsal-check-list">
+                      {row.matchedStaticReviewCheckIds.map((checkId) => (
+                        <article
+                          key={`${row.sourceReadinessRehearsalPromptRowId}:${checkId}`}
+                        >
+                          <span className="event-type">Matched check</span>
+                          <strong>{checkId}</strong>
+                        </article>
+                      ))}
+                      {row.staticReviewCueIds.map((cueId) => (
+                        <article
+                          key={`${row.sourceReadinessRehearsalPromptRowId}:${cueId}`}
+                        >
+                          <span className="event-type">Static cue</span>
+                          <strong>{cueId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{row.reviewerPrompt}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-rehearsal-panel">
+              <span className="metric-label">Default rehearsal context</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessRehearsal
+                    .defaultRehearsalPromptRow.label
+                }
+              </strong>
+              <p>{observationHandoffSourceReadinessRehearsal.summary.summary}</p>
+              <div className="observation-handoff-source-readiness-rehearsal-static-prompt-list">
+                {observationHandoffSourceReadinessRehearsal.staticReviewerPromptChecks.map(
+                  (check) => (
+                    <article key={check.staticReviewerPromptCheckRowId}>
+                      <span className="event-type">
+                        Check {check.checkOrder} - {check.anchorTargetId}
+                      </span>
+                      <strong>{check.label}</strong>
+                      <p>{check.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={check.localAnchorHref}>
+                          {check.anchorTargetId}
+                        </a>
+                        <span>{check.sourceStaticReviewCheckRowId}</span>
+                        <span>
+                          {check.matchedSourceReadinessRowIds.length} readiness
+                        </span>
+                        <span>
+                          {check.matchedSourceReadoutRowIds.length} readouts
+                        </span>
+                        <span>
+                          {check.matchedSourceWalkthroughSectionIds.length}{" "}
+                          sections
+                        </span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{check.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{check.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{check.deferredScopeReminderIds.length}</strong>
+                        </div>
+                      </div>
+                      <p>{check.reviewerPrompt}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-rehearsal-non-goal-list">
+                {[
+                  "No saved reviewer notes",
+                  "No saved source readiness rehearsal progress",
+                  "No saved source readiness progress",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadinessRehearsal
+                    .staticSourceReadinessRehearsalSummary
                 }
               </p>
             </aside>

@@ -1671,6 +1671,68 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       .staticReviewCheckCount,
     view.reviewObservationHandoffSourceReadout?.staticReviewCues.length,
   );
+  assert.ok(view.reviewObservationHandoffSourceReadinessRehearsal);
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessRehearsal?.schema,
+    "telemforge.review_observation_handoff_source_readiness_rehearsal.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessRehearsal
+      ?.sourceReviewObservationHandoffSourceReadiness,
+    view.reviewObservationHandoffSourceReadiness,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSourceReadinessRehearsal?.rehearsalPromptRows.map(
+      (row) => [
+        row.sourceReadinessRowId,
+        row.sourceReadoutRowId,
+        row.sourceWalkthroughSectionId,
+        row.sourceCrosswalkRowId,
+        row.sourceRelayStepId,
+        row.sourceInspectionReferenceIds,
+        row.localAnchorHrefs,
+        row.anchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.matchedStaticReviewCheckIds,
+        row.staticReviewCueIds,
+      ],
+    ),
+    view.reviewObservationHandoffSourceReadiness?.sourceReadinessRows.map(
+      (row) => [
+        row.sourceReadinessRowId,
+        row.sourceReadoutRowId,
+        row.sourceWalkthroughSectionId,
+        row.sourceCrosswalkRowId,
+        row.sourceRelayStepId,
+        row.sourceInspectionReferenceIds,
+        row.localAnchorHrefs,
+        row.anchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        view.reviewObservationHandoffSourceReadiness?.staticReviewChecks
+          .filter((check) =>
+            row.matchedStaticReviewCueIds.includes(
+              check.sourceStaticReviewCueRowId,
+            ),
+          )
+          .map((check) => check.staticReviewCheckRowId),
+        row.matchedStaticReviewCueIds,
+      ],
+    ),
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessRehearsal?.summary.counts
+      .rehearsalPromptRowCount,
+    view.reviewObservationHandoffSourceReadiness?.sourceReadinessRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessRehearsal?.summary.counts
+      .staticReviewerPromptCheckCount,
+    view.reviewObservationHandoffSourceReadiness?.staticReviewChecks.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -1819,6 +1881,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadiness
       ?.sourceReviewObservationHandoffSourceReadout,
     view.reviewObservationHandoffSourceReadout,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessRehearsal?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessRehearsal
+      ?.sourceReviewObservationHandoffSourceReadiness,
+    view.reviewObservationHandoffSourceReadiness,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
