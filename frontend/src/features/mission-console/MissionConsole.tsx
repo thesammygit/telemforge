@@ -47,6 +47,7 @@ export function MissionConsole({
   const observationHandoffAgenda = view.reviewObservationHandoffAgenda;
   const observationHandoffPath = view.reviewObservationHandoffPath;
   const observationHandoffDryRun = view.reviewObservationHandoffDryRun;
+  const observationHandoffDebrief = view.reviewObservationHandoffDebrief;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -2845,6 +2846,157 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffDryRun.staticDryRunSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffDebrief ? (
+        <section
+          className="review-observation-handoff-debrief-section"
+          aria-label="Review observation handoff debrief"
+        >
+          <a id="review-observation-handoff-debrief" className="section-anchor" />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 44 observation handoff debrief
+              </span>
+              <h2>Static debrief prompts and follow-up map</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffDebrief.localStatus}`}
+            >
+              {observationHandoffDebrief.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffDebrief.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompts</span>
+              <strong>
+                {observationHandoffDebrief.summary.counts.debriefPromptCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up map</span>
+              <strong>
+                {
+                  observationHandoffDebrief.summary.counts
+                    .followUpMapEntryCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default cue</span>
+              <strong>{observationHandoffDebrief.summary.defaultCueId}</strong>
+            </div>
+          </div>
+          <div className="observation-handoff-debrief-layout">
+            <div className="observation-handoff-debrief-prompt-list">
+              {observationHandoffDebrief.debriefPrompts.map((prompt) => (
+                <article key={prompt.debriefPromptId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Prompt {prompt.promptNumber} - {prompt.sourceCueId}
+                      </span>
+                      <h3>{prompt.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {prompt.anchorTargetIds.length} anchors
+                    </span>
+                  </div>
+                  <p>{prompt.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{prompt.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{prompt.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{prompt.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved notes</span>
+                      <strong>
+                        {prompt.staticNonGoalFlags.noSavedDebriefNotes
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {prompt.localAnchorHrefs.map((href) => (
+                      <a key={`${prompt.debriefPromptId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{prompt.sourcePathStepId}</span>
+                    <span>{prompt.sourceAgendaSectionId}</span>
+                    <span>{prompt.sourcePromptGroupId}</span>
+                  </div>
+                  <div className="observation-handoff-debrief-source-list">
+                    {prompt.sourceReferences.map((reference) => (
+                      <div
+                        key={`${prompt.debriefPromptId}:${reference.referenceId}`}
+                      >
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{prompt.debriefPrompt}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-debrief-panel">
+              <span className="metric-label">Default debrief prompt</span>
+              <strong>{observationHandoffDebrief.defaultDebriefPrompt.label}</strong>
+              <p>{observationHandoffDebrief.summary.summary}</p>
+              <div className="observation-handoff-debrief-follow-up-list">
+                {observationHandoffDebrief.followUpMapEntries.map((entry) => (
+                  <article key={entry.followUpMapEntryId}>
+                    <span className="event-type">
+                      Follow-up {entry.followUpOrder} - {entry.anchorTargetId}
+                    </span>
+                    <strong>{entry.label}</strong>
+                    <p>{entry.summary}</p>
+                    <div className="gap-reference-strip">
+                      <a href={entry.localAnchorHref}>{entry.anchorTargetId}</a>
+                      <span>{entry.sourceAnchorCoverageEntryId}</span>
+                      <span>{entry.sourceCueId}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="observation-handoff-debrief-non-goal-list">
+                {[
+                  "No saved debrief notes",
+                  "No saved follow-up progress",
+                  "No saved follow-up ownership",
+                  "No route changes",
+                  "No meeting workflow",
+                  "No command execution",
+                  "No exports or signoff",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffDebrief.staticDebriefSummary}</p>
             </aside>
           </div>
         </section>

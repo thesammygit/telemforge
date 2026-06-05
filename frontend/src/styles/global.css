@@ -183,6 +183,7 @@ button {
 .review-observation-handoff-agenda-section,
 .review-observation-handoff-path-section,
 .review-observation-handoff-dry-run-section,
+.review-observation-handoff-debrief-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -434,6 +435,7 @@ button {
 .review-observation-handoff-agenda-section,
 .review-observation-handoff-path-section,
 .review-observation-handoff-dry-run-section,
+.review-observation-handoff-debrief-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -554,6 +556,10 @@ button {
 }
 
 .review-observation-handoff-dry-run-section {
+  padding: 18px;
+}
+
+.review-observation-handoff-debrief-section {
   padding: 18px;
 }
 
@@ -2579,6 +2585,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-debrief-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2679,7 +2692,12 @@ button {
 .observation-handoff-dry-run-panel,
 .observation-handoff-dry-run-source-list,
 .observation-handoff-dry-run-coverage-list,
-.observation-handoff-dry-run-non-goal-list {
+.observation-handoff-dry-run-non-goal-list,
+.observation-handoff-debrief-prompt-list,
+.observation-handoff-debrief-panel,
+.observation-handoff-debrief-source-list,
+.observation-handoff-debrief-follow-up-list,
+.observation-handoff-debrief-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2783,7 +2801,12 @@ button {
 .observation-handoff-dry-run-panel,
 .observation-handoff-dry-run-source-list div,
 .observation-handoff-dry-run-coverage-list article,
-.observation-handoff-dry-run-non-goal-list div {
+.observation-handoff-dry-run-non-goal-list div,
+.observation-handoff-debrief-prompt-list article,
+.observation-handoff-debrief-panel,
+.observation-handoff-debrief-source-list div,
+.observation-handoff-debrief-follow-up-list article,
+.observation-handoff-debrief-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2807,7 +2830,8 @@ button {
 .observation-handoff-card-list article,
 .observation-handoff-coverage-row-list article,
 .observation-handoff-path-step-list article,
-.observation-handoff-dry-run-cue-list article {
+.observation-handoff-dry-run-cue-list article,
+.observation-handoff-debrief-prompt-list article {
   display: grid;
   gap: 10px;
 }
@@ -2836,6 +2860,10 @@ button {
 
 .observation-handoff-dry-run-cue-list article {
   border-left: 4px solid #184d88;
+}
+
+.observation-handoff-debrief-prompt-list article {
+  border-left: 4px solid #12745b;
 }
 
 .surface-index-row-decision {
@@ -3112,7 +3140,12 @@ button {
 .observation-handoff-dry-run-panel strong,
 .observation-handoff-dry-run-source-list strong,
 .observation-handoff-dry-run-coverage-list strong,
-.observation-handoff-dry-run-non-goal-list strong {
+.observation-handoff-dry-run-non-goal-list strong,
+.observation-handoff-debrief-prompt-list h3,
+.observation-handoff-debrief-panel strong,
+.observation-handoff-debrief-source-list strong,
+.observation-handoff-debrief-follow-up-list strong,
+.observation-handoff-debrief-non-goal-list strong {
   margin: 3px 0 0;
   color: #172026;
   font-size: 1rem;
@@ -3213,7 +3246,11 @@ button {
 .observation-handoff-dry-run-cue-list p,
 .observation-handoff-dry-run-panel p,
 .observation-handoff-dry-run-source-list p,
-.observation-handoff-dry-run-coverage-list p {
+.observation-handoff-dry-run-coverage-list p,
+.observation-handoff-debrief-prompt-list p,
+.observation-handoff-debrief-panel p,
+.observation-handoff-debrief-source-list p,
+.observation-handoff-debrief-follow-up-list p {
   margin: 0;
   color: #52636f;
   font-size: 0.88rem;
@@ -3256,6 +3293,11 @@ button {
 }
 
 .observation-handoff-dry-run-source-list {
+  display: grid;
+  gap: 8px;
+}
+
+.observation-handoff-debrief-source-list {
   display: grid;
   gap: 8px;
 }
@@ -3308,6 +3350,12 @@ button {
   padding-left: 10px;
 }
 
+.observation-handoff-debrief-source-list div {
+  min-width: 0;
+  border-left: 3px solid #12745b;
+  padding-left: 10px;
+}
+
 .observation-handoff-prompt-group-list,
 .observation-handoff-questions-panel,
 .observation-handoff-review-question-list,
@@ -3325,7 +3373,10 @@ button {
 .observation-handoff-anchor-map-list,
 .observation-handoff-dry-run-cue-list,
 .observation-handoff-dry-run-panel,
-.observation-handoff-dry-run-coverage-list {
+.observation-handoff-dry-run-coverage-list,
+.observation-handoff-debrief-prompt-list,
+.observation-handoff-debrief-panel,
+.observation-handoff-debrief-follow-up-list {
   max-height: 340px;
   overflow: auto;
 }
@@ -3786,6 +3837,7 @@ button {
   .observation-handoff-agenda-layout,
   .observation-handoff-path-layout,
   .observation-handoff-dry-run-layout,
+  .observation-handoff-debrief-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
