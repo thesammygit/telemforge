@@ -70,6 +70,7 @@ For each stage:
 41. [Review Observation Handoff Agenda And Static Facilitation Guide](steps/41-review-observation-handoff-agenda-and-static-facilitation-guide.md)
 42. [Review Observation Handoff Path And Static Anchor Map](steps/42-review-observation-handoff-path-and-static-anchor-map.md)
 43. [Review Observation Handoff Dry Run And Static Cue Sheet](steps/43-review-observation-handoff-dry-run-and-static-cue-sheet.md)
+44. [Review Observation Handoff Debrief And Static Follow-Up Map](steps/44-review-observation-handoff-debrief-and-static-follow-up-map.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
