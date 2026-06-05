@@ -52,6 +52,8 @@ export function MissionConsole({
     view.reviewObservationHandoffContinuity;
   const observationHandoffDriftGuard =
     view.reviewObservationHandoffDriftGuard;
+  const observationHandoffCalibration =
+    view.reviewObservationHandoffCalibration;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -3343,6 +3345,182 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{observationHandoffDriftGuard.staticDriftGuardSummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffCalibration ? (
+        <section
+          className="review-observation-handoff-calibration-section"
+          aria-label="Review observation handoff calibration"
+        >
+          <a
+            id="review-observation-handoff-calibration"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 47 observation handoff calibration
+              </span>
+              <h2>Calibration board and static alignment notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffCalibration.localStatus}`}
+            >
+              {observationHandoffCalibration.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>{observationHandoffCalibration.contractLabel}</strong>
+            </div>
+            <div>
+              <span className="metric-label">Calibration cards</span>
+              <strong>
+                {
+                  observationHandoffCalibration.summary.counts
+                    .calibrationCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Alignment notes</span>
+              <strong>
+                {
+                  observationHandoffCalibration.summary.counts
+                    .staticAlignmentNoteCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default cue</span>
+              <strong>
+                {
+                  observationHandoffCalibration.summary
+                    .defaultDriftGuardContext.defaultCueId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-calibration-layout">
+            <div className="observation-handoff-calibration-card-list">
+              {observationHandoffCalibration.calibrationCards.map((card) => (
+                <article key={card.calibrationCardId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Card {card.cardNumber} - {card.sourceCueId}
+                      </span>
+                      <h3>{card.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {card.sourceReferences.length} sources
+                    </span>
+                  </div>
+                  <p>{card.summary}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Evidence callbacks</span>
+                      <strong>{card.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Gap points</span>
+                      <strong>{card.gapDiscussionPointIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Deferred</span>
+                      <strong>{card.deferredScopeReminderIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved calibration</span>
+                      <strong>
+                        {card.staticNonGoalFlags.noSavedCalibrationState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {card.localAnchorHrefs.map((href) => (
+                      <a key={`${card.calibrationCardId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{card.sourceDebriefPromptId}</span>
+                    <span>{card.sourcePathStepId}</span>
+                    <span>{card.sourceAgendaSectionId}</span>
+                    <span>{card.sourcePromptGroupId}</span>
+                    <span>{card.sourceCoverageRowId}</span>
+                    <span>{card.sourceHandoffCardId}</span>
+                  </div>
+                  <div className="observation-handoff-calibration-source-list">
+                    {card.sourceReferences.map((reference) => (
+                      <div
+                        key={`${card.calibrationCardId}:${reference.referenceId}`}
+                      >
+                        <span className="event-type">
+                          {reference.sourceKind.replace(/_/g, " ")}
+                        </span>
+                        <strong>{reference.label}</strong>
+                        <p>{reference.sourceId}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <p>{card.calibrationPrompt}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="observation-handoff-calibration-panel">
+              <span className="metric-label">Default drift guard context</span>
+              <strong>
+                {observationHandoffCalibration.defaultCalibrationCard.label}
+              </strong>
+              <p>{observationHandoffCalibration.summary.summary}</p>
+              <div className="observation-handoff-calibration-alignment-list">
+                {observationHandoffCalibration.staticAlignmentNotes.map(
+                  (note) => (
+                    <article key={note.staticAlignmentNoteId}>
+                      <span className="event-type">
+                        Alignment {note.alignmentOrder} -{" "}
+                        {note.anchorTargetId}
+                      </span>
+                      <strong>{note.label}</strong>
+                      <p>{note.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={note.localAnchorHref}>
+                          {note.anchorTargetId}
+                        </a>
+                        <span>{note.sourceFollowUpMapEntryId}</span>
+                        <span>{note.sourceAnchorCoverageEntryId}</span>
+                        <span>{note.sourceDebriefPromptId}</span>
+                        <span>{note.sourcePathStepId}</span>
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-calibration-non-goal-list">
+                {[
+                  "No saved calibration notes",
+                  "No saved calibration state",
+                  "No saved drift state",
+                  "No saved reviewer progress",
+                  "No saved follow-up ownership",
+                  "No routes or task launchers",
+                  "No runnable checklists",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{observationHandoffCalibration.staticCalibrationSummary}</p>
             </aside>
           </div>
         </section>

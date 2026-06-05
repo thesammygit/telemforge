@@ -4705,6 +4705,160 @@ export interface ReviewObservationHandoffDriftGuardView {
   sourceObservationHandoffContinuity: ReviewObservationHandoffContinuityView;
 }
 
+export interface ReviewObservationHandoffCalibrationStaticNonGoalFlagsView
+  extends ReviewObservationHandoffDriftGuardStaticNonGoalFlagsView {
+  noSavedCalibrationNotes: true;
+  noSavedCalibrationState: true;
+}
+
+export interface ReviewObservationHandoffCalibrationCardView {
+  calibrationCardId: string;
+  cardNumber: number;
+  label: string;
+  summary: string;
+  calibrationPrompt: string;
+  sourceDriftGuardRowId: string;
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  sourceReferences: ReviewObservationHandoffPathSourceReferenceView[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffCalibrationStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffCalibrationStaticAlignmentNoteView {
+  staticAlignmentNoteId: string;
+  alignmentOrder: number;
+  sourceStaticRegressionMapEntryId: string;
+  sourceCueId: string;
+  sourceCueIds: string[];
+  sourceDebriefPromptId: string;
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryId: string;
+  sourceFollowUpMapEntryIds: string[];
+  sourceAnchorCoverageEntryId: string;
+  sourceAnchorCoverageEntryIds: string[];
+  sourcePathStepId: string;
+  sourcePathStepIds: string[];
+  sourceAnchorOrder: number;
+  sourceAgendaSectionId: string;
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupId: string;
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowId: string;
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardId: string;
+  sourceHandoffCardIds: string[];
+  sourceSummaryReference: ReviewObservationHandoffQuestionsSourceSummaryReferenceView;
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffCalibrationStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffCalibrationSummaryView {
+  calibrationId: "candidate-local-review-observation-handoff-calibration";
+  label: string;
+  summary: string;
+  defaultDriftGuardContext: {
+    defaultDriftGuardRowId: string;
+    defaultCueId: string;
+    defaultDebriefPromptId: string;
+    defaultAnchorTargetId: string;
+    sourceDriftGuardSummary: string;
+    sourceContinuitySummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    calibrationCardCount: number;
+    staticAlignmentNoteCount: number;
+    sourceDriftGuardRowCount: number;
+    sourceStaticRegressionMapEntryCount: number;
+    sourceCueCount: number;
+    sourceDebriefPromptCount: number;
+    sourceFollowUpMapEntryCount: number;
+    sourcePathStepCount: number;
+    sourceAgendaSectionCount: number;
+    sourcePromptGroupCount: number;
+    sourceCoverageRowCount: number;
+    sourceHandoffCardCount: number;
+    localOnlyCalibrationCardCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffCalibrationView {
+  schema: "telemforge.review_observation_handoff_calibration.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff calibration board and static alignment notes";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffCalibrationSummaryView;
+  defaultCalibrationCard: ReviewObservationHandoffCalibrationCardView;
+  calibrationCards: ReviewObservationHandoffCalibrationCardView[];
+  staticAlignmentNotes: ReviewObservationHandoffCalibrationStaticAlignmentNoteView[];
+  staticCalibrationSummary: string;
+  sourceObservationHandoffDriftGuard: ReviewObservationHandoffDriftGuardView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -4909,6 +5063,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffDebrief?: ReviewObservationHandoffDebriefView;
   reviewObservationHandoffContinuity?: ReviewObservationHandoffContinuityView;
   reviewObservationHandoffDriftGuard?: ReviewObservationHandoffDriftGuardView;
+  reviewObservationHandoffCalibration?: ReviewObservationHandoffCalibrationView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

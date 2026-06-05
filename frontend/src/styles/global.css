@@ -186,6 +186,7 @@ button {
 .review-observation-handoff-debrief-section,
 .review-observation-handoff-continuity-section,
 .review-observation-handoff-drift-guard-section,
+.review-observation-handoff-calibration-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -440,6 +441,7 @@ button {
 .review-observation-handoff-debrief-section,
 .review-observation-handoff-continuity-section,
 .review-observation-handoff-drift-guard-section,
+.review-observation-handoff-calibration-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -572,6 +574,10 @@ button {
 }
 
 .review-observation-handoff-drift-guard-section {
+  padding: 18px;
+}
+
+.review-observation-handoff-calibration-section {
   padding: 18px;
 }
 
@@ -2618,6 +2624,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-calibration-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2733,7 +2746,12 @@ button {
 .observation-handoff-drift-guard-panel,
 .observation-handoff-drift-guard-source-list,
 .observation-handoff-drift-guard-regression-list,
-.observation-handoff-drift-guard-non-goal-list {
+.observation-handoff-drift-guard-non-goal-list,
+.observation-handoff-calibration-card-list,
+.observation-handoff-calibration-panel,
+.observation-handoff-calibration-source-list,
+.observation-handoff-calibration-alignment-list,
+.observation-handoff-calibration-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -2852,7 +2870,12 @@ button {
 .observation-handoff-drift-guard-panel,
 .observation-handoff-drift-guard-source-list div,
 .observation-handoff-drift-guard-regression-list article,
-.observation-handoff-drift-guard-non-goal-list div {
+.observation-handoff-drift-guard-non-goal-list div,
+.observation-handoff-calibration-card-list article,
+.observation-handoff-calibration-panel,
+.observation-handoff-calibration-source-list div,
+.observation-handoff-calibration-alignment-list article,
+.observation-handoff-calibration-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -2879,7 +2902,8 @@ button {
 .observation-handoff-dry-run-cue-list article,
 .observation-handoff-debrief-prompt-list article,
 .observation-handoff-continuity-card-list article,
-.observation-handoff-drift-guard-row-list article {
+.observation-handoff-drift-guard-row-list article,
+.observation-handoff-calibration-card-list article {
   display: grid;
   gap: 10px;
 }
@@ -2920,6 +2944,10 @@ button {
 
 .observation-handoff-drift-guard-row-list article {
   border-left: 4px solid #12745b;
+}
+
+.observation-handoff-calibration-card-list article {
+  border-left: 4px solid #184d88;
 }
 
 .surface-index-row-decision {
@@ -3925,6 +3953,7 @@ button {
   .observation-handoff-debrief-layout,
   .observation-handoff-continuity-layout,
   .observation-handoff-drift-guard-layout,
+  .observation-handoff-calibration-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
