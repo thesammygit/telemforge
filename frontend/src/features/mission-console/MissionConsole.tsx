@@ -78,6 +78,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadinessResponseTraceMap;
   const observationHandoffSourceReadinessResponseTraceCoverageBoard =
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard;
+  const observationHandoffSourceReadinessResponseTraceCoverageReviewPath =
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -6233,6 +6235,264 @@ export function MissionConsole({
                 {
                   observationHandoffSourceReadinessResponseTraceCoverageBoard
                     .staticSourceReadinessResponseTraceCoverageBoardSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadinessResponseTraceCoverageReviewPath ? (
+        <section
+          className="review-observation-handoff-source-readiness-response-trace-coverage-review-path-section"
+          aria-label="Review observation handoff source readiness response trace coverage review path"
+        >
+          <a
+            id="review-observation-handoff-source-readiness-response-trace-coverage-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 60 source readiness response trace coverage review path
+              </span>
+              <h2>Coverage review path and static handoff prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadinessResponseTraceCoverageReviewPath.localStatus}`}
+            >
+              {observationHandoffSourceReadinessResponseTraceCoverageReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath.contractLabel
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath
+                    .summary.counts.reviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Handoff prompts</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath
+                    .summary.counts.staticHandoffPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default step</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath
+                    .summary.defaultCoverageReviewPathContext
+                    .defaultReviewPathStepId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-response-trace-coverage-review-path-layout">
+            <div className="observation-handoff-source-readiness-response-trace-coverage-review-path-step-list">
+              {observationHandoffSourceReadinessResponseTraceCoverageReviewPath.reviewPathSteps.map(
+                (step) => (
+                  <article
+                    key={
+                      step.sourceReadinessResponseTraceCoverageReviewPathStepId
+                    }
+                  >
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Review step {step.reviewPathOrder} -{" "}
+                          {step.sourceReadinessResponseTraceCoverageRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.matchedStaticGapNoteCardIds.length} prompts
+                      </span>
+                    </div>
+                    <p>{step.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{step.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{step.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{step.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{step.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved review</span>
+                        <strong>
+                          {step.staticNonGoalFlags
+                            .noSavedSourceReadinessResponseTraceCoverageReviewProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.sourceReadinessResponseTraceCoverageReviewPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceReadinessResponseTraceRowId}</span>
+                      <span>{step.sourceReadinessResponseWalkthroughStepId}</span>
+                      <span>{step.sourceReadinessResponseRowId}</span>
+                      <span>{step.sourceReadinessQuestionRowId}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-response-trace-coverage-review-path-note-list">
+                      {step.matchedSourceAlignmentNoteCardIds.map((noteId) => (
+                        <article
+                          key={`${step.sourceReadinessResponseTraceCoverageReviewPathStepId}:${noteId}`}
+                        >
+                          <span className="event-type">
+                            Source alignment note
+                          </span>
+                          <strong>{noteId}</strong>
+                        </article>
+                      ))}
+                      {step.matchedStaticEvidenceNoteRowIds.map((noteId) => (
+                        <article
+                          key={`${step.sourceReadinessResponseTraceCoverageReviewPathStepId}:${noteId}`}
+                        >
+                          <span className="event-type">
+                            Matched evidence note
+                          </span>
+                          <strong>{noteId}</strong>
+                        </article>
+                      ))}
+                      {step.matchedStaticFollowUpPromptRowIds.map(
+                        (promptId) => (
+                          <article
+                            key={`${step.sourceReadinessResponseTraceCoverageReviewPathStepId}:${promptId}`}
+                          >
+                            <span className="event-type">
+                              Static follow-up prompt
+                            </span>
+                            <strong>{promptId}</strong>
+                          </article>
+                        ),
+                      )}
+                    </div>
+                    <p>{step.responseNoteCue}</p>
+                    <p>{step.reviewerCueText}</p>
+                    <p>{step.coverageNoteText}</p>
+                    <p>{step.gapNoteText}</p>
+                    <p>{step.staticHandoffPromptText}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-response-trace-coverage-review-path-panel">
+              <span className="metric-label">Default review path context</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath
+                    .defaultReviewPathStep.label
+                }
+              </strong>
+              <p>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath
+                    .summary.summary
+                }
+              </p>
+              <div className="observation-handoff-source-readiness-response-trace-coverage-review-path-prompt-list">
+                {observationHandoffSourceReadinessResponseTraceCoverageReviewPath.staticHandoffPromptCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.sourceReadinessResponseTraceCoverageReviewPathStaticHandoffPromptCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Handoff prompt {card.handoffPromptOrder} -{" "}
+                        {card.anchorTargetId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>
+                          {card.anchorTargetId}
+                        </a>
+                        <span>{card.matchedCoverageRowIds.length} coverage</span>
+                        <span>{card.matchedResponseTraceRowIds.length} traces</span>
+                        <span>{card.matchedResponseRowIds.length} responses</span>
+                        <span>{card.matchedQuestionRowIds.length} questions</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                      </div>
+                      <p>{card.cueText}</p>
+                      <p>{card.gapNoteText}</p>
+                      <p>{card.handoffPromptText}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-response-trace-coverage-review-path-non-goal-list">
+                {[
+                  "No saved coverage review progress",
+                  "No saved trace coverage progress",
+                  "No saved gap notes",
+                  "No saved handoff prompt edits",
+                  "No saved reviewer answers",
+                  "No saved response progress",
+                  "No saved source readiness progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageReviewPath
+                    .staticSourceReadinessResponseTraceCoverageReviewPathSummary
                 }
               </p>
             </aside>

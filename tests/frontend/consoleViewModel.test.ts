@@ -2171,6 +2171,115 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
           card.staticNonGoalFlags.noRunnableChecklists,
       ),
   );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath
+      ?.schema,
+    "telemforge.review_observation_handoff_source_readiness_response_trace_coverage_review_path.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageBoard,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath?.reviewPathSteps.map(
+      (step) => [
+        step.reviewPathOrder,
+        step.sourceReadinessResponseTraceCoverageRowId,
+        step.sourceReadinessResponseTraceRowId,
+        step.sourceReadinessResponseWalkthroughStepId,
+        step.sourceReadinessResponseRowId,
+        step.sourceReadinessQuestionRowId,
+        step.matchedSourceAlignmentNoteCardIds,
+        step.matchedStaticEvidenceNoteRowIds,
+        step.matchedStaticFollowUpPromptRowIds,
+        step.sourceLocalAnchorHrefs,
+        step.sourceAnchorTargetIds,
+        step.evidenceCallbackIds,
+        step.gapDiscussionPointIds,
+        step.deferredScopeReminderIds,
+        step.responseNoteCue,
+        step.reviewerCueText,
+        step.coverageNoteText,
+      ],
+    ),
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard?.coverageRows.map(
+      (row) => [
+        row.coverageOrder,
+        row.sourceReadinessResponseTraceCoverageRowId,
+        row.sourceReadinessResponseTraceRowId,
+        row.sourceReadinessResponseWalkthroughStepId,
+        row.sourceReadinessResponseRowId,
+        row.sourceReadinessQuestionRowId,
+        row.matchedSourceAlignmentNoteCardIds,
+        row.matchedStaticEvidenceNoteRowIds,
+        row.matchedStaticFollowUpPromptRowIds,
+        row.sourceLocalAnchorHrefs,
+        row.sourceAnchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.responseNoteCue,
+        row.reviewerCueText,
+        row.coverageNoteText,
+      ],
+    ),
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath
+      ?.summary.counts.reviewPathStepCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.coverageRows.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath
+      ?.reviewPathSteps.every(
+        (step) =>
+          step.staticHandoffPromptText.includes(
+            step.sourceReadinessResponseTraceCoverageRowId,
+          ) &&
+          step.localOnly &&
+          step.sourceBacked &&
+          step.inPageOnly &&
+          step.explanatoryOnly &&
+          step.staticOnly &&
+          step.informationalOnly &&
+          step.nonActionable &&
+          step.nonPersistent &&
+          step.nonExecutable &&
+          step.nonRouting &&
+          step.nonCertifying &&
+          step.nonRanking &&
+          step.notATask &&
+          step.notATicket &&
+          step.notAChecklist &&
+          step.notOwnerAssigned &&
+          step.staticNonGoalFlags
+            .noSavedSourceReadinessResponseTraceCoverageReviewProgress &&
+          step.staticNonGoalFlags.noSavedCoverageReviewProgress &&
+          step.staticNonGoalFlags.noSavedCoverageProgress &&
+          step.staticNonGoalFlags.noSavedHandoffPromptEdits &&
+          step.staticNonGoalFlags.noSavedTraceCoverageProgress &&
+          step.staticNonGoalFlags.noSavedGapNotes &&
+          step.staticNonGoalFlags.noSavedReviewerAnswers &&
+          step.staticNonGoalFlags.noPersistence &&
+          step.staticNonGoalFlags.noRouteChanges &&
+          step.staticNonGoalFlags.noCommandExecution &&
+          step.staticNonGoalFlags.noExports &&
+          step.staticNonGoalFlags.noSignoff &&
+          step.staticNonGoalFlags.noAuditRetention &&
+          step.staticNonGoalFlags.noOwnerAssignment &&
+          step.staticNonGoalFlags.noScoring &&
+          step.staticNonGoalFlags.noCertification &&
+          step.staticNonGoalFlags.noMeetingWorkflow &&
+          step.staticNonGoalFlags.noHandoffPackageGeneration &&
+          step.staticNonGoalFlags.noTaskLaunchers &&
+          step.staticNonGoalFlags.noRunnableChecklists,
+      ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -2374,6 +2483,16 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
       ?.sourceReviewObservationHandoffSourceReadinessResponseTraceMap,
     view.reviewObservationHandoffSourceReadinessResponseTraceMap,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath
+      ?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageBoard,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
