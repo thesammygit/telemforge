@@ -104,6 +104,8 @@ export function MissionConsole({
     view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane;
   const observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap =
     view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap;
+  const observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath =
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -9799,6 +9801,272 @@ export function MissionConsole({
               <p>
                 {
                   observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.staticSourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath ? (
+        <section
+          className="review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-section"
+          aria-label="Review observation handoff follow-up readiness answer follow-up review lane source recap review path"
+        >
+          <a
+            id="review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 73 source recap review path
+              </span>
+              <h2>Source recap review path and static reviewer checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath.localStatus}`}
+            >
+              {
+                observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath.localStatus
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+                    .contractLabel
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+                    .summary.counts.reviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Reviewer checks</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+                    .summary.counts.staticReviewerCheckCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review labels</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+                    .summary.counts.reviewPathLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-layout">
+            <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-step-list">
+              {observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath.reviewPathSteps.map(
+                (step) => (
+                  <article
+                    key={
+                      step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStepId
+                    }
+                  >
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Review path step{" "}
+                          {
+                            step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStepOrder
+                          }{" "}
+                          - {step.sourceSourceRecapRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceStaticNextPassPromptCardIds.length} reviewer
+                        checks
+                      </span>
+                    </div>
+                    <p>{step.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Next-pass cards</span>
+                        <strong>{step.sourceStaticNextPassPromptCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Review labels</span>
+                        <strong>{step.reviewPathLabels.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{step.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{step.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved path</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedReviewPathState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceSourceRecapRowId}</span>
+                      <span>{step.sourceAnswerFollowUpReviewLaneRowId}</span>
+                      <span>{step.sourceAnswerSourceCrosswalkRowId}</span>
+                      <span>{step.sourceAnswerWalkthroughStepId}</span>
+                      <span>{step.sourceAnswerCoverageRowId}</span>
+                      <span>{step.sourceRehearsalPathStepId}</span>
+                      <span>{step.sourceReviewBoardRowId}</span>
+                      <span>{step.followUpReadinessBriefRowId}</span>
+                      <span>
+                        {
+                          step.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId
+                        }
+                      </span>
+                    </div>
+                    <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-check-list">
+                      {step.sourceStaticNextPassPromptCardIds.map((cardId) => (
+                        <article
+                          key={`${step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStepId}:${cardId}`}
+                        >
+                          <span className="event-type">
+                            Stage 72 static next-pass prompt
+                          </span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.reviewPathLabels.map((label) => (
+                        <span
+                          key={`${step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStepId}:${label}`}
+                        >
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{step.sourceRecapText}</p>
+                    <p>{step.staticNextPassPromptText}</p>
+                    <p>{step.reviewPathText}</p>
+                    <p>{step.staticReviewerCheckText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-panel">
+              <span className="metric-label">Default review path context</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+                    .defaultReviewPathStep.label
+                }
+              </strong>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+                    .summary.summary
+                }
+              </p>
+              <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-reviewer-check-list">
+                {observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath.staticReviewerCheckCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStaticReviewerCheckCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static reviewer check {card.staticReviewerCheckOrder} -{" "}
+                        {card.sourceStaticNextPassPromptCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>{card.anchorTargetId}</a>
+                        <span>{card.matchedReviewPathStepIds.length} steps</span>
+                        <span>{card.matchedSourceRecapRowIds.length} recap</span>
+                        <span>
+                          {card.matchedAnswerFollowUpReviewLaneRowIds.length}{" "}
+                          lanes
+                        </span>
+                        <span>
+                          {card.matchedAnswerSourceCrosswalkRowIds.length} rows
+                        </span>
+                        <span>{card.reviewPathLabels.length} labels</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Saved checks</span>
+                          <strong>
+                            {card.staticNonGoalFlags.noSavedReviewerChecks
+                              ? "no"
+                              : "yes"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{card.staticNextPassPromptText}</p>
+                      <p>{card.staticReviewerCheckText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved answer drafts",
+                  "No saved reviewer notes",
+                  "No saved source recap state",
+                  "No saved review-path state",
+                  "No saved reviewer checks",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath.staticSourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathSummary
                 }
               </p>
             </aside>
