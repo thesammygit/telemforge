@@ -101,6 +101,7 @@ For each stage:
 72. [Review Observation Handoff Follow-Up Readiness Answer Follow-Up Review Lane Source Recap And Static Next-Pass Prompts](steps/72-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-and-static-next-pass-prompts.md)
 73. [Review Observation Handoff Follow-Up Readiness Answer Follow-Up Review Lane Source Recap Review Path And Static Reviewer Checks](steps/73-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-and-static-reviewer-checks.md)
 74. [Review Observation Handoff Follow-Up Readiness Answer Follow-Up Review Lane Source Recap Review Path Coverage Matrix And Static Readiness Cues](steps/74-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-and-static-readiness-cues.md)
+75. [Review Observation Handoff Follow-Up Readiness Answer Follow-Up Review Lane Source Recap Review Path Coverage Review Path And Static Coverage Prompts](steps/75-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-review-path-and-static-coverage-prompts.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
