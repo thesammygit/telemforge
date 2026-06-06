@@ -207,6 +207,7 @@ button {
 .review-observation-handoff-follow-up-readiness-review-board-section,
 .review-observation-handoff-follow-up-readiness-rehearsal-path-section,
 .review-observation-handoff-follow-up-readiness-answer-coverage-section,
+.review-observation-handoff-follow-up-readiness-answer-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -482,6 +483,7 @@ button {
 .review-observation-handoff-follow-up-readiness-review-board-section,
 .review-observation-handoff-follow-up-readiness-rehearsal-path-section,
 .review-observation-handoff-follow-up-readiness-answer-coverage-section,
+.review-observation-handoff-follow-up-readiness-answer-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2815,6 +2817,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-follow-up-readiness-answer-walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -3041,7 +3050,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-coverage-panel,
 .observation-handoff-follow-up-readiness-answer-coverage-note-list,
 .observation-handoff-follow-up-readiness-answer-coverage-check-list,
-.observation-handoff-follow-up-readiness-answer-coverage-non-goal-list {
+.observation-handoff-follow-up-readiness-answer-coverage-non-goal-list,
+.observation-handoff-follow-up-readiness-answer-walkthrough-step-list,
+.observation-handoff-follow-up-readiness-answer-walkthrough-panel,
+.observation-handoff-follow-up-readiness-answer-walkthrough-note-list,
+.observation-handoff-follow-up-readiness-answer-walkthrough-review-note-list,
+.observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3271,7 +3285,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-coverage-panel,
 .observation-handoff-follow-up-readiness-answer-coverage-note-list article,
 .observation-handoff-follow-up-readiness-answer-coverage-check-list article,
-.observation-handoff-follow-up-readiness-answer-coverage-non-goal-list div {
+.observation-handoff-follow-up-readiness-answer-coverage-non-goal-list div,
+.observation-handoff-follow-up-readiness-answer-walkthrough-step-list article,
+.observation-handoff-follow-up-readiness-answer-walkthrough-panel,
+.observation-handoff-follow-up-readiness-answer-walkthrough-note-list article,
+.observation-handoff-follow-up-readiness-answer-walkthrough-review-note-list article,
+.observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3313,7 +3332,8 @@ button {
 .observation-handoff-source-readiness-response-trace-row-list article,
 .observation-handoff-source-readiness-response-trace-coverage-review-path-step-list article,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-brief-row-list article,
-.observation-handoff-follow-up-readiness-answer-coverage-row-list article {
+.observation-handoff-follow-up-readiness-answer-coverage-row-list article,
+.observation-handoff-follow-up-readiness-answer-walkthrough-step-list article {
   display: grid;
   gap: 10px;
 }
@@ -3390,6 +3410,10 @@ button {
 
 .observation-handoff-follow-up-readiness-answer-coverage-row-list article {
   border-left: 4px solid #2368b5;
+}
+
+.observation-handoff-follow-up-readiness-answer-walkthrough-step-list article {
+  border-left: 4px solid #12745b;
 }
 
 .surface-index-row-decision {
@@ -4416,6 +4440,7 @@ button {
   .observation-handoff-follow-up-readiness-review-board-layout,
   .observation-handoff-follow-up-readiness-rehearsal-path-layout,
   .observation-handoff-follow-up-readiness-answer-coverage-layout,
+  .observation-handoff-follow-up-readiness-answer-walkthrough-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

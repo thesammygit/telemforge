@@ -96,6 +96,8 @@ export function MissionConsole({
     view.reviewObservationHandoffFollowUpReadinessRehearsalPath;
   const observationHandoffFollowUpReadinessAnswerCoverage =
     view.reviewObservationHandoffFollowUpReadinessAnswerCoverage;
+  const observationHandoffFollowUpReadinessAnswerWalkthrough =
+    view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -8763,6 +8765,255 @@ export function MissionConsole({
               <p>
                 {
                   observationHandoffFollowUpReadinessAnswerCoverage.staticSourceFollowUpReadinessAnswerCoverageSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffFollowUpReadinessAnswerWalkthrough ? (
+        <section
+          className="review-observation-handoff-follow-up-readiness-answer-walkthrough-section"
+          aria-label="Review observation handoff follow-up readiness answer walkthrough"
+        >
+          <a
+            id="review-observation-handoff-follow-up-readiness-answer-walkthrough"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 69 answer walkthrough</span>
+              <h2>Answer walkthrough and static review notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffFollowUpReadinessAnswerWalkthrough.localStatus}`}
+            >
+              {observationHandoffFollowUpReadinessAnswerWalkthrough.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough.contractLabel
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Walkthrough steps</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough.summary
+                    .counts.answerWalkthroughStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static review notes</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough.summary
+                    .counts.staticReviewNoteCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default walkthrough step</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough
+                    .defaultAnswerWalkthroughStep.label
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-follow-up-readiness-answer-walkthrough-layout">
+            <div className="observation-handoff-follow-up-readiness-answer-walkthrough-step-list">
+              {observationHandoffFollowUpReadinessAnswerWalkthrough.answerWalkthroughSteps.map(
+                (step) => (
+                  <article key={step.followUpReadinessAnswerWalkthroughStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Answer walkthrough step{" "}
+                          {step.followUpReadinessAnswerWalkthroughStepOrder} -{" "}
+                          {step.sourceAnswerCoverageRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceStaticReviewerCheckPromptCardIds.length} review
+                        notes
+                      </span>
+                    </div>
+                    <p>{step.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Reviewer checks</span>
+                        <strong>
+                          {step.sourceStaticReviewerCheckPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{step.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{step.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{step.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved notes</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedReviewNotes
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.followUpReadinessAnswerWalkthroughStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceAnswerCoverageRowId}</span>
+                      <span>{step.sourceRehearsalPathStepId}</span>
+                      <span>{step.sourceReviewBoardRowId}</span>
+                      <span>{step.followUpReadinessBriefRowId}</span>
+                      <span>
+                        {
+                          step.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId
+                        }
+                      </span>
+                      <span>{step.sourceReadinessResponseTraceCoverageRowId}</span>
+                      <span>{step.sourceReadinessResponseTraceRowId}</span>
+                      <span>{step.sourceReadinessResponseWalkthroughStepId}</span>
+                      <span>{step.sourceReadinessResponseRowId}</span>
+                      <span>{step.sourceReadinessQuestionRowId}</span>
+                    </div>
+                    <div className="observation-handoff-follow-up-readiness-answer-walkthrough-note-list">
+                      {step.sourceStaticReviewerCheckPromptCardIds.map((cardId) => (
+                        <article
+                          key={`${step.followUpReadinessAnswerWalkthroughStepId}:${cardId}`}
+                        >
+                          <span className="event-type">
+                            Static reviewer-check prompt
+                          </span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{step.coverageNoteText}</p>
+                    <p>{step.handoffPromptText}</p>
+                    <p>{step.staticReviewerCheckPromptText}</p>
+                    <p>{step.staticReviewNoteText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-follow-up-readiness-answer-walkthrough-panel">
+              <span className="metric-label">Default walkthrough context</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough
+                    .defaultAnswerWalkthroughStep.label
+                }
+              </strong>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough.summary
+                    .summary
+                }
+              </p>
+              <div className="observation-handoff-follow-up-readiness-answer-walkthrough-review-note-list">
+                {observationHandoffFollowUpReadinessAnswerWalkthrough.staticReviewNoteCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.followUpReadinessAnswerWalkthroughStaticReviewNoteCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static review note {card.staticReviewNoteOrder} -{" "}
+                        {
+                          card.sourceStaticReviewerCheckPromptCardId
+                        }
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>{card.anchorTargetId}</a>
+                        <span>{card.matchedAnswerWalkthroughStepIds.length} steps</span>
+                        <span>{card.matchedAnswerCoverageRowIds.length} rows</span>
+                        <span>
+                          {card.matchedRehearsalPathStepIds.length} rehearsal
+                        </span>
+                        <span>{card.matchedReviewBoardRowIds.length} board</span>
+                        <span>{card.matchedFollowUpReadinessBriefRowIds.length} brief</span>
+                        <span>{card.matchedFollowUpTriageRowIds.length} triage</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Saved review notes</span>
+                          <strong>
+                            {card.staticNonGoalFlags.noSavedReviewNotes
+                              ? "no"
+                              : "yes"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{card.staticReviewerCheckPromptText}</p>
+                      <p>{card.staticReviewNoteText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved answer drafts",
+                  "No saved walkthrough state",
+                  "No saved review notes",
+                  "No saved reviewer-check prompts",
+                  "No saved answer coverage state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerWalkthrough.staticSourceFollowUpReadinessAnswerWalkthroughSummary
                 }
               </p>
             </aside>
