@@ -203,6 +203,7 @@ button {
 .review-observation-handoff-source-readiness-response-trace-coverage-readiness-brief-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-lane-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-section,
+.review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -474,6 +475,7 @@ button {
 .review-observation-handoff-source-readiness-response-trace-coverage-readiness-brief-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-lane-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-section,
+.review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2772,6 +2774,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2973,7 +2982,12 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-panel,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-note-list,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-list,
-.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-non-goal-list {
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-non-goal-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-row-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-panel,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-note-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-check-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3178,7 +3192,12 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-panel,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-note-list article,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-list article,
-.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-non-goal-list div {
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-non-goal-list div,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-row-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-panel,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-note-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-check-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -4313,6 +4332,7 @@ button {
   .observation-handoff-source-readiness-response-trace-coverage-readiness-brief-layout,
   .observation-handoff-source-readiness-response-trace-coverage-readiness-review-lane-layout,
   .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-layout,
+  .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

@@ -79,6 +79,7 @@ import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReview
 import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief.ts";
 import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane.ts";
 import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis.ts";
+import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -314,6 +315,10 @@ export function buildMissionConsoleView(
     buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis(
       reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
     );
+  const reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage =
+    buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage(
+      reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
+    );
 
   return {
     mission: {
@@ -389,6 +394,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
     reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
     reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
+    reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
