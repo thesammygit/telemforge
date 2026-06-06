@@ -98,6 +98,8 @@ export function MissionConsole({
     view.reviewObservationHandoffFollowUpReadinessAnswerCoverage;
   const observationHandoffFollowUpReadinessAnswerWalkthrough =
     view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough;
+  const observationHandoffFollowUpReadinessAnswerSourceCrosswalk =
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -9020,6 +9022,256 @@ export function MissionConsole({
           </div>
         </section>
       ) : null}
+
+      {observationHandoffFollowUpReadinessAnswerSourceCrosswalk ? (
+        <section
+          className="review-observation-handoff-follow-up-readiness-answer-source-crosswalk-section"
+          aria-label="Review observation handoff follow-up readiness answer-source crosswalk"
+        >
+          <a
+            id="review-observation-handoff-follow-up-readiness-answer-source-crosswalk"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 70 answer-source crosswalk</span>
+              <h2>Answer-source crosswalk and static follow-up prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffFollowUpReadinessAnswerSourceCrosswalk.localStatus}`}
+            >
+              {observationHandoffFollowUpReadinessAnswerSourceCrosswalk.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk.contractLabel
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Crosswalk rows</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk.summary
+                    .counts.answerSourceCrosswalkRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static follow-up prompts</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk.summary
+                    .counts.staticFollowUpPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default crosswalk row</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk
+                    .defaultAnswerSourceCrosswalkRow.label
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-follow-up-readiness-answer-source-crosswalk-layout">
+            <div className="observation-handoff-follow-up-readiness-answer-source-crosswalk-row-list">
+              {observationHandoffFollowUpReadinessAnswerSourceCrosswalk.answerSourceCrosswalkRows.map(
+                (row) => (
+                  <article key={row.followUpReadinessAnswerSourceCrosswalkRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Answer-source crosswalk row{" "}
+                          {row.followUpReadinessAnswerSourceCrosswalkRowOrder} -{" "}
+                          {row.sourceAnswerWalkthroughStepId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticReviewNoteCardIds.length} follow-up
+                        prompts
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Review notes</span>
+                        <strong>{row.sourceStaticReviewNoteCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Reviewer checks</span>
+                        <strong>
+                          {row.sourceStaticReviewerCheckPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved prompts</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedFollowUpPrompts
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.followUpReadinessAnswerSourceCrosswalkRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceAnswerWalkthroughStepId}</span>
+                      <span>{row.sourceAnswerCoverageRowId}</span>
+                      <span>{row.sourceRehearsalPathStepId}</span>
+                      <span>{row.sourceReviewBoardRowId}</span>
+                      <span>{row.followUpReadinessBriefRowId}</span>
+                      <span>
+                        {
+                          row.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId
+                        }
+                      </span>
+                      <span>{row.sourceReadinessResponseTraceCoverageRowId}</span>
+                      <span>{row.sourceReadinessResponseTraceRowId}</span>
+                    </div>
+                    <div className="observation-handoff-follow-up-readiness-answer-source-crosswalk-note-list">
+                      {row.sourceStaticReviewNoteCardIds.map((cardId) => (
+                        <article
+                          key={`${row.followUpReadinessAnswerSourceCrosswalkRowId}:${cardId}`}
+                        >
+                          <span className="event-type">
+                            Stage 69 static review note
+                          </span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{row.coverageNoteText}</p>
+                    <p>{row.handoffPromptText}</p>
+                    <p>{row.staticReviewNoteText}</p>
+                    <p>{row.staticFollowUpPromptText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-follow-up-readiness-answer-source-crosswalk-panel">
+              <span className="metric-label">Default crosswalk context</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk
+                    .defaultAnswerSourceCrosswalkRow.label
+                }
+              </strong>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk.summary
+                    .summary
+                }
+              </p>
+              <div className="observation-handoff-follow-up-readiness-answer-source-crosswalk-follow-up-prompt-list">
+                {observationHandoffFollowUpReadinessAnswerSourceCrosswalk.staticFollowUpPromptCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.followUpReadinessAnswerSourceCrosswalkStaticFollowUpPromptCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static follow-up prompt {card.staticFollowUpPromptOrder}{" "}
+                        - {card.sourceStaticReviewNoteCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>{card.anchorTargetId}</a>
+                        <span>
+                          {card.matchedAnswerSourceCrosswalkRowIds.length} rows
+                        </span>
+                        <span>{card.matchedAnswerWalkthroughStepIds.length} steps</span>
+                        <span>{card.sourceAnswerCoverageRowIds.length} coverage</span>
+                        <span>
+                          {card.sourceStaticReviewerCheckPromptCardIds.length} checks
+                        </span>
+                        <span>{card.matchedRehearsalPathStepIds.length} rehearsal</span>
+                        <span>{card.matchedReviewBoardRowIds.length} board</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Saved prompts</span>
+                          <strong>
+                            {card.staticNonGoalFlags.noSavedFollowUpPrompts
+                              ? "no"
+                              : "yes"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{card.staticReviewNoteText}</p>
+                      <p>{card.staticFollowUpPromptText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-follow-up-readiness-answer-source-crosswalk-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved answer drafts",
+                  "No saved answer-source crosswalk",
+                  "No saved follow-up prompts",
+                  "No saved walkthrough state",
+                  "No saved review notes",
+                  "No saved reviewer-check prompts",
+                  "No saved answer coverage state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerSourceCrosswalk.staticSourceFollowUpReadinessAnswerSourceCrosswalkSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
 
       {view.reviewDecisionRegister ? (
         <section

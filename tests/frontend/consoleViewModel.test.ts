@@ -2938,6 +2938,57 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewerCheckPromptState,
     ),
   );
+  assert.ok(view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk);
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_source_crosswalk.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
+    view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.summary
+      .counts.answerSourceCrosswalkRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough
+      ?.answerWalkthroughSteps.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.summary
+      .counts.staticFollowUpPromptCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough
+      ?.staticReviewNoteCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.answerSourceCrosswalkRows.every(
+      (row) =>
+        row.followUpReadinessAnswerSourceCrosswalkRowId.length > 0 &&
+        row.followUpReadinessAnswerSourceCrosswalkRowOrder > 0 &&
+        row.staticFollowUpPromptText.includes(
+          row.sourceAnswerWalkthroughStepId,
+        ) &&
+        row.staticNonGoalFlags.noSavedAnswerSourceCrosswalkState &&
+        row.staticNonGoalFlags.noSavedFollowUpPrompts &&
+        row.staticNonGoalFlags.noSavedWalkthroughState &&
+        row.staticNonGoalFlags.noSavedReviewNotes,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.staticFollowUpPromptCards.every(
+      (card) =>
+        card.followUpReadinessAnswerSourceCrosswalkStaticFollowUpPromptCardId.length > 0 &&
+        card.staticFollowUpPromptText.includes(card.sourceStaticReviewNoteCardId) &&
+        card.staticNonGoalFlags.noSavedAnswerSourceCrosswalkState &&
+        card.staticNonGoalFlags.noSavedFollowUpPrompts &&
+        card.staticNonGoalFlags.noSavedWalkthroughState &&
+        card.staticNonGoalFlags.noSavedReviewNotes,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -3236,6 +3287,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough
       ?.sourceReviewObservationHandoffFollowUpReadinessAnswerCoverage,
     view.reviewObservationHandoffFollowUpReadinessAnswerCoverage,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
+    view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

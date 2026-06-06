@@ -208,6 +208,7 @@ button {
 .review-observation-handoff-follow-up-readiness-rehearsal-path-section,
 .review-observation-handoff-follow-up-readiness-answer-coverage-section,
 .review-observation-handoff-follow-up-readiness-answer-walkthrough-section,
+.review-observation-handoff-follow-up-readiness-answer-source-crosswalk-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -484,6 +485,7 @@ button {
 .review-observation-handoff-follow-up-readiness-rehearsal-path-section,
 .review-observation-handoff-follow-up-readiness-answer-coverage-section,
 .review-observation-handoff-follow-up-readiness-answer-walkthrough-section,
+.review-observation-handoff-follow-up-readiness-answer-source-crosswalk-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2824,6 +2826,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -3055,7 +3064,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-walkthrough-panel,
 .observation-handoff-follow-up-readiness-answer-walkthrough-note-list,
 .observation-handoff-follow-up-readiness-answer-walkthrough-review-note-list,
-.observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list {
+.observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-row-list,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-panel,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-note-list,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-follow-up-prompt-list,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3290,7 +3304,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-walkthrough-panel,
 .observation-handoff-follow-up-readiness-answer-walkthrough-note-list article,
 .observation-handoff-follow-up-readiness-answer-walkthrough-review-note-list article,
-.observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list div {
+.observation-handoff-follow-up-readiness-answer-walkthrough-non-goal-list div,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-row-list article,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-panel,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-note-list article,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-follow-up-prompt-list article,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3333,7 +3352,8 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-review-path-step-list article,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-brief-row-list article,
 .observation-handoff-follow-up-readiness-answer-coverage-row-list article,
-.observation-handoff-follow-up-readiness-answer-walkthrough-step-list article {
+.observation-handoff-follow-up-readiness-answer-walkthrough-step-list article,
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-row-list article {
   display: grid;
   gap: 10px;
 }
@@ -3414,6 +3434,10 @@ button {
 
 .observation-handoff-follow-up-readiness-answer-walkthrough-step-list article {
   border-left: 4px solid #12745b;
+}
+
+.observation-handoff-follow-up-readiness-answer-source-crosswalk-row-list article {
+  border-left: 4px solid #6f4eb6;
 }
 
 .surface-index-row-decision {
@@ -4441,6 +4465,7 @@ button {
   .observation-handoff-follow-up-readiness-rehearsal-path-layout,
   .observation-handoff-follow-up-readiness-answer-coverage-layout,
   .observation-handoff-follow-up-readiness-answer-walkthrough-layout,
+  .observation-handoff-follow-up-readiness-answer-source-crosswalk-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
