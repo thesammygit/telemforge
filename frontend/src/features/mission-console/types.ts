@@ -7233,6 +7233,173 @@ export interface ReviewObservationHandoffSourceReadinessResponseTraceCoverageRea
   sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPathView;
 }
 
+export interface ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneStaticNonGoalFlagsView
+  extends ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBriefStaticNonGoalFlagsView {
+  noSavedSourceReadinessResponseTraceCoverageReadinessReviewLaneState: true;
+  noSavedReviewLaneState: true;
+  noSavedHumanCheckPrompts: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneRowView {
+  sourceReadinessResponseTraceCoverageReadinessReviewLaneRowId: string;
+  reviewLaneOrder: number;
+  label: string;
+  summary: string;
+  sourceReadinessResponseTraceCoverageReadinessBriefRowId: string;
+  sourceReadinessResponseTraceCoverageReadinessBriefRowIds: string[];
+  sourceReadinessResponseTraceCoverageReviewPathStepId: string;
+  sourceReadinessResponseTraceCoverageReviewPathStepIds: string[];
+  sourceReadinessResponseTraceCoverageRowId: string;
+  sourceReadinessResponseTraceCoverageRowIds: string[];
+  sourceReadinessResponseTraceRowId: string;
+  sourceReadinessResponseTraceRowIds: string[];
+  sourceReadinessResponseWalkthroughStepId: string;
+  sourceReadinessResponseWalkthroughStepIds: string[];
+  sourceReadinessResponseRowId: string;
+  sourceReadinessResponseRowIds: string[];
+  sourceReadinessQuestionRowId: string;
+  sourceReadinessQuestionRowIds: string[];
+  matchedStaticReviewerCueCardIds: string[];
+  matchedStaticHandoffPromptCardIds: string[];
+  sourceLocalAnchorHrefs: string[];
+  sourceAnchorTargetIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  reviewerCueText: string;
+  coverageNoteText: string;
+  gapNoteText: string;
+  handoffPromptText: string;
+  readinessBriefText: string;
+  reviewLaneText: string;
+  humanCheckPromptText: string;
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneStaticHumanCheckPromptCardView {
+  sourceReadinessResponseTraceCoverageReadinessReviewLaneStaticHumanCheckPromptCardId: string;
+  humanCheckPromptOrder: number;
+  sourceReadinessResponseTraceCoverageReadinessBriefStaticReviewerCueCardId: string;
+  sourceReadinessResponseTraceCoverageReadinessBriefStaticReviewerCueCardIds: string[];
+  sourceReadinessResponseTraceCoverageReviewPathStaticHandoffPromptCardId: string;
+  sourceReadinessResponseTraceCoverageReviewPathStaticHandoffPromptCardIds: string[];
+  sourceReadinessResponseTraceCoverageBoardStaticGapNoteCardId: string;
+  sourceReadinessResponseTraceCoverageBoardStaticGapNoteCardIds: string[];
+  matchedReadinessBriefRowIds: string[];
+  matchedReviewPathStepIds: string[];
+  matchedCoverageRowIds: string[];
+  matchedResponseTraceRowIds: string[];
+  matchedResponseRowIds: string[];
+  matchedQuestionRowIds: string[];
+  sourceLocalAnchorHrefs: string[];
+  sourceAnchorTargetIds: string[];
+  localAnchorHref: string;
+  anchorTargetId: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  label: string;
+  summary: string;
+  cueText: string;
+  handoffPromptText: string;
+  readinessBriefText: string;
+  humanCheckPromptText: string;
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneSummaryView {
+  sourceReadinessResponseTraceCoverageReadinessReviewLaneId: "candidate-local-review-observation-handoff-source-readiness-response-trace-coverage-readiness-review-lane";
+  label: string;
+  summary: string;
+  defaultReviewLaneContext: {
+    defaultReviewLaneRowId: string;
+    defaultReadinessBriefRowId: string;
+    defaultReviewPathStepId: string;
+    defaultCoverageRowId: string;
+    defaultTraceRowId: string;
+    defaultResponseTraceRowId: string;
+    defaultStaticHumanCheckPromptCardId: string;
+    defaultStaticReviewerCueCardId: string;
+    defaultStaticHandoffPromptCardId: string;
+    defaultGapNoteCardId: string;
+    sourceReadinessResponseTraceCoverageReadinessBriefSummary: string;
+    sourceReadinessResponseTraceCoverageReadinessBriefDefaultContext: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBriefSummaryView["defaultReadinessBriefContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    reviewLaneRowCount: number;
+    staticHumanCheckPromptCardCount: number;
+    readinessBriefRowCount: number;
+    staticReviewerCueCardCount: number;
+    reviewPathStepCount: number;
+    staticHandoffPromptCardCount: number;
+    coverageRowCount: number;
+    responseTraceRowCount: number;
+    responseWalkthroughStepCount: number;
+    responseRowCount: number;
+    questionRowCount: number;
+    sourceAnchorCount: number;
+    evidenceCallbackCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    localOnlyReviewLaneRowCount: number;
+    localOnlyStaticHumanCheckPromptCardCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneView {
+  schema: "telemforge.review_observation_handoff_source_readiness_response_trace_coverage_readiness_review_lane.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff source readiness response trace coverage readiness review lane and static human-check prompts";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneSummaryView;
+  defaultReviewLaneRow: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneRowView;
+  defaultStaticHumanCheckPromptCard: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneStaticHumanCheckPromptCardView;
+  reviewLaneRows: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneRowView[];
+  staticHumanCheckPromptCards: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneStaticHumanCheckPromptCardView[];
+  staticSourceReadinessResponseTraceCoverageReadinessReviewLaneSummary: string;
+  sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBriefView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -7452,6 +7619,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard?: ReviewObservationHandoffSourceReadinessResponseTraceCoverageBoardView;
   reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath?: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPathView;
   reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief?: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBriefView;
+  reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane?: ReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLaneView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

@@ -2293,6 +2293,22 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
       ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath,
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath,
   );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.summary.counts.reviewLaneRowCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief
+      ?.readinessBriefRows.length,
+  );
   assert.deepEqual(
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief?.readinessBriefRows.map(
       (row) => [
@@ -2379,6 +2395,144 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
           row.staticNonGoalFlags.noSavedCoverageReviewProgress &&
           row.staticNonGoalFlags.noSavedCoverageProgress &&
           row.staticNonGoalFlags.noSavedHandoffPromptEdits &&
+          row.staticNonGoalFlags.noSavedTraceCoverageProgress &&
+          row.staticNonGoalFlags.noSavedGapNotes &&
+          row.staticNonGoalFlags.noSavedReviewerAnswers &&
+          row.staticNonGoalFlags.noPersistence &&
+          row.staticNonGoalFlags.noRouteChanges &&
+          row.staticNonGoalFlags.noCommandExecution &&
+          row.staticNonGoalFlags.noExports &&
+          row.staticNonGoalFlags.noSignoff &&
+          row.staticNonGoalFlags.noAuditRetention &&
+          row.staticNonGoalFlags.noOwnerAssignment &&
+          row.staticNonGoalFlags.noScoring &&
+          row.staticNonGoalFlags.noCertification &&
+          row.staticNonGoalFlags.noMeetingWorkflow &&
+          row.staticNonGoalFlags.noHandoffPackageGeneration &&
+          row.staticNonGoalFlags.noTaskLaunchers &&
+          row.staticNonGoalFlags.noRunnableChecklists,
+      ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.schema,
+    "telemforge.review_observation_handoff_source_readiness_response_trace_coverage_readiness_review_lane.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane?.reviewLaneRows.map(
+      (row) => [
+        row.reviewLaneOrder,
+        row.sourceReadinessResponseTraceCoverageReadinessBriefRowId,
+        row.sourceReadinessResponseTraceCoverageReviewPathStepId,
+        row.sourceReadinessResponseTraceCoverageRowId,
+        row.sourceReadinessResponseTraceRowId,
+        row.sourceReadinessResponseWalkthroughStepId,
+        row.sourceReadinessResponseRowId,
+        row.sourceReadinessQuestionRowId,
+        row.matchedStaticReviewerCueCardIds,
+        row.matchedStaticHandoffPromptCardIds,
+        row.sourceLocalAnchorHrefs,
+        row.sourceAnchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.reviewerCueText,
+        row.coverageNoteText,
+        row.gapNoteText,
+        row.handoffPromptText,
+        row.readinessBriefText,
+      ],
+    ),
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief?.readinessBriefRows.map(
+      (readinessBriefRow) => {
+        const matchedStaticReviewerCueCards =
+          view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief?.staticReviewerCueCards.filter(
+            (card) =>
+              card.matchedReviewPathStepIds.includes(
+                readinessBriefRow
+                  .sourceReadinessResponseTraceCoverageReviewPathStepId,
+              ) ||
+              card.matchedCoverageRowIds.includes(
+                readinessBriefRow.sourceReadinessResponseTraceCoverageRowId,
+              ) ||
+              readinessBriefRow.matchedStaticHandoffPromptCardIds.includes(
+                card.sourceReadinessResponseTraceCoverageReviewPathStaticHandoffPromptCardId,
+              ),
+          ) ?? [];
+
+        return [
+          readinessBriefRow.readinessBriefOrder,
+          readinessBriefRow.sourceReadinessResponseTraceCoverageReadinessBriefRowId,
+          readinessBriefRow.sourceReadinessResponseTraceCoverageReviewPathStepId,
+          readinessBriefRow.sourceReadinessResponseTraceCoverageRowId,
+          readinessBriefRow.sourceReadinessResponseTraceRowId,
+          readinessBriefRow.sourceReadinessResponseWalkthroughStepId,
+          readinessBriefRow.sourceReadinessResponseRowId,
+          readinessBriefRow.sourceReadinessQuestionRowId,
+          matchedStaticReviewerCueCards.map(
+            (card) =>
+              card.sourceReadinessResponseTraceCoverageReadinessBriefStaticReviewerCueCardId,
+          ),
+          readinessBriefRow.matchedStaticHandoffPromptCardIds,
+          readinessBriefRow.sourceLocalAnchorHrefs,
+          readinessBriefRow.sourceAnchorTargetIds,
+          readinessBriefRow.evidenceCallbackIds,
+          readinessBriefRow.gapDiscussionPointIds,
+          readinessBriefRow.deferredScopeReminderIds,
+          readinessBriefRow.reviewerCueText,
+          readinessBriefRow.coverageNoteText,
+          readinessBriefRow.gapNoteText,
+          readinessBriefRow.handoffPromptText,
+          readinessBriefRow.readinessBriefText,
+        ];
+      },
+    ),
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.summary.counts.reviewLaneRowCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief
+      ?.readinessBriefRows.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.reviewLaneRows.every(
+        (row) =>
+          row.reviewLaneText.includes(
+            row.sourceReadinessResponseTraceCoverageReadinessBriefRowId,
+          ) &&
+          row.humanCheckPromptText.includes(row.coverageNoteText) &&
+          row.localOnly &&
+          row.sourceBacked &&
+          row.inPageOnly &&
+          row.explanatoryOnly &&
+          row.staticOnly &&
+          row.informationalOnly &&
+          row.nonActionable &&
+          row.nonPersistent &&
+          row.nonExecutable &&
+          row.nonRouting &&
+          row.nonCertifying &&
+          row.nonRanking &&
+          row.notATask &&
+          row.notATicket &&
+          row.notAChecklist &&
+          row.notOwnerAssigned &&
+          row.staticNonGoalFlags
+            .noSavedSourceReadinessResponseTraceCoverageReadinessReviewLaneState &&
+          row.staticNonGoalFlags.noSavedReviewLaneState &&
+          row.staticNonGoalFlags.noSavedHumanCheckPrompts &&
+          row.staticNonGoalFlags.noSavedReadinessBriefState &&
+          row.staticNonGoalFlags.noSavedReviewerCues &&
+          row.staticNonGoalFlags.noSavedCoverageReviewProgress &&
           row.staticNonGoalFlags.noSavedTraceCoverageProgress &&
           row.staticNonGoalFlags.noSavedGapNotes &&
           row.staticNonGoalFlags.noSavedReviewerAnswers &&
@@ -2620,6 +2774,16 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief
       ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath,
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReviewPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
