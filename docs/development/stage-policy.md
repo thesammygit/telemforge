@@ -92,8 +92,8 @@ Executor must:
 
 ## Current Transition
 
-Stage 70 is review-ready/completed for automation-branch development. It proved
-a deterministic local answer-source crosswalk and static follow-up prompt
-surface over the Stage 69 answer walkthrough.
+Stage 71 is review-ready/completed for automation-branch development. It proved
+a deterministic local answer follow-up review lane and static decision-cue
+surface over the Stage 70 answer-source crosswalk.
 
-New work should begin in Stage 71 unless a focused Stage 70 regression is found.
+New work should begin in Stage 72 unless a focused Stage 71 regression is found.
