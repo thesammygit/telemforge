@@ -1989,6 +1989,188 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationHandoffSourceReadinessResponseWalkthrough
       ?.walkthroughSteps.length,
   );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.schema,
+    "telemforge.review_observation_handoff_source_readiness_response_trace_coverage_board.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceMap,
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard?.coverageRows.map(
+      (row) => [
+        row.coverageOrder,
+        row.sourceReadinessResponseTraceRowId,
+        row.sourceReadinessResponseWalkthroughStepId,
+        row.sourceReadinessResponseRowId,
+        row.sourceReadinessQuestionRowId,
+        row.matchedStaticEvidenceNoteRowIds,
+        row.matchedStaticFollowUpPromptRowIds,
+        row.matchedSourceAlignmentNoteCardIds,
+        row.sourceLocalAnchorHrefs,
+        row.sourceAnchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.responseNoteCue,
+        row.reviewerCueText,
+        row.sourceAlignmentNoteText,
+      ],
+    ),
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap?.responseTraceRows.map(
+      (row) => [
+        row.traceOrder,
+        row.sourceReadinessResponseTraceRowId,
+        row.sourceReadinessResponseWalkthroughStepId,
+        row.sourceReadinessResponseRowId,
+        row.sourceReadinessQuestionRowId,
+        row.matchedStaticEvidenceNoteRowIds,
+        row.matchedStaticFollowUpPromptRowIds,
+        view.reviewObservationHandoffSourceReadinessResponseTraceMap?.staticSourceAlignmentNoteCards
+          .filter(
+            (card) =>
+              card.matchedResponseRowIds.includes(
+                row.sourceReadinessResponseRowId,
+              ) ||
+              card.matchedQuestionRowIds.includes(
+                row.sourceReadinessQuestionRowId,
+              ),
+          )
+          .map(
+            (card) =>
+              card.sourceReadinessResponseTraceMapStaticSourceAlignmentNoteCardId,
+          ),
+        row.localAnchorHrefs,
+        row.anchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.responseNoteCue,
+        row.reviewerCueText,
+        row.sourceAlignmentNoteText,
+      ],
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.coverageRows.every(
+        (row) =>
+          row.coverageNoteText.includes(
+            row.sourceReadinessResponseTraceRowId,
+          ) &&
+          row.coverageNoteText.includes(row.sourceReadinessResponseRowId) &&
+          row.localOnly &&
+          row.sourceBacked &&
+          row.inPageOnly &&
+          row.explanatoryOnly &&
+          row.staticOnly &&
+          row.informationalOnly &&
+          row.nonActionable &&
+          row.nonPersistent &&
+          row.nonExecutable &&
+          row.nonRouting &&
+          row.nonCertifying &&
+          row.nonRanking &&
+          row.notATask &&
+          row.notATicket &&
+          row.notAChecklist &&
+          row.notOwnerAssigned &&
+          row.staticNonGoalFlags
+            .noSavedSourceReadinessResponseTraceCoverageProgress &&
+          row.staticNonGoalFlags.noSavedTraceCoverageProgress &&
+          row.staticNonGoalFlags.noSavedGapNotes &&
+          row.staticNonGoalFlags.noSavedSourceReadinessResponseTraceProgress &&
+          row.staticNonGoalFlags.noSavedTraceProgress &&
+          row.staticNonGoalFlags.noSavedSourceReadinessResponseWalkthroughProgress &&
+          row.staticNonGoalFlags.noSavedWalkthroughProgress &&
+          row.staticNonGoalFlags.noSavedSourceReadinessResponseProgress &&
+          row.staticNonGoalFlags.noSavedReviewerAnswers &&
+          row.staticNonGoalFlags.noSavedSourceReadinessQuestionProgress &&
+          row.staticNonGoalFlags.noSavedSourceReadinessRehearsalProgress &&
+          row.staticNonGoalFlags.noSavedSourceReadinessProgress &&
+          row.staticNonGoalFlags.noSavedSourceReadoutProgress &&
+          row.staticNonGoalFlags.noSavedSourceWalkthroughProgress &&
+          row.staticNonGoalFlags.noSavedSourceInspectionState &&
+          row.staticNonGoalFlags.noSavedAnchorState &&
+          row.staticNonGoalFlags.noSavedRelayProgress &&
+          row.staticNonGoalFlags.noPersistence &&
+          row.staticNonGoalFlags.noRouteChanges &&
+          row.staticNonGoalFlags.noCommandExecution &&
+          row.staticNonGoalFlags.noExports &&
+          row.staticNonGoalFlags.noSignoff &&
+          row.staticNonGoalFlags.noAuditRetention &&
+          row.staticNonGoalFlags.noOwnerAssignment &&
+          row.staticNonGoalFlags.noScoring &&
+          row.staticNonGoalFlags.noCertification &&
+          row.staticNonGoalFlags.noMeetingWorkflow &&
+          row.staticNonGoalFlags.noHandoffPackageGeneration &&
+          row.staticNonGoalFlags.noTaskLaunchers &&
+          row.staticNonGoalFlags.noRunnableChecklists,
+      ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.staticGapNoteCards.every(
+        (card) =>
+          card.gapNoteText.includes(
+            card.sourceReadinessResponseTraceMapStaticSourceAlignmentNoteCardId,
+          ) &&
+          card.gapNoteText.includes(card.sourceReadinessStaticEvidenceNoteRowId) &&
+          card.localOnly &&
+          card.sourceBacked &&
+          card.inPageOnly &&
+          card.explanatoryOnly &&
+          card.staticOnly &&
+          card.informationalOnly &&
+          card.nonActionable &&
+          card.nonPersistent &&
+          card.nonExecutable &&
+          card.nonRouting &&
+          card.nonCertifying &&
+          card.nonRanking &&
+          card.notATask &&
+          card.notATicket &&
+          card.notAChecklist &&
+          card.notOwnerAssigned &&
+          card.staticNonGoalFlags
+            .noSavedSourceReadinessResponseTraceCoverageProgress &&
+          card.staticNonGoalFlags.noSavedTraceCoverageProgress &&
+          card.staticNonGoalFlags.noSavedGapNotes &&
+          card.staticNonGoalFlags.noSavedSourceReadinessResponseTraceProgress &&
+          card.staticNonGoalFlags.noSavedTraceProgress &&
+          card.staticNonGoalFlags.noSavedSourceReadinessResponseWalkthroughProgress &&
+          card.staticNonGoalFlags.noSavedWalkthroughProgress &&
+          card.staticNonGoalFlags.noSavedSourceReadinessResponseProgress &&
+          card.staticNonGoalFlags.noSavedReviewerAnswers &&
+          card.staticNonGoalFlags.noSavedSourceReadinessQuestionProgress &&
+          card.staticNonGoalFlags.noSavedSourceReadinessRehearsalProgress &&
+          card.staticNonGoalFlags.noSavedSourceReadinessProgress &&
+          card.staticNonGoalFlags.noSavedSourceReadoutProgress &&
+          card.staticNonGoalFlags.noSavedSourceWalkthroughProgress &&
+          card.staticNonGoalFlags.noSavedSourceInspectionState &&
+          card.staticNonGoalFlags.noSavedAnchorState &&
+          card.staticNonGoalFlags.noSavedRelayProgress &&
+          card.staticNonGoalFlags.noPersistence &&
+          card.staticNonGoalFlags.noRouteChanges &&
+          card.staticNonGoalFlags.noCommandExecution &&
+          card.staticNonGoalFlags.noExports &&
+          card.staticNonGoalFlags.noSignoff &&
+          card.staticNonGoalFlags.noAuditRetention &&
+          card.staticNonGoalFlags.noOwnerAssignment &&
+          card.staticNonGoalFlags.noScoring &&
+          card.staticNonGoalFlags.noCertification &&
+          card.staticNonGoalFlags.noMeetingWorkflow &&
+          card.staticNonGoalFlags.noHandoffPackageGeneration &&
+          card.staticNonGoalFlags.noTaskLaunchers &&
+          card.staticNonGoalFlags.noRunnableChecklists,
+      ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -2182,6 +2364,16 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadinessResponseTraceMap
       ?.sourceReviewObservationHandoffSourceReadinessResponseWalkthrough,
     view.reviewObservationHandoffSourceReadinessResponseWalkthrough,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceMap,
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

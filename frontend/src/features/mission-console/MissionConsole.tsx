@@ -76,6 +76,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadinessResponseWalkthrough;
   const observationHandoffSourceReadinessResponseTraceMap =
     view.reviewObservationHandoffSourceReadinessResponseTraceMap;
+  const observationHandoffSourceReadinessResponseTraceCoverageBoard =
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -5987,6 +5989,250 @@ export function MissionConsole({
                 {
                   observationHandoffSourceReadinessResponseTraceMap
                     .staticSourceReadinessResponseTraceMapSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadinessResponseTraceCoverageBoard ? (
+        <section
+          className="review-observation-handoff-source-readiness-response-trace-coverage-board-section"
+          aria-label="Review observation handoff source readiness response trace coverage board"
+        >
+          <a
+            id="review-observation-handoff-source-readiness-response-trace-coverage-board"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 59 source readiness response trace coverage board
+              </span>
+              <h2>Trace coverage board and static gap notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadinessResponseTraceCoverageBoard.localStatus}`}
+            >
+              {observationHandoffSourceReadinessResponseTraceCoverageBoard.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard.contractLabel
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Coverage rows</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard
+                    .summary.counts.coverageRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Gap notes</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard
+                    .summary.counts.staticGapNoteCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default coverage</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard
+                    .summary.defaultCoverageContext.defaultCoverageRowId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-response-trace-map-layout">
+            <div className="observation-handoff-source-readiness-response-trace-row-list">
+              {observationHandoffSourceReadinessResponseTraceCoverageBoard.coverageRows.map(
+                (row) => (
+                  <article key={row.sourceReadinessResponseTraceCoverageRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Coverage {row.coverageOrder} -{" "}
+                          {row.sourceReadinessResponseTraceRowId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedSourceAlignmentNoteCardIds.length} notes
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved trace</span>
+                        <strong>
+                          {row.staticNonGoalFlags
+                            .noSavedSourceReadinessResponseTraceCoverageProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.sourceReadinessResponseTraceCoverageRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceReadinessResponseWalkthroughStepId}</span>
+                      <span>{row.sourceReadinessResponseRowId}</span>
+                      <span>{row.sourceReadinessQuestionRowId}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-response-trace-map-note-list">
+                      {row.matchedStaticEvidenceNoteRowIds.map((noteId) => (
+                        <article
+                          key={`${row.sourceReadinessResponseTraceCoverageRowId}:${noteId}`}
+                        >
+                          <span className="event-type">
+                            Matched evidence note
+                          </span>
+                          <strong>{noteId}</strong>
+                        </article>
+                      ))}
+                      {row.matchedStaticFollowUpPromptRowIds.map(
+                        (promptId) => (
+                          <article
+                            key={`${row.sourceReadinessResponseTraceCoverageRowId}:${promptId}`}
+                          >
+                            <span className="event-type">
+                              Static follow-up prompt
+                            </span>
+                            <strong>{promptId}</strong>
+                          </article>
+                        ),
+                      )}
+                    </div>
+                    <p>{row.responseNoteCue}</p>
+                    <p>{row.reviewerCueText}</p>
+                    <p>{row.sourceAlignmentNoteText}</p>
+                    <p>{row.coverageNoteText}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-response-trace-map-panel">
+              <span className="metric-label">Default coverage context</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard
+                    .defaultCoverageRow.label
+                }
+              </strong>
+              <p>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard
+                    .summary.summary
+                }
+              </p>
+              <div className="observation-handoff-source-readiness-response-trace-map-alignment-note-list">
+                {observationHandoffSourceReadinessResponseTraceCoverageBoard.staticGapNoteCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.sourceReadinessResponseTraceCoverageBoardStaticGapNoteCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Gap note {card.gapNoteOrder} - {card.anchorTargetId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>
+                          {card.anchorTargetId}
+                        </a>
+                        <span>{card.sourceReadinessStaticEvidenceNoteRowId}</span>
+                        <span>{card.matchedResponseTraceRowIds.length} traces</span>
+                        <span>{card.matchedResponseRowIds.length} responses</span>
+                        <span>{card.matchedQuestionRowIds.length} questions</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                      </div>
+                      <p>{card.cueText}</p>
+                      <p>{card.gapNoteText}</p>
+                      <p>{card.sourceAlignmentNoteText}</p>
+                      <p>{card.responseNoteCue}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-response-trace-map-non-goal-list">
+                {[
+                  "No saved trace coverage progress",
+                  "No saved gap notes",
+                  "No saved reviewer answers",
+                  "No saved response progress",
+                  "No saved response walkthrough progress",
+                  "No saved response trace progress",
+                  "No saved source readiness question progress",
+                  "No saved source readiness rehearsal progress",
+                  "No saved source readiness progress",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadinessResponseTraceCoverageBoard
+                    .staticSourceReadinessResponseTraceCoverageBoardSummary
                 }
               </p>
             </aside>

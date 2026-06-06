@@ -198,6 +198,7 @@ button {
 .review-observation-handoff-source-readiness-response-matrix-section,
 .review-observation-handoff-source-readiness-response-walkthrough-section,
 .review-observation-handoff-source-readiness-response-trace-map-section,
+.review-observation-handoff-source-readiness-response-trace-coverage-board-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;

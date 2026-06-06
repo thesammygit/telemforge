@@ -74,6 +74,7 @@ import { buildReviewObservationHandoffSourceReadinessQuestionBoard } from "../..
 import { buildReviewObservationHandoffSourceReadinessResponseMatrix } from "../../lib/reviewObservationHandoffSourceReadinessResponseMatrix.ts";
 import { buildReviewObservationHandoffSourceReadinessResponseWalkthrough } from "../../lib/reviewObservationHandoffSourceReadinessResponseWalkthrough.ts";
 import { buildReviewObservationHandoffSourceReadinessResponseTraceMap } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceMap.ts";
+import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageBoard } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -289,6 +290,10 @@ export function buildMissionConsoleView(
     buildReviewObservationHandoffSourceReadinessResponseTraceMap(
       reviewObservationHandoffSourceReadinessResponseWalkthrough,
     );
+  const reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard =
+    buildReviewObservationHandoffSourceReadinessResponseTraceCoverageBoard(
+      reviewObservationHandoffSourceReadinessResponseTraceMap,
+    );
 
   return {
     mission: {
@@ -359,6 +364,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffSourceReadinessResponseMatrix,
     reviewObservationHandoffSourceReadinessResponseWalkthrough,
     reviewObservationHandoffSourceReadinessResponseTraceMap,
+    reviewObservationHandoffSourceReadinessResponseTraceCoverageBoard,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
