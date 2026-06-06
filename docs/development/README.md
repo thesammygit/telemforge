@@ -87,6 +87,7 @@ For each stage:
 58. [Review Observation Handoff Source Readiness Response Trace Map And Static Source Alignment Notes](steps/58-review-observation-handoff-source-readiness-response-trace-map-and-static-source-alignment-notes.md)
 59. [Review Observation Handoff Source Readiness Response Trace Coverage Board And Static Gap Notes](steps/59-review-observation-handoff-source-readiness-response-trace-coverage-board-and-static-gap-notes.md)
 60. [Review Observation Handoff Source Readiness Response Trace Coverage Review Path And Static Handoff Prompts](steps/60-review-observation-handoff-source-readiness-response-trace-coverage-review-path-and-static-handoff-prompts.md)
+61. [Review Observation Handoff Source Readiness Response Trace Coverage Readiness Brief And Static Reviewer Cues](steps/61-review-observation-handoff-source-readiness-response-trace-coverage-readiness-brief-and-static-reviewer-cues.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
