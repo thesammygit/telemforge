@@ -290,6 +290,17 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewHandoffCoverageMatrix?.readiness.counts.blockingRowCount,
     2,
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix?.summary.counts.coverageRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix?.coverageRows.length,
+  );
   assert.ok(view.reviewGapTriage);
   assert.equal(
     view.reviewGapTriage?.schema,
@@ -3172,6 +3183,71 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewPathState &&
         card.staticNonGoalFlags.noSavedReviewerChecks &&
         card.staticNonGoalFlags.noSavedReviewerCheckCards,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.summary.counts.coverageRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+      ?.reviewPathSteps.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.summary.counts.staticReadinessCueCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath
+      ?.staticReviewerCheckCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix?.coverageRows.every(
+      (row) =>
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowId.length > 0 &&
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowOrder > 0 &&
+        row.coverageText.includes(row.sourceReviewPathStepId) &&
+        row.coverageText.includes(row.sourceSourceRecapRowId) &&
+        row.readinessCueText.includes(row.sourceReviewPathStepId) &&
+        row.coverageLabels.includes("review-path coverage row") &&
+        row.coverageLabels.includes("static reviewer-check readiness cue") &&
+        row.staticNonGoalFlags.noSavedReviewPathState &&
+        row.staticNonGoalFlags.noSavedReviewerChecks &&
+        row.staticNonGoalFlags.noSavedCoverageState &&
+        row.staticNonGoalFlags.noSavedCoverageRows &&
+        row.staticNonGoalFlags.noSavedCoverageMatrix &&
+        row.staticNonGoalFlags.noSavedReadinessCues &&
+        row.staticNonGoalFlags.noSavedReadinessCueCards,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix?.staticReadinessCueCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticReadinessCueCardId.length > 0 &&
+        card.staticReadinessCueText.includes(
+          card.sourceStaticReviewerCheckCardId,
+        ) &&
+        card.staticReadinessCueText.includes(card.sourceStaticNextPassPromptCardId) &&
+        card.readinessCueLabels.includes("static readiness cue") &&
+        card.readinessCueLabels.includes("review-path source alignment") &&
+        card.staticNonGoalFlags.noSavedReviewerChecks &&
+        card.staticNonGoalFlags.noSavedCoverageState &&
+        card.staticNonGoalFlags.noSavedReadinessCues &&
+        card.staticNonGoalFlags.noSavedReadinessCueCards,
     ),
   );
 });

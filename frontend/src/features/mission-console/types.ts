@@ -8964,6 +8964,175 @@ export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLa
   sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapView;
 }
 
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticNonGoalFlagsView
+  extends ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStaticNonGoalFlagsView {
+  noSavedCoverageState: true;
+  noSavedCoverageRows: true;
+  noSavedCoverageMatrix: true;
+  noSavedReadinessCues: true;
+  noSavedReadinessCueCards: true;
+  noSavedReadinessCueState: true;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStepView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowId: string;
+  followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowOrder: number;
+  sourceReviewPathStepId: string;
+  sourceReviewPathStepIds: string[];
+  sourceStaticReviewerCheckCardIds: string[];
+  coverageLabels: string[];
+  coverageText: string;
+  readinessCueText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticNonGoalFlagsView;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticReadinessCueCardView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathStaticReviewerCheckCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticReadinessCueCardId: string;
+  followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticReadinessCueCardIds: string[];
+  sourceStaticReviewerCheckCardId: string;
+  sourceStaticReviewerCheckCardIds: string[];
+  matchedCoverageRowIds: string[];
+  staticReadinessCueOrder: number;
+  readinessCueLabels: string[];
+  staticReadinessCueText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticNonGoalFlagsView;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixSummaryView {
+  followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixId: "candidate-local-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix";
+  label: string;
+  summary: string;
+  defaultCoverageContext: {
+    defaultCoverageRowId: string;
+    defaultReviewPathStepId: string;
+    defaultSourceRecapRowId: string;
+    defaultAnswerFollowUpReviewLaneRowId: string;
+    defaultAnswerSourceCrosswalkRowId: string;
+    defaultAnswerWalkthroughStepId: string;
+    defaultAnswerCoverageRowId: string;
+    defaultRehearsalPathStepId: string;
+    defaultReviewBoardRowId: string;
+    defaultFollowUpReadinessBriefRowId: string;
+    defaultFollowUpTriageRowId: string;
+    defaultSynthesisRowId: string;
+    defaultReviewLaneRowId: string;
+    defaultReadinessBriefRowId: string;
+    defaultCoverageReviewPathStepId: string;
+    defaultCoverageRowId: string;
+    defaultTraceRowId: string;
+    defaultStaticReadinessCueCardId: string;
+    defaultStaticReviewerCheckCardId: string;
+    defaultStaticNextPassPromptCardId: string;
+    defaultStaticDecisionCueCardId: string;
+    defaultStaticFollowUpPromptCardId: string;
+    defaultStaticReviewNoteCardId: string;
+    defaultStaticReviewerCheckPromptCardId: string;
+    defaultStaticAnswerPrepPromptCardId: string;
+    defaultStaticQuestionPromptCardId: string;
+    defaultStaticReviewerPromptCardId: string;
+    defaultStaticCheckPromptCardId: string;
+    defaultStaticFollowUpNoteCardId: string;
+    defaultStaticHumanCheckPromptCardId: string;
+    defaultStaticReviewerCueCardId: string;
+    defaultStaticHandoffPromptCardId: string;
+    sourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathSummary: string;
+    sourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathDefaultContext: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathSummaryView["defaultReviewPathContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    coverageRowCount: number;
+    staticReadinessCueCardCount: number;
+    reviewPathStepCount: number;
+    staticReviewerCheckCardCount: number;
+    sourceRecapRowCount: number;
+    staticNextPassPromptCardCount: number;
+    answerFollowUpReviewLaneRowCount: number;
+    staticDecisionCueCardCount: number;
+    answerSourceCrosswalkRowCount: number;
+    staticFollowUpPromptCardCount: number;
+    answerWalkthroughStepCount: number;
+    staticReviewNoteCardCount: number;
+    answerCoverageRowCount: number;
+    staticReviewerCheckPromptCardCount: number;
+    rehearsalPathStepCount: number;
+    staticAnswerPrepPromptCardCount: number;
+    reviewBoardRowCount: number;
+    staticQuestionPromptCardCount: number;
+    followUpReadinessBriefRowCount: number;
+    staticReviewerPromptCardCount: number;
+    followUpTriageRowCount: number;
+    staticCheckPromptCardCount: number;
+    synthesisRowCount: number;
+    staticFollowUpNoteCardCount: number;
+    reviewLaneRowCount: number;
+    staticHumanCheckPromptCardCount: number;
+    readinessBriefRowCount: number;
+    staticReviewerCueCardCount: number;
+    staticHandoffPromptCardCount: number;
+    responseTraceRowCount: number;
+    responseWalkthroughStepCount: number;
+    responseRowCount: number;
+    questionRowCount: number;
+    sourceAnchorCount: number;
+    evidenceCallbackCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    laneLabelCount: number;
+    sourceRecapLabelCount: number;
+    reviewPathLabelCount: number;
+    coverageLabelCount: number;
+    readinessCueLabelCount: number;
+    localOnlyCoverageRowCount: number;
+    localOnlyStaticReadinessCueCardCount: number;
+    localOnlyReviewPathStepCount: number;
+    localOnlyStaticReviewerCheckCardCount: number;
+    localOnlySourceRecapRowCount: number;
+    localOnlyStaticNextPassPromptCardCount: number;
+    localOnlyAnswerFollowUpReviewLaneRowCount: number;
+    localOnlyStaticDecisionCueCardCount: number;
+    localOnlyAnswerSourceCrosswalkRowCount: number;
+    localOnlyStaticFollowUpPromptCardCount: number;
+    localOnlyAnswerWalkthroughStepCount: number;
+    localOnlyStaticReviewNoteCardCount: number;
+    localOnlyAnswerCoverageRowCount: number;
+    localOnlyStaticReviewerCheckPromptCardCount: number;
+    localOnlyRehearsalPathStepCount: number;
+    localOnlyStaticAnswerPrepPromptCardCount: number;
+    localOnlyReviewBoardRowCount: number;
+    localOnlyStaticQuestionPromptCardCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixView {
+  schema: "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff follow-up readiness answer follow-up review lane source recap review-path coverage matrix and static readiness cues";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixSummaryView;
+  defaultCoverageRow: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowView;
+  defaultStaticReadinessCueCard: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticReadinessCueCardView;
+  coverageRows: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixRowView[];
+  staticReadinessCueCards: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixStaticReadinessCueCardView[];
+  staticSourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixSummary: string;
+  sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -9195,6 +9364,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneView;
   reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapView;
   reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPath?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathView;
+  reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
