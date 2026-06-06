@@ -9272,7 +9272,6 @@ export function MissionConsole({
         </section>
       ) : null}
 
-
       {view.reviewDecisionRegister ? (
         <section
           className="review-decision-section"
