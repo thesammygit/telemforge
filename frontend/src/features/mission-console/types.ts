@@ -8496,6 +8496,156 @@ export interface ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkV
   sourceReviewObservationHandoffFollowUpReadinessAnswerWalkthrough: ReviewObservationHandoffFollowUpReadinessAnswerWalkthroughView;
 }
 
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneStaticNonGoalFlagsView
+  extends ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkStaticNonGoalFlagsView {
+  noSavedAnswerFollowUpReviewLaneState: true;
+  noSavedFollowUpReviewLaneRows: true;
+  noSavedFollowUpLaneState: true;
+  noSavedDecisionCues: true;
+  noSavedDecisionCueCards: true;
+  noSavedDecisionCueState: true;
+  noSavedReviewerDecisions: true;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneRowView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkRowView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReadinessAnswerFollowUpReviewLaneRowId: string;
+  followUpReadinessAnswerFollowUpReviewLaneRowOrder: number;
+  sourceAnswerSourceCrosswalkRowId: string;
+  sourceAnswerSourceCrosswalkRowIds: string[];
+  sourceStaticFollowUpPromptCardIds: string[];
+  laneLabels: string[];
+  answerFollowUpReviewLaneText: string;
+  staticDecisionCueText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneStaticNonGoalFlagsView;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneStaticDecisionCueCardView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkStaticFollowUpPromptCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReadinessAnswerFollowUpReviewLaneStaticDecisionCueCardId: string;
+  followUpReadinessAnswerFollowUpReviewLaneStaticDecisionCueCardIds: string[];
+  sourceStaticFollowUpPromptCardId: string;
+  sourceStaticFollowUpPromptCardIds: string[];
+  matchedAnswerFollowUpReviewLaneRowIds: string[];
+  staticDecisionCueOrder: number;
+  staticDecisionCueText: string;
+  laneLabels: string[];
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneStaticNonGoalFlagsView;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSummaryView {
+  followUpReadinessAnswerFollowUpReviewLaneId: "candidate-local-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane";
+  label: string;
+  summary: string;
+  defaultAnswerFollowUpReviewLaneContext: {
+    defaultAnswerFollowUpReviewLaneRowId: string;
+    defaultAnswerSourceCrosswalkRowId: string;
+    defaultAnswerWalkthroughStepId: string;
+    defaultAnswerCoverageRowId: string;
+    defaultRehearsalPathStepId: string;
+    defaultReviewBoardRowId: string;
+    defaultFollowUpReadinessBriefRowId: string;
+    defaultFollowUpTriageRowId: string;
+    defaultSynthesisRowId: string;
+    defaultReviewLaneRowId: string;
+    defaultReadinessBriefRowId: string;
+    defaultReviewPathStepId: string;
+    defaultCoverageRowId: string;
+    defaultTraceRowId: string;
+    defaultStaticDecisionCueCardId: string;
+    defaultStaticFollowUpPromptCardId: string;
+    defaultStaticReviewNoteCardId: string;
+    defaultStaticReviewerCheckPromptCardId: string;
+    defaultStaticAnswerPrepPromptCardId: string;
+    defaultStaticQuestionPromptCardId: string;
+    defaultStaticReviewerPromptCardId: string;
+    defaultStaticCheckPromptCardId: string;
+    defaultStaticFollowUpNoteCardId: string;
+    defaultStaticHumanCheckPromptCardId: string;
+    defaultStaticReviewerCueCardId: string;
+    defaultStaticHandoffPromptCardId: string;
+    sourceFollowUpReadinessAnswerSourceCrosswalkSummary: string;
+    sourceFollowUpReadinessAnswerSourceCrosswalkDefaultContext: ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkSummaryView["defaultAnswerSourceCrosswalkContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    answerFollowUpReviewLaneRowCount: number;
+    staticDecisionCueCardCount: number;
+    answerSourceCrosswalkRowCount: number;
+    staticFollowUpPromptCardCount: number;
+    answerWalkthroughStepCount: number;
+    staticReviewNoteCardCount: number;
+    answerCoverageRowCount: number;
+    staticReviewerCheckPromptCardCount: number;
+    rehearsalPathStepCount: number;
+    staticAnswerPrepPromptCardCount: number;
+    reviewBoardRowCount: number;
+    staticQuestionPromptCardCount: number;
+    followUpReadinessBriefRowCount: number;
+    staticReviewerPromptCardCount: number;
+    followUpTriageRowCount: number;
+    staticCheckPromptCardCount: number;
+    synthesisRowCount: number;
+    staticFollowUpNoteCardCount: number;
+    reviewLaneRowCount: number;
+    staticHumanCheckPromptCardCount: number;
+    readinessBriefRowCount: number;
+    staticReviewerCueCardCount: number;
+    reviewPathStepCount: number;
+    staticHandoffPromptCardCount: number;
+    coverageRowCount: number;
+    responseTraceRowCount: number;
+    responseWalkthroughStepCount: number;
+    responseRowCount: number;
+    questionRowCount: number;
+    sourceAnchorCount: number;
+    evidenceCallbackCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    laneLabelCount: number;
+    localOnlyAnswerFollowUpReviewLaneRowCount: number;
+    localOnlyStaticDecisionCueCardCount: number;
+    localOnlyAnswerSourceCrosswalkRowCount: number;
+    localOnlyStaticFollowUpPromptCardCount: number;
+    localOnlyAnswerWalkthroughStepCount: number;
+    localOnlyStaticReviewNoteCardCount: number;
+    localOnlyAnswerCoverageRowCount: number;
+    localOnlyStaticReviewerCheckPromptCardCount: number;
+    localOnlyRehearsalPathStepCount: number;
+    localOnlyStaticAnswerPrepPromptCardCount: number;
+    localOnlyReviewBoardRowCount: number;
+    localOnlyStaticQuestionPromptCardCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneView {
+  schema: "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff follow-up readiness answer follow-up review lane and static decision cues";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSummaryView;
+  defaultAnswerFollowUpReviewLaneRow: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneRowView;
+  defaultStaticDecisionCueCard: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneStaticDecisionCueCardView;
+  answerFollowUpReviewLaneRows: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneRowView[];
+  staticDecisionCueCards: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneStaticDecisionCueCardView[];
+  staticSourceFollowUpReadinessAnswerFollowUpReviewLaneSummary: string;
+  sourceReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk: ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -8724,6 +8874,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffFollowUpReadinessAnswerCoverage?: ReviewObservationHandoffFollowUpReadinessAnswerCoverageView;
   reviewObservationHandoffFollowUpReadinessAnswerWalkthrough?: ReviewObservationHandoffFollowUpReadinessAnswerWalkthroughView;
   reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk?: ReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalkView;
+  reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

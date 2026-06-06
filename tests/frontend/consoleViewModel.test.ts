@@ -2989,6 +2989,67 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewNotes,
     ),
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk,
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.summary.counts.answerFollowUpReviewLaneRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk
+      ?.answerSourceCrosswalkRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.summary.counts.staticDecisionCueCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk
+      ?.staticFollowUpPromptCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane?.answerFollowUpReviewLaneRows.every(
+      (row) =>
+        row.followUpReadinessAnswerFollowUpReviewLaneRowId.length > 0 &&
+        row.followUpReadinessAnswerFollowUpReviewLaneRowOrder > 0 &&
+        row.answerFollowUpReviewLaneText.includes(
+          row.sourceAnswerSourceCrosswalkRowId,
+        ) &&
+        row.staticDecisionCueText.includes(row.sourceAnswerSourceCrosswalkRowId) &&
+        row.laneLabels.includes("source-ready follow-up scan") &&
+        row.staticNonGoalFlags.noSavedAnswerSourceCrosswalkState &&
+        row.staticNonGoalFlags.noSavedFollowUpPrompts &&
+        row.staticNonGoalFlags.noSavedAnswerFollowUpReviewLaneState &&
+        row.staticNonGoalFlags.noSavedFollowUpLaneState &&
+        row.staticNonGoalFlags.noSavedDecisionCues &&
+        row.staticNonGoalFlags.noSavedReviewerDecisions,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane?.staticDecisionCueCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneStaticDecisionCueCardId.length > 0 &&
+        card.staticDecisionCueText.includes(card.sourceStaticFollowUpPromptCardId) &&
+        card.staticNonGoalFlags.noSavedAnswerSourceCrosswalkState &&
+        card.staticNonGoalFlags.noSavedFollowUpPrompts &&
+        card.staticNonGoalFlags.noSavedAnswerFollowUpReviewLaneState &&
+        card.staticNonGoalFlags.noSavedFollowUpLaneState &&
+        card.staticNonGoalFlags.noSavedDecisionCues &&
+        card.staticNonGoalFlags.noSavedReviewerDecisions,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
