@@ -94,6 +94,7 @@ For each stage:
 65. [Review Observation Handoff Follow-Up Readiness Brief And Static Reviewer Prompts](steps/65-review-observation-handoff-follow-up-readiness-brief-and-static-reviewer-prompts.md)
 66. [Review Observation Handoff Follow-Up Readiness Review Board And Static Question Prompts](steps/66-review-observation-handoff-follow-up-readiness-review-board-and-static-question-prompts.md)
 67. [Review Observation Handoff Follow-Up Readiness Rehearsal Path And Static Answer Prep Prompts](steps/67-review-observation-handoff-follow-up-readiness-rehearsal-path-and-static-answer-prep-prompts.md)
+68. [Review Observation Handoff Follow-Up Readiness Answer Coverage And Static Reviewer Check Prompts](steps/68-review-observation-handoff-follow-up-readiness-answer-coverage-and-static-reviewer-check-prompts.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
