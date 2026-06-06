@@ -92,9 +92,9 @@ Executor must:
 
 ## Current Transition
 
-Stage 75 is review-ready/completed for automation-branch development. It proved
+Stage 76 is review-ready/completed for automation-branch development. It proved
 a deterministic local answer follow-up review lane source recap review-path
-coverage-review path and static coverage-prompt surface over the Stage 74
-coverage matrix and static readiness-cue cards.
+coverage-review response map and static follow-up prompt surface over the Stage
+75 coverage-review path and static coverage-prompt cards.
 
-New work should begin in Stage 76 unless a focused Stage 75 regression is found.
+New work should begin in Stage 77 unless a focused Stage 76 regression is found.
