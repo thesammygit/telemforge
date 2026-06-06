@@ -92,6 +92,8 @@ export function MissionConsole({
     view.reviewObservationHandoffFollowUpReadinessBrief;
   const observationHandoffFollowUpReadinessReviewBoard =
     view.reviewObservationHandoffFollowUpReadinessReviewBoard;
+  const observationHandoffFollowUpReadinessRehearsalPath =
+    view.reviewObservationHandoffFollowUpReadinessRehearsalPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -8204,6 +8206,290 @@ export function MissionConsole({
               <p>
                 {
                   observationHandoffFollowUpReadinessReviewBoard.staticSourceFollowUpReadinessReviewBoardSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffFollowUpReadinessRehearsalPath ? (
+        <section
+          className="review-observation-handoff-follow-up-readiness-rehearsal-path-section"
+          aria-label="Review observation handoff follow-up readiness rehearsal path"
+        >
+          <a
+            id="review-observation-handoff-follow-up-readiness-rehearsal-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 67 readiness rehearsal path
+              </span>
+              <h2>Readiness rehearsal path and static answer-prep prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffFollowUpReadinessRehearsalPath.localStatus}`}
+            >
+              {observationHandoffFollowUpReadinessRehearsalPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffFollowUpReadinessRehearsalPath.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Rehearsal steps</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessRehearsalPath.summary.counts
+                    .rehearsalPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Answer-prep prompts</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessRehearsalPath.summary.counts
+                    .staticAnswerPrepPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default rehearsal step</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessRehearsalPath
+                    .defaultRehearsalPathStep.label
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-follow-up-readiness-rehearsal-path-layout">
+            <div className="observation-handoff-follow-up-readiness-rehearsal-path-step-list">
+              {observationHandoffFollowUpReadinessRehearsalPath.rehearsalPathSteps.map(
+                (step) => (
+                  <article key={step.followUpReadinessRehearsalPathStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Rehearsal step{" "}
+                          {step.followUpReadinessRehearsalPathStepOrder} -{" "}
+                          {step.sourceReviewBoardRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.matchedStaticQuestionPromptCardIds.length} answer
+                        prompts
+                      </span>
+                    </div>
+                    <p>{step.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{step.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{step.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{step.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{step.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved answers</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedReviewerAnswers
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.followUpReadinessRehearsalPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceReviewBoardRowId}</span>
+                      <span>{step.followUpReadinessBriefRowId}</span>
+                      <span>
+                        {
+                          step.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId
+                        }
+                      </span>
+                      <span>
+                        {
+                          step.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisRowId
+                        }
+                      </span>
+                      <span>
+                        {
+                          step.sourceReadinessResponseTraceCoverageReadinessReviewLaneRowId
+                        }
+                      </span>
+                      <span>
+                        {step.sourceReadinessResponseTraceCoverageReadinessBriefRowId}
+                      </span>
+                      <span>
+                        {step.sourceReadinessResponseTraceCoverageReviewPathStepId}
+                      </span>
+                      <span>{step.sourceReadinessResponseTraceCoverageRowId}</span>
+                      <span>{step.sourceReadinessResponseTraceRowId}</span>
+                      <span>{step.sourceReadinessResponseWalkthroughStepId}</span>
+                      <span>{step.sourceReadinessResponseRowId}</span>
+                      <span>{step.sourceReadinessQuestionRowId}</span>
+                    </div>
+                    <div className="observation-handoff-follow-up-readiness-rehearsal-path-note-list">
+                      {step.matchedStaticReviewerPromptCardIds.map((cardId) => (
+                        <article
+                          key={`${step.followUpReadinessRehearsalPathStepId}:${cardId}`}
+                        >
+                          <span className="event-type">Static reviewer prompt</span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                      {step.matchedStaticQuestionPromptCardIds.map((cardId) => (
+                        <article
+                          key={`${step.followUpReadinessRehearsalPathStepId}:${cardId}`}
+                        >
+                          <span className="event-type">Static question prompt</span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{step.coverageNoteText}</p>
+                    <p>{step.gapNoteText}</p>
+                    <p>{step.handoffPromptText}</p>
+                    <p>{step.readinessBriefText}</p>
+                    <p>{step.reviewLaneText}</p>
+                    <p>{step.humanCheckPromptText}</p>
+                    <p>{step.followUpNoteText}</p>
+                    <p>{step.staticQuestionPromptText}</p>
+                    <p>{step.staticAnswerPrepPromptText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-follow-up-readiness-rehearsal-path-panel">
+              <span className="metric-label">Default rehearsal context</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessRehearsalPath
+                    .defaultRehearsalPathStep.label
+                }
+              </strong>
+              <p>{observationHandoffFollowUpReadinessRehearsalPath.summary.summary}</p>
+              <div className="observation-handoff-follow-up-readiness-rehearsal-path-answer-prep-list">
+                {observationHandoffFollowUpReadinessRehearsalPath.staticAnswerPrepPromptCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.followUpReadinessRehearsalPathStaticAnswerPrepPromptCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static answer-prep prompt{" "}
+                        {card.staticAnswerPrepPromptOrder} -{" "}
+                        {
+                          card.followUpReadinessRehearsalPathStaticAnswerPrepPromptCardId
+                        }
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>{card.anchorTargetId}</a>
+                        <span>{card.matchedRehearsalPathStepIds.length} steps</span>
+                        <span>{card.matchedReviewBoardRowIds.length} board</span>
+                        <span>
+                          {card.matchedFollowUpReadinessBriefRowIds.length} brief
+                        </span>
+                        <span>
+                          {card.matchedFollowUpTriageRowIds.length} triage
+                        </span>
+                        <span>{card.matchedSynthesisRowIds.length} synthesis</span>
+                        <span>{card.matchedReviewLaneRowIds.length} lanes</span>
+                        <span>{card.matchedCoverageRowIds.length} coverage</span>
+                        <span>{card.matchedResponseTraceRowIds.length} traces</span>
+                        <span>{card.matchedResponseRowIds.length} responses</span>
+                        <span>{card.matchedQuestionRowIds.length} questions</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Saved drafts</span>
+                          <strong>
+                            {card.staticNonGoalFlags.noSavedAnswerDrafts
+                              ? "no"
+                              : "yes"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{card.reviewLaneText}</p>
+                      <p>{card.followUpNoteText}</p>
+                      <p>{card.staticReviewerPromptText}</p>
+                      <p>{card.staticQuestionPromptText}</p>
+                      <p>{card.staticAnswerPrepPromptText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-follow-up-readiness-rehearsal-path-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved answer drafts",
+                  "No saved rehearsal state",
+                  "No saved rehearsal steps",
+                  "No saved static answer-prep prompts",
+                  "No saved review board state",
+                  "No saved static question prompts",
+                  "No saved readiness brief state",
+                  "No saved prompt state",
+                  "No saved notes",
+                  "No saved gap notes",
+                  "No saved handoff prompt edits",
+                  "No saved source readiness progress",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessRehearsalPath.staticSourceFollowUpReadinessRehearsalPathSummary
                 }
               </p>
             </aside>
