@@ -8098,6 +8098,133 @@ export interface ReviewObservationHandoffFollowUpReadinessRehearsalPathView {
   sourceReviewObservationHandoffFollowUpReadinessReviewBoard: ReviewObservationHandoffFollowUpReadinessReviewBoardView;
 }
 
+export interface ReviewObservationHandoffFollowUpReadinessAnswerCoverageStaticNonGoalFlagsView
+  extends ReviewObservationHandoffFollowUpReadinessRehearsalPathStaticNonGoalFlagsView {
+  noSavedAnswerCoverageState: true;
+  noSavedAnswerCoverageRows: true;
+  noSavedReviewerCheckPrompts: true;
+  noSavedReviewerCheckPromptCards: true;
+  noSavedReviewerCheckPromptState: true;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerCoverageRowView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessRehearsalPathStepView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReadinessAnswerCoverageRowId: string;
+  followUpReadinessAnswerCoverageRowOrder: number;
+  sourceRehearsalPathStepId: string;
+  sourceRehearsalPathStepIds: string[];
+  matchedStaticAnswerPrepPromptCardIds: string[];
+  sourceStaticAnswerPrepPromptCardIds: string[];
+  staticReviewerCheckPromptText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ReviewObservationHandoffFollowUpReadinessAnswerCoverageStaticNonGoalFlagsView;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerCoverageStaticReviewerCheckPromptCardView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessRehearsalPathStaticAnswerPrepPromptCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReadinessAnswerCoverageStaticReviewerCheckPromptCardId: string;
+  followUpReadinessAnswerCoverageStaticReviewerCheckPromptCardIds: string[];
+  sourceStaticAnswerPrepPromptCardId: string;
+  sourceStaticAnswerPrepPromptCardIds: string[];
+  staticReviewerCheckPromptOrder: number;
+  matchedAnswerCoverageRowIds: string[];
+  staticReviewerCheckPromptText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ReviewObservationHandoffFollowUpReadinessAnswerCoverageStaticNonGoalFlagsView;
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerCoverageSummaryView {
+  followUpReadinessAnswerCoverageId: "candidate-local-review-observation-handoff-follow-up-readiness-answer-coverage";
+  label: string;
+  summary: string;
+  defaultAnswerCoverageContext: {
+    defaultAnswerCoverageRowId: string;
+    defaultRehearsalPathStepId: string;
+    defaultReviewBoardRowId: string;
+    defaultFollowUpReadinessBriefRowId: string;
+    defaultFollowUpTriageRowId: string;
+    defaultSynthesisRowId: string;
+    defaultReviewLaneRowId: string;
+    defaultReadinessBriefRowId: string;
+    defaultReviewPathStepId: string;
+    defaultCoverageRowId: string;
+    defaultTraceRowId: string;
+    defaultStaticReviewerCheckPromptCardId: string;
+    defaultStaticAnswerPrepPromptCardId: string;
+    defaultStaticQuestionPromptCardId: string;
+    defaultStaticReviewerPromptCardId: string;
+    defaultStaticCheckPromptCardId: string;
+    defaultStaticFollowUpNoteCardId: string;
+    defaultStaticHumanCheckPromptCardId: string;
+    defaultStaticReviewerCueCardId: string;
+    defaultStaticHandoffPromptCardId: string;
+    sourceFollowUpReadinessRehearsalPathSummary: string;
+    sourceFollowUpReadinessRehearsalPathDefaultContext: ReviewObservationHandoffFollowUpReadinessRehearsalPathSummaryView["defaultRehearsalContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    answerCoverageRowCount: number;
+    staticReviewerCheckPromptCardCount: number;
+    rehearsalPathStepCount: number;
+    staticAnswerPrepPromptCardCount: number;
+    reviewBoardRowCount: number;
+    staticQuestionPromptCardCount: number;
+    followUpReadinessBriefRowCount: number;
+    staticReviewerPromptCardCount: number;
+    followUpTriageRowCount: number;
+    staticCheckPromptCardCount: number;
+    synthesisRowCount: number;
+    staticFollowUpNoteCardCount: number;
+    reviewLaneRowCount: number;
+    staticHumanCheckPromptCardCount: number;
+    readinessBriefRowCount: number;
+    staticReviewerCueCardCount: number;
+    reviewPathStepCount: number;
+    staticHandoffPromptCardCount: number;
+    coverageRowCount: number;
+    responseTraceRowCount: number;
+    responseWalkthroughStepCount: number;
+    responseRowCount: number;
+    questionRowCount: number;
+    sourceAnchorCount: number;
+    evidenceCallbackCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    localOnlyAnswerCoverageRowCount: number;
+    localOnlyStaticReviewerCheckPromptCardCount: number;
+    localOnlyRehearsalPathStepCount: number;
+    localOnlyStaticAnswerPrepPromptCardCount: number;
+    localOnlyReviewBoardRowCount: number;
+    localOnlyStaticQuestionPromptCardCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffFollowUpReadinessAnswerCoverageView {
+  schema: "telemforge.review_observation_handoff_follow_up_readiness_answer_coverage.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff follow-up readiness answer coverage and static reviewer-check prompts";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffFollowUpReadinessAnswerCoverageSummaryView;
+  defaultAnswerCoverageRow: ReviewObservationHandoffFollowUpReadinessAnswerCoverageRowView;
+  defaultStaticReviewerCheckPromptCard: ReviewObservationHandoffFollowUpReadinessAnswerCoverageStaticReviewerCheckPromptCardView;
+  answerCoverageRows: ReviewObservationHandoffFollowUpReadinessAnswerCoverageRowView[];
+  staticReviewerCheckPromptCards: ReviewObservationHandoffFollowUpReadinessAnswerCoverageStaticReviewerCheckPromptCardView[];
+  staticSourceFollowUpReadinessAnswerCoverageSummary: string;
+  sourceReviewObservationHandoffFollowUpReadinessRehearsalPath: ReviewObservationHandoffFollowUpReadinessRehearsalPathView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -8323,6 +8450,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffFollowUpReadinessBrief?: ReviewObservationHandoffFollowUpReadinessBriefView;
   reviewObservationHandoffFollowUpReadinessReviewBoard?: ReviewObservationHandoffFollowUpReadinessReviewBoardView;
   reviewObservationHandoffFollowUpReadinessRehearsalPath?: ReviewObservationHandoffFollowUpReadinessRehearsalPathView;
+  reviewObservationHandoffFollowUpReadinessAnswerCoverage?: ReviewObservationHandoffFollowUpReadinessAnswerCoverageView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;

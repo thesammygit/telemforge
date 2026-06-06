@@ -2838,6 +2838,58 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedStaticQuestionPrompts,
     ),
   );
+  assert.ok(view.reviewObservationHandoffFollowUpReadinessAnswerCoverage);
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_coverage.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage
+      ?.sourceReviewObservationHandoffFollowUpReadinessRehearsalPath,
+    view.reviewObservationHandoffFollowUpReadinessRehearsalPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.summary.counts
+      .answerCoverageRowCount,
+    view.reviewObservationHandoffFollowUpReadinessRehearsalPath?.rehearsalPathSteps
+      .length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.summary.counts
+      .staticReviewerCheckPromptCardCount,
+    view.reviewObservationHandoffFollowUpReadinessRehearsalPath
+      ?.staticAnswerPrepPromptCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.answerCoverageRows.every(
+      (row) =>
+        row.followUpReadinessAnswerCoverageRowId.length > 0 &&
+        row.followUpReadinessAnswerCoverageRowOrder > 0 &&
+        row.staticReviewerCheckPromptText.includes(row.sourceRehearsalPathStepId) &&
+        row.staticNonGoalFlags.noSavedAnswerCoverageState &&
+        row.staticNonGoalFlags.noSavedAnswerCoverageRows &&
+        row.staticNonGoalFlags.noSavedReviewerCheckPrompts &&
+        row.staticNonGoalFlags.noSavedReviewerCheckPromptCards &&
+        row.staticNonGoalFlags.noSavedReviewerCheckPromptState &&
+        row.staticNonGoalFlags.noSavedRehearsalState,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.staticReviewerCheckPromptCards.every(
+      (card) =>
+        card.followUpReadinessAnswerCoverageStaticReviewerCheckPromptCardId.length > 0 &&
+        card.staticReviewerCheckPromptText.includes(card.sourceStaticAnswerPrepPromptCardId) &&
+        card.staticNonGoalFlags.noSavedAnswerCoverageState &&
+        card.staticNonGoalFlags.noSavedReviewerCheckPrompts &&
+        card.staticNonGoalFlags.noSavedReviewerCheckPromptCards &&
+        card.staticNonGoalFlags.noSavedReviewerCheckPromptState &&
+        card.staticNonGoalFlags.noSavedStaticAnswerPrepPrompts,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -3118,6 +3170,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffFollowUpReadinessRehearsalPath
       ?.sourceReviewObservationHandoffFollowUpReadinessReviewBoard,
     view.reviewObservationHandoffFollowUpReadinessReviewBoard,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerCoverage
+      ?.sourceReviewObservationHandoffFollowUpReadinessRehearsalPath,
+    view.reviewObservationHandoffFollowUpReadinessRehearsalPath,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
