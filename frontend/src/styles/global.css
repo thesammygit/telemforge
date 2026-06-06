@@ -200,6 +200,7 @@ button {
 .review-observation-handoff-source-readiness-response-trace-map-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-board-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-review-path-section,
+.review-observation-handoff-source-readiness-response-trace-coverage-readiness-brief-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -468,6 +469,7 @@ button {
 .review-observation-handoff-source-readiness-response-trace-map-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-board-section,
 .review-observation-handoff-source-readiness-response-trace-coverage-review-path-section,
+.review-observation-handoff-source-readiness-response-trace-coverage-readiness-brief-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2745,6 +2747,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2931,7 +2940,12 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-review-path-panel,
 .observation-handoff-source-readiness-response-trace-coverage-review-path-note-list,
 .observation-handoff-source-readiness-response-trace-coverage-review-path-prompt-list,
-.observation-handoff-source-readiness-response-trace-coverage-review-path-non-goal-list {
+.observation-handoff-source-readiness-response-trace-coverage-review-path-non-goal-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-row-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-panel,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-note-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-cue-list,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3121,7 +3135,12 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-review-path-panel,
 .observation-handoff-source-readiness-response-trace-coverage-review-path-note-list article,
 .observation-handoff-source-readiness-response-trace-coverage-review-path-prompt-list article,
-.observation-handoff-source-readiness-response-trace-coverage-review-path-non-goal-list div {
+.observation-handoff-source-readiness-response-trace-coverage-review-path-non-goal-list div,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-row-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-panel,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-note-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-cue-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3161,7 +3180,8 @@ button {
 .observation-handoff-source-readiness-response-row-list article,
 .observation-handoff-source-readiness-response-walkthrough-step-list article,
 .observation-handoff-source-readiness-response-trace-row-list article,
-.observation-handoff-source-readiness-response-trace-coverage-review-path-step-list article {
+.observation-handoff-source-readiness-response-trace-coverage-review-path-step-list article,
+.observation-handoff-source-readiness-response-trace-coverage-readiness-brief-row-list article {
   display: grid;
   gap: 10px;
 }
@@ -4252,6 +4272,7 @@ button {
   .observation-handoff-source-readiness-response-walkthrough-layout,
   .observation-handoff-source-readiness-response-trace-map-layout,
   .observation-handoff-source-readiness-response-trace-coverage-review-path-layout,
+  .observation-handoff-source-readiness-response-trace-coverage-readiness-brief-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
