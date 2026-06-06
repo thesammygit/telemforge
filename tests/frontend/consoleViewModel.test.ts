@@ -3250,6 +3250,72 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReadinessCueCards,
     ),
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix_review_path.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.summary.counts.coverageReviewPathStepCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.coverageRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.summary.counts.staticCoveragePromptCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrix
+      ?.staticReadinessCueCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath?.coverageReviewPathSteps.every(
+      (step) =>
+        step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathStepId.length > 0 &&
+        step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathStepOrder > 0 &&
+        step.coverageReviewText.includes(step.sourceCoverageMatrixRowId) &&
+        step.coverageReviewText.includes(step.sourceReviewPathStepId) &&
+        step.staticCoveragePromptText.includes(step.sourceCoverageMatrixRowId) &&
+        step.coverageReviewLabels.includes("coverage-review path step") &&
+        step.coverageReviewLabels.includes("static coverage-prompt cue") &&
+        step.staticNonGoalFlags.noSavedCoverageState &&
+        step.staticNonGoalFlags.noSavedReadinessCues &&
+        step.staticNonGoalFlags.noSavedCoverageReviewState &&
+        step.staticNonGoalFlags.noSavedCoverageReviewPathSteps &&
+        step.staticNonGoalFlags.noSavedCoveragePrompts &&
+        step.staticNonGoalFlags.noSavedCoveragePromptCards,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath?.staticCoveragePromptCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathStaticCoveragePromptCardId.length > 0 &&
+        card.staticCoveragePromptText.includes(
+          card.sourceStaticReadinessCueCardId,
+        ) &&
+        card.staticCoveragePromptText.includes(
+          card.sourceStaticReviewerCheckCardId,
+        ) &&
+        card.coverageReviewLabels.includes("static coverage prompt") &&
+        card.coverageReviewLabels.includes("readiness-cue carry-forward") &&
+        card.staticNonGoalFlags.noSavedReadinessCues &&
+        card.staticNonGoalFlags.noSavedCoverageReviewState &&
+        card.staticNonGoalFlags.noSavedCoveragePrompts &&
+        card.staticNonGoalFlags.noSavedCoveragePromptCards,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
