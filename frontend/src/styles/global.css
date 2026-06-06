@@ -2781,6 +2781,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-follow-up-readiness-brief-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2987,7 +2994,12 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-panel,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-note-list,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-check-list,
-.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-non-goal-list {
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-non-goal-list,
+.observation-handoff-follow-up-readiness-brief-row-list,
+.observation-handoff-follow-up-readiness-brief-panel,
+.observation-handoff-follow-up-readiness-brief-note-list,
+.observation-handoff-follow-up-readiness-brief-prompt-list,
+.observation-handoff-follow-up-readiness-brief-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3197,7 +3209,12 @@ button {
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-panel,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-note-list article,
 .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-check-list article,
-.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-non-goal-list div {
+.observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-non-goal-list div,
+.observation-handoff-follow-up-readiness-brief-row-list article,
+.observation-handoff-follow-up-readiness-brief-panel,
+.observation-handoff-follow-up-readiness-brief-note-list article,
+.observation-handoff-follow-up-readiness-brief-prompt-list article,
+.observation-handoff-follow-up-readiness-brief-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -4333,6 +4350,7 @@ button {
   .observation-handoff-source-readiness-response-trace-coverage-readiness-review-lane-layout,
   .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-layout,
   .observation-handoff-source-readiness-response-trace-coverage-readiness-review-synthesis-follow-up-triage-layout,
+  .observation-handoff-follow-up-readiness-brief-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

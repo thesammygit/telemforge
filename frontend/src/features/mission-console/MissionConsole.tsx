@@ -88,6 +88,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis;
   const observationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage =
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage;
+  const observationHandoffFollowUpReadinessBrief =
+    view.reviewObservationHandoffFollowUpReadinessBrief;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -7628,6 +7630,297 @@ export function MissionConsole({
                   observationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage
                     .staticSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageSummary
                 }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffFollowUpReadinessBrief ? (
+        <section
+          className="review-observation-handoff-follow-up-readiness-brief-section"
+          aria-label="Review observation handoff follow-up readiness brief"
+        >
+          <a
+            id="review-observation-handoff-follow-up-readiness-brief"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 65 follow-up readiness brief
+              </span>
+              <h2>Readiness brief and static reviewer prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffFollowUpReadinessBrief.localStatus}`}
+            >
+              {observationHandoffFollowUpReadinessBrief.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffFollowUpReadinessBrief.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Brief rows</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessBrief.summary.counts
+                    .followUpReadinessBriefRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static prompts</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessBrief.summary.counts
+                    .staticReviewerPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default brief row</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessBrief.defaultFollowUpReadinessBriefRow
+                    .label
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-follow-up-readiness-brief-layout">
+            <div className="observation-handoff-follow-up-readiness-brief-row-list">
+              {observationHandoffFollowUpReadinessBrief.followUpReadinessBriefRows.map(
+                (row) => (
+                  <article
+                    key={row.followUpReadinessBriefRowId}
+                  >
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Brief row {row.followUpReadinessBriefRowOrder} -{" "}
+                          {
+                            row.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId
+                          }
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedStaticCheckPromptCardIds.length} checks
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved brief</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedFollowUpReadinessBriefState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.followUpReadinessBriefRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>
+                        {
+                          row.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisRowId
+                        }
+                      </span>
+                      <span>
+                        {
+                          row.sourceReadinessResponseTraceCoverageReadinessReviewLaneRowId
+                        }
+                      </span>
+                      <span>
+                        {row.sourceReadinessResponseTraceCoverageReadinessBriefRowId}
+                      </span>
+                      <span>
+                        {row.sourceReadinessResponseTraceCoverageReviewPathStepId}
+                      </span>
+                      <span>{row.sourceReadinessResponseTraceCoverageRowId}</span>
+                      <span>{row.sourceReadinessResponseTraceRowId}</span>
+                      <span>{row.sourceReadinessResponseWalkthroughStepId}</span>
+                      <span>{row.sourceReadinessResponseRowId}</span>
+                      <span>{row.sourceReadinessQuestionRowId}</span>
+                    </div>
+                    <div className="observation-handoff-follow-up-readiness-brief-note-list">
+                      {row.matchedStaticReviewerCueCardIds.map((cueId) => (
+                        <article key={`${row.followUpReadinessBriefRowId}:${cueId}`}>
+                          <span className="event-type">Static reviewer cue</span>
+                          <strong>{cueId}</strong>
+                        </article>
+                      ))}
+                      {row.matchedStaticHumanCheckPromptCardIds.map((cardId) => (
+                        <article key={`${row.followUpReadinessBriefRowId}:${cardId}`}>
+                          <span className="event-type">Static human check</span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                      {row.matchedStaticHandoffPromptCardIds.map((promptId) => (
+                        <article key={`${row.followUpReadinessBriefRowId}:${promptId}`}>
+                          <span className="event-type">Static handoff prompt</span>
+                          <strong>{promptId}</strong>
+                        </article>
+                      ))}
+                      {row.matchedStaticFollowUpNoteCardIds.map((noteId) => (
+                        <article key={`${row.followUpReadinessBriefRowId}:${noteId}`}>
+                          <span className="event-type">Static follow-up note</span>
+                          <strong>{noteId}</strong>
+                        </article>
+                      ))}
+                      {row.matchedStaticCheckPromptCardIds.map((cardId) => (
+                        <article key={`${row.followUpReadinessBriefRowId}:${cardId}`}>
+                          <span className="event-type">Static check prompt</span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <p>{row.coverageNoteText}</p>
+                    <p>{row.gapNoteText}</p>
+                    <p>{row.handoffPromptText}</p>
+                    <p>{row.readinessBriefText}</p>
+                    <p>{row.reviewLaneText}</p>
+                    <p>{row.humanCheckPromptText}</p>
+                    <p>{row.followUpNoteText}</p>
+                    <p>{row.staticCheckPromptText}</p>
+                    <p>{row.staticReviewerPromptText}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-follow-up-readiness-brief-panel">
+              <span className="metric-label">Default brief context</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessBrief.defaultFollowUpReadinessBriefRow
+                    .label
+                }
+              </strong>
+              <p>
+                {observationHandoffFollowUpReadinessBrief.summary.summary}
+              </p>
+              <div className="observation-handoff-follow-up-readiness-brief-prompt-list">
+                {observationHandoffFollowUpReadinessBrief.staticReviewerPromptCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.followUpReadinessBriefStaticReviewerPromptCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static reviewer prompt {card.staticReviewerPromptOrder} -{" "}
+                        {card.followUpReadinessBriefStaticReviewerPromptCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>
+                          {card.anchorTargetId}
+                        </a>
+                        <span>
+                          {card.matchedFollowUpReadinessBriefRowIds.length} brief
+                        </span>
+                        <span>
+                          {card.matchedFollowUpTriageRowIds.length} triage
+                        </span>
+                        <span>{card.matchedSynthesisRowIds.length} synthesis</span>
+                        <span>{card.matchedReviewLaneRowIds.length} lanes</span>
+                        <span>
+                          {card.matchedReadinessBriefRowIds.length} brief rows
+                        </span>
+                        <span>{card.matchedReviewPathStepIds.length} steps</span>
+                        <span>{card.matchedCoverageRowIds.length} coverage</span>
+                        <span>{card.matchedResponseTraceRowIds.length} traces</span>
+                        <span>
+                          {card.matchedResponseWalkthroughStepIds.length} walkthrough
+                        </span>
+                        <span>{card.matchedResponseRowIds.length} responses</span>
+                        <span>{card.matchedQuestionRowIds.length} questions</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Saved prompt</span>
+                          <strong>
+                            {card.staticNonGoalFlags
+                              .noSavedStaticReviewerPromptState
+                              ? "no"
+                              : "yes"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{card.reviewLaneText}</p>
+                      <p>{card.followUpNoteText}</p>
+                      <p>{card.staticCheckPromptText}</p>
+                      <p>{card.staticReviewerPromptText}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-follow-up-readiness-brief-non-goal-list">
+                {[
+                  "No saved follow-up readiness brief state",
+                  "No saved brief rows",
+                  "No saved static reviewer prompts",
+                  "No saved triage state",
+                  "No saved prompt state",
+                  "No saved notes",
+                  "No saved gap notes",
+                  "No saved handoff prompt edits",
+                  "No saved source readiness progress",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {observationHandoffFollowUpReadinessBrief.staticSourceFollowUpReadinessBriefSummary}
               </p>
             </aside>
           </div>

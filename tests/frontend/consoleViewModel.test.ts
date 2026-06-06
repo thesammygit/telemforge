@@ -2649,6 +2649,71 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
           row.staticNonGoalFlags.noCertification,
       ),
   );
+  assert.ok(view.reviewObservationHandoffFollowUpReadinessBrief);
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_brief.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessBrief
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.summary.counts
+      .followUpReadinessBriefRowCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage
+      ?.followUpTriageRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.summary.counts
+      .staticReviewerPromptCardCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage
+      ?.staticCheckPromptCards.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.summary
+      .defaultFollowUpReadinessBriefContext.defaultFollowUpTriageRowId,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage
+      ?.summary.defaultFollowUpTriageContext.defaultFollowUpTriageRowId,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.followUpReadinessBriefRows.every(
+      (row) =>
+        row.followUpReadinessBriefRowId.length > 0 &&
+        row.followUpReadinessBriefRowOrder > 0 &&
+        row.staticReviewerPromptText.includes(
+          row.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId,
+        ) &&
+        row.staticNonGoalFlags.noSavedFollowUpReadinessBriefState &&
+        row.staticNonGoalFlags.noSavedFollowUpReadinessBriefRows &&
+        row.staticNonGoalFlags.noSavedBriefState &&
+        row.staticNonGoalFlags.noSavedStaticReviewerPrompts &&
+        row.staticNonGoalFlags.noSavedStaticReviewerPromptCards &&
+        row.staticNonGoalFlags.noSavedStaticReviewerPromptState &&
+        row.staticNonGoalFlags.noSavedPromptState,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.staticReviewerPromptCards.every(
+      (card) =>
+        card.followUpReadinessBriefStaticReviewerPromptCardId.length > 0 &&
+        card.staticReviewerPromptText.includes(
+          card.followUpReadinessBriefStaticReviewerPromptCardId,
+        ) &&
+        card.staticNonGoalFlags.noSavedFollowUpReadinessBriefState &&
+        card.staticNonGoalFlags.noSavedFollowUpReadinessBriefRows &&
+        card.staticNonGoalFlags.noSavedBriefState &&
+        card.staticNonGoalFlags.noSavedStaticReviewerPrompts &&
+        card.staticNonGoalFlags.noSavedStaticReviewerPromptCards &&
+        card.staticNonGoalFlags.noSavedStaticReviewerPromptState &&
+        card.staticNonGoalFlags.noSavedPromptState,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -2902,6 +2967,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage
       ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessBrief
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

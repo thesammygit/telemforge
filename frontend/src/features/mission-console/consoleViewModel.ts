@@ -80,6 +80,7 @@ import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadin
 import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane.ts";
 import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis.ts";
 import { buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage } from "../../lib/reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage.ts";
+import { buildReviewObservationHandoffFollowUpReadinessBrief } from "../../lib/reviewObservationHandoffFollowUpReadinessBrief.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -319,6 +320,10 @@ export function buildMissionConsoleView(
     buildReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage(
       reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
     );
+  const reviewObservationHandoffFollowUpReadinessBrief =
+    buildReviewObservationHandoffFollowUpReadinessBrief(
+      reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
+    );
 
   return {
     mission: {
@@ -395,6 +400,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
     reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
     reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriage,
+    reviewObservationHandoffFollowUpReadinessBrief,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
