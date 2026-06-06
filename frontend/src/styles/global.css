@@ -196,6 +196,7 @@ button {
 .review-observation-handoff-source-readiness-rehearsal-section,
 .review-observation-handoff-source-readiness-question-board-section,
 .review-observation-handoff-source-readiness-response-matrix-section,
+.review-observation-handoff-source-readiness-response-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -460,6 +461,7 @@ button {
 .review-observation-handoff-source-readiness-rehearsal-section,
 .review-observation-handoff-source-readiness-question-board-section,
 .review-observation-handoff-source-readiness-response-matrix-section,
+.review-observation-handoff-source-readiness-response-walkthrough-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2716,6 +2718,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-source-readiness-response-walkthrough-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -2885,7 +2894,13 @@ button {
 .observation-handoff-source-readiness-response-source-list,
 .observation-handoff-source-readiness-response-note-list,
 .observation-handoff-source-readiness-static-evidence-note-list,
-.observation-handoff-source-readiness-response-non-goal-list {
+.observation-handoff-source-readiness-response-non-goal-list,
+.observation-handoff-source-readiness-response-walkthrough-step-list,
+.observation-handoff-source-readiness-response-walkthrough-panel,
+.observation-handoff-source-readiness-response-walkthrough-source-list,
+.observation-handoff-source-readiness-response-walkthrough-cue-list,
+.observation-handoff-source-readiness-response-walkthrough-static-cue-list,
+.observation-handoff-source-readiness-response-walkthrough-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3058,7 +3073,13 @@ button {
 .observation-handoff-source-readiness-response-source-list div,
 .observation-handoff-source-readiness-response-note-list article,
 .observation-handoff-source-readiness-static-evidence-note-list article,
-.observation-handoff-source-readiness-response-non-goal-list div {
+.observation-handoff-source-readiness-response-non-goal-list div,
+.observation-handoff-source-readiness-response-walkthrough-step-list article,
+.observation-handoff-source-readiness-response-walkthrough-panel,
+.observation-handoff-source-readiness-response-walkthrough-source-list div,
+.observation-handoff-source-readiness-response-walkthrough-cue-list article,
+.observation-handoff-source-readiness-response-walkthrough-static-cue-list article,
+.observation-handoff-source-readiness-response-walkthrough-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3095,7 +3116,8 @@ button {
 .observation-handoff-source-readiness-row-list article,
 .observation-handoff-source-readiness-rehearsal-prompt-list article,
 .observation-handoff-source-readiness-question-row-list article,
-.observation-handoff-source-readiness-response-row-list article {
+.observation-handoff-source-readiness-response-row-list article,
+.observation-handoff-source-readiness-response-walkthrough-step-list article {
   display: grid;
   gap: 10px;
 }
@@ -4183,6 +4205,7 @@ button {
   .observation-handoff-source-readiness-rehearsal-layout,
   .observation-handoff-source-readiness-question-board-layout,
   .observation-handoff-source-readiness-response-matrix-layout,
+  .observation-handoff-source-readiness-response-walkthrough-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

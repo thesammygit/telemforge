@@ -6375,6 +6375,189 @@ export interface ReviewObservationHandoffSourceReadinessResponseMatrixView {
   sourceReviewObservationHandoffSourceReadinessQuestionBoard: ReviewObservationHandoffSourceReadinessQuestionBoardView;
 }
 
+export interface ReviewObservationHandoffSourceReadinessResponseWalkthroughStaticNonGoalFlagsView
+  extends ReviewObservationHandoffSourceReadinessResponseMatrixStaticNonGoalFlagsView {
+  noSavedSourceReadinessResponseWalkthroughProgress: true;
+  noSavedWalkthroughProgress: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseWalkthroughStepView {
+  sourceReadinessResponseWalkthroughStepId: string;
+  stepOrder: number;
+  label: string;
+  summary: string;
+  sourceReadinessResponseRowId: string;
+  sourceReadinessResponseRowIds: string[];
+  sourceReadinessQuestionRowId: string;
+  sourceReadinessQuestionRowIds: string[];
+  matchedStaticEvidenceNoteRowIds: string[];
+  matchedStaticFollowUpPromptRowIds: string[];
+  sourceReadinessRehearsalPromptRowId: string;
+  sourceReadinessRehearsalPromptRowIds: string[];
+  sourceReadinessRowId: string;
+  sourceReadinessRowIds: string[];
+  sourceReadoutRowId: string;
+  sourceReadoutRowIds: string[];
+  sourceWalkthroughSectionId: string;
+  sourceWalkthroughSectionIds: string[];
+  sourceCrosswalkRowId: string;
+  sourceCrosswalkRowIds: string[];
+  sourceRelayStepId: string;
+  sourceRelayStepIds: string[];
+  sourceInspectionReferenceIds: string[];
+  sourceKinds: ReviewObservationHandoffSourceCrosswalkRowView["sourceKinds"];
+  sourceIds: string[];
+  sourceLabels: string[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  sourceSynthesisRowIds: string[];
+  sourceCalibrationCardIds: string[];
+  sourceAlignmentNoteIds: string[];
+  sourceCueIds: string[];
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepIds: string[];
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  matchedStaticReviewCheckIds: string[];
+  matchedStaticReviewerPromptCheckRowIds: string[];
+  staticReviewCueIds: string[];
+  reviewerPromptText: string;
+  followUpQuestionText: string;
+  responseNoteCue: string;
+  staticReviewerCueText: string;
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessResponseWalkthroughStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseWalkthroughStaticCueCardView {
+  sourceReadinessResponseWalkthroughStaticCueCardId: string;
+  cueOrder: number;
+  sourceReadinessStaticEvidenceNoteRowId: string;
+  sourceReadinessStaticEvidenceNoteRowIds: string[];
+  sourceReadinessStaticFollowUpPromptRowId: string;
+  sourceReadinessStaticFollowUpPromptRowIds: string[];
+  matchedResponseRowIds: string[];
+  matchedQuestionRowIds: string[];
+  matchedSourceFollowUpPromptRowIds: string[];
+  sourceLocalAnchorHrefs: string[];
+  sourceAnchorTargetIds: string[];
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  reviewerPromptText: string;
+  followUpPromptText: string;
+  responseNoteCue: string;
+  cueText: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessResponseWalkthroughStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseWalkthroughSummaryView {
+  sourceReadinessResponseWalkthroughId: "candidate-local-review-observation-handoff-source-readiness-response-walkthrough";
+  label: string;
+  summary: string;
+  defaultResponseWalkthroughContext: {
+    defaultWalkthroughStepId: string;
+    defaultResponseRowId: string;
+    defaultQuestionRowId: string;
+    defaultRehearsalPromptRowId: string;
+    defaultSourceReadinessRowId: string;
+    defaultSourceReadoutRowId: string;
+    defaultSourceWalkthroughSectionId: string;
+    defaultSourceCrosswalkRowId: string;
+    defaultRelayStepId: string;
+    defaultAnchorTargetId: string;
+    sourceReadinessResponseMatrixSummary: string;
+    sourceReadinessQuestionBoardSummary: string;
+    sourceReadinessRehearsalSummary: string;
+    sourceReadinessSummary: string;
+    sourceReadoutSummary: string;
+    sourceWalkthroughSummary: string;
+    sourceCrosswalkSummary: string;
+    sourceRelayTrailSummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    walkthroughStepCount: number;
+    staticReviewerCueCardCount: number;
+    responseRowCount: number;
+    staticEvidenceNoteCount: number;
+    questionRowCount: number;
+    matchedStaticFollowUpPromptRowCount: number;
+    sourceReadinessRehearsalPromptRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceReadoutRowCount: number;
+    sourceWalkthroughSectionCount: number;
+    sourceCrosswalkRowCount: number;
+    sourceRelayStepCount: number;
+    sourceInspectionReferenceCount: number;
+    evidenceCallbackCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    localOnlyWalkthroughStepCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseWalkthroughView {
+  schema: "telemforge.review_observation_handoff_source_readiness_response_walkthrough.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff source readiness response walkthrough and static reviewer cues";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffSourceReadinessResponseWalkthroughSummaryView;
+  defaultWalkthroughStep: ReviewObservationHandoffSourceReadinessResponseWalkthroughStepView;
+  walkthroughSteps: ReviewObservationHandoffSourceReadinessResponseWalkthroughStepView[];
+  staticReviewerCueCards: ReviewObservationHandoffSourceReadinessResponseWalkthroughStaticCueCardView[];
+  staticSourceReadinessResponseWalkthroughSummary: string;
+  sourceReviewObservationHandoffSourceReadinessResponseMatrix: ReviewObservationHandoffSourceReadinessResponseMatrixView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -6589,6 +6772,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffSourceReadinessRehearsal?: ReviewObservationHandoffSourceReadinessRehearsalView;
   reviewObservationHandoffSourceReadinessQuestionBoard?: ReviewObservationHandoffSourceReadinessQuestionBoardView;
   reviewObservationHandoffSourceReadinessResponseMatrix?: ReviewObservationHandoffSourceReadinessResponseMatrixView;
+  reviewObservationHandoffSourceReadinessResponseWalkthrough?: ReviewObservationHandoffSourceReadinessResponseWalkthroughView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
