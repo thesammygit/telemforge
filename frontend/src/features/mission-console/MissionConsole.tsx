@@ -74,6 +74,8 @@ export function MissionConsole({
     view.reviewObservationHandoffSourceReadinessResponseMatrix;
   const observationHandoffSourceReadinessResponseWalkthrough =
     view.reviewObservationHandoffSourceReadinessResponseWalkthrough;
+  const observationHandoffSourceReadinessResponseTraceMap =
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -5732,6 +5734,259 @@ export function MissionConsole({
                 {
                   observationHandoffSourceReadinessResponseWalkthrough
                     .staticSourceReadinessResponseWalkthroughSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffSourceReadinessResponseTraceMap ? (
+        <section
+          className="review-observation-handoff-source-readiness-response-trace-map-section"
+          aria-label="Review observation handoff source readiness response trace map"
+        >
+          <a
+            id="review-observation-handoff-source-readiness-response-trace-map"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 58 source readiness response trace map
+              </span>
+              <h2>Response trace map and source alignment notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffSourceReadinessResponseTraceMap.localStatus}`}
+            >
+              {observationHandoffSourceReadinessResponseTraceMap.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {observationHandoffSourceReadinessResponseTraceMap.contractLabel}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Trace rows</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceMap.summary
+                    .counts.responseTraceRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Alignment notes</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceMap.summary
+                    .counts.staticSourceAlignmentNoteCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Default trace</span>
+              <strong>
+                {
+                  observationHandoffSourceReadinessResponseTraceMap.summary
+                    .defaultResponseTraceContext.defaultTraceRowId
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-source-readiness-response-trace-map-layout">
+            <div className="observation-handoff-source-readiness-response-trace-row-list">
+              {observationHandoffSourceReadinessResponseTraceMap.responseTraceRows.map(
+                (row) => (
+                  <article key={row.sourceReadinessResponseTraceRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Trace {row.traceOrder} - {row.sourceCueIds[0]}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.matchedStaticEvidenceNoteRowIds.length} notes
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.localAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved trace</span>
+                        <strong>
+                          {row.staticNonGoalFlags
+                            .noSavedSourceReadinessResponseTraceProgress
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.localAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.sourceReadinessResponseTraceRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceReadinessResponseWalkthroughStepId}</span>
+                      <span>{row.sourceReadinessResponseRowId}</span>
+                      <span>{row.sourceReadinessQuestionRowId}</span>
+                      <span>{row.sourceReadinessRehearsalPromptRowId}</span>
+                      <span>{row.sourceReadinessRowId}</span>
+                      <span>{row.sourceReadoutRowId}</span>
+                      <span>{row.sourceWalkthroughSectionId}</span>
+                      <span>{row.sourceCrosswalkRowId}</span>
+                      <span>{row.sourceRelayStepId}</span>
+                    </div>
+                    <div className="observation-handoff-source-readiness-response-trace-map-source-list">
+                      {row.sourceInspectionReferenceIds.map(
+                        (referenceId, index) => (
+                          <div
+                            key={`${row.sourceReadinessResponseTraceRowId}:${referenceId}`}
+                          >
+                            <span className="event-type">
+                              {row.sourceKinds[index]?.replace(/_/g, " ")}
+                            </span>
+                            <strong>{row.sourceLabels[index]}</strong>
+                            <p>{row.sourceIds[index]}</p>
+                          </div>
+                        ),
+                      )}
+                    </div>
+                    <div className="observation-handoff-source-readiness-response-trace-map-note-list">
+                      {row.matchedStaticEvidenceNoteRowIds.map((noteId) => (
+                        <article
+                          key={`${row.sourceReadinessResponseTraceRowId}:${noteId}`}
+                        >
+                          <span className="event-type">
+                            Matched evidence note
+                          </span>
+                          <strong>{noteId}</strong>
+                        </article>
+                      ))}
+                      {row.matchedStaticFollowUpPromptRowIds.map(
+                        (promptId) => (
+                          <article
+                            key={`${row.sourceReadinessResponseTraceRowId}:${promptId}`}
+                          >
+                            <span className="event-type">
+                              Static follow-up prompt
+                            </span>
+                            <strong>{promptId}</strong>
+                          </article>
+                        ),
+                      )}
+                    </div>
+                    <p>{row.responseNoteCue}</p>
+                    <p>{row.reviewerCueText}</p>
+                    <p>{row.sourceAlignmentNoteText}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-source-readiness-response-trace-map-panel">
+              <span className="metric-label">Default trace context</span>
+              <strong>
+                {observationHandoffSourceReadinessResponseTraceMap.defaultTraceRow.label}
+              </strong>
+              <p>{observationHandoffSourceReadinessResponseTraceMap.summary.summary}</p>
+              <div className="observation-handoff-source-readiness-response-trace-map-alignment-note-list">
+                {observationHandoffSourceReadinessResponseTraceMap.staticSourceAlignmentNoteCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.sourceReadinessResponseTraceMapStaticSourceAlignmentNoteCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Alignment note {card.noteOrder} - {card.anchorTargetId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>
+                          {card.anchorTargetId}
+                        </a>
+                        <span>{card.sourceReadinessStaticEvidenceNoteRowId}</span>
+                        <span>{card.matchedResponseRowIds.length} responses</span>
+                        <span>{card.matchedQuestionRowIds.length} questions</span>
+                        <span>
+                          {card.matchedSourceFollowUpPromptRowIds.length}{" "}
+                          prompts
+                        </span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                      </div>
+                      <p>{card.cueText}</p>
+                      <p>{card.alignmentNoteText}</p>
+                      <p>{card.responseNoteCue}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-source-readiness-response-trace-map-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved source readiness response progress",
+                  "No saved response walkthrough progress",
+                  "No saved response trace progress",
+                  "No saved source readiness question progress",
+                  "No saved source readiness rehearsal progress",
+                  "No saved source readiness progress",
+                  "No saved source readout progress",
+                  "No saved source walkthrough progress",
+                  "No saved source inspection state",
+                  "No saved anchor state",
+                  "No saved relay progress",
+                  "No routes or task launchers",
+                  "No audit, scoring, or certification",
+                  "No exports, packages, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffSourceReadinessResponseTraceMap
+                    .staticSourceReadinessResponseTraceMapSummary
                 }
               </p>
             </aside>

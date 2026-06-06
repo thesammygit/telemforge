@@ -1927,6 +1927,68 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
     view.reviewObservationHandoffSourceReadinessResponseMatrix?.responseRows
       .length,
   );
+  assert.ok(view.reviewObservationHandoffSourceReadinessResponseTraceMap);
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap?.schema,
+    "telemforge.review_observation_handoff_source_readiness_response_trace_map.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap
+      ?.sourceReviewObservationHandoffSourceReadinessResponseWalkthrough,
+    view.reviewObservationHandoffSourceReadinessResponseWalkthrough,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap?.responseTraceRows.map(
+      (row) => [
+        row.sourceReadinessResponseWalkthroughStepId,
+        row.sourceReadinessResponseRowId,
+        row.sourceReadinessQuestionRowId,
+        row.sourceReadinessRehearsalPromptRowId,
+        row.sourceReadinessRowId,
+        row.sourceReadoutRowId,
+        row.sourceWalkthroughSectionId,
+        row.sourceCrosswalkRowId,
+        row.sourceRelayStepId,
+        row.sourceInspectionReferenceIds,
+        row.localAnchorHrefs,
+        row.anchorTargetIds,
+        row.evidenceCallbackIds,
+        row.gapDiscussionPointIds,
+        row.deferredScopeReminderIds,
+        row.matchedStaticEvidenceNoteRowIds,
+        row.matchedStaticFollowUpPromptRowIds,
+        row.staticReviewCueIds,
+      ],
+    ),
+    view.reviewObservationHandoffSourceReadinessResponseWalkthrough?.walkthroughSteps.map(
+      (step) => [
+        step.sourceReadinessResponseWalkthroughStepId,
+        step.sourceReadinessResponseRowId,
+        step.sourceReadinessQuestionRowId,
+        step.sourceReadinessRehearsalPromptRowId,
+        step.sourceReadinessRowId,
+        step.sourceReadoutRowId,
+        step.sourceWalkthroughSectionId,
+        step.sourceCrosswalkRowId,
+        step.sourceRelayStepId,
+        step.sourceInspectionReferenceIds,
+        step.localAnchorHrefs,
+        step.anchorTargetIds,
+        step.evidenceCallbackIds,
+        step.gapDiscussionPointIds,
+        step.deferredScopeReminderIds,
+        step.matchedStaticEvidenceNoteRowIds,
+        step.matchedStaticFollowUpPromptRowIds,
+        step.staticReviewCueIds,
+      ],
+    ),
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap?.summary.counts
+      .responseTraceRowCount,
+    view.reviewObservationHandoffSourceReadinessResponseWalkthrough
+      ?.walkthroughSteps.length,
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -2111,6 +2173,15 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadinessResponseWalkthrough
       ?.sourceReviewObservationHandoffSourceReadinessResponseMatrix,
     view.reviewObservationHandoffSourceReadinessResponseMatrix,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceMap
+      ?.sourceReviewObservationHandoffSourceReadinessResponseWalkthrough,
+    view.reviewObservationHandoffSourceReadinessResponseWalkthrough,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(

@@ -6558,6 +6558,199 @@ export interface ReviewObservationHandoffSourceReadinessResponseWalkthroughView 
   sourceReviewObservationHandoffSourceReadinessResponseMatrix: ReviewObservationHandoffSourceReadinessResponseMatrixView;
 }
 
+export interface ReviewObservationHandoffSourceReadinessResponseTraceMapStaticNonGoalFlagsView
+  extends ReviewObservationHandoffSourceReadinessResponseWalkthroughStaticNonGoalFlagsView {
+  noSavedSourceReadinessResponseTraceProgress: true;
+  noSavedTraceProgress: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceRowView {
+  sourceReadinessResponseTraceRowId: string;
+  traceOrder: number;
+  label: string;
+  summary: string;
+  sourceReadinessResponseWalkthroughStepId: string;
+  sourceReadinessResponseWalkthroughStepIds: string[];
+  sourceReadinessResponseRowId: string;
+  sourceReadinessResponseRowIds: string[];
+  sourceReadinessQuestionRowId: string;
+  sourceReadinessQuestionRowIds: string[];
+  matchedStaticEvidenceNoteRowIds: string[];
+  matchedStaticFollowUpPromptRowIds: string[];
+  sourceReadinessRehearsalPromptRowId: string;
+  sourceReadinessRehearsalPromptRowIds: string[];
+  sourceReadinessRowId: string;
+  sourceReadinessRowIds: string[];
+  sourceReadoutRowId: string;
+  sourceReadoutRowIds: string[];
+  sourceWalkthroughSectionId: string;
+  sourceWalkthroughSectionIds: string[];
+  sourceCrosswalkRowId: string;
+  sourceCrosswalkRowIds: string[];
+  sourceRelayStepId: string;
+  sourceRelayStepIds: string[];
+  sourceInspectionReferenceIds: string[];
+  sourceKinds: ReviewObservationHandoffSourceCrosswalkRowView["sourceKinds"];
+  sourceIds: string[];
+  sourceLabels: string[];
+  localAnchorHrefs: string[];
+  anchorTargetIds: string[];
+  sourceSynthesisRowIds: string[];
+  sourceCalibrationCardIds: string[];
+  sourceAlignmentNoteIds: string[];
+  sourceCueIds: string[];
+  sourceDebriefPromptIds: string[];
+  sourceFollowUpMapEntryIds: string[];
+  sourcePathStepIds: string[];
+  sourceAgendaSectionIds: string[];
+  sourcePromptGroupIds: string[];
+  sourceCoverageRowIds: string[];
+  sourceHandoffCardIds: string[];
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  matchedStaticReviewCheckIds: string[];
+  matchedStaticReviewerPromptCheckRowIds: string[];
+  staticReviewCueIds: string[];
+  reviewerPromptText: string;
+  followUpQuestionText: string;
+  responseNoteCue: string;
+  reviewerCueText: string;
+  sourceAlignmentNoteText: string;
+  staticNonGoalContexts: ReviewObservationBoundaryWalkthroughStaticContextView[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessResponseTraceMapStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceMapStaticSourceAlignmentNoteCardView {
+  sourceReadinessResponseTraceMapStaticSourceAlignmentNoteCardId: string;
+  noteOrder: number;
+  sourceReadinessResponseWalkthroughStaticCueCardId: string;
+  sourceReadinessResponseWalkthroughStaticCueCardIds: string[];
+  sourceReadinessStaticEvidenceNoteRowId: string;
+  sourceReadinessStaticEvidenceNoteRowIds: string[];
+  sourceReadinessStaticFollowUpPromptRowId: string;
+  sourceReadinessStaticFollowUpPromptRowIds: string[];
+  matchedResponseRowIds: string[];
+  matchedQuestionRowIds: string[];
+  matchedSourceFollowUpPromptRowIds: string[];
+  sourceLocalAnchorHrefs: string[];
+  sourceAnchorTargetIds: string[];
+  localAnchorHref: string;
+  anchorTargetId: string;
+  label: string;
+  summary: string;
+  reviewerPromptText: string;
+  followUpPromptText: string;
+  responseNoteCue: string;
+  cueText: string;
+  alignmentNoteText: string;
+  evidenceCallbackIds: string[];
+  gapDiscussionPointIds: string[];
+  deferredScopeReminderIds: string[];
+  staticNonGoalFlags: ReviewObservationHandoffSourceReadinessResponseTraceMapStaticNonGoalFlagsView;
+  localOnly: true;
+  sourceBacked: true;
+  inPageOnly: true;
+  explanatoryOnly: true;
+  staticOnly: true;
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  notATask: true;
+  notATicket: true;
+  notAChecklist: true;
+  notOwnerAssigned: true;
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceMapSummaryView {
+  sourceReadinessResponseTraceMapId: "candidate-local-review-observation-handoff-source-readiness-response-trace-map";
+  label: string;
+  summary: string;
+  defaultResponseTraceContext: {
+    defaultTraceRowId: string;
+    defaultWalkthroughStepId: string;
+    defaultResponseRowId: string;
+    defaultQuestionRowId: string;
+    defaultRehearsalPromptRowId: string;
+    defaultSourceReadinessRowId: string;
+    defaultSourceReadoutRowId: string;
+    defaultSourceWalkthroughSectionId: string;
+    defaultSourceCrosswalkRowId: string;
+    defaultRelayStepId: string;
+    defaultAnchorTargetId: string;
+    sourceReadinessResponseWalkthroughSummary: string;
+    sourceReadinessResponseMatrixSummary: string;
+    sourceReadinessQuestionBoardSummary: string;
+    sourceReadinessRehearsalSummary: string;
+    sourceReadinessSummary: string;
+    sourceReadoutSummary: string;
+    sourceWalkthroughSummary: string;
+    sourceCrosswalkSummary: string;
+    sourceRelayTrailSummary: string;
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: {
+    responseTraceRowCount: number;
+    staticSourceAlignmentNoteCardCount: number;
+    responseWalkthroughStepCount: number;
+    staticReviewerCueCardCount: number;
+    responseRowCount: number;
+    staticEvidenceNoteCount: number;
+    questionRowCount: number;
+    matchedStaticFollowUpPromptRowCount: number;
+    sourceReadinessRehearsalPromptRowCount: number;
+    sourceReadinessRowCount: number;
+    sourceReadoutRowCount: number;
+    sourceWalkthroughSectionCount: number;
+    sourceCrosswalkRowCount: number;
+    sourceRelayStepCount: number;
+    sourceInspectionReferenceCount: number;
+    evidenceCallbackCount: number;
+    gapDiscussionPointCount: number;
+    deferredScopeReminderCount: number;
+    localOnlyTraceRowCount: number;
+  };
+}
+
+export interface ReviewObservationHandoffSourceReadinessResponseTraceMapView {
+  schema: "telemforge.review_observation_handoff_source_readiness_response_trace_map.v1";
+  version: 1;
+  contractLabel: "local deterministic observation handoff source readiness response trace map and static source alignment notes";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ReviewObservationHandoffSourceReadinessResponseTraceMapSummaryView;
+  defaultTraceRow: ReviewObservationHandoffSourceReadinessResponseTraceRowView;
+  responseTraceRows: ReviewObservationHandoffSourceReadinessResponseTraceRowView[];
+  staticSourceAlignmentNoteCards: ReviewObservationHandoffSourceReadinessResponseTraceMapStaticSourceAlignmentNoteCardView[];
+  staticSourceReadinessResponseTraceMapSummary: string;
+  sourceReviewObservationHandoffSourceReadinessResponseWalkthrough: ReviewObservationHandoffSourceReadinessResponseWalkthroughView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -6773,6 +6966,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffSourceReadinessQuestionBoard?: ReviewObservationHandoffSourceReadinessQuestionBoardView;
   reviewObservationHandoffSourceReadinessResponseMatrix?: ReviewObservationHandoffSourceReadinessResponseMatrixView;
   reviewObservationHandoffSourceReadinessResponseWalkthrough?: ReviewObservationHandoffSourceReadinessResponseWalkthroughView;
+  reviewObservationHandoffSourceReadinessResponseTraceMap?: ReviewObservationHandoffSourceReadinessResponseTraceMapView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
