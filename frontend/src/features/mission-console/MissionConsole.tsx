@@ -102,6 +102,8 @@ export function MissionConsole({
     view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk;
   const observationHandoffFollowUpReadinessAnswerFollowUpReviewLane =
     view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane;
+  const observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap =
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -9531,6 +9533,272 @@ export function MissionConsole({
               <p>
                 {
                   observationHandoffFollowUpReadinessAnswerFollowUpReviewLane.staticSourceFollowUpReadinessAnswerFollowUpReviewLaneSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap ? (
+        <section
+          className="review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-section"
+          aria-label="Review observation handoff follow-up readiness answer follow-up review lane source recap"
+        >
+          <a
+            id="review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 72 answer follow-up review lane source recap
+              </span>
+              <h2>Review lane source recap and static next-pass prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.localStatus}`}
+            >
+              {
+                observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.localStatus
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Contract</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+                    .contractLabel
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source recap rows</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+                    .summary.counts.sourceRecapRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Next-pass prompts</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+                    .summary.counts.staticNextPassPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Recap labels</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+                    .summary.counts.sourceRecapLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-layout">
+            <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-row-list">
+              {observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.sourceRecapRows.map(
+                (row) => (
+                  <article
+                    key={
+                      row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowId
+                    }
+                  >
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Source recap row{" "}
+                          {
+                            row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowOrder
+                          }{" "}
+                          - {row.sourceAnswerFollowUpReviewLaneRowId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticDecisionCueCardIds.length} next-pass
+                        cues
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Decision cues</span>
+                        <strong>{row.sourceStaticDecisionCueCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Source labels</span>
+                        <strong>{row.sourceRecapLabels.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Gaps</span>
+                        <strong>{row.gapDiscussionPointIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Deferred</span>
+                        <strong>{row.deferredScopeReminderIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved recap</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedSourceRecapState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceAnswerFollowUpReviewLaneRowId}</span>
+                      <span>{row.sourceAnswerSourceCrosswalkRowId}</span>
+                      <span>{row.sourceAnswerWalkthroughStepId}</span>
+                      <span>{row.sourceAnswerCoverageRowId}</span>
+                      <span>{row.sourceRehearsalPathStepId}</span>
+                      <span>{row.sourceReviewBoardRowId}</span>
+                      <span>{row.followUpReadinessBriefRowId}</span>
+                      <span>
+                        {
+                          row.sourceReadinessResponseTraceCoverageReadinessReviewSynthesisFollowUpTriageRowId
+                        }
+                      </span>
+                    </div>
+                    <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-note-list">
+                      {row.sourceStaticDecisionCueCardIds.map((cardId) => (
+                        <article
+                          key={`${row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowId}:${cardId}`}
+                        >
+                          <span className="event-type">
+                            Stage 71 static decision cue
+                          </span>
+                          <strong>{cardId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceRecapLabels.map((label) => (
+                        <span
+                          key={`${row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowId}:${label}`}
+                        >
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{row.answerFollowUpReviewLaneText}</p>
+                    <p>{row.staticDecisionCueText}</p>
+                    <p>{row.sourceRecapText}</p>
+                    <p>{row.staticNextPassPromptText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-panel">
+              <span className="metric-label">Default source recap context</span>
+              <strong>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+                    .defaultSourceRecapRow.label
+                }
+              </strong>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+                    .summary.summary
+                }
+              </p>
+              <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-next-pass-list">
+                {observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.staticNextPassPromptCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapStaticNextPassPromptCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static next-pass prompt{" "}
+                        {card.staticNextPassPromptOrder} -{" "}
+                        {card.sourceStaticDecisionCueCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        <a href={card.localAnchorHref}>{card.anchorTargetId}</a>
+                        <span>{card.matchedSourceRecapRowIds.length} recap</span>
+                        <span>
+                          {card.matchedAnswerFollowUpReviewLaneRowIds.length}{" "}
+                          lanes
+                        </span>
+                        <span>
+                          {card.matchedAnswerSourceCrosswalkRowIds.length} rows
+                        </span>
+                        <span>{card.sourceAnswerCoverageRowIds.length} coverage</span>
+                        <span>{card.sourceRecapLabels.length} labels</span>
+                      </div>
+                      <div className="surface-index-count-grid">
+                        <div>
+                          <span className="metric-label">Callbacks</span>
+                          <strong>{card.evidenceCallbackIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Gaps</span>
+                          <strong>{card.gapDiscussionPointIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Deferred</span>
+                          <strong>{card.deferredScopeReminderIds.length}</strong>
+                        </div>
+                        <div>
+                          <span className="metric-label">Saved prompts</span>
+                          <strong>
+                            {card.staticNonGoalFlags.noSavedNextPassPrompts
+                              ? "no"
+                              : "yes"}
+                          </strong>
+                        </div>
+                      </div>
+                      <p>{card.staticDecisionCueText}</p>
+                      <p>{card.staticNextPassPromptText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-non-goal-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved answer drafts",
+                  "No saved follow-up lane state",
+                  "No saved source recap state",
+                  "No saved next-pass prompts",
+                  "No saved decision cues",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  observationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.staticSourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapSummary
                 }
               </p>
             </aside>

@@ -87,6 +87,7 @@ import { buildReviewObservationHandoffFollowUpReadinessAnswerCoverage } from "..
 import { buildReviewObservationHandoffFollowUpReadinessAnswerWalkthrough } from "../../lib/reviewObservationHandoffFollowUpReadinessAnswerWalkthrough.ts";
 import { buildReviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk } from "../../lib/reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk.ts";
 import { buildReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane } from "../../lib/reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane.ts";
+import { buildReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap } from "../../lib/reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -354,6 +355,10 @@ export function buildMissionConsoleView(
     buildReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane(
       reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk,
     );
+  const reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap =
+    buildReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap(
+      reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane,
+    );
 
   return {
     mission: {
@@ -437,6 +442,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
     reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk,
     reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane,
+    reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

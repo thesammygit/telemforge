@@ -210,6 +210,7 @@ button {
 .review-observation-handoff-follow-up-readiness-answer-walkthrough-section,
 .review-observation-handoff-follow-up-readiness-answer-source-crosswalk-section,
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-section,
+.review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -488,6 +489,7 @@ button {
 .review-observation-handoff-follow-up-readiness-answer-walkthrough-section,
 .review-observation-handoff-follow-up-readiness-answer-source-crosswalk-section,
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-section,
+.review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2842,6 +2844,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -3083,7 +3092,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-panel,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-note-list,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-decision-cue-list,
-.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-non-goal-list {
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-non-goal-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-row-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-panel,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-note-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-next-pass-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3328,7 +3342,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-panel,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-note-list article,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-decision-cue-list article,
-.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-non-goal-list div {
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-non-goal-list div,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-row-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-panel,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-note-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-next-pass-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3373,7 +3392,8 @@ button {
 .observation-handoff-follow-up-readiness-answer-coverage-row-list article,
 .observation-handoff-follow-up-readiness-answer-walkthrough-step-list article,
 .observation-handoff-follow-up-readiness-answer-source-crosswalk-row-list article,
-.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-row-list article {
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-row-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-row-list article {
   display: grid;
   gap: 10px;
 }
@@ -3462,6 +3482,10 @@ button {
 
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-row-list article {
   border-left: 4px solid #a76a16;
+}
+
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-row-list article {
+  border-left: 4px solid #184d88;
 }
 
 .surface-index-row-decision {
@@ -4491,6 +4515,7 @@ button {
   .observation-handoff-follow-up-readiness-answer-walkthrough-layout,
   .observation-handoff-follow-up-readiness-answer-source-crosswalk-layout,
   .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-layout,
+  .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

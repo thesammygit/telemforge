@@ -3050,6 +3050,66 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewerDecisions,
     ),
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+      ?.summary.counts.sourceRecapRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.answerFollowUpReviewLaneRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap
+      ?.summary.counts.staticNextPassPromptCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLane
+      ?.staticDecisionCueCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap?.sourceRecapRows.every(
+      (row) =>
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowId.length > 0 &&
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapRowOrder > 0 &&
+        row.sourceRecapText.includes(row.sourceAnswerFollowUpReviewLaneRowId) &&
+        row.staticNextPassPromptText.includes(
+          row.sourceAnswerFollowUpReviewLaneRowId,
+        ) &&
+        row.sourceRecapLabels.includes("source-backed lane recap") &&
+        row.staticNonGoalFlags.noSavedAnswerFollowUpReviewLaneState &&
+        row.staticNonGoalFlags.noSavedFollowUpLaneState &&
+        row.staticNonGoalFlags.noSavedDecisionCues &&
+        row.staticNonGoalFlags.noSavedSourceRecapState &&
+        row.staticNonGoalFlags.noSavedNextPassPrompts &&
+        row.staticNonGoalFlags.noSavedReviewerDecisions,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecap?.staticNextPassPromptCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapStaticNextPassPromptCardId.length > 0 &&
+        card.staticNextPassPromptText.includes(card.sourceStaticDecisionCueCardId) &&
+        card.staticNonGoalFlags.noSavedFollowUpLaneState &&
+        card.staticNonGoalFlags.noSavedDecisionCues &&
+        card.staticNonGoalFlags.noSavedSourceRecapState &&
+        card.staticNonGoalFlags.noSavedNextPassPrompts &&
+        card.staticNonGoalFlags.noSavedNextPassPromptCards,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
