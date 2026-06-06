@@ -2551,6 +2551,55 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
           row.staticNonGoalFlags.noRunnableChecklists,
       ),
   );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.schema,
+    "telemforge.review_observation_handoff_source_readiness_response_trace_coverage_readiness_review_synthesis.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.summary.counts.synthesisRowCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.reviewLaneRows.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.summary.counts.staticFollowUpNoteCardCount,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
+      ?.staticHumanCheckPromptCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.synthesisRows.every(
+        (row) =>
+          row.followUpNoteText.includes(
+            row.sourceReadinessResponseTraceCoverageReadinessReviewLaneRowId,
+          ) &&
+          row.staticNonGoalFlags.noSavedSynthesisState &&
+          row.staticNonGoalFlags.noSavedFollowUpNotes &&
+          row.staticNonGoalFlags.noSavedReviewLaneState &&
+          row.staticNonGoalFlags.noSavedHumanCheckPrompts &&
+          row.staticNonGoalFlags.noRouteChanges &&
+          row.staticNonGoalFlags.noCommandExecution &&
+          row.staticNonGoalFlags.noExports &&
+          row.staticNonGoalFlags.noOwnerAssignment &&
+          row.staticNonGoalFlags.noScoring &&
+          row.staticNonGoalFlags.noCertification,
+      ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -2784,6 +2833,16 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane
       ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
     view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessBrief,
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewSynthesis
+      ?.sourceReviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
+    view.reviewObservationHandoffSourceReadinessResponseTraceCoverageReadinessReviewLane,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
