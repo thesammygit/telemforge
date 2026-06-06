@@ -214,6 +214,7 @@ button {
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-section,
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-section,
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-section,
+.review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -496,6 +497,7 @@ button {
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-section,
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-section,
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-section,
+.review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-section,
 .incident-packet-section,
 .alerts-section {
   margin-top: 18px;
@@ -2878,6 +2880,13 @@ button {
   margin-top: 16px;
 }
 
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -3139,7 +3148,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-panel,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-prompt-list,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-static-coverage-prompt-list,
-.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-non-goal-list {
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-non-goal-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-row-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-panel,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-prompt-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-static-follow-up-prompt-list,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-non-goal-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3404,7 +3418,12 @@ button {
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-panel,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-prompt-list article,
 .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-static-coverage-prompt-list article,
-.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-non-goal-list div {
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-non-goal-list div,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-row-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-panel,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-prompt-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-static-follow-up-prompt-list article,
+.observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-non-goal-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -4581,6 +4600,7 @@ button {
   .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-layout,
   .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-layout,
   .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-layout,
+  .observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

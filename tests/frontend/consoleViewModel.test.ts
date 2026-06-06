@@ -3316,6 +3316,82 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedCoveragePromptCards,
     ),
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix_review_path_response_map.v1",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.localStatus,
+    "fixture",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath,
+  );
+  assert.deepEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.summary.defaultResponseMapContext
+      .sourceFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathDefaultContext,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.summary.defaultCoverageReviewContext,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.summary.counts.responseMapRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.coverageReviewPathSteps.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.summary.counts.staticFollowUpPromptCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath
+      ?.staticCoveragePromptCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap?.responseMapRows.every(
+      (row) =>
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapRowId.length > 0 &&
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapRowOrder > 0 &&
+        row.responseMapText.includes(row.sourceCoverageReviewPathStepId) &&
+        row.responseMapText.includes(row.sourceCoverageMatrixRowId) &&
+        row.responseMapText.includes(row.sourceReviewPathStepId) &&
+        row.staticFollowUpPromptText.includes(row.sourceCoverageReviewPathStepId) &&
+        row.responseMapLabels.includes("coverage-review response map row") &&
+        row.responseMapLabels.includes("static follow-up prompt cue") &&
+        row.staticNonGoalFlags.noSavedCoverageReviewState &&
+        row.staticNonGoalFlags.noSavedCoveragePrompts &&
+        row.staticNonGoalFlags.noSavedResponseNotes &&
+        row.staticNonGoalFlags.noSavedResponseMapState &&
+        row.staticNonGoalFlags.noSavedResponseMapRows &&
+        row.staticNonGoalFlags.noSavedFollowUpPrompts &&
+        row.staticNonGoalFlags.noSavedFollowUpPromptCards,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap?.staticFollowUpPromptCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapStaticFollowUpPromptCardId.length > 0 &&
+        card.staticFollowUpPromptText.includes(
+          card.sourceStaticCoveragePromptCardId,
+        ) &&
+        card.staticFollowUpPromptText.includes(
+          card.sourceStaticReadinessCueCardId,
+        ) &&
+        card.responseMapLabels.includes("static follow-up prompt") &&
+        card.responseMapLabels.includes("coverage-prompt carry-forward") &&
+        card.staticNonGoalFlags.noSavedCoverageReviewState &&
+        card.staticNonGoalFlags.noSavedCoveragePrompts &&
+        card.staticNonGoalFlags.noSavedResponseMapState &&
+        card.staticNonGoalFlags.noSavedFollowUpPrompts &&
+        card.staticNonGoalFlags.noSavedFollowUpPromptCards,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -3623,6 +3699,16 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffFollowUpReadinessAnswerSourceCrosswalk
       ?.sourceReviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
     view.reviewObservationHandoffFollowUpReadinessAnswerWalkthrough,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMap
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPath,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
