@@ -92,8 +92,8 @@ Executor must:
 
 ## Current Transition
 
-Stage 48 is review-ready/completed for automation-branch development. It proved
-a deterministic local observation handoff synthesis map and static relay notes
-over the Stage 47 calibration board.
+Stage 70 is review-ready/completed for automation-branch development. It proved
+a deterministic local answer-source crosswalk and static follow-up prompt
+surface over the Stage 69 answer walkthrough.
 
-New work should begin in Stage 49 unless a focused Stage 48 regression is found.
+New work should begin in Stage 71 unless a focused Stage 70 regression is found.
