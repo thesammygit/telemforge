@@ -92,8 +92,9 @@ Executor must:
 
 ## Current Transition
 
-Stage 89 is review-ready/completed for automation-branch development. It proved
-a deterministic local constraint-response evidence-gap follow-up review path and
-static readiness cue surface over the Stage 88 evidence-gap readiness matrix.
+Stage 90 is review-ready/completed for automation-branch development. It proved
+a deterministic local constraint-response evidence-gap follow-up coverage board
+and static review prompt surface over the Stage 89 evidence-gap follow-up
+review path.
 
-New work should begin in Stage 90 unless a focused Stage 89 regression is found.
+New work should begin in Stage 91 unless a focused Stage 90 regression is found.
