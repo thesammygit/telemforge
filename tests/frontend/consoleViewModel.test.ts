@@ -3943,6 +3943,71 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );
+  assert.ok(view.constraintResponseSourceFollowUpMap);
+  assert.equal(
+    view.constraintResponseSourceFollowUpMap?.schema,
+    "telemforge.constraint_response_source_follow_up_map.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseSourceFollowUpMap
+      ?.sourceConstraintResponseSourceReadinessLane,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane,
+  );
+  assert.equal(
+    view.constraintResponseSourceFollowUpMap?.summary.counts
+      .sourceFollowUpMapEntryCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.sourceReadinessLaneRows.length,
+  );
+  assert.equal(
+    view.constraintResponseSourceFollowUpMap?.summary.counts
+      .staticCitationCheckPromptCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.staticSourceFollowUpCueCards.length,
+  );
+  assert.deepEqual(
+    view.constraintResponseSourceFollowUpMap?.summary.defaultFollowUpContext
+      .sourceStage84DefaultSourceReadinessContext,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.summary.defaultSourceReadinessContext,
+  );
+  assert.ok(
+    view.constraintResponseSourceFollowUpMap?.sourceFollowUpMapEntries.every(
+      (entry) =>
+        entry.sourceFollowUpMapEntryId.length > 0 &&
+        entry.sourceFollowUpText.includes(entry.sourceSourceReadinessLaneRowId) &&
+        entry.sourceFollowUpText.includes(entry.sourceCrosswalkRowId) &&
+        entry.sourceFollowUpText.includes(
+          entry.sourceConstraintResponseReviewPathStepId,
+        ) &&
+        entry.citationCheckPromptText.includes(
+          entry.sourceSourceReviewPathStepId,
+        ) &&
+        entry.sourceFollowUpLabels.includes("source follow-up map entry") &&
+        entry.citationCheckLabels.includes(
+          "static citation-check prompt context",
+        ) &&
+        entry.staticNonGoalFlags.noSavedSourceFollowUpMapState &&
+        entry.staticNonGoalFlags.noSavedCitationSelections &&
+        entry.staticNonGoalFlags.noSavedCitationCheckState &&
+        entry.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseSourceFollowUpMap?.staticCitationCheckPromptCards.every(
+      (card) =>
+        card.staticCitationCheckPromptCardId.length > 0 &&
+        card.citationCheckPromptText.includes(
+          card.sourceStaticSourceFollowUpCueCardId,
+        ) &&
+        card.staticCitationCheckLabels.includes(
+          "static citation-check prompt card",
+        ) &&
+        card.staticNonGoalFlags.noSavedStaticCitationCheckPrompts &&
+        card.staticNonGoalFlags.noSavedCitationSelections &&
+        card.staticNonGoalFlags.noSavedSourceSelections,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {

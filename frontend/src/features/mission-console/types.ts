@@ -10315,6 +10315,100 @@ export interface ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLa
   sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathView;
 }
 
+export interface ConstraintResponseSourceFollowUpMapStaticNonGoalFlagsView
+  extends ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneStaticNonGoalFlagsView {
+  noSavedSourceFollowUpMapState: true;
+  noSavedCitationSelections: true;
+  noSavedCitationCheckState: true;
+  noSavedCitationCheckPromptState: true;
+  noSavedStaticCitationCheckPrompts: true;
+  noSavedStaticCitationCheckPromptCards: true;
+}
+
+export interface ConstraintResponseSourceFollowUpMapEntryView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneRowView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  sourceFollowUpMapEntryId: string;
+  sourceFollowUpMapEntryIds: string[];
+  sourceFollowUpMapEntryOrder: number;
+  sourceSourceReadinessLaneRowId: string;
+  sourceSourceReadinessLaneRowIds: string[];
+  sourceStaticSourceFollowUpCueCardIds: string[];
+  sourceFollowUpLabels: string[];
+  citationCheckLabels: string[];
+  sourceFollowUpText: string;
+  citationCheckPromptText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseSourceFollowUpMapStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseSourceFollowUpMapStaticCitationCheckPromptCardView
+  extends Omit<
+    ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneStaticSourceFollowUpCueCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  staticCitationCheckPromptCardId: string;
+  staticCitationCheckPromptCardIds: string[];
+  sourceStaticSourceFollowUpCueCardId: string;
+  sourceStaticSourceFollowUpCueCardIds: string[];
+  sourceSourceFollowUpMapEntryIds: string[];
+  staticCitationCheckPromptOrder: number;
+  staticCitationCheckLabels: string[];
+  citationCheckPromptText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseSourceFollowUpMapStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseSourceFollowUpMapSummaryView {
+  constraintResponseSourceFollowUpMapId: "candidate-local-constraint-response-source-follow-up-map";
+  label: string;
+  summary: string;
+  defaultFollowUpContext: {
+    defaultSourceFollowUpMapEntryId: string;
+    defaultStaticCitationCheckPromptCardId: string;
+    defaultSourceReadinessLaneRowId: string;
+    defaultStaticSourceFollowUpCueCardId: string;
+    defaultSourceReviewPathStepId: string;
+    defaultStaticSourceReviewPromptCardId: string;
+    defaultSourceCrosswalkRowId: string;
+    defaultConstraintResponseReviewPathStepId: string;
+    defaultConstraintCoverageRowId: string;
+    sourceStage84SourceReadinessLaneSummary: string;
+    sourceStage84DefaultSourceReadinessContext: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneSummaryView["defaultSourceReadinessContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneSummaryView["counts"] & {
+    sourceFollowUpMapEntryCount: number;
+    staticCitationCheckPromptCardCount: number;
+    sourceFollowUpLabelCount: number;
+    citationCheckPromptLabelCount: number;
+    localOnlySourceFollowUpMapEntryCount: number;
+    localOnlyStaticCitationCheckPromptCardCount: number;
+  };
+}
+
+export interface ConstraintResponseSourceFollowUpMapView {
+  schema: "telemforge.constraint_response_source_follow_up_map.v1";
+  version: 1;
+  contractLabel: "local deterministic constraint-response source follow-up map and static citation-check prompts";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ConstraintResponseSourceFollowUpMapSummaryView;
+  defaultSourceFollowUpMapEntry: ConstraintResponseSourceFollowUpMapEntryView;
+  defaultStaticCitationCheckPromptCard: ConstraintResponseSourceFollowUpMapStaticCitationCheckPromptCardView;
+  sourceFollowUpMapEntries: ConstraintResponseSourceFollowUpMapEntryView[];
+  staticCitationCheckPromptCards: ConstraintResponseSourceFollowUpMapStaticCitationCheckPromptCardView[];
+  staticCitationCheckBoundarySummary: string;
+  sourceConstraintResponseSourceReadinessLane: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -10557,6 +10651,7 @@ export interface MissionConsoleView {
   reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkView;
   reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathView;
   reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane?: ReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneView;
+  constraintResponseSourceFollowUpMap?: ConstraintResponseSourceFollowUpMapView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
