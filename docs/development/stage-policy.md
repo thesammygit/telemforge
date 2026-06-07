@@ -92,9 +92,8 @@ Executor must:
 
 ## Current Transition
 
-Stage 78 is review-ready/completed for automation-branch development. It proved
-a deterministic local response-prompt readiness board and static answer-check
-surface over the Stage 77 response-map review path and static response-prompt
-cards.
+Stage 79 is review-ready/completed for automation-branch development. It proved
+a deterministic local answer-review path and static constraint-note surface over
+the Stage 78 response-prompt readiness board and static answer-check cards.
 
-New work should begin in Stage 79 unless a focused Stage 78 regression is found.
+New work should begin in Stage 80 unless a focused Stage 79 regression is found.
