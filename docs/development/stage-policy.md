@@ -92,9 +92,9 @@ Executor must:
 
 ## Current Transition
 
-Stage 93 is review-ready/completed for automation-branch development. It proved
+Stage 94 is review-ready/completed for automation-branch development. It proved
 a deterministic local constraint-response evidence-gap follow-up coverage-review
-response-readiness review path and static revision-prompt surface over the Stage
-92 response-readiness board.
+response-readiness review-path revision coverage board and static revision-check
+surface over the Stage 93 response-readiness review path.
 
-New work should begin in Stage 94 unless a focused Stage 93 regression is found.
+New work should begin in Stage 95 unless a focused Stage 94 regression is found.
