@@ -122,6 +122,7 @@ For each stage:
 93. [Constraint Response Evidence Gap Follow-Up Coverage Review Response Readiness Review Path And Static Revision Prompts](steps/93-constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-and-static-revision-prompts.md)
 94. [Constraint Response Evidence Gap Follow-Up Coverage Review Response Readiness Review Path Revision Coverage Board And Static Revision Checks](steps/94-constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-and-static-revision-checks.md)
 95. [Constraint Response Evidence Gap Follow-Up Coverage Review Response Readiness Review Path Revision Coverage Review Path And Static Revision Follow-Up Prompts](steps/95-constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-review-path-and-static-revision-follow-up-prompts.md)
+96. [Constraint Response Revision Follow-Up Readiness Board And Static Response Checks](steps/96-constraint-response-revision-follow-up-readiness-board-and-static-response-checks.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
