@@ -4008,6 +4008,70 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedSourceSelections,
     ),
   );
+  assert.ok(view.constraintResponseSourceCitationReviewLane);
+  assert.equal(
+    view.constraintResponseSourceCitationReviewLane?.schema,
+    "telemforge.constraint_response_source_citation_review_lane.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseSourceCitationReviewLane
+      ?.sourceConstraintResponseSourceFollowUpMap,
+    view.constraintResponseSourceFollowUpMap,
+  );
+  assert.equal(
+    view.constraintResponseSourceCitationReviewLane?.summary.counts
+      .citationReviewLaneRowCount,
+    view.constraintResponseSourceFollowUpMap?.staticCitationCheckPromptCards
+      .length,
+  );
+  assert.equal(
+    view.constraintResponseSourceCitationReviewLane?.summary.counts
+      .staticEvidenceCheckPromptCardCount,
+    view.constraintResponseSourceFollowUpMap?.sourceFollowUpMapEntries.length,
+  );
+  assert.deepEqual(
+    view.constraintResponseSourceCitationReviewLane?.summary
+      .defaultCitationReviewContext.sourceStage85DefaultFollowUpContext,
+    view.constraintResponseSourceFollowUpMap?.summary.defaultFollowUpContext,
+  );
+  assert.ok(
+    view.constraintResponseSourceCitationReviewLane?.citationReviewLaneRows.every(
+      (row) =>
+        row.citationReviewLaneRowId.length > 0 &&
+        row.citationReviewText.includes(
+          row.sourceStaticCitationCheckPromptCardId,
+        ) &&
+        row.citationReviewText.includes(
+          row.sourceStaticSourceFollowUpCueCardId,
+        ) &&
+        row.evidenceCheckPromptText.includes(
+          row.sourceSourceFollowUpMapEntryIds[0],
+        ) &&
+        row.citationReviewLabels.includes("source citation-review lane row") &&
+        row.staticNonGoalFlags.noSavedCitationReviewLaneState &&
+        row.staticNonGoalFlags.noSavedEvidenceCheckState &&
+        row.staticNonGoalFlags.noSavedCitationSelections &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseSourceCitationReviewLane?.staticEvidenceCheckPromptCards.every(
+      (card) =>
+        card.staticEvidenceCheckPromptCardId.length > 0 &&
+        card.evidenceCheckPromptText.includes(
+          card.sourceSourceFollowUpMapEntryId,
+        ) &&
+        card.evidenceCheckPromptText.includes(
+          card.sourceSourceReadinessLaneRowId,
+        ) &&
+        card.evidenceCheckLabels.includes(
+          "static evidence-check prompt card",
+        ) &&
+        card.staticNonGoalFlags.noSavedEvidenceCheckPromptState &&
+        card.staticNonGoalFlags.noSavedCitationReviewState &&
+        card.staticNonGoalFlags.noSavedSourceSelections,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
