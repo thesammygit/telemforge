@@ -4437,6 +4437,81 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
           card.staticNonGoalFlags.noSavedStaticResponseCueCards,
       ),
   );
+  assert.ok(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.schema,
+    "telemforge.constraint_response_evidence_gap_follow_up_coverage_review_response_readiness_review_path.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.sourceConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.summary.counts.responseReadinessReviewPathStepCount,
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard
+      ?.responseReadinessRows.length,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.summary.counts.staticRevisionPromptCardCount,
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard
+      ?.staticDraftCheckCards.length,
+  );
+  assert.deepEqual(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.summary.defaultResponseReadinessReviewContext
+      .sourceStage92DefaultResponseReadinessContext,
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard
+      ?.summary.defaultResponseReadinessContext,
+  );
+  assert.ok(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.responseReadinessReviewPathSteps.every(
+        (step) =>
+          step.responseReadinessReviewPathStepId.length > 0 &&
+          step.responseReadinessReviewText.includes(
+            step.sourceResponseReadinessRowId,
+          ) &&
+          step.responseReadinessReviewText.includes(
+            step.sourceCoverageReviewPathStepId,
+          ) &&
+          step.responseReadinessReviewText.includes(
+            step.sourceStaticDraftCheckCardIds[0],
+          ) &&
+          step.responseReadinessReviewLabels.includes(
+            "response-readiness review path step",
+          ) &&
+          step.staticRevisionPromptLabels.includes(
+            "static revision-prompt carry-forward",
+          ) &&
+          step.staticNonGoalFlags.noSavedResponseReadinessReviewPathState &&
+          step.staticNonGoalFlags
+            .noSavedResponseReadinessReviewPathSelections &&
+          step.staticNonGoalFlags.noSavedRevisionPromptState &&
+          step.staticNonGoalFlags.noSavedRevisionDrafts &&
+          step.staticNonGoalFlags.noSavedReviewerNotes,
+      ),
+  );
+  assert.ok(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.staticRevisionPromptCards.every(
+        (card) =>
+          card.staticRevisionPromptCardId.length > 0 &&
+          card.revisionPromptText.includes(card.sourceStaticDraftCheckCardId) &&
+          card.revisionPromptText.includes(card.sourceStaticResponseCueCardId) &&
+          card.staticRevisionPromptLabels.includes(
+            "static revision-prompt card",
+          ) &&
+          card.staticNonGoalFlags.noSavedStaticRevisionPromptCards &&
+          card.staticNonGoalFlags.noSavedRevisionPromptState &&
+          card.staticNonGoalFlags.noSavedStaticDraftCheckCards,
+      ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
@@ -4824,6 +4899,16 @@ test("buildMissionConsoleView keeps the surface index aligned with local-live mo
     view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath
       ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk,
     view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.localStatus,
+    "local-live",
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+      ?.sourceConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
   );
   assert.equal(view.reviewSurfaceIndex?.rows[0].localStatusLabel, "Local live mode");
   assert.equal(
