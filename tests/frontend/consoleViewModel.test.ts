@@ -4139,6 +4139,65 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedSourceSelections,
     ),
   );
+  assert.ok(view.constraintResponseEvidenceGapReadinessMatrix);
+  assert.equal(
+    view.constraintResponseEvidenceGapReadinessMatrix?.schema,
+    "telemforge.constraint_response_evidence_gap_readiness_matrix.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseEvidenceGapReadinessMatrix
+      ?.sourceConstraintResponseEvidenceCheckReviewPath,
+    view.constraintResponseEvidenceCheckReviewPath,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapReadinessMatrix?.summary.counts
+      .evidenceGapReadinessRowCount,
+    view.constraintResponseEvidenceCheckReviewPath?.evidenceCheckReviewPathSteps
+      .length,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapReadinessMatrix?.summary.counts
+      .staticFollowUpPromptCardCount,
+    view.constraintResponseEvidenceCheckReviewPath?.staticCitationGapCueCards
+      .length,
+  );
+  assert.deepEqual(
+    view.constraintResponseEvidenceGapReadinessMatrix?.summary
+      .defaultEvidenceGapReadinessContext
+      .sourceStage87DefaultEvidenceCheckReviewContext,
+    view.constraintResponseEvidenceCheckReviewPath?.summary
+      .defaultEvidenceCheckReviewContext,
+  );
+  assert.ok(
+    view.constraintResponseEvidenceGapReadinessMatrix?.evidenceGapReadinessRows.every(
+      (row) =>
+        row.evidenceGapReadinessRowId.length > 0 &&
+        row.readinessText.includes(row.sourceEvidenceCheckReviewPathStepId) &&
+        row.readinessText.includes(row.sourceStaticCitationGapCueCardIds[0]) &&
+        row.readinessText.includes(row.sourceStaticEvidenceCheckPromptCardId) &&
+        row.readinessText.includes(row.sourceCitationReviewLaneRowIds[0]) &&
+        row.readinessText.includes(row.sourceSourceFollowUpMapEntryId) &&
+        row.followUpPromptText.includes(row.sourceEvidenceCheckReviewPathStepId) &&
+        row.readinessLabels.includes("evidence-gap readiness matrix row") &&
+        row.followUpPromptLabels.includes("static follow-up prompt context") &&
+        row.staticNonGoalFlags.noSavedEvidenceGapReadinessState &&
+        row.staticNonGoalFlags.noSavedEvidenceGapReadinessSelections &&
+        row.staticNonGoalFlags.noSavedEvidenceCheckSelections &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseEvidenceGapReadinessMatrix?.staticFollowUpPromptCards.every(
+      (card) =>
+        card.staticFollowUpPromptCardId.length > 0 &&
+        card.followUpPromptText.includes(card.sourceStaticCitationGapCueCardId) &&
+        card.followUpPromptText.includes(card.sourceCitationReviewLaneRowId) &&
+        card.followUpPromptLabels.includes("static follow-up prompt card") &&
+        card.staticNonGoalFlags.noSavedStaticFollowUpPromptCards &&
+        card.staticNonGoalFlags.noSavedEvidenceGapReadinessMatrixState &&
+        card.staticNonGoalFlags.noSavedCitationSelections,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {

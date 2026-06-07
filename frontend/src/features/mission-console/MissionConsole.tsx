@@ -134,6 +134,8 @@ export function MissionConsole({
     view.constraintResponseSourceCitationReviewLane;
   const constraintResponseEvidenceCheckReviewPath =
     view.constraintResponseEvidenceCheckReviewPath;
+  const constraintResponseEvidenceGapReadinessMatrix =
+    view.constraintResponseEvidenceGapReadinessMatrix;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -13671,6 +13673,248 @@ export function MissionConsole({
               <p>
                 {
                   constraintResponseEvidenceCheckReviewPath.staticCitationGapBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {constraintResponseEvidenceGapReadinessMatrix ? (
+        <section
+          className="constraint-response-evidence-gap-readiness-matrix-section"
+          aria-label="Stage 88 evidence gap readiness matrix"
+        >
+          <a
+            id="constraint-response-evidence-gap-readiness-matrix"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 88 evidence gap readiness matrix
+              </span>
+              <h2>Evidence gap readiness matrix and follow-up prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${constraintResponseEvidenceGapReadinessMatrix.localStatus}`}
+            >
+              {constraintResponseEvidenceGapReadinessMatrix.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Readiness rows</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix.summary.counts
+                    .evidenceGapReadinessRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up prompts</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix.summary.counts
+                    .staticFollowUpPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Readiness labels</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix.summary.counts
+                    .readinessLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompt labels</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix.summary.counts
+                    .followUpPromptLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only rows</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix.summary.counts
+                    .localOnlyEvidenceGapReadinessRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-gap-readiness-matrix-layout">
+            <div className="constraint-response-evidence-gap-readiness-matrix-row-list">
+              {constraintResponseEvidenceGapReadinessMatrix.evidenceGapReadinessRows.map(
+                (row) => (
+                  <article key={row.evidenceGapReadinessRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Readiness row {row.evidenceGapReadinessRowOrder} -{" "}
+                          {row.sourceEvidenceCheckReviewPathStepId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticCitationGapCueCardIds.length} cues
+                      </span>
+                    </div>
+                    <p>{row.readinessText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 87 step</span>
+                        <strong>
+                          {row.sourceEvidenceCheckReviewPathStepIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 87 cues</span>
+                        <strong>
+                          {row.sourceStaticCitationGapCueCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 86 rows</span>
+                        <strong>{row.sourceCitationReviewLaneRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved readiness</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedEvidenceGapReadinessState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${row.evidenceGapReadinessRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceEvidenceCheckReviewPathStepId}</span>
+                      <span>{row.sourceStaticEvidenceCheckPromptCardId}</span>
+                      <span>{row.sourceSourceFollowUpMapEntryId}</span>
+                      <span>{row.sourceSourceReadinessLaneRowId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[...row.readinessLabels, ...row.followUpPromptLabels].map(
+                        (label) => (
+                          <span key={`${row.evidenceGapReadinessRowId}:${label}`}>
+                            {label}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                    <p>{row.followUpPromptText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-evidence-gap-readiness-matrix-panel">
+              <span className="metric-label">Default readiness context</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix
+                    .defaultEvidenceGapReadinessRow.label
+                }
+              </strong>
+              <p>{constraintResponseEvidenceGapReadinessMatrix.summary.summary}</p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    constraintResponseEvidenceGapReadinessMatrix.summary
+                      .defaultEvidenceGapReadinessContext
+                      .defaultEvidenceGapReadinessRowId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseEvidenceGapReadinessMatrix.summary
+                      .defaultEvidenceGapReadinessContext
+                      .defaultStaticFollowUpPromptCardId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseEvidenceGapReadinessMatrix.summary
+                      .defaultEvidenceGapReadinessContext
+                      .defaultEvidenceCheckReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseEvidenceGapReadinessMatrix.summary
+                      .defaultEvidenceGapReadinessContext
+                      .defaultStaticCitationGapCueCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-gap-readiness-matrix-prompt-list">
+                {constraintResponseEvidenceGapReadinessMatrix.staticFollowUpPromptCards.map(
+                  (card) => (
+                    <article key={card.staticFollowUpPromptCardId}>
+                      <span className="event-type">
+                        Follow-up prompt {card.staticFollowUpPromptOrder} -{" "}
+                        {card.sourceStaticCitationGapCueCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.followUpPromptText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticFollowUpPromptCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {card.sourceEvidenceCheckReviewPathStepIds.length} steps
+                        </span>
+                        <span>{card.sourceCitationReviewLaneRowId}</span>
+                        <span>{card.sourceStaticCitationCheckPromptCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.followUpPromptLabels.map((label) => (
+                          <span key={`${card.staticFollowUpPromptCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-evidence-gap-readiness-matrix-boundary-list">
+                {[
+                  "No saved source selections",
+                  "No saved citation selections",
+                  "No saved evidence-check selections",
+                  "No saved evidence-gap readiness state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  constraintResponseEvidenceGapReadinessMatrix
+                    .staticEvidenceGapReadinessBoundarySummary
                 }
               </p>
             </aside>
