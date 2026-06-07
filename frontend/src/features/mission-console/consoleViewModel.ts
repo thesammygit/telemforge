@@ -109,6 +109,7 @@ import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewPath } from "..
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.ts";
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.ts";
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard.ts";
+import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath.ts";
 import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -469,6 +470,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard(
       constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath,
     );
+  const constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath =
+    buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath(
+      constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard,
+    );
 
   return {
     mission: {
@@ -575,6 +580,7 @@ export function buildMissionConsoleView(
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath,
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard,
+    constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
