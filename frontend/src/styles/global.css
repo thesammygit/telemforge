@@ -3044,6 +3044,21 @@ button {
   margin-top: 16px;
 }
 
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-section {
+  margin-top: 18px;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 48px rgba(18, 35, 48, 0.08);
+}
+
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -3755,7 +3770,11 @@ button {
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-step-list,
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-panel,
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-prompt-list,
-.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-boundary-list {
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-boundary-list,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-row-list,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-panel,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-static-check-list,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-boundary-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3764,7 +3783,11 @@ button {
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-step-list article,
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-panel,
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-prompt-list article,
-.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-boundary-list div {
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-boundary-list div,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-row-list article,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-panel,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-static-check-list article,
+.constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-boundary-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -4959,6 +4982,7 @@ button {
   .constraint-response-evidence-gap-follow-up-coverage-review-path-layout,
   .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-layout,
   .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-layout,
+  .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

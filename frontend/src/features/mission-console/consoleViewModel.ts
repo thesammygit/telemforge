@@ -108,6 +108,7 @@ import { buildConstraintResponseEvidenceGapFollowUpCoverageBoard } from "../../l
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewPath.ts";
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.ts";
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.ts";
+import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard.ts";
 import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -464,6 +465,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath(
       constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
     );
+  const constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard =
+    buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard(
+      constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath,
+    );
 
   return {
     mission: {
@@ -569,6 +574,7 @@ export function buildMissionConsoleView(
     constraintResponseEvidenceGapFollowUpCoverageReviewPath,
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard,
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath,
+    constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

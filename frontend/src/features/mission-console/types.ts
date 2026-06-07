@@ -11242,6 +11242,114 @@ export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseRead
   sourceConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardView;
 }
 
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardStaticNonGoalFlagsView
+  extends ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathStaticNonGoalFlagsView {
+  noSavedRevisionCoverageBoardState: true;
+  noSavedRevisionCoverageRows: true;
+  noSavedRevisionCoverageState: true;
+  noSavedRevisionCoverageSelections: true;
+  noSavedRevisionCheckState: true;
+  noSavedRevisionCheckSelections: true;
+  noSavedStaticRevisionCheckCards: true;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardRowView
+  extends Omit<
+    ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathStepView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  revisionCoverageRowId: string;
+  revisionCoverageRowIds: string[];
+  revisionCoverageRowOrder: number;
+  sourceResponseReadinessReviewPathStepId: string;
+  sourceResponseReadinessReviewPathStepIds: string[];
+  sourceStaticRevisionPromptCardIds: string[];
+  revisionCoverageLabels: string[];
+  staticRevisionCheckLabels: string[];
+  revisionCoverageText: string;
+  staticRevisionCheckText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardStaticRevisionCheckCardView
+  extends Omit<
+    ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathStaticRevisionPromptCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  staticRevisionCheckCardId: string;
+  staticRevisionCheckCardIds: string[];
+  staticRevisionCheckOrder: number;
+  sourceStaticRevisionPromptCardId: string;
+  sourceStaticRevisionPromptCardIds: string[];
+  sourceResponseReadinessReviewPathStepIds: string[];
+  revisionCoverageLabels: string[];
+  staticRevisionCheckLabels: string[];
+  revisionCoverageText: string;
+  staticRevisionCheckText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardSummaryView {
+  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardId: "candidate-local-constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board";
+  label: string;
+  summary: string;
+  defaultRevisionCoverageContext: {
+    defaultRevisionCoverageRowId: string;
+    defaultStaticRevisionCheckCardId: string;
+    defaultResponseReadinessReviewPathStepId: string;
+    defaultStaticRevisionPromptCardId: string;
+    defaultResponseReadinessRowId: string;
+    defaultStaticDraftCheckCardId: string;
+    defaultCoverageReviewPathStepId: string;
+    defaultStaticResponseCueCardId: string;
+    defaultCoverageRowId: string;
+    defaultStaticReviewPromptCardId: string;
+    defaultFollowUpReviewPathStepId: string;
+    defaultStaticReadinessCueCardId: string;
+    defaultEvidenceGapReadinessRowId: string;
+    defaultStaticFollowUpPromptCardId: string;
+    defaultEvidenceCheckReviewPathStepId: string;
+    defaultStaticCitationGapCueCardId: string;
+    defaultStaticEvidenceCheckPromptCardId: string;
+    defaultCitationReviewLaneRowId: string;
+    defaultStaticCitationCheckPromptCardId: string;
+    defaultSourceFollowUpMapEntryId: string;
+    sourceStage93ResponseReadinessReviewPathSummary: string;
+    sourceStage93DefaultResponseReadinessReviewContext: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathSummaryView["defaultResponseReadinessReviewContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathSummaryView["counts"] & {
+    revisionCoverageRowCount: number;
+    staticRevisionCheckCardCount: number;
+    revisionCoverageLabelCount: number;
+    staticRevisionCheckLabelCount: number;
+    localOnlyRevisionCoverageRowCount: number;
+    localOnlyStaticRevisionCheckCardCount: number;
+  };
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardView {
+  schema: "telemforge.constraint_response_evidence_gap_follow_up_coverage_review_response_readiness_review_path_revision_coverage_board.v1";
+  version: 1;
+  contractLabel: "local deterministic constraint-response evidence-gap follow-up coverage-review response-readiness review-path revision coverage board and static revision checks";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardSummaryView;
+  defaultRevisionCoverageRow: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardRowView;
+  defaultStaticRevisionCheckCard: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardStaticRevisionCheckCardView;
+  revisionCoverageRows: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardRowView[];
+  staticRevisionCheckCards: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardStaticRevisionCheckCardView[];
+  staticRevisionCoverageBoundarySummary: string;
+  sourceConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -11493,6 +11601,7 @@ export interface MissionConsoleView {
   constraintResponseEvidenceGapFollowUpCoverageReviewPath?: ConstraintResponseEvidenceGapFollowUpCoverageReviewPathView;
   constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard?: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardView;
   constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath?: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathView;
+  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard?: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoardView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
