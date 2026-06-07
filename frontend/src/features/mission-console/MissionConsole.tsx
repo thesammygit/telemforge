@@ -142,6 +142,8 @@ export function MissionConsole({
     view.constraintResponseEvidenceGapFollowUpCoverageBoard;
   const constraintResponseEvidenceGapFollowUpCoverageReviewPath =
     view.constraintResponseEvidenceGapFollowUpCoverageReviewPath;
+  const constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard =
+    view.constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -14634,6 +14636,253 @@ export function MissionConsole({
                 {
                   constraintResponseEvidenceGapFollowUpCoverageReviewPath
                     .staticCoverageReviewPathBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard ? (
+        <section
+          className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-section"
+          aria-label="Stage 92 evidence gap follow-up coverage review response readiness board"
+        >
+          <a
+            id="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 92 evidence gap follow-up response readiness
+              </span>
+              <h2>Response-readiness board and static draft checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.localStatus}`}
+            >
+              {
+                constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.localStatus
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Readiness rows</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                    .counts.responseReadinessRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Draft checks</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                    .counts.staticDraftCheckCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Readiness labels</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                    .counts.responseReadinessLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Draft labels</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                    .counts.staticDraftCheckLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only rows</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                    .counts.localOnlyResponseReadinessRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-layout">
+            <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-row-list">
+              {constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.responseReadinessRows.map(
+                (row) => (
+                  <article key={row.responseReadinessRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Readiness row {row.responseReadinessRowOrder} -{" "}
+                          {row.sourceCoverageReviewPathStepId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticResponseCueCardIds.length} draft checks
+                      </span>
+                    </div>
+                    <p>{row.responseReadinessText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 91 step</span>
+                        <strong>
+                          {row.sourceCoverageReviewPathStepIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 91 cues</span>
+                        <strong>{row.sourceStaticResponseCueCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 90 prompts</span>
+                        <strong>{row.sourceStaticReviewPromptCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved draft</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedDraftCheckState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${row.responseReadinessRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceCoverageReviewPathStepId}</span>
+                      <span>{row.sourceCoverageRowId}</span>
+                      <span>{row.sourceFollowUpReviewPathStepId}</span>
+                      <span>{row.sourceEvidenceGapReadinessRowId}</span>
+                      <span>{row.sourceEvidenceCheckReviewPathStepId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...row.responseReadinessLabels,
+                        ...row.staticDraftCheckLabels,
+                      ].map((label) => (
+                        <span key={`${row.responseReadinessRowId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{row.staticDraftCheckText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-panel">
+              <span className="metric-label">Default readiness context</span>
+              <strong>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard
+                    .defaultResponseReadinessRow.label
+                }
+              </strong>
+              <p>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard
+                    .summary.summary
+                }
+              </p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                      .defaultResponseReadinessContext
+                      .defaultResponseReadinessRowId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                      .defaultResponseReadinessContext
+                      .defaultStaticDraftCheckCardId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                      .defaultResponseReadinessContext
+                      .defaultCoverageReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.summary
+                      .defaultResponseReadinessContext
+                      .defaultStaticResponseCueCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-draft-check-list">
+                {constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard.staticDraftCheckCards.map(
+                  (card) => (
+                    <article key={card.staticDraftCheckCardId}>
+                      <span className="event-type">
+                        Draft check {card.staticDraftCheckOrder} -{" "}
+                        {card.sourceStaticResponseCueCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.staticDraftCheckText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a key={`${card.staticDraftCheckCardId}:${href}`} href={href}>
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {card.sourceCoverageReviewPathStepIds.length} rows
+                        </span>
+                        <span>{card.sourceStaticReviewPromptCardId}</span>
+                        <span>{card.sourceStaticReadinessCueCardId}</span>
+                        <span>{card.sourceStaticFollowUpPromptCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.staticDraftCheckLabels.map((label) => (
+                          <span key={`${card.staticDraftCheckCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board-boundary-list">
+                {[
+                  "No saved response-readiness selections",
+                  "No saved draft-check state",
+                  "No saved answers, drafts, notes, or coverage state",
+                  "No saved coverage-review or response cue selections",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard
+                    .staticResponseReadinessBoundarySummary
                 }
               </p>
             </aside>

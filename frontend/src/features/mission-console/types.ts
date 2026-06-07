@@ -11029,6 +11029,111 @@ export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewPathView {
   sourceConstraintResponseEvidenceGapFollowUpCoverageBoard: ConstraintResponseEvidenceGapFollowUpCoverageBoardView;
 }
 
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardStaticNonGoalFlagsView
+  extends ConstraintResponseEvidenceGapFollowUpCoverageReviewPathStaticNonGoalFlagsView {
+  noSavedResponseReadinessState: true;
+  noSavedResponseReadinessSelections: true;
+  noSavedDraftCheckState: true;
+  noSavedDraftCheckSelections: true;
+  noSavedStaticDraftCheckCards: true;
+  noSavedAnswerDrafts: true;
+  noSavedReviewerNotes: true;
+  noSavedResponseNotes: true;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardRowView
+  extends Omit<
+    ConstraintResponseEvidenceGapFollowUpCoverageReviewPathStepView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  responseReadinessRowId: string;
+  responseReadinessRowIds: string[];
+  responseReadinessRowOrder: number;
+  sourceCoverageReviewPathStepId: string;
+  sourceCoverageReviewPathStepIds: string[];
+  sourceStaticResponseCueCardIds: string[];
+  responseReadinessLabels: string[];
+  staticDraftCheckLabels: string[];
+  responseReadinessText: string;
+  staticDraftCheckText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardStaticDraftCheckCardView
+  extends Omit<
+    ConstraintResponseEvidenceGapFollowUpCoverageReviewPathStaticResponseCueCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  staticDraftCheckCardId: string;
+  staticDraftCheckCardIds: string[];
+  staticDraftCheckOrder: number;
+  sourceStaticResponseCueCardId: string;
+  sourceStaticResponseCueCardIds: string[];
+  sourceCoverageReviewPathStepIds: string[];
+  responseReadinessLabels: string[];
+  staticDraftCheckLabels: string[];
+  responseReadinessText: string;
+  staticDraftCheckText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardSummaryView {
+  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardId: "candidate-local-constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-board";
+  label: string;
+  summary: string;
+  defaultResponseReadinessContext: {
+    defaultResponseReadinessRowId: string;
+    defaultStaticDraftCheckCardId: string;
+    defaultCoverageReviewPathStepId: string;
+    defaultStaticResponseCueCardId: string;
+    defaultCoverageRowId: string;
+    defaultStaticReviewPromptCardId: string;
+    defaultFollowUpReviewPathStepId: string;
+    defaultStaticReadinessCueCardId: string;
+    defaultEvidenceGapReadinessRowId: string;
+    defaultStaticFollowUpPromptCardId: string;
+    defaultEvidenceCheckReviewPathStepId: string;
+    defaultStaticCitationGapCueCardId: string;
+    defaultStaticEvidenceCheckPromptCardId: string;
+    defaultCitationReviewLaneRowId: string;
+    defaultStaticCitationCheckPromptCardId: string;
+    defaultSourceFollowUpMapEntryId: string;
+    sourceStage91CoverageReviewPathSummary: string;
+    sourceStage91DefaultCoverageReviewContext: ConstraintResponseEvidenceGapFollowUpCoverageReviewPathSummaryView["defaultCoverageReviewContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: ConstraintResponseEvidenceGapFollowUpCoverageReviewPathSummaryView["counts"] & {
+    responseReadinessRowCount: number;
+    staticDraftCheckCardCount: number;
+    responseReadinessLabelCount: number;
+    staticDraftCheckLabelCount: number;
+    localOnlyResponseReadinessRowCount: number;
+    localOnlyStaticDraftCheckCardCount: number;
+  };
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardView {
+  schema: "telemforge.constraint_response_evidence_gap_follow_up_coverage_review_response_readiness_board.v1";
+  version: 1;
+  contractLabel: "local deterministic constraint-response evidence-gap follow-up coverage-review response-readiness board and static draft checks";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardSummaryView;
+  defaultResponseReadinessRow: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardRowView;
+  defaultStaticDraftCheckCard: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardStaticDraftCheckCardView;
+  responseReadinessRows: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardRowView[];
+  staticDraftCheckCards: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardStaticDraftCheckCardView[];
+  staticResponseReadinessBoundarySummary: string;
+  sourceConstraintResponseEvidenceGapFollowUpCoverageReviewPath: ConstraintResponseEvidenceGapFollowUpCoverageReviewPathView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -11278,6 +11383,7 @@ export interface MissionConsoleView {
   constraintResponseEvidenceGapFollowUpReviewPath?: ConstraintResponseEvidenceGapFollowUpReviewPathView;
   constraintResponseEvidenceGapFollowUpCoverageBoard?: ConstraintResponseEvidenceGapFollowUpCoverageBoardView;
   constraintResponseEvidenceGapFollowUpCoverageReviewPath?: ConstraintResponseEvidenceGapFollowUpCoverageReviewPathView;
+  constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard?: ConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoardView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
