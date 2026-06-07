@@ -102,6 +102,7 @@ import { buildReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneS
 import { buildReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane } from "../../lib/reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane.ts";
 import { buildConstraintResponseSourceFollowUpMap } from "../../lib/constraintResponseSourceFollowUpMap.ts";
 import { buildConstraintResponseSourceCitationReviewLane } from "../../lib/constraintResponseSourceCitationReviewLane.ts";
+import { buildConstraintResponseEvidenceCheckReviewPath } from "../../lib/constraintResponseEvidenceCheckReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -429,6 +430,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseSourceCitationReviewLane(
       constraintResponseSourceFollowUpMap,
     );
+  const constraintResponseEvidenceCheckReviewPath =
+    buildConstraintResponseEvidenceCheckReviewPath(
+      constraintResponseSourceCitationReviewLane,
+    );
 
   return {
     mission: {
@@ -527,6 +532,7 @@ export function buildMissionConsoleView(
     reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane,
     constraintResponseSourceFollowUpMap,
     constraintResponseSourceCitationReviewLane,
+    constraintResponseEvidenceCheckReviewPath,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

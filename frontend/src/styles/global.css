@@ -225,6 +225,7 @@ button {
 .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-readiness-lane-section,
 .constraint-response-source-follow-up-map-section,
 .constraint-response-source-citation-review-lane-section,
+.constraint-response-evidence-check-review-path-section,
 .incident-packet-section,
 .alerts-section {
   border: 1px solid #d7e1e8;
@@ -2974,6 +2975,13 @@ button {
   margin-top: 16px;
 }
 
+.constraint-response-evidence-check-review-path-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
 .evidence-coverage-row-list,
 .evidence-coverage-panel,
 .evidence-coverage-group-list,
@@ -3291,7 +3299,11 @@ button {
 .constraint-response-source-citation-review-lane-row-list,
 .constraint-response-source-citation-review-lane-panel,
 .constraint-response-source-citation-review-lane-evidence-list,
-.constraint-response-source-citation-review-lane-boundary-list {
+.constraint-response-source-citation-review-lane-boundary-list,
+.constraint-response-evidence-check-review-path-step-list,
+.constraint-response-evidence-check-review-path-panel,
+.constraint-response-evidence-check-review-path-cue-list,
+.constraint-response-evidence-check-review-path-boundary-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3614,7 +3626,11 @@ button {
 .constraint-response-source-citation-review-lane-row-list article,
 .constraint-response-source-citation-review-lane-panel,
 .constraint-response-source-citation-review-lane-evidence-list article,
-.constraint-response-source-citation-review-lane-boundary-list div {
+.constraint-response-source-citation-review-lane-boundary-list div,
+.constraint-response-evidence-check-review-path-step-list article,
+.constraint-response-evidence-check-review-path-panel,
+.constraint-response-evidence-check-review-path-cue-list article,
+.constraint-response-evidence-check-review-path-boundary-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -4802,6 +4818,7 @@ button {
   .review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-matrix-review-path-response-map-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-readiness-lane-layout,
   .constraint-response-source-follow-up-map-layout,
   .constraint-response-source-citation-review-lane-layout,
+  .constraint-response-evidence-check-review-path-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
