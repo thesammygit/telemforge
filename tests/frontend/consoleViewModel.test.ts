@@ -3868,6 +3868,81 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix_review_path_response_map_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_readiness_lane.v1",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.summary.counts.sourceReadinessLaneRowCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath
+      ?.sourceReviewPathSteps.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane
+      ?.summary.counts.staticSourceFollowUpCueCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath
+      ?.staticSourceReviewPromptCards.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane?.sourceReadinessLaneRows.every(
+      (row) =>
+        row.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneRowId.length > 0 &&
+        row.sourceReadinessLaneText.includes(row.sourceSourceReviewPathStepId) &&
+        row.sourceReadinessLaneText.includes(row.sourceCrosswalkRowId) &&
+        row.sourceReadinessLaneText.includes(
+          row.sourceConstraintCoverageRowId,
+        ) &&
+        row.staticSourceFollowUpCueText.includes(
+          row.sourceSourceReviewPathStepId,
+        ) &&
+        row.sourceReadinessLaneLabels.includes(
+          "source-review readiness lane row",
+        ) &&
+        row.sourceReadinessLaneLabels.includes(
+          "static source-follow-up cue carry-forward",
+        ) &&
+        row.staticNonGoalFlags.noSavedSourceReviewReadinessState &&
+        row.staticNonGoalFlags.noSavedSourceReadinessLaneState &&
+        row.staticNonGoalFlags.noSavedSourceFollowUpState &&
+        row.staticNonGoalFlags.noSavedSourceFollowUpCueState &&
+        row.staticNonGoalFlags.noSavedSourceSelections &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLane?.staticSourceFollowUpCueCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReadinessLaneStaticSourceFollowUpCueCardId.length > 0 &&
+        card.staticSourceFollowUpCueText.includes(
+          card.sourceStaticSourceReviewPromptCardId,
+        ) &&
+        card.staticSourceFollowUpCueText.includes(
+          card.sourceStaticReviewCheckCardId,
+        ) &&
+        card.staticSourceFollowUpCueLabels.includes(
+          "static source-follow-up cue card",
+        ) &&
+        card.staticSourceFollowUpCueLabels.includes(
+          "static source-review prompt carry-forward",
+        ) &&
+        card.staticNonGoalFlags.noSavedSourceReviewReadinessState &&
+        card.staticNonGoalFlags.noSavedSourceReadinessLaneState &&
+        card.staticNonGoalFlags.noSavedStaticSourceFollowUpCues &&
+        card.staticNonGoalFlags.noSavedStaticSourceFollowUpCueCards &&
+        card.staticNonGoalFlags.noSavedSourceSelections &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
