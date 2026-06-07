@@ -114,6 +114,7 @@ For each stage:
 85. [Constraint Response Source Follow-Up Map And Static Citation Checks](steps/85-constraint-response-source-follow-up-map-and-static-citation-checks.md)
 86. [Constraint Response Source Citation Review Lane And Static Evidence Check Prompts](steps/86-constraint-response-source-citation-review-lane-and-static-evidence-check-prompts.md)
 87. [Constraint Response Evidence Check Review Path And Static Citation Gap Cues](steps/87-constraint-response-evidence-check-review-path-and-static-citation-gap-cues.md)
+88. [Constraint Response Evidence Gap Readiness Matrix And Static Follow-Up Prompts](steps/88-constraint-response-evidence-gap-readiness-matrix-and-static-follow-up-prompts.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
