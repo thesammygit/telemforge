@@ -110,6 +110,7 @@ import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadine
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.ts";
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard.ts";
 import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath.ts";
+import { buildConstraintResponseRevisionFollowUpReadinessBoard } from "../../lib/constraintResponseRevisionFollowUpReadinessBoard.ts";
 import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -474,6 +475,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath(
       constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard,
     );
+  const constraintResponseRevisionFollowUpReadinessBoard =
+    buildConstraintResponseRevisionFollowUpReadinessBoard(
+      constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath,
+    );
 
   return {
     mission: {
@@ -581,6 +586,7 @@ export function buildMissionConsoleView(
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath,
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageBoard,
     constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessReviewPathRevisionCoverageReviewPath,
+    constraintResponseRevisionFollowUpReadinessBoard,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
