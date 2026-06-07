@@ -104,6 +104,7 @@ import { buildConstraintResponseSourceFollowUpMap } from "../../lib/constraintRe
 import { buildConstraintResponseSourceCitationReviewLane } from "../../lib/constraintResponseSourceCitationReviewLane.ts";
 import { buildConstraintResponseEvidenceCheckReviewPath } from "../../lib/constraintResponseEvidenceCheckReviewPath.ts";
 import { buildConstraintResponseEvidenceGapReadinessMatrix } from "../../lib/constraintResponseEvidenceGapReadinessMatrix.ts";
+import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
 const statusRank: Record<TelemetryStatus, number> = {
@@ -439,6 +440,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseEvidenceGapReadinessMatrix(
       constraintResponseEvidenceCheckReviewPath,
     );
+  const constraintResponseEvidenceGapFollowUpReviewPath =
+    buildConstraintResponseEvidenceGapFollowUpReviewPath(
+      constraintResponseEvidenceGapReadinessMatrix,
+    );
 
   return {
     mission: {
@@ -539,6 +544,7 @@ export function buildMissionConsoleView(
     constraintResponseSourceCitationReviewLane,
     constraintResponseEvidenceCheckReviewPath,
     constraintResponseEvidenceGapReadinessMatrix,
+    constraintResponseEvidenceGapFollowUpReviewPath,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,

@@ -10736,6 +10736,102 @@ export interface ConstraintResponseEvidenceGapReadinessMatrixView {
   sourceConstraintResponseEvidenceCheckReviewPath: ConstraintResponseEvidenceCheckReviewPathView;
 }
 
+export interface ConstraintResponseEvidenceGapFollowUpReviewPathStaticNonGoalFlagsView
+  extends ConstraintResponseEvidenceGapReadinessMatrixStaticNonGoalFlagsView {
+  noSavedFollowUpReviewPathState: true;
+  noSavedFollowUpReviewPathSelections: true;
+  noSavedEvidenceGapFollowUpSelections: true;
+  noSavedStaticReadinessCueState: true;
+  noSavedStaticReadinessCueCards: true;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpReviewPathStepView
+  extends Omit<
+    ConstraintResponseEvidenceGapReadinessMatrixRowView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  followUpReviewPathStepId: string;
+  followUpReviewPathStepIds: string[];
+  followUpReviewPathStepOrder: number;
+  sourceEvidenceGapReadinessRowId: string;
+  sourceEvidenceGapReadinessRowIds: string[];
+  sourceStaticFollowUpPromptCardIds: string[];
+  followUpReviewLabels: string[];
+  readinessCueLabels: string[];
+  followUpReviewText: string;
+  readinessCueText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseEvidenceGapFollowUpReviewPathStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpReviewPathStaticReadinessCueCardView
+  extends Omit<
+    ConstraintResponseEvidenceGapReadinessMatrixStaticFollowUpPromptCardView,
+    "staticNonGoalContext" | "staticNonGoalFlags"
+  > {
+  staticReadinessCueCardId: string;
+  staticReadinessCueCardIds: string[];
+  staticReadinessCueOrder: number;
+  sourceStaticFollowUpPromptCardId: string;
+  sourceStaticFollowUpPromptCardIds: string[];
+  sourceEvidenceGapReadinessRowIds: string[];
+  followUpReviewLabels: string[];
+  readinessCueLabels: string[];
+  followUpReviewText: string;
+  readinessCueText: string;
+  staticNonGoalContext: string;
+  staticNonGoalFlags: ConstraintResponseEvidenceGapFollowUpReviewPathStaticNonGoalFlagsView;
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpReviewPathSummaryView {
+  constraintResponseEvidenceGapFollowUpReviewPathId: "candidate-local-constraint-response-evidence-gap-follow-up-review-path";
+  label: string;
+  summary: string;
+  defaultFollowUpReviewContext: {
+    defaultFollowUpReviewPathStepId: string;
+    defaultStaticReadinessCueCardId: string;
+    defaultEvidenceGapReadinessRowId: string;
+    defaultStaticFollowUpPromptCardId: string;
+    defaultEvidenceCheckReviewPathStepId: string;
+    defaultStaticCitationGapCueCardId: string;
+    defaultStaticEvidenceCheckPromptCardId: string;
+    defaultCitationReviewLaneRowId: string;
+    defaultStaticCitationCheckPromptCardId: string;
+    defaultSourceFollowUpMapEntryId: string;
+    sourceStage88EvidenceGapReadinessMatrixSummary: string;
+    sourceStage88DefaultEvidenceGapReadinessContext: ConstraintResponseEvidenceGapReadinessMatrixSummaryView["defaultEvidenceGapReadinessContext"];
+  };
+  informationalOnly: true;
+  nonActionable: true;
+  nonPersistent: true;
+  nonExecutable: true;
+  nonRouting: true;
+  nonCertifying: true;
+  nonRanking: true;
+  counts: ConstraintResponseEvidenceGapReadinessMatrixSummaryView["counts"] & {
+    followUpReviewPathStepCount: number;
+    staticReadinessCueCardCount: number;
+    followUpReviewLabelCount: number;
+    readinessCueLabelCount: number;
+    localOnlyFollowUpReviewPathStepCount: number;
+    localOnlyStaticReadinessCueCardCount: number;
+  };
+}
+
+export interface ConstraintResponseEvidenceGapFollowUpReviewPathView {
+  schema: "telemforge.constraint_response_evidence_gap_follow_up_review_path.v1";
+  version: 1;
+  contractLabel: "local deterministic constraint-response evidence-gap follow-up review path and static readiness cues";
+  localStatus: ReplayPlaybackView["localStatus"];
+  summary: ConstraintResponseEvidenceGapFollowUpReviewPathSummaryView;
+  defaultFollowUpReviewPathStep: ConstraintResponseEvidenceGapFollowUpReviewPathStepView;
+  defaultStaticReadinessCueCard: ConstraintResponseEvidenceGapFollowUpReviewPathStaticReadinessCueCardView;
+  followUpReviewPathSteps: ConstraintResponseEvidenceGapFollowUpReviewPathStepView[];
+  staticReadinessCueCards: ConstraintResponseEvidenceGapFollowUpReviewPathStaticReadinessCueCardView[];
+  staticFollowUpReviewBoundarySummary: string;
+  sourceConstraintResponseEvidenceGapReadinessMatrix: ConstraintResponseEvidenceGapReadinessMatrixView;
+}
+
 export type ScenarioRunbookStepActionKind =
   | "inspect_alert"
   | "acknowledge_alert"
@@ -10982,6 +11078,7 @@ export interface MissionConsoleView {
   constraintResponseSourceCitationReviewLane?: ConstraintResponseSourceCitationReviewLaneView;
   constraintResponseEvidenceCheckReviewPath?: ConstraintResponseEvidenceCheckReviewPathView;
   constraintResponseEvidenceGapReadinessMatrix?: ConstraintResponseEvidenceGapReadinessMatrixView;
+  constraintResponseEvidenceGapFollowUpReviewPath?: ConstraintResponseEvidenceGapFollowUpReviewPathView;
   runbook?: ScenarioRunbookPlaybackView;
   incidentReviewPacket?: IncidentReviewPacketView;
   incidentReviewExport?: IncidentReviewExportPayload;
