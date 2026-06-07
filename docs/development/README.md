@@ -112,6 +112,7 @@ For each stage:
 83. [Constraint Response Source Crosswalk Review Path And Static Source Review Prompts](steps/83-constraint-response-source-crosswalk-review-path-and-static-source-review-prompts.md)
 84. [Constraint Response Source Review Readiness Lane And Static Source Follow-Up Cues](steps/84-constraint-response-source-review-readiness-lane-and-static-source-follow-up-cues.md)
 85. [Constraint Response Source Follow-Up Map And Static Citation Checks](steps/85-constraint-response-source-follow-up-map-and-static-citation-checks.md)
+86. [Constraint Response Source Citation Review Lane And Static Evidence Check Prompts](steps/86-constraint-response-source-citation-review-lane-and-static-evidence-check-prompts.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
