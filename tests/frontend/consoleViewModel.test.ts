@@ -3526,6 +3526,67 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedResponseMapReviewPathState,
     ),
   );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath
+      ?.schema,
+    "telemforge.review_observation_handoff_follow_up_readiness_answer_follow_up_review_lane_source_recap_review_path_coverage_matrix_review_path_response_map_review_path_response_prompt_readiness_board_answer_review_path.v1",
+  );
+  assert.strictEqual(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath
+      ?.sourceReviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoard,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoard,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath
+      ?.summary.counts.answerReviewPathStepCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoard
+      ?.staticAnswerCheckCards.length,
+  );
+  assert.equal(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath
+      ?.summary.counts.staticConstraintNoteCardCount,
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoard
+      ?.responsePromptReadinessRows.length,
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath?.answerReviewPathSteps.every(
+      (step) =>
+        step.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathStepId.length > 0 &&
+        step.answerReviewPathText.includes(step.sourceStaticAnswerCheckCardId) &&
+        step.staticConstraintNoteText.includes(
+          step.sourceStaticAnswerCheckCardId,
+        ) &&
+        step.answerReviewPathLabels.includes("answer-review path step") &&
+        step.answerReviewPathLabels.includes("static constraint-note context") &&
+        step.staticNonGoalFlags.noSavedAnswerReviewState &&
+        step.staticNonGoalFlags.noSavedConstraintNoteState &&
+        step.staticNonGoalFlags.noSavedReviewerAnswers &&
+        step.staticNonGoalFlags.noSavedAnswerCheckState,
+    ),
+  );
+  assert.ok(
+    view.reviewObservationHandoffFollowUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPath?.staticConstraintNoteCards.every(
+      (card) =>
+        card.followUpReadinessAnswerFollowUpReviewLaneSourceRecapReviewPathCoverageMatrixReviewPathResponseMapReviewPathResponsePromptReadinessBoardAnswerReviewPathStaticConstraintNoteCardId.length > 0 &&
+        card.staticConstraintNoteText.includes(
+          card.sourceResponsePromptReadinessRowId,
+        ) &&
+        card.answerReviewPathText.includes(
+          card.sourceResponsePromptReadinessRowId,
+        ) &&
+        card.staticConstraintNoteLabels.includes("static constraint note") &&
+        card.staticConstraintNoteLabels.includes(
+          "manual answer constraint carry-forward",
+        ) &&
+        card.staticNonGoalFlags.noSavedAnswerReviewState &&
+        card.staticNonGoalFlags.noSavedConstraintNoteState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers &&
+        card.staticNonGoalFlags.noSavedPromptReadinessState,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
