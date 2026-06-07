@@ -4255,6 +4255,61 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedCitationSelections,
     ),
   );
+  assert.ok(view.constraintResponseEvidenceGapFollowUpCoverageBoard);
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard?.schema,
+    "telemforge.constraint_response_evidence_gap_follow_up_coverage_board.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard
+      ?.sourceConstraintResponseEvidenceGapFollowUpReviewPath,
+    view.constraintResponseEvidenceGapFollowUpReviewPath,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard?.summary.counts
+      .coverageRowCount,
+    view.constraintResponseEvidenceGapFollowUpReviewPath?.followUpReviewPathSteps
+      .length,
+  );
+  assert.equal(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard?.summary.counts
+      .staticReviewPromptCardCount,
+    view.constraintResponseEvidenceGapFollowUpReviewPath?.staticReadinessCueCards
+      .length,
+  );
+  assert.deepEqual(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard?.summary
+      .defaultCoverageContext.sourceStage89DefaultFollowUpReviewContext,
+    view.constraintResponseEvidenceGapFollowUpReviewPath?.summary
+      .defaultFollowUpReviewContext,
+  );
+  assert.ok(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard?.coverageRows.every(
+      (row) =>
+        row.coverageRowId.length > 0 &&
+        row.coverageText.includes(row.sourceFollowUpReviewPathStepId) &&
+        row.coverageText.includes(row.sourceStaticReadinessCueCardIds[0]) &&
+        row.coverageText.includes(row.sourceEvidenceGapReadinessRowId) &&
+        row.coverageText.includes(row.sourceStaticFollowUpPromptCardIds[0]) &&
+        row.coverageLabels.includes("evidence-gap follow-up coverage row") &&
+        row.staticReviewPromptLabels.includes("static review prompt context") &&
+        row.staticNonGoalFlags.noSavedCoverageBoardState &&
+        row.staticNonGoalFlags.noSavedEvidenceGapFollowUpSelections &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseEvidenceGapFollowUpCoverageBoard?.staticReviewPromptCards.every(
+      (card) =>
+        card.staticReviewPromptCardId.length > 0 &&
+        card.staticReviewPromptText.includes(card.sourceStaticReadinessCueCardId) &&
+        card.staticReviewPromptText.includes(card.sourceStaticFollowUpPromptCardId) &&
+        card.staticReviewPromptLabels.includes("static review prompt card") &&
+        card.staticNonGoalFlags.noSavedStaticReviewPromptCards &&
+        card.staticNonGoalFlags.noSavedCoverageBoardState &&
+        card.staticNonGoalFlags.noSavedCitationSelections,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {

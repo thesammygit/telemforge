@@ -104,6 +104,7 @@ import { buildConstraintResponseSourceFollowUpMap } from "../../lib/constraintRe
 import { buildConstraintResponseSourceCitationReviewLane } from "../../lib/constraintResponseSourceCitationReviewLane.ts";
 import { buildConstraintResponseEvidenceCheckReviewPath } from "../../lib/constraintResponseEvidenceCheckReviewPath.ts";
 import { buildConstraintResponseEvidenceGapReadinessMatrix } from "../../lib/constraintResponseEvidenceGapReadinessMatrix.ts";
+import { buildConstraintResponseEvidenceGapFollowUpCoverageBoard } from "../../lib/constraintResponseEvidenceGapFollowUpCoverageBoard.ts";
 import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -444,6 +445,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseEvidenceGapFollowUpReviewPath(
       constraintResponseEvidenceGapReadinessMatrix,
     );
+  const constraintResponseEvidenceGapFollowUpCoverageBoard =
+    buildConstraintResponseEvidenceGapFollowUpCoverageBoard(
+      constraintResponseEvidenceGapFollowUpReviewPath,
+    );
 
   return {
     mission: {
@@ -545,6 +550,7 @@ export function buildMissionConsoleView(
     constraintResponseEvidenceCheckReviewPath,
     constraintResponseEvidenceGapReadinessMatrix,
     constraintResponseEvidenceGapFollowUpReviewPath,
+    constraintResponseEvidenceGapFollowUpCoverageBoard,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
