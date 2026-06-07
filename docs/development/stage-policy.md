@@ -92,8 +92,8 @@ Executor must:
 
 ## Current Transition
 
-Stage 87 is review-ready/completed for automation-branch development. It proved
-a deterministic local constraint-response evidence-check review path and static
-citation-gap cue surface over the Stage 86 source citation-review lane.
+Stage 88 is review-ready/completed for automation-branch development. It proved
+a deterministic local constraint-response evidence-gap readiness matrix and
+static follow-up prompt surface over the Stage 87 evidence-check review path.
 
-New work should begin in Stage 88 unless a focused Stage 87 regression is found.
+New work should begin in Stage 89 unless a focused Stage 88 regression is found.
