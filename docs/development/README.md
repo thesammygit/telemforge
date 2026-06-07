@@ -109,6 +109,7 @@ For each stage:
 80. [Review Observation Handoff Follow-Up Readiness Answer Follow-Up Review Lane Source Recap Review Path Coverage Review Response Map Review Path Response Prompt Readiness Board Answer Review Path Constraint Coverage Map And Static Response Notes](steps/80-review-observation-handoff-follow-up-readiness-answer-follow-up-review-lane-source-recap-review-path-coverage-review-response-map-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-and-static-response-notes.md)
 81. [Review Observation Handoff Follow-Up Readiness Answer Follow-Up Review Lane Source Recap Review Path Coverage Review Response Map Review Path Response Prompt Readiness Board Answer Review Path Constraint Coverage Map Review Path And Static Response Prompts](steps/81-constraint-response-review-path-and-static-response-prompts.md)
 82. [Constraint Response Source Crosswalk And Static Review Checks](steps/82-constraint-response-source-crosswalk-and-static-review-checks.md)
+83. [Constraint Response Source Crosswalk Review Path And Static Source Review Prompts](steps/83-constraint-response-source-crosswalk-review-path-and-static-source-review-prompts.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 

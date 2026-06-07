@@ -92,9 +92,8 @@ Executor must:
 
 ## Current Transition
 
-Stage 81 is review-ready/completed for automation-branch development. It proved
-a deterministic local constraint-response review path and static response-review
-prompt surface over the Stage 80 constraint-coverage map and static
-response-note prompt cards.
+Stage 82 is review-ready/completed for automation-branch development. It proved
+a deterministic local constraint-response source crosswalk and static
+review-check surface over the Stage 81 constraint-response review path.
 
-New work should begin in Stage 82 unless a focused Stage 81 regression is found.
+New work should begin in Stage 83 unless a focused Stage 82 regression is found.
