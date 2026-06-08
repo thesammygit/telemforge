@@ -4736,6 +4736,67 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedStaticRevisionFollowUpPromptCards,
     ),
   );
+  assert.ok(view.constraintResponseRevisionFollowUpReadinessReviewPath);
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPath?.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPath
+      ?.sourceConstraintResponseRevisionFollowUpReadinessBoard,
+    view.constraintResponseRevisionFollowUpReadinessBoard,
+  );
+  assert.deepEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPath?.summary
+      .defaultRevisionFollowUpReadinessReviewPathContext
+      .sourceStage96DefaultRevisionFollowUpReadinessContext,
+    view.constraintResponseRevisionFollowUpReadinessBoard?.summary
+      .defaultRevisionFollowUpReadinessContext,
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPath?.revisionFollowUpReadinessReviewPathSteps.every(
+      (step) =>
+        step.revisionFollowUpReadinessReviewPathStepId.length > 0 &&
+        step.revisionFollowUpReadinessReviewPathText.includes(
+          step.sourceRevisionFollowUpReadinessRowId,
+        ) &&
+        step.revisionFollowUpReadinessReviewPathText.includes(
+          step.sourceStaticResponseCheckCardIds[0],
+        ) &&
+        step.staticResponsePromptText.includes(
+          step.sourceStaticRevisionFollowUpPromptCardIds[0],
+        ) &&
+        step.revisionFollowUpReadinessReviewPathLabels.includes(
+          "revision follow-up readiness review-path step",
+        ) &&
+        step.staticResponsePromptLabels.includes(
+          "static response-prompt carry-forward",
+        ) &&
+        step.staticNonGoalFlags.noSavedReviewPathState &&
+        step.staticNonGoalFlags.noSavedResponsePromptSelections &&
+        step.staticNonGoalFlags.noSavedResponseDrafts &&
+        step.staticNonGoalFlags.noSavedRevisionDrafts &&
+        step.staticNonGoalFlags.noSavedReviewerNotes,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPath?.staticResponsePromptCards.every(
+      (card) =>
+        card.staticResponsePromptCardId.length > 0 &&
+        card.staticResponsePromptText.includes(
+          card.sourceStaticResponseCheckCardId,
+        ) &&
+        card.staticResponsePromptText.includes(
+          card.sourceStaticRevisionFollowUpPromptCardId,
+        ) &&
+        card.staticResponsePromptLabels.includes(
+          "static response-prompt card",
+        ) &&
+        card.staticNonGoalFlags.noSavedStaticResponsePromptCards &&
+        card.staticNonGoalFlags.noSavedResponsePromptSelections &&
+        card.staticNonGoalFlags.noSavedStaticResponseCheckCards,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
