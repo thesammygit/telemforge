@@ -5064,6 +5064,74 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedResponseNotes,
     ),
   );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk
+      ?.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk
+      ?.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath,
+  );
+  assert.deepEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk
+      ?.summary.defaultSourceCheckContext
+      .sourceStage101DefaultResponsePromptContext,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.summary.defaultResponsePromptContext,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk
+      ?.summary.counts.sourceCrosswalkRowCount,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.constraintCoverageReviewPathSteps.length,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk
+      ?.summary.counts.staticReviewCheckCardCount,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.staticResponsePromptCards.length,
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk?.sourceCrosswalkRows.every(
+      (row) =>
+        row.sourceCrosswalkLabels.includes(
+          "constraint-response source crosswalk row",
+        ) &&
+        row.sourceCrosswalkLabels.includes("static review-check source chain") &&
+        row.staticNonGoalFlags.noSavedSourceCrosswalkState &&
+        row.staticNonGoalFlags.noSavedSourceSelections &&
+        row.staticNonGoalFlags.noSavedSourceCheckState &&
+        row.staticNonGoalFlags.noSavedStaticReviewChecks &&
+        row.staticNonGoalFlags.noSavedResponseReviewState &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers &&
+        row.staticNonGoalFlags.noSavedResponseNotes,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk?.staticReviewCheckCards.every(
+      (card) =>
+        card.staticReviewCheckLabels.includes("static review-check card") &&
+        card.staticReviewCheckLabels.includes("response-prompt source check") &&
+        card.staticNonGoalFlags.noSavedSourceCrosswalkState &&
+        card.staticNonGoalFlags.noSavedSourceSelections &&
+        card.staticNonGoalFlags.noSavedSourceCheckState &&
+        card.staticNonGoalFlags.noSavedStaticReviewChecks &&
+        card.staticNonGoalFlags.noSavedResponseReviewState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers &&
+        card.staticNonGoalFlags.noSavedResponseNotes,
+    ),
+  );
+  const missionConsoleSource = readFileSync(
+    resolve(repoRoot, "frontend/src/features/mission-console/MissionConsole.tsx"),
+    "utf8",
+  );
+  assert.match(missionConsoleSource, /Stage 102 source crosswalk/);
+  assert.match(missionConsoleSource, /No saved review-check state/);
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
