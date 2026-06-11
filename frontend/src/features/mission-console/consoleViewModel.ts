@@ -113,6 +113,7 @@ import { buildConstraintResponseEvidenceGapFollowUpCoverageReviewResponseReadine
 import { buildConstraintResponseRevisionFollowUpReadinessBoard } from "../../lib/constraintResponseRevisionFollowUpReadinessBoard.ts";
 import { buildConstraintResponseRevisionFollowUpReadinessReviewPath } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPath.ts";
 import { buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard.ts";
+import { buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath.ts";
 import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -489,6 +490,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard(
       constraintResponseRevisionFollowUpReadinessReviewPath,
     );
+  const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath =
+    buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath(
+      constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard,
+    );
 
   return {
     mission: {
@@ -599,6 +604,7 @@ export function buildMissionConsoleView(
     constraintResponseRevisionFollowUpReadinessBoard,
     constraintResponseRevisionFollowUpReadinessReviewPath,
     constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard,
+    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
