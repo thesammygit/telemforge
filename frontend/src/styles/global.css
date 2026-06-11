@@ -3063,7 +3063,8 @@ button {
 .constraint-response-revision-follow-up-readiness-review-path-section,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-section,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-section,
-.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-section {
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-section,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-section {
   margin-top: 18px;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3082,7 +3083,8 @@ button {
 .constraint-response-revision-follow-up-readiness-review-path-layout,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-layout,
-.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-layout {
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-layout,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
   gap: 16px;
@@ -3825,7 +3827,12 @@ button {
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-panel,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-note-list,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-static-response-note-prompt-list,
-.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-boundary-list {
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-boundary-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-step-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-panel,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-prompt-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-static-response-prompt-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-boundary-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3859,7 +3866,12 @@ button {
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-panel,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-note-list article,
 .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-static-response-note-prompt-list article,
-.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-boundary-list div {
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-boundary-list div,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-step-list article,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-panel,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-prompt-list article,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-static-response-prompt-list article,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-boundary-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -5060,6 +5072,7 @@ button {
   .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout,
   .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-layout,
   .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-layout,
+  .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }

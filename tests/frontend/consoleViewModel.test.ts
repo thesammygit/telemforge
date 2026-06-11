@@ -4986,6 +4986,84 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedResponseNotes,
     ),
   );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap,
+  );
+  assert.deepEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.summary.defaultResponsePromptContext.sourceStage100DefaultResponseNoteContext,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+      ?.summary.defaultResponseNoteContext,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.summary.counts.constraintCoverageReviewPathStepCount,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+      ?.constraintCoverageRows.length,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath
+      ?.summary.counts.staticResponsePromptCardCount,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+      ?.staticResponseNotePromptCards.length,
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath?.constraintCoverageReviewPathSteps.every(
+      (step) =>
+        step.constraintCoverageReviewPathStepId.length > 0 &&
+        step.constraintCoverageReviewPathText.includes(
+          step.sourceConstraintCoverageRowId,
+        ) &&
+        step.constraintCoverageReviewPathText.includes(
+          step.sourceAnswerReviewPathStepId,
+        ) &&
+        step.staticResponsePromptText.includes(
+          step.sourceAnswerReviewPathStepId,
+        ) &&
+        step.constraintCoverageReviewPathLabels.includes(
+          "constraint-coverage review path step",
+        ) &&
+        step.constraintCoverageReviewPathLabels.includes(
+          "static response-prompt carry-forward",
+        ) &&
+        step.staticNonGoalFlags.noSavedConstraintCoverageReviewState &&
+        step.staticNonGoalFlags.noSavedReviewPathState &&
+        step.staticNonGoalFlags.noSavedResponsePromptState &&
+        step.staticNonGoalFlags.noSavedReviewerAnswers &&
+        step.staticNonGoalFlags.noSavedResponseNotes,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath?.staticResponsePromptCards.every(
+      (card) =>
+        card.staticResponsePromptCardId.length > 0 &&
+        card.staticResponsePromptText.includes(
+          card.sourceStaticResponseNotePromptCardId,
+        ) &&
+        card.staticResponsePromptText.includes(
+          card.sourceResponsePromptReadinessRowId,
+        ) &&
+        card.staticResponsePromptLabels.includes("static response prompt") &&
+        card.staticResponsePromptLabels.includes(
+          "response-note prompt carry-forward",
+        ) &&
+        card.staticNonGoalFlags.noSavedConstraintCoverageReviewState &&
+        card.staticNonGoalFlags.noSavedReviewPathState &&
+        card.staticNonGoalFlags.noSavedResponsePromptState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers &&
+        card.staticNonGoalFlags.noSavedResponseNotes,
+    ),
+  );
 });
 
 test("buildMissionConsoleView keeps the surface index aligned with local-live mode", () => {
