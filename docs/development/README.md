@@ -126,6 +126,7 @@ For each stage:
 97. [Constraint Response Revision Follow-Up Readiness Review Path And Static Response Prompts](steps/97-constraint-response-revision-follow-up-readiness-review-path-and-static-response-prompts.md)
 98. [Constraint Response Revision Follow-Up Readiness Review Path Response Prompt Readiness Board And Static Answer Checks](steps/98-constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-and-static-answer-checks.md)
 99. [Constraint Response Revision Follow-Up Readiness Review Path Response Prompt Readiness Board Answer Review Path And Static Constraint Notes](steps/99-constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-and-static-constraint-notes.md)
+100. [Constraint Response Revision Follow-Up Readiness Review Path Response Prompt Readiness Board Answer Review Path Constraint Coverage Map And Static Response Notes](steps/100-constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-and-static-response-notes.md)
 
 Future stages should be added as new numbered files when the next work crosses a new product domain, risk profile, or review gate. Do not keep appending unrelated work to the current stage.
 
