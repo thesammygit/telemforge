@@ -158,6 +158,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard;
   const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath =
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath;
+  const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -16690,6 +16692,236 @@ export function MissionConsole({
                 {
                   constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath
                     .staticConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap ? (
+        <section
+          className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-section"
+          aria-label="Stage 100 constraint coverage"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 100 constraint coverage</span>
+              <h2>Constraint coverage map and response notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap.localStatus}`}
+            >
+              {
+                constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap.localStatus
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Coverage rows</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+                    .summary.counts.constraintCoverageRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Response-note prompts</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+                    .summary.counts.staticResponseNotePromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Coverage labels</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+                    .summary.counts.constraintCoverageLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompt labels</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+                    .summary.counts.staticResponseNotePromptLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-layout">
+            <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-row-list">
+              {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap.constraintCoverageRows.map(
+                (row) => (
+                  <article key={row.constraintCoverageRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Constraint coverage {row.constraintCoverageRowOrder} -{" "}
+                          {row.sourceStaticAnswerCheckCardId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticConstraintNoteCardIds.length} notes
+                      </span>
+                    </div>
+                    <p>{row.summary}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 99 step</span>
+                        <strong>{row.sourceAnswerReviewPathStepIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Constraint notes</span>
+                        <strong>{row.sourceStaticConstraintNoteCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{row.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved notes</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedResponseNoteState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${row.constraintCoverageRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceAnswerReviewPathStepId}</span>
+                      <span>{row.sourceStaticAnswerCheckCardId}</span>
+                      <span>{row.sourceStaticResponsePromptCardId}</span>
+                      <span>{row.sourceStaticResponseCheckCardId}</span>
+                    </div>
+                    <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-note-list">
+                      {row.sourceStaticConstraintNoteCardIds.map((constraintNoteId) => (
+                        <article key={`${row.constraintCoverageRowId}:${constraintNoteId}`}>
+                          <span className="event-type">
+                            Stage 99 constraint note
+                          </span>
+                          <strong>{constraintNoteId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...row.staticAnswerCheckLabels,
+                        ...row.answerReviewPathLabels,
+                        ...row.staticConstraintNoteLabels,
+                        ...row.constraintCoverageLabels,
+                      ].map((label) => (
+                        <span key={`${row.constraintCoverageRowId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{row.staticAnswerCheckText}</p>
+                    <p>{row.staticResponsePromptReadinessText}</p>
+                    <p>{row.constraintCoverageText}</p>
+                    <p>{row.staticResponseNotePromptText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-panel">
+              <span className="metric-label">Default response-note context</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+                    .defaultConstraintCoverageRow.label
+                }
+              </strong>
+              <p>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap
+                    .summary.summary
+                }
+              </p>
+              <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-static-response-note-prompt-list">
+                {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap.staticResponseNotePromptCards.map(
+                  (card) => (
+                    <article key={card.staticResponseNotePromptCardId}>
+                      <span className="event-type">
+                        Response-note prompt {card.staticResponseNotePromptOrder} -{" "}
+                        {card.sourceResponsePromptReadinessRowId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.summary}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticResponseNotePromptCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>{card.sourceAnswerReviewPathStepIds.length} steps</span>
+                        <span>{card.sourceStaticConstraintNoteCardId}</span>
+                        <span>{card.sourceResponsePromptReadinessRowId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {[
+                          ...card.responsePromptReadinessLabels,
+                          ...card.staticConstraintNoteLabels,
+                          ...card.staticResponseNotePromptLabels,
+                        ].map((label) => (
+                          <span
+                            key={`${card.staticResponseNotePromptCardId}:${label}`}
+                          >
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                      <p>{card.responsePromptReadinessText}</p>
+                      <p>{card.staticConstraintNoteText}</p>
+                      <p>{card.staticResponseNotePromptText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-boundary-list">
+                {[
+                  "No saved reviewer answers",
+                  "No saved answer drafts",
+                  "No saved response notes",
+                  "No saved constraint-coverage state",
+                  "No saved response-note state",
+                  "No saved answer-review state",
+                  "No saved constraint-note state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap.staticConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapSummary
                 }
               </p>
             </aside>

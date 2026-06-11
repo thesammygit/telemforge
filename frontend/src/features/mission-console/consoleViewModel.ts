@@ -114,6 +114,7 @@ import { buildConstraintResponseRevisionFollowUpReadinessBoard } from "../../lib
 import { buildConstraintResponseRevisionFollowUpReadinessReviewPath } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPath.ts";
 import { buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard.ts";
 import { buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath.ts";
+import { buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap } from "../../lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap.ts";
 import { buildConstraintResponseEvidenceGapFollowUpReviewPath } from "../../lib/constraintResponseEvidenceGapFollowUpReviewPath.ts";
 import { buildScenarioRunbookPlayback } from "../../lib/scenarioRunbooks.ts";
 
@@ -494,6 +495,10 @@ export function buildMissionConsoleView(
     buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath(
       constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard,
     );
+  const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap =
+    buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap(
+      constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath,
+    );
 
   return {
     mission: {
@@ -605,6 +610,7 @@ export function buildMissionConsoleView(
     constraintResponseRevisionFollowUpReadinessReviewPath,
     constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard,
     constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath,
+    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap,
     runbook,
     incidentReviewPacket,
     incidentReviewExport,
