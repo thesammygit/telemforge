@@ -92,9 +92,10 @@ Executor must:
 
 ## Current Transition
 
-Stage 101 is review-ready/completed for automation-branch development. It
-proved a deterministic local constraint-coverage map review path and static
-response-prompt surface over the Stage 100 constraint-coverage map.
+Stage 102 is review-ready/completed for automation-branch development. It
+proved a deterministic local source crosswalk and static review-check surface
+over the Stage 101 constraint-coverage map review path and static response
+prompts.
 
-New work should begin in Stage 102 unless a focused Stage 101 regression is
+New work should begin in Stage 103 unless a focused Stage 102 regression is
 found.
