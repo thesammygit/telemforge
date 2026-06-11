@@ -3943,6 +3943,81 @@ test("buildMissionConsoleView exposes deterministic Stage 13 replay playback fra
         card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap?.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map.v1",
+  );
+  assert.strictEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap
+      ?.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap?.summary.counts.sourceFollowUpMapEntryCount,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane?.sourceReviewReadinessLaneRows.length,
+  );
+  assert.equal(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap?.summary.counts.staticCitationCheckPromptCardCount,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane?.staticSourceFollowUpCueCards.length,
+  );
+  assert.deepEqual(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap?.summary.defaultSourceFollowUpContext
+      .sourceStage104DefaultSourceReviewReadinessContext,
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane?.summary.defaultSourceReviewReadinessContext,
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap?.sourceFollowUpMapEntries.every(
+      (entry) =>
+        entry.sourceFollowUpMapEntryId.length > 0 &&
+        entry.sourceFollowUpText.includes(
+          entry.sourceSourceReviewReadinessLaneRowId,
+        ) &&
+        entry.sourceFollowUpText.includes(entry.sourceSourceReviewPathStepId) &&
+        entry.sourceFollowUpText.includes(entry.sourceCrosswalkRowId) &&
+        entry.sourceFollowUpText.includes(entry.sourceConstraintCoverageRowId) &&
+        entry.citationCheckPromptText.includes(
+          entry.sourceSourceReviewPathStepId,
+        ) &&
+        entry.sourceFollowUpLabels.includes("source follow-up map entry") &&
+        entry.sourceFollowUpLabels.includes(
+          "Stage 104 source-review readiness lane carry-forward",
+        ) &&
+        entry.citationCheckLabels.includes(
+          "static citation-check prompt context",
+        ) &&
+        entry.staticNonGoalFlags.noSavedSourceFollowUpMapState &&
+        entry.staticNonGoalFlags.noSavedCitationSelections &&
+        entry.staticNonGoalFlags.noSavedCitationCheckState &&
+        entry.staticNonGoalFlags.noSavedCitationCheckPromptState &&
+        entry.staticNonGoalFlags.noSavedSourceReviewReadinessState &&
+        entry.staticNonGoalFlags.noSavedSourceFollowUpState &&
+        entry.staticNonGoalFlags.noSavedSourceSelections &&
+        entry.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap?.staticCitationCheckPromptCards.every(
+      (card) =>
+        card.staticCitationCheckPromptCardId.length > 0 &&
+        card.citationCheckPromptText.includes(
+          card.sourceStaticSourceFollowUpCueCardId,
+        ) &&
+        card.citationCheckPromptText.includes(card.sourceStaticReviewCheckCardId) &&
+        card.staticCitationCheckLabels.includes(
+          "static citation-check prompt card",
+        ) &&
+        card.staticCitationCheckLabels.includes(
+          "Stage 104 source-follow-up cue carry-forward",
+        ) &&
+        card.staticNonGoalFlags.noSavedStaticCitationCheckPrompts &&
+        card.staticNonGoalFlags.noSavedStaticCitationCheckPromptCards &&
+        card.staticNonGoalFlags.noSavedCitationSelections &&
+        card.staticNonGoalFlags.noSavedSourceSelections,
+    ),
+  );
   assert.ok(view.constraintResponseSourceFollowUpMap);
   assert.equal(
     view.constraintResponseSourceFollowUpMap?.schema,
