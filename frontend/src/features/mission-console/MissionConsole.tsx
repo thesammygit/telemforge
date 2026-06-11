@@ -154,6 +154,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessBoard;
   const constraintResponseRevisionFollowUpReadinessReviewPath =
     view.constraintResponseRevisionFollowUpReadinessReviewPath;
+  const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -16168,6 +16170,276 @@ export function MissionConsole({
                 {
                   constraintResponseRevisionFollowUpReadinessReviewPath
                     .staticRevisionFollowUpReadinessReviewPathBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard ? (
+        <section
+          className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-section"
+          aria-label="Stage 98 response prompt readiness board"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 98 response-prompt readiness board
+              </span>
+              <h2>Response prompt readiness and static answer checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard.localStatus}`}
+            >
+              {
+                constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard.localStatus
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Readiness rows</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .summary.counts.responsePromptReadinessRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Answer checks</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .summary.counts.staticAnswerCheckCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Readiness labels</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .summary.counts.responsePromptReadinessLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Answer labels</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .summary.counts.staticAnswerCheckLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only rows</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .summary.counts.localOnlyResponsePromptReadinessRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout">
+            <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-row-list">
+              {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard.responsePromptReadinessRows.map(
+                (row) => (
+                  <article key={row.responsePromptReadinessRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Readiness row {row.responsePromptReadinessRowOrder} -{" "}
+                          {
+                            row.sourceRevisionFollowUpReadinessReviewPathStepId
+                          }
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticResponsePromptCardIds.length} checks
+                      </span>
+                    </div>
+                    <p>{row.responsePromptReadinessText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 97 steps</span>
+                        <strong>
+                          {
+                            row.sourceRevisionFollowUpReadinessReviewPathStepIds
+                              .length
+                          }
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 97 prompts</span>
+                        <strong>
+                          {row.sourceStaticResponsePromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 96 rows</span>
+                        <strong>
+                          {row.sourceRevisionFollowUpReadinessRowIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved prompt</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedPromptReadinessState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.responsePromptReadinessRowId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>
+                        {row.sourceRevisionFollowUpReadinessReviewPathStepId}
+                      </span>
+                      <span>{row.sourceRevisionFollowUpReadinessRowId}</span>
+                      <span>{row.sourceStaticResponseCheckCardIds[0]}</span>
+                      <span>{row.sourceRevisionCoverageReviewPathStepId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...row.responsePromptReadinessLabels,
+                        ...row.staticAnswerCheckLabels,
+                      ].map((label) => (
+                        <span key={`${row.responsePromptReadinessRowId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{row.staticAnswerCheckText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-panel">
+              <span className="metric-label">Default answer check</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .defaultResponsePromptReadinessRow.label
+                }
+              </strong>
+              <p>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .summary.summary
+                }
+              </p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                      .summary.defaultResponsePromptReadinessContext
+                      .defaultResponsePromptReadinessRowId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                      .summary.defaultResponsePromptReadinessContext
+                      .defaultStaticAnswerCheckCardId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                      .summary.defaultResponsePromptReadinessContext
+                      .defaultRevisionFollowUpReadinessReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                      .summary.defaultResponsePromptReadinessContext
+                      .defaultStaticResponsePromptCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-static-answer-list">
+                {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard.staticAnswerCheckCards.map(
+                  (card) => (
+                    <article key={card.staticAnswerCheckCardId}>
+                      <span className="event-type">
+                        Answer check {card.staticAnswerCheckOrder} -{" "}
+                        {card.sourceStaticResponsePromptCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.staticAnswerCheckText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticAnswerCheckCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {
+                            card
+                              .sourceRevisionFollowUpReadinessReviewPathStepIds
+                              .length
+                          }{" "}
+                          rows
+                        </span>
+                        <span>{card.sourceStaticResponsePromptCardId}</span>
+                        <span>{card.sourceStaticResponseCheckCardId}</span>
+                        <span>
+                          {card.sourceStaticRevisionFollowUpPromptCardId}
+                        </span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.staticAnswerCheckLabels.map((label) => (
+                          <span key={`${card.staticAnswerCheckCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-boundary-list">
+                {[
+                  "No saved prompt readiness state",
+                  "No saved prompt readiness selections",
+                  "No saved answer-check selections",
+                  "No saved answers, drafts, revisions, or notes",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard
+                    .staticResponsePromptReadinessBoundarySummary
                 }
               </p>
             </aside>

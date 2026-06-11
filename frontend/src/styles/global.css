@@ -3060,7 +3060,8 @@ button {
   box-shadow: 0 18px 48px rgba(18, 35, 48, 0.08);
 }
 
-.constraint-response-revision-follow-up-readiness-review-path-section {
+.constraint-response-revision-follow-up-readiness-review-path-section,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-section {
   margin-top: 18px;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3076,7 +3077,8 @@ button {
 }
 
 .constraint-response-revision-follow-up-readiness-board-layout,
-.constraint-response-revision-follow-up-readiness-review-path-layout {
+.constraint-response-revision-follow-up-readiness-review-path-layout,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
   gap: 16px;
@@ -3806,7 +3808,11 @@ button {
 .constraint-response-revision-follow-up-readiness-review-path-step-list,
 .constraint-response-revision-follow-up-readiness-review-path-panel,
 .constraint-response-revision-follow-up-readiness-review-path-static-prompt-list,
-.constraint-response-revision-follow-up-readiness-review-path-boundary-list {
+.constraint-response-revision-follow-up-readiness-review-path-boundary-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-row-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-panel,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-static-answer-list,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-boundary-list {
   display: grid;
   align-content: start;
   gap: 10px;
@@ -3827,7 +3833,11 @@ button {
 .constraint-response-revision-follow-up-readiness-review-path-step-list article,
 .constraint-response-revision-follow-up-readiness-review-path-panel,
 .constraint-response-revision-follow-up-readiness-review-path-static-prompt-list article,
-.constraint-response-revision-follow-up-readiness-review-path-boundary-list div {
+.constraint-response-revision-follow-up-readiness-review-path-boundary-list div,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-row-list article,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-panel,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-static-answer-list article,
+.constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-boundary-list div {
   min-width: 0;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -5025,6 +5035,7 @@ button {
   .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-layout,
   .constraint-response-revision-follow-up-readiness-board-layout,
   .constraint-response-revision-follow-up-readiness-review-path-layout,
+  .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout,
   .decision-register-layout {
     grid-template-columns: 1fr;
   }
