@@ -278,6 +278,39 @@ test("buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptRe
         card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );
+  const directStage105PromptStrings = [
+    sourceFollowUpMap.summary.summary,
+    sourceFollowUpMap.staticCitationCheckBoundarySummary,
+    ...sourceFollowUpMap.sourceFollowUpMapEntries.flatMap((entry) => [
+      entry.sourceFollowUpText,
+      entry.citationCheckPromptText,
+      entry.staticNonGoalContext,
+      ...entry.sourceFollowUpLabels,
+      ...entry.citationCheckLabels,
+    ]),
+    ...sourceFollowUpMap.staticCitationCheckPromptCards.flatMap((card) => [
+      card.citationCheckPromptText,
+      card.staticNonGoalContext,
+      ...card.staticCitationCheckLabels,
+    ]),
+  ];
+
+  assert.equal(
+    directStage105PromptStrings.filter((value) => value.includes("undefined"))
+      .length,
+    0,
+  );
+  assert.equal(
+    missionConsoleSource.match(/aria-label="Stage 105 source follow-up map"/g)
+      ?.length ?? 0,
+    1,
+  );
+  assert.equal(
+    missionConsoleSource.match(
+      /const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap =/g,
+    )?.length ?? 0,
+    1,
+  );
   assert.match(missionConsoleSource, /Stage 105 source follow-up map/);
   assert.match(missionConsoleSource, /No saved citation-check state/);
 });
