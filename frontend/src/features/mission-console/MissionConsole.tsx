@@ -170,6 +170,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane;
   const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap =
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap;
+  const constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -18115,6 +18117,252 @@ export function MissionConsole({
               <p>
                 {
                   constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap.staticCitationCheckBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane ? (
+        <section
+          className="constraint-response-source-citation-review-lane-section"
+          aria-label="Stage 106 source citation review lane"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map-source-citation-review-lane"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 106 source citation review lane
+              </span>
+              <h2>Source citation review lane and static evidence checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.localStatus}`}
+            >
+              {
+                constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.localStatus
+              }
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Citation rows</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .summary.counts.citationReviewLaneRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence prompts</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .summary.counts.staticEvidenceCheckPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Citation labels</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .summary.counts.citationReviewLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence labels</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .summary.counts.evidenceCheckPromptLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only rows</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .summary.counts.localOnlyCitationReviewLaneRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-source-citation-review-lane-layout">
+            <div className="constraint-response-source-citation-review-lane-row-list">
+              {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.citationReviewLaneRows.map(
+                (row) => (
+                  <article key={row.citationReviewLaneRowId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Citation review row {row.citationReviewLaneRowOrder} -{" "}
+                          {row.sourceStaticCitationCheckPromptCardId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceSourceFollowUpMapEntryIds.length} follow-ups
+                      </span>
+                    </div>
+                    <p>{row.citationReviewText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 105 prompt</span>
+                        <strong>
+                          {row.sourceStaticCitationCheckPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 105 entries</span>
+                        <strong>{row.sourceSourceFollowUpMapEntryIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved evidence state</span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedEvidenceCheckState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${row.citationReviewLaneRowId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceStaticCitationCheckPromptCardId}</span>
+                      <span>{row.sourceStaticSourceFollowUpCueCardId}</span>
+                      <span>{row.sourceStaticSourceReviewPromptCardId}</span>
+                      <span>{row.sourceStaticReviewCheckCardId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[...row.citationReviewLabels, ...row.evidenceCheckLabels].map(
+                        (label) => (
+                          <span key={`${row.citationReviewLaneRowId}:${label}`}>
+                            {label}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                    <p>{row.evidenceCheckPromptText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-source-citation-review-lane-panel">
+              <span className="metric-label">Default citation review context</span>
+              <strong>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .defaultCitationReviewLaneRow.label
+                }
+              </strong>
+              <p>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                    .summary.summary
+                }
+              </p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                      .summary.defaultCitationReviewContext
+                      .defaultCitationReviewLaneRowId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                      .summary.defaultCitationReviewContext
+                      .defaultStaticEvidenceCheckPromptCardId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                      .summary.defaultCitationReviewContext
+                      .defaultStaticCitationCheckPromptCardId
+                  }
+                </span>
+                <span>
+                  {
+                    constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane
+                      .summary.defaultCitationReviewContext
+                      .defaultSourceFollowUpMapEntryId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-source-citation-review-lane-evidence-list">
+                {constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.staticEvidenceCheckPromptCards.map(
+                  (card) => (
+                    <article key={card.staticEvidenceCheckPromptCardId}>
+                      <span className="event-type">
+                        Evidence prompt {card.staticEvidenceCheckPromptOrder} -{" "}
+                        {card.sourceSourceFollowUpMapEntryId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.evidenceCheckPromptText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticEvidenceCheckPromptCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>{card.sourceStaticCitationCheckPromptCardIds.length} prompts</span>
+                        <span>{card.sourceSourceFollowUpMapEntryId}</span>
+                        <span>{card.sourceSourceReviewReadinessLaneRowId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.evidenceCheckLabels.map((label) => (
+                          <span
+                            key={`${card.staticEvidenceCheckPromptCardId}:${label}`}
+                          >
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-source-citation-review-lane-boundary-list">
+                {[
+                  "No saved source selections",
+                  "No saved citation selections",
+                  "No saved citation-review state",
+                  "No saved evidence-check state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.staticEvidenceCheckBoundarySummary
                 }
               </p>
             </aside>
