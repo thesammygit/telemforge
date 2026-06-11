@@ -92,8 +92,9 @@ Executor must:
 
 ## Current Transition
 
-Stage 96 is review-ready/completed for automation-branch development. It proved
-a deterministic local constraint-response revision follow-up readiness board and
-static response-check surface over the Stage 95 revision coverage review path.
+Stage 97 is review-ready/completed for automation-branch development. It proved
+a deterministic local constraint-response revision follow-up readiness review
+path and static response-prompt surface over the Stage 96 revision follow-up
+readiness board.
 
-New work should begin in Stage 97 unless a focused Stage 96 regression is found.
+New work should begin in Stage 98 unless a focused Stage 97 regression is found.
