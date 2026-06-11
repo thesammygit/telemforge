@@ -92,9 +92,9 @@ Executor must:
 
 ## Current Transition
 
-Stage 99 is review-ready/completed for automation-branch development. It proved
-a deterministic local constraint-response answer-review path and static
-constraint-note surface over the Stage 98 response-prompt readiness board.
+Stage 100 is review-ready/completed for automation-branch development. It
+proved a deterministic local constraint-coverage map and static response-note
+surface over the Stage 99 answer-review path.
 
-New work should begin in Stage 100 unless a focused Stage 99 regression is
+New work should begin in Stage 101 unless a focused Stage 100 regression is
 found.
