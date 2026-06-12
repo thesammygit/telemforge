@@ -478,3 +478,161 @@ test("buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptRe
     ),
   );
 });
+
+test("Stage 113 response-readiness review path derives steps from Stage 112 readiness rows", async () => {
+  const {
+    buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPath,
+  } = await import(
+    "../../frontend/src/lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath.ts"
+  ).catch((error) =>
+    assert.fail(`expected Stage 113 helper export to exist: ${error.message}`),
+  );
+  const view = buildMissionConsoleView(stage07ConsoleFixture);
+  const sourceResponseReadinessBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoard;
+  const responseReadinessReviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPath;
+  const missionConsoleSource = readFileSync(
+    resolve(repoRoot, "frontend/src/features/mission-console/MissionConsole.tsx"),
+    "utf8",
+  );
+
+  assert.ok(sourceResponseReadinessBoard);
+
+  const builtResponseReadinessReviewPath =
+    buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPath(
+      sourceResponseReadinessBoard,
+    );
+
+  assert.ok(responseReadinessReviewPath);
+  assert.ok(builtResponseReadinessReviewPath);
+  assert.deepEqual(responseReadinessReviewPath, builtResponseReadinessReviewPath);
+  assert.equal(
+    responseReadinessReviewPath.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix_evidence_gap_follow_up_review_path_evidence_gap_follow_up_coverage_board_evidence_gap_follow_up_coverage_review_path_response_readiness_board_response_readiness_review_path.v1",
+  );
+  assert.strictEqual(
+    responseReadinessReviewPath.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoard,
+    sourceResponseReadinessBoard,
+  );
+  assert.deepEqual(
+    responseReadinessReviewPath.responseReadinessReviewPathSteps.map(
+      (step) => step.sourceResponseReadinessRowId,
+    ),
+    sourceResponseReadinessBoard.responseReadinessRows.map(
+      (row) => row.responseReadinessRowId,
+    ),
+  );
+  assert.deepEqual(
+    responseReadinessReviewPath.staticRevisionPromptCards.map(
+      (card) => card.sourceStaticDraftCheckCardId,
+    ),
+    sourceResponseReadinessBoard.staticDraftCheckCards.map(
+      (card) => card.staticDraftCheckCardId,
+    ),
+  );
+  assert.deepEqual(
+    responseReadinessReviewPath.summary.defaultResponseReadinessReviewContext
+      .sourceStage112DefaultResponseReadinessContext,
+    sourceResponseReadinessBoard.summary.defaultResponseReadinessContext,
+  );
+
+  const firstStep =
+    responseReadinessReviewPath.responseReadinessReviewPathSteps[0];
+  assert.equal(firstStep.responseReadinessReviewPathStepOrder, 1);
+  assert.ok(
+    firstStep.responseReadinessReviewText.includes(
+      firstStep.sourceResponseReadinessRowId,
+    ),
+  );
+  assert.ok(
+    firstStep.responseReadinessReviewText.includes(
+      firstStep.sourceCoverageReviewPathStepId,
+    ),
+  );
+  assert.ok(
+    firstStep.responseReadinessReviewText.includes(
+      firstStep.sourceStaticDraftCheckCardIds[0],
+    ),
+  );
+  assert.ok(firstStep.responseReadinessReviewText.includes(firstStep.sourceCoverageRowId));
+  assert.ok(
+    firstStep.responseReadinessReviewText.includes(
+      firstStep.sourceFollowUpReviewPathStepId,
+    ),
+  );
+  assert.ok(
+    firstStep.responseReadinessReviewText.includes(
+      firstStep.sourceEvidenceGapReadinessRowId,
+    ),
+  );
+  assert.ok(
+    firstStep.responseReadinessReviewText.includes(
+      firstStep.sourceEvidenceCheckReviewPathStepId,
+    ),
+  );
+  assert.ok(
+    firstStep.responseReadinessReviewLabels.includes(
+      "Stage 112 response-readiness row carry-forward",
+    ),
+  );
+  assert.ok(
+    firstStep.staticRevisionPromptLabels.includes(
+      "static revision-prompt carry-forward",
+    ),
+  );
+  assert.equal(
+    firstStep.staticNonGoalFlags.noSavedResponseReadinessReviewPathState,
+    true,
+  );
+  assert.equal(
+    firstStep.staticNonGoalFlags.noSavedResponseReadinessReviewPathSelections,
+    true,
+  );
+  assert.equal(firstStep.staticNonGoalFlags.noSavedRevisionPromptState, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedRevisionPromptSelections, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedRevisionDrafts, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedAnswerDrafts, true);
+
+  const firstRevisionPrompt =
+    responseReadinessReviewPath.staticRevisionPromptCards[0];
+  assert.equal(firstRevisionPrompt.staticRevisionPromptOrder, 1);
+  assert.ok(
+    firstRevisionPrompt.revisionPromptText.includes(
+      firstRevisionPrompt.sourceStaticDraftCheckCardId,
+    ),
+  );
+  assert.ok(
+    firstRevisionPrompt.revisionPromptText.includes(
+      firstRevisionPrompt.sourceStaticResponseCueCardId,
+    ),
+  );
+  assert.ok(
+    firstRevisionPrompt.revisionPromptText.includes(
+      firstRevisionPrompt.sourceStaticReviewPromptCardId,
+    ),
+  );
+  assert.ok(
+    firstRevisionPrompt.staticRevisionPromptLabels.includes(
+      "static revision-prompt card",
+    ),
+  );
+  assert.equal(
+    firstRevisionPrompt.staticNonGoalFlags.noSavedStaticRevisionPromptCards,
+    true,
+  );
+  assert.equal(
+    firstRevisionPrompt.staticNonGoalFlags.noSavedRevisionPromptState,
+    true,
+  );
+  assert.equal(
+    firstRevisionPrompt.staticNonGoalFlags.noSavedStaticDraftCheckCards,
+    true,
+  );
+  assert.ok(missionConsoleSource.includes("Stage 113 response-readiness review path"));
+  assert.ok(
+    missionConsoleSource.includes(
+      "Response-readiness review path and static revision prompts",
+    ),
+  );
+});

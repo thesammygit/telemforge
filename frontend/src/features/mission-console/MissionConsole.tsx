@@ -184,6 +184,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPath;
   const stage112EvidenceGapFollowUpCoverageReviewResponseReadinessBoard =
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoard;
+  const stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -19827,6 +19829,251 @@ export function MissionConsole({
                 {
                   stage112EvidenceGapFollowUpCoverageReviewResponseReadinessBoard
                     .staticResponseReadinessBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath ? (
+        <section
+          className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-section"
+          aria-label="Stage 113 evidence gap follow-up coverage-review response-readiness review path"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map-source-citation-review-lane-evidence-check-review-path-evidence-gap-readiness-matrix-evidence-gap-follow-up-review-path-evidence-gap-follow-up-coverage-board-evidence-gap-follow-up-coverage-review-path-response-readiness-board-response-readiness-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 113 response-readiness review path
+              </span>
+              <h2>Response-readiness review path and static revision prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.localStatus}`}
+            >
+              {stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .summary.counts.responseReadinessReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Revision prompts</span>
+              <strong>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .summary.counts.staticRevisionPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review labels</span>
+              <strong>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .summary.counts.responseReadinessReviewLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompt labels</span>
+              <strong>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .summary.counts.staticRevisionPromptLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only steps</span>
+              <strong>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .summary.counts.localOnlyResponseReadinessReviewPathStepCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-layout">
+            <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-step-list">
+              {stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.responseReadinessReviewPathSteps.map(
+                (step) => (
+                  <article key={step.responseReadinessReviewPathStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Review step {step.responseReadinessReviewPathStepOrder} -{" "}
+                          {step.sourceResponseReadinessRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceStaticDraftCheckCardIds.length} prompts
+                      </span>
+                    </div>
+                    <p>{step.responseReadinessReviewText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 112 row</span>
+                        <strong>{step.sourceResponseReadinessRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Draft cards</span>
+                        <strong>{step.sourceStaticDraftCheckCardIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 111 step</span>
+                        <strong>{step.sourceCoverageReviewPathStepIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved review path</span>
+                        <strong>
+                          {step.staticNonGoalFlags
+                            .noSavedResponseReadinessReviewPathState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${step.responseReadinessReviewPathStepId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceResponseReadinessRowId}</span>
+                      <span>{step.sourceCoverageReviewPathStepId}</span>
+                      <span>{step.sourceCoverageRowId}</span>
+                      <span>{step.sourceFollowUpReviewPathStepId}</span>
+                      <span>{step.sourceEvidenceGapReadinessRowId}</span>
+                      <span>{step.sourceEvidenceCheckReviewPathStepId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...step.responseReadinessReviewLabels,
+                        ...step.staticRevisionPromptLabels,
+                      ].map((label) => (
+                        <span key={`${step.responseReadinessReviewPathStepId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{step.revisionPromptText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-panel">
+              <span className="metric-label">Default review context</span>
+              <strong>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .defaultResponseReadinessReviewPathStep.label
+                }
+              </strong>
+              <p>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .summary.summary
+                }
+              </p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                      .summary.defaultResponseReadinessReviewContext
+                      .defaultResponseReadinessReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                      .summary.defaultResponseReadinessReviewContext
+                      .defaultStaticRevisionPromptCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                      .summary.defaultResponseReadinessReviewContext
+                      .defaultResponseReadinessRowId
+                  }
+                </span>
+                <span>
+                  {
+                    stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                      .summary.defaultResponseReadinessReviewContext
+                      .defaultStaticDraftCheckCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-prompt-list">
+                {stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath.staticRevisionPromptCards.map(
+                  (card) => (
+                    <article key={card.staticRevisionPromptCardId}>
+                      <span className="event-type">
+                        Revision prompt {card.staticRevisionPromptOrder} -{" "}
+                        {card.sourceStaticDraftCheckCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.revisionPromptText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a key={`${card.staticRevisionPromptCardId}:${href}`} href={href}>
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {card.sourceResponseReadinessRowIds.length} rows
+                        </span>
+                        <span>{card.sourceStaticResponseCueCardId}</span>
+                        <span>{card.sourceStaticReviewPromptCardId}</span>
+                        <span>{card.sourceStaticReadinessCueCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.staticRevisionPromptLabels.map((label) => (
+                          <span key={`${card.staticRevisionPromptCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-boundary-list">
+                {[
+                  "No saved response-readiness review path state",
+                  "No saved revision-prompt state",
+                  "No saved answers, drafts, notes, or coverage state",
+                  "No saved source, citation, or evidence selections",
+                  "No saved draft-check or response-readiness selections",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath
+                    .staticResponseReadinessReviewBoundarySummary
                 }
               </p>
             </aside>
