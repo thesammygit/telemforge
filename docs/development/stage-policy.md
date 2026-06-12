@@ -92,10 +92,10 @@ Executor must:
 
 ## Current Transition
 
-Stage 112 is review-ready/completed for automation-branch development. It
+Stage 113 is review-ready/completed for automation-branch development. It
 proved a deterministic local evidence-gap follow-up coverage-review
-response-readiness board and static draft-check surface over the Stage 111
-coverage-review path and static response cue cards.
+response-readiness review path and static revision-prompt surface over the
+Stage 112 response-readiness board and static draft-check cards.
 
-New work should begin in Stage 113 unless a focused Stage 112 regression is
+New work should begin in Stage 114 unless a focused Stage 113 regression is
 found.
