@@ -186,6 +186,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoard;
   const stage113EvidenceGapFollowUpCoverageReviewResponseReadinessReviewPath =
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPath;
+  const stage114RevisionCoverageBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoard;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -20076,6 +20078,224 @@ export function MissionConsole({
                     .staticResponseReadinessReviewBoundarySummary
                 }
               </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage114RevisionCoverageBoard ? (
+        <section
+          className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-section"
+          aria-label="Stage 114 response readiness review path revision coverage board"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map-source-citation-review-lane-evidence-check-review-path-evidence-gap-readiness-matrix-evidence-gap-follow-up-review-path-evidence-gap-follow-up-coverage-board-evidence-gap-follow-up-coverage-review-path-response-readiness-board-response-readiness-review-path-revision-coverage-board"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 114 revision coverage board</span>
+              <h2>Revision coverage board and static revision checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage114RevisionCoverageBoard.localStatus}`}
+            >
+              {stage114RevisionCoverageBoard.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Coverage rows</span>
+              <strong>
+                {stage114RevisionCoverageBoard.summary.counts.revisionCoverageRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Static checks</span>
+              <strong>
+                {
+                  stage114RevisionCoverageBoard.summary.counts
+                    .staticRevisionCheckCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Coverage labels</span>
+              <strong>
+                {
+                  stage114RevisionCoverageBoard.summary.counts
+                    .revisionCoverageLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Check labels</span>
+              <strong>
+                {
+                  stage114RevisionCoverageBoard.summary.counts
+                    .staticRevisionCheckLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only rows</span>
+              <strong>
+                {
+                  stage114RevisionCoverageBoard.summary.counts
+                    .localOnlyRevisionCoverageRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-layout">
+            <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-row-list">
+              {stage114RevisionCoverageBoard.revisionCoverageRows.map((row) => (
+                <article key={row.revisionCoverageRowId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Coverage row {row.revisionCoverageRowOrder} -{" "}
+                        {row.sourceResponseReadinessReviewPathStepId}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.sourceStaticRevisionPromptCardIds.length} checks
+                    </span>
+                  </div>
+                  <p>{row.revisionCoverageText}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Stage 113 step</span>
+                      <strong>
+                        {row.sourceResponseReadinessReviewPathStepIds.length}
+                      </strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Revision prompts</span>
+                      <strong>{row.sourceStaticRevisionPromptCardIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stage 112 row</span>
+                      <strong>{row.sourceResponseReadinessRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved coverage</span>
+                      <strong>
+                        {row.staticNonGoalFlags.noSavedRevisionCoverageState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.sourceLocalAnchorHrefs.map((href) => (
+                      <a key={`${row.revisionCoverageRowId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{row.sourceResponseReadinessReviewPathStepId}</span>
+                    <span>{row.sourceResponseReadinessRowId}</span>
+                    <span>{row.sourceCoverageReviewPathStepId}</span>
+                    <span>{row.sourceCoverageRowId}</span>
+                    <span>{row.sourceEvidenceCheckReviewPathStepId}</span>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {[
+                      ...row.revisionCoverageLabels,
+                      ...row.staticRevisionCheckLabels,
+                    ].map((label) => (
+                      <span key={`${row.revisionCoverageRowId}:${label}`}>
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                  <p>{row.staticRevisionCheckText}</p>
+                  <p>{row.staticNonGoalContext}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-panel">
+              <span className="metric-label">Default revision coverage</span>
+              <strong>{stage114RevisionCoverageBoard.defaultRevisionCoverageRow.label}</strong>
+              <p>{stage114RevisionCoverageBoard.summary.summary}</p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage114RevisionCoverageBoard.summary
+                      .defaultRevisionCoverageContext.defaultRevisionCoverageRowId
+                  }
+                </span>
+                <span>
+                  {
+                    stage114RevisionCoverageBoard.summary
+                      .defaultRevisionCoverageContext.defaultStaticRevisionCheckCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage114RevisionCoverageBoard.summary
+                      .defaultRevisionCoverageContext
+                      .defaultResponseReadinessReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    stage114RevisionCoverageBoard.summary
+                      .defaultRevisionCoverageContext.defaultStaticRevisionPromptCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-static-check-list">
+                {stage114RevisionCoverageBoard.staticRevisionCheckCards.map((card) => (
+                  <article key={card.staticRevisionCheckCardId}>
+                    <span className="event-type">
+                      Revision check {card.staticRevisionCheckOrder} -{" "}
+                      {card.sourceStaticRevisionPromptCardId}
+                    </span>
+                    <strong>{card.label}</strong>
+                    <p>{card.staticRevisionCheckText}</p>
+                    <div className="gap-reference-strip">
+                      {card.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${card.staticRevisionCheckCardId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>
+                        {card.sourceResponseReadinessReviewPathStepIds.length} rows
+                      </span>
+                      <span>{card.sourceStaticDraftCheckCardId}</span>
+                      <span>{card.sourceStaticResponseCueCardId}</span>
+                      <span>{card.sourceStaticReviewPromptCardId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {card.staticRevisionCheckLabels.map((label) => (
+                        <span key={`${card.staticRevisionCheckCardId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-board-boundary-list">
+                {[
+                  "No saved revision coverage board state",
+                  "No saved revision coverage selections",
+                  "No saved static revision-check selections",
+                  "No saved revision-prompt selections",
+                  "No saved response-readiness or draft-check selections",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{stage114RevisionCoverageBoard.staticRevisionCoverageBoundarySummary}</p>
             </aside>
           </div>
         </section>
