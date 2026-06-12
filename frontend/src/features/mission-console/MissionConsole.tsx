@@ -140,6 +140,8 @@ export function MissionConsole({
     view.constraintResponseEvidenceGapFollowUpReviewPath;
   const constraintResponseEvidenceGapFollowUpCoverageBoard =
     view.constraintResponseEvidenceGapFollowUpCoverageBoard;
+  const stage111EvidenceGapFollowUpCoverageReviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPath;
   const constraintResponseEvidenceGapFollowUpCoverageReviewPath =
     view.constraintResponseEvidenceGapFollowUpCoverageReviewPath;
   const constraintResponseEvidenceGapFollowUpCoverageReviewResponseReadinessBoard =
@@ -180,6 +182,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPath;
   const stage110EvidenceGapFollowUpCoverageBoard =
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoard;
+  const stage111EvidenceGapFollowUpCoverageReviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -19338,6 +19342,489 @@ export function MissionConsole({
                 {
                   stage110EvidenceGapFollowUpCoverageBoard
                     .staticCoverageBoardBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage111EvidenceGapFollowUpCoverageReviewPath ? (
+        <section
+          className="constraint-response-evidence-gap-follow-up-coverage-review-path-section"
+          aria-label="Stage 111 evidence gap follow-up coverage-review path"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map-source-citation-review-lane-evidence-check-review-path-evidence-gap-readiness-matrix-evidence-gap-follow-up-review-path-evidence-gap-follow-up-coverage-board-evidence-gap-follow-up-coverage-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 111 evidence gap follow-up coverage-review path
+              </span>
+              <h2>Evidence gap follow-up coverage-review path and static response cues</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage111EvidenceGapFollowUpCoverageReviewPath.localStatus}`}
+            >
+              {stage111EvidenceGapFollowUpCoverageReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .coverageReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Response cues</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .staticResponseCueCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review labels</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .coverageReviewLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Cue labels</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .responseCueLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only steps</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .localOnlyCoverageReviewPathStepCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-gap-follow-up-coverage-review-path-layout">
+            <div className="constraint-response-evidence-gap-follow-up-coverage-review-path-step-list">
+              {stage111EvidenceGapFollowUpCoverageReviewPath.coverageReviewPathSteps.map(
+                (step) => (
+                  <article key={step.coverageReviewPathStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Review step {step.coverageReviewPathStepOrder} -{" "}
+                          {step.sourceCoverageRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceStaticReviewPromptCardIds.length} cues
+                      </span>
+                    </div>
+                    <p>{step.coverageReviewText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 110 row</span>
+                        <strong>{step.sourceCoverageRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 110 cues</span>
+                        <strong>
+                          {step.sourceStaticReviewPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 109 step</span>
+                        <strong>
+                          {step.sourceFollowUpReviewPathStepIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved review</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedCoverageReviewPathState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.coverageReviewPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceCoverageRowId}</span>
+                      <span>{step.sourceFollowUpReviewPathStepId}</span>
+                      <span>{step.sourceEvidenceGapReadinessRowId}</span>
+                      <span>{step.sourceEvidenceCheckReviewPathStepId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...step.coverageReviewLabels,
+                        ...step.responseCueLabels,
+                      ].map((label) => (
+                        <span key={`${step.coverageReviewPathStepId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{step.responseCueText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-evidence-gap-follow-up-coverage-review-path-panel">
+              <span className="metric-label">Default review context</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.defaultCoverageReviewPathStep.label
+                }
+              </strong>
+              <p>
+                {stage111EvidenceGapFollowUpCoverageReviewPath.summary.summary}
+              </p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext
+                      .defaultCoverageReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultStaticResponseCueCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultCoverageRowId
+                  }
+                </span>
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultStaticReviewPromptCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-path-cue-list">
+                {stage111EvidenceGapFollowUpCoverageReviewPath.staticResponseCueCards.map(
+                  (card) => (
+                    <article key={card.staticResponseCueCardId}>
+                      <span className="event-type">
+                        Response cue {card.staticResponseCueOrder} -{" "}
+                        {card.sourceStaticReviewPromptCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.staticResponseCueText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticResponseCueCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>{card.sourceCoverageRowIds.length} steps</span>
+                        <span>{card.sourceStaticReadinessCueCardId}</span>
+                        <span>{card.sourceStaticFollowUpPromptCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.staticResponseCueLabels.map((label) => (
+                          <span key={`${card.staticResponseCueCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-evidence-gap-follow-up-coverage-review-path-boundary-list">
+                {[
+                  "No saved coverage-review selections",
+                  "No saved response cue selections",
+                  "No saved answers, drafts, notes, or coverage state",
+                  "No saved coverage-board or prompt-card selections",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath
+                    .staticCoverageReviewPathBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage111EvidenceGapFollowUpCoverageReviewPath ? (
+        <section
+          className="constraint-response-evidence-gap-readiness-matrix-section constraint-response-evidence-gap-follow-up-review-path-section"
+          aria-label="Stage 111 evidence gap follow-up coverage-review path"
+        >
+          <a
+            id="constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map-source-citation-review-lane-evidence-check-review-path-evidence-gap-readiness-matrix-evidence-gap-follow-up-review-path-evidence-gap-follow-up-coverage-board-evidence-gap-follow-up-coverage-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 111 evidence gap follow-up coverage-review path
+              </span>
+              <h2>Evidence gap follow-up coverage-review path and static response cues</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage111EvidenceGapFollowUpCoverageReviewPath.localStatus}`}
+            >
+              {stage111EvidenceGapFollowUpCoverageReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .coverageReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Response cues</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .staticResponseCueCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review labels</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .coverageReviewLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Cue labels</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .responseCueLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Local-only steps</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath.summary.counts
+                    .localOnlyCoverageReviewPathStepCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-gap-readiness-matrix-layout">
+            <div className="constraint-response-evidence-gap-readiness-matrix-row-list">
+              {stage111EvidenceGapFollowUpCoverageReviewPath.coverageReviewPathSteps.map(
+                (step) => (
+                  <article key={step.coverageReviewPathStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Coverage-review step {step.coverageReviewPathStepOrder} -{" "}
+                          {step.sourceCoverageRowId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceStaticReviewPromptCardIds.length} cues
+                      </span>
+                    </div>
+                    <p>{step.coverageReviewText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 110 row</span>
+                        <strong>{step.sourceCoverageRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 110 prompts</span>
+                        <strong>
+                          {step.sourceStaticReviewPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 109 cues</span>
+                        <strong>
+                          {step.sourceStaticReadinessCueCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved review</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedCoverageReviewPathState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a key={`${step.coverageReviewPathStepId}:${href}`} href={href}>
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceCoverageRowId}</span>
+                      <span>{step.sourceFollowUpReviewPathStepId}</span>
+                      <span>{step.sourceEvidenceGapReadinessRowId}</span>
+                      <span>{step.sourceEvidenceCheckReviewPathStepId}</span>
+                      <span>{step.sourceSourceFollowUpMapEntryId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[...step.coverageReviewLabels, ...step.responseCueLabels].map(
+                        (label) => (
+                          <span key={`${step.coverageReviewPathStepId}:${label}`}>
+                            {label}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                    <p>{step.responseCueText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-evidence-gap-readiness-matrix-panel">
+              <span className="metric-label">Default coverage-review context</span>
+              <strong>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath
+                    .defaultCoverageReviewPathStep.label
+                }
+              </strong>
+              <p>{stage111EvidenceGapFollowUpCoverageReviewPath.summary.summary}</p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultCoverageReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultStaticResponseCueCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultCoverageRowId
+                  }
+                </span>
+                <span>
+                  {
+                    stage111EvidenceGapFollowUpCoverageReviewPath.summary
+                      .defaultCoverageReviewContext.defaultStaticReviewPromptCardId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-gap-readiness-matrix-prompt-list">
+                {stage111EvidenceGapFollowUpCoverageReviewPath.staticResponseCueCards.map(
+                  (card) => (
+                    <article key={card.staticResponseCueCardId}>
+                      <span className="event-type">
+                        Response cue {card.staticResponseCueOrder} -{" "}
+                        {card.sourceStaticReviewPromptCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.staticResponseCueText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a key={`${card.staticResponseCueCardId}:${href}`} href={href}>
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>{card.sourceCoverageRowIds.length} rows</span>
+                        <span>{card.sourceStaticReadinessCueCardId}</span>
+                        <span>{card.sourceStaticFollowUpPromptCardId}</span>
+                        <span>{card.sourceStaticCitationGapCueCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.staticResponseCueLabels.map((label) => (
+                          <span key={`${card.staticResponseCueCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-evidence-gap-readiness-matrix-boundary-list">
+                {[
+                  "No saved source selections",
+                  "No saved citation selections",
+                  "No saved evidence-check selections",
+                  "No saved evidence-gap readiness selections",
+                  "No saved evidence-gap follow-up selections",
+                  "No saved follow-up review path state",
+                  "No saved coverage-board selections",
+                  "No saved coverage-review selections",
+                  "No saved response cue selections",
+                  "No saved coverage state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage111EvidenceGapFollowUpCoverageReviewPath
+                    .staticCoverageReviewPathBoundarySummary
                 }
               </p>
             </aside>
