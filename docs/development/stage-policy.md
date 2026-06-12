@@ -92,10 +92,10 @@ Executor must:
 
 ## Current Transition
 
-Stage 107 is review-ready/completed for automation-branch development. It
-proved a deterministic local evidence-check review path and static citation-gap
-cue surface over the Stage 106 source citation-review lane and static
-evidence-check prompt cards.
+Stage 108 is review-ready/completed for automation-branch development. It
+proved a deterministic local evidence-gap readiness matrix and static follow-up
+prompt surface over the Stage 107 evidence-check review path and static
+citation-gap cue cards.
 
-New work should begin in Stage 108 unless a focused Stage 107 regression is
+New work should begin in Stage 109 unless a focused Stage 108 regression is
 found.
