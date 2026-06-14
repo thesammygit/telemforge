@@ -92,11 +92,11 @@ Executor must:
 
 ## Current Transition
 
-Stage 115 is review-ready/completed for automation-branch development. It
-proved a deterministic local revision coverage review path and static revision
-follow-up prompt surface over the Stage 114 revision coverage board and static
-revision-check cards.
+Stage 116 is review-ready/completed for automation-branch development. It
+proved a deterministic local revision follow-up readiness board and static
+response-check surface over the Stage 115 revision coverage review path and
+static revision follow-up prompt cards.
 
-Stage 116 should now build the next deterministic local revision follow-up
-readiness board and static response-check surface over Stage 115 unless a
-focused Stage 115 regression is found.
+Stage 117 should now build the next deterministic local revision follow-up
+readiness review path and static response-prompt surface over Stage 116 unless
+a focused Stage 116 regression is found.
