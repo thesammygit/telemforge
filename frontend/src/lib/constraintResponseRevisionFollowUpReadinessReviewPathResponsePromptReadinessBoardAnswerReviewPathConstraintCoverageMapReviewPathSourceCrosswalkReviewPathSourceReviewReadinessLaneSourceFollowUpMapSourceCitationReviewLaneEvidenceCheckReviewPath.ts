@@ -35,6 +35,11 @@ import type {
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoardStaticRevisionCheckCardView as Stage114StaticRevisionCheckCard,
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoardSummaryView as Stage114Summary,
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoardView as Stage114View,
+  ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathStaticNonGoalFlagsView as Stage115StaticNonGoalFlags,
+  ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathStaticRevisionFollowUpPromptCardView as Stage115StaticRevisionFollowUpPromptCard,
+  ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathStepView as Stage115RevisionCoverageReviewPathStep,
+  ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathSummaryView as Stage115Summary,
+  ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathView as Stage115View,
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathStaticNonGoalFlagsView,
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathStepView,
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathSummaryView,
@@ -54,6 +59,7 @@ const stage111IdPrefix = `${stage110IdPrefix}-evidence-gap-follow-up-coverage-re
 const stage112IdPrefix = `${stage111IdPrefix}-response-readiness-board`;
 const stage113IdPrefix = `${stage112IdPrefix}-response-readiness-review-path`;
 const stage114IdPrefix = `${stage113IdPrefix}-revision-coverage-board`;
+const stage115IdPrefix = `${stage113IdPrefix}-revision-coverage-review-path`;
 
 type Stage111CoverageReviewPathStaticNonGoalFlags =
   ConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathStaticNonGoalFlagsView;
@@ -934,6 +940,136 @@ export function buildConstraintResponseRevisionFollowUpReadinessReviewPathRespon
   };
 }
 
+export function buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath(
+  revisionCoverageBoard: Stage114View | undefined,
+): Stage115View | undefined {
+  if (
+    !revisionCoverageBoard?.revisionCoverageRows.length ||
+    !revisionCoverageBoard.staticRevisionCheckCards.length
+  ) {
+    return undefined;
+  }
+
+  const revisionCoverageReviewPathSteps =
+    revisionCoverageBoard.revisionCoverageRows.map((row) =>
+      buildStage115RevisionCoverageReviewPathStep(
+        row,
+        revisionCoverageBoard.staticRevisionCheckCards,
+      ),
+    );
+  const staticRevisionFollowUpPromptCards =
+    revisionCoverageBoard.staticRevisionCheckCards.map((card) =>
+      buildStage115StaticRevisionFollowUpPromptCard(
+        card,
+        revisionCoverageBoard.revisionCoverageRows,
+      ),
+    );
+  const defaultRevisionCoverageReviewPathStep =
+    revisionCoverageReviewPathSteps.find(
+      (step) =>
+        step.sourceRevisionCoverageRowId ===
+        revisionCoverageBoard.defaultRevisionCoverageRow.revisionCoverageRowId,
+    ) ?? revisionCoverageReviewPathSteps[0];
+  const defaultStaticRevisionFollowUpPromptCard =
+    staticRevisionFollowUpPromptCards.find(
+      (card) =>
+        card.sourceStaticRevisionCheckCardId ===
+        revisionCoverageBoard.defaultStaticRevisionCheckCard.staticRevisionCheckCardId,
+    ) ?? staticRevisionFollowUpPromptCards[0];
+  const defaultStage114Context =
+    revisionCoverageBoard.summary.defaultRevisionCoverageContext;
+
+  return {
+    schema:
+      "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix_evidence_gap_follow_up_review_path_evidence_gap_follow_up_coverage_board_evidence_gap_follow_up_coverage_review_path_response_readiness_board_response_readiness_review_path_revision_coverage_review_path.v1",
+    version: 1,
+    contractLabel:
+      "local deterministic constraint-response revision follow-up readiness review-path response-prompt readiness-board answer-review path constraint-coverage map review path source-crosswalk review path source-review readiness lane source follow-up map source citation-review lane evidence-check review path evidence-gap follow-up coverage board evidence-gap follow-up coverage-review path response-readiness board response-readiness review path revision coverage review path and static revision follow-up prompts",
+    localStatus: revisionCoverageBoard.localStatus,
+    summary: {
+      constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathId:
+        `candidate-local-${stage115IdPrefix}`,
+      label:
+        "Local constraint-response revision follow-up response-readiness review-path revision coverage review path",
+      summary:
+        "A static revision coverage review path derives steps from Stage 114 revision coverage rows and static revision follow-up prompt cards from Stage 114 static revision-check cards so reviewers can follow each revision coverage row and static revision check to the next manual follow-up prompt before editing outside the app without saved answers, answer drafts, revision drafts, reviewer notes, response notes, response-readiness selections, draft-check selections, revision-prompt selections, revision coverage selections, revision-check selections, revision follow-up selections, saved review-path state, persistence, routes, exports, signoff, owner assignment, scoring, ranking, certification, meeting workflow, handoff packages, runnable checklists, task launchers, command execution, or production handoff semantics.",
+      defaultRevisionCoverageReviewPathContext: {
+        defaultRevisionCoverageReviewPathStepId:
+          defaultRevisionCoverageReviewPathStep.revisionCoverageReviewPathStepId,
+        defaultStaticRevisionFollowUpPromptCardId:
+          defaultStaticRevisionFollowUpPromptCard
+            .staticRevisionFollowUpPromptCardId,
+        defaultRevisionCoverageRowId:
+          defaultRevisionCoverageReviewPathStep.sourceRevisionCoverageRowId,
+        defaultStaticRevisionCheckCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticRevisionCheckCardId,
+        defaultResponseReadinessReviewPathStepId:
+          defaultRevisionCoverageReviewPathStep
+            .sourceResponseReadinessReviewPathStepId,
+        defaultStaticRevisionPromptCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticRevisionPromptCardId,
+        defaultResponseReadinessRowId:
+          defaultRevisionCoverageReviewPathStep.sourceResponseReadinessRowId,
+        defaultStaticDraftCheckCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticDraftCheckCardId,
+        defaultCoverageReviewPathStepId:
+          defaultRevisionCoverageReviewPathStep.sourceCoverageReviewPathStepId,
+        defaultStaticResponseCueCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticResponseCueCardId,
+        defaultCoverageRowId:
+          defaultRevisionCoverageReviewPathStep.sourceCoverageRowId,
+        defaultStaticReviewPromptCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticReviewPromptCardId,
+        defaultFollowUpReviewPathStepId:
+          defaultRevisionCoverageReviewPathStep.sourceFollowUpReviewPathStepId,
+        defaultStaticReadinessCueCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticReadinessCueCardId,
+        defaultEvidenceGapReadinessRowId:
+          defaultRevisionCoverageReviewPathStep.sourceEvidenceGapReadinessRowId,
+        defaultStaticFollowUpPromptCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticFollowUpPromptCardId,
+        defaultEvidenceCheckReviewPathStepId:
+          defaultRevisionCoverageReviewPathStep.sourceEvidenceCheckReviewPathStepId,
+        defaultStaticCitationGapCueCardId:
+          defaultStaticRevisionFollowUpPromptCard.sourceStaticCitationGapCueCardId,
+        defaultStaticEvidenceCheckPromptCardId:
+          defaultRevisionCoverageReviewPathStep
+            .sourceStaticEvidenceCheckPromptCardId,
+        defaultCitationReviewLaneRowId:
+          defaultStaticRevisionFollowUpPromptCard.sourceCitationReviewLaneRowId,
+        defaultStaticCitationCheckPromptCardId:
+          defaultStaticRevisionFollowUpPromptCard
+            .sourceStaticCitationCheckPromptCardId,
+        defaultSourceFollowUpMapEntryId:
+          defaultRevisionCoverageReviewPathStep.sourceSourceFollowUpMapEntryId,
+        sourceStage114RevisionCoverageBoardSummary:
+          revisionCoverageBoard.summary.summary,
+        sourceStage114DefaultRevisionCoverageContext: defaultStage114Context,
+      },
+      informationalOnly: true,
+      nonActionable: true,
+      nonPersistent: true,
+      nonExecutable: true,
+      nonRouting: true,
+      nonCertifying: true,
+      nonRanking: true,
+      counts: buildStage115Counts(
+        revisionCoverageReviewPathSteps,
+        staticRevisionFollowUpPromptCards,
+        revisionCoverageBoard,
+      ),
+    },
+    defaultRevisionCoverageReviewPathStep,
+    defaultStaticRevisionFollowUpPromptCard,
+    revisionCoverageReviewPathSteps,
+    staticRevisionFollowUpPromptCards,
+    staticRevisionCoverageReviewPathBoundarySummary:
+      "Stage 115 revision coverage review-path steps and static revision follow-up prompt cards are deterministic, local, source-backed, in-page only, explanatory, static, non-actionable, non-persistent, non-executable, non-routing, non-ranking, and non-certifying; they do not save reviewer answers, answer drafts, revision drafts, reviewer notes, response notes, response-readiness selections, draft-check selections, revision-prompt selections, revision coverage selections, revision-check selections, revision follow-up selections, review-path state, local storage, routes, tickets, meetings, owners, signoff, audits, reports, handoff packages, scores, certifications, task launchers, runnable checklists, command runners, exports, or production handoff state.",
+    sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoard:
+      revisionCoverageBoard,
+  };
+}
+
 function buildStage112ResponseReadinessRow(
   coverageReviewPathStep: Stage111CoverageReviewPathStep,
   staticResponseCueCards: Stage111CoverageReviewPathStaticResponseCueCard[],
@@ -1668,6 +1804,253 @@ function stage114StaticNonGoalFlags(
     noSavedRevisionCheckState: true,
     noSavedRevisionCheckSelections: true,
     noSavedStaticRevisionCheckCards: true,
+  };
+}
+
+function buildStage115RevisionCoverageReviewPathStep(
+  revisionCoverageRow: Stage114RevisionCoverageRow,
+  staticRevisionCheckCards: Stage114StaticRevisionCheckCard[],
+): Stage115RevisionCoverageReviewPathStep {
+  const sourceRevisionCoverageRowId = revisionCoverageRow.revisionCoverageRowId;
+  const matchedStaticRevisionCheckCards = staticRevisionCheckCards.filter((card) =>
+    stage115RowMatchesStaticRevisionFollowUpPromptCard(revisionCoverageRow, card),
+  );
+  const sourceStaticRevisionCheckCardIds =
+    matchedStaticRevisionCheckCards.map((card) => card.staticRevisionCheckCardId);
+  const revisionCoverageReviewPathLabels =
+    buildStage115StepRevisionCoverageReviewPathLabels(
+      revisionCoverageRow,
+      matchedStaticRevisionCheckCards,
+    );
+  const staticRevisionFollowUpPromptLabels =
+    buildStage115StepStaticRevisionFollowUpPromptLabels(
+      revisionCoverageRow,
+      matchedStaticRevisionCheckCards,
+    );
+  const revisionCoverageReviewPathStepId =
+    `${stage115IdPrefix}:step:${sourceRevisionCoverageRowId}`;
+
+  return {
+    ...revisionCoverageRow,
+    revisionCoverageReviewPathStepId,
+    revisionCoverageReviewPathStepIds: [revisionCoverageReviewPathStepId],
+    revisionCoverageReviewPathStepOrder:
+      revisionCoverageRow.revisionCoverageRowOrder,
+    sourceRevisionCoverageRowId,
+    sourceRevisionCoverageRowIds: [sourceRevisionCoverageRowId],
+    sourceStaticRevisionCheckCardIds,
+    revisionCoverageReviewPathLabels,
+    staticRevisionFollowUpPromptLabels,
+    revisionCoverageReviewPathText:
+      `Revision coverage review-path step ${sourceRevisionCoverageRowId}: carry Stage 114 revision coverage row ${sourceRevisionCoverageRowId}, Stage 114 static revision-check cards ${joinOrNone(sourceStaticRevisionCheckCardIds)}, Stage 113 response-readiness review-path step ${revisionCoverageRow.sourceResponseReadinessReviewPathStepId}, Stage 113 static revision-prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticRevisionPromptCardIds)}, Stage 112 response-readiness row ${revisionCoverageRow.sourceResponseReadinessRowId}, Stage 112 static draft-check cards ${joinOrNone(revisionCoverageRow.sourceStaticDraftCheckCardIds)}, Stage 111 coverage-review path step ${revisionCoverageRow.sourceCoverageReviewPathStepId}, Stage 111 static response cue cards ${joinOrNone(revisionCoverageRow.sourceStaticResponseCueCardIds)}, Stage 110 coverage row ${revisionCoverageRow.sourceCoverageRowId}, Stage 110 static review prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticReviewPromptCardIds)}, Stage 109 follow-up review path step ${revisionCoverageRow.sourceFollowUpReviewPathStepId}, Stage 109 static readiness cue cards ${joinOrNone(revisionCoverageRow.sourceStaticReadinessCueCardIds)}, Stage 108 readiness row ${revisionCoverageRow.sourceEvidenceGapReadinessRowId}, Stage 108 static follow-up prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticFollowUpPromptCardIds)}, Stage 107 evidence-check review path step ${revisionCoverageRow.sourceEvidenceCheckReviewPathStepId}, Stage 107 static citation-gap cue cards ${joinOrNone(revisionCoverageRow.sourceStaticCitationGapCueCardIds)}, Stage 106 static evidence-check prompt card ${revisionCoverageRow.sourceStaticEvidenceCheckPromptCardId}, Stage 106 citation-review lane rows ${joinOrNone(revisionCoverageRow.sourceCitationReviewLaneRowIds)}, Stage 105 source follow-up map entry ${revisionCoverageRow.sourceSourceFollowUpMapEntryId}, Stage 105 citation prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticCitationCheckPromptCardIds)}, Stage 104 readiness row ${revisionCoverageRow.sourceSourceReviewReadinessLaneRowId}, Stage 104 cue cards ${joinOrNone(revisionCoverageRow.sourceStaticSourceFollowUpCueCardIds)}, Stage 103 source-review path step ${revisionCoverageRow.sourceSourceReviewPathStepId}, Stage 103 static source-review prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticSourceReviewPromptCardIds)}, Stage 102 source-crosswalk row ${revisionCoverageRow.sourceCrosswalkRowId}, Stage 102 static review-check cards ${joinOrNone(revisionCoverageRow.sourceStaticReviewCheckCardIds)}, Stage 101 review-path step ${revisionCoverageRow.sourceConstraintCoverageReviewPathStepId}, Stage 101 response-review prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticResponseReviewPromptCardIds)}, Stage 100 constraint-coverage row ${revisionCoverageRow.sourceConstraintCoverageRowId}, Stage 100 response-note prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticResponseNotePromptCardIds)}, Stage 99 answer-review step ${revisionCoverageRow.sourceAnswerReviewPathStepId}, Stage 99 constraint-note cards ${joinOrNone(revisionCoverageRow.sourceStaticConstraintNoteCardIds)}, Stage 98 answer-check card ${revisionCoverageRow.sourceStaticAnswerCheckCardId}, Stage 98 through Stage 64 source lineage ids preserved from the Stage 114 row, anchors ${joinOrNone(revisionCoverageRow.sourceLocalAnchorHrefs)}, callbacks ${joinOrNone(revisionCoverageRow.evidenceCallbackIds)}, gap prompts ${joinOrNone(revisionCoverageRow.gapDiscussionPointIds)}, deferred reminders ${joinOrNone(revisionCoverageRow.deferredScopeReminderIds)}, revision coverage review-path labels ${joinOrNone(revisionCoverageReviewPathLabels)}, static revision follow-up prompt labels ${joinOrNone(staticRevisionFollowUpPromptLabels)}, Stage 114 revision coverage text "${displayCarriedText(revisionCoverageRow.revisionCoverageText)}", Stage 114 static revision-check text "${displayCarriedText(revisionCoverageRow.staticRevisionCheckText)}", and local-only flag ${revisionCoverageRow.localOnly ? "true" : "false"} as deterministic manual revision coverage review-path context only.`,
+    staticRevisionFollowUpPromptText:
+      `Static revision follow-up prompt for revision coverage row ${sourceRevisionCoverageRowId}: inspect Stage 114 revision coverage row ${sourceRevisionCoverageRowId}, Stage 114 static revision-check cards ${joinOrNone(sourceStaticRevisionCheckCardIds)}, Stage 113 response-readiness review-path step ${revisionCoverageRow.sourceResponseReadinessReviewPathStepId}, Stage 113 static revision-prompt cards ${joinOrNone(revisionCoverageRow.sourceStaticRevisionPromptCardIds)}, Stage 112 response-readiness row ${revisionCoverageRow.sourceResponseReadinessRowId}, Stage 112 static draft-check cards ${joinOrNone(revisionCoverageRow.sourceStaticDraftCheckCardIds)}, Stage 112 through Stage 64 source lineage ids, anchors ${joinOrNone(revisionCoverageRow.sourceLocalAnchorHrefs)}, callbacks ${joinOrNone(revisionCoverageRow.evidenceCallbackIds)}, gap prompts ${joinOrNone(revisionCoverageRow.gapDiscussionPointIds)}, deferred reminders ${joinOrNone(revisionCoverageRow.deferredScopeReminderIds)}, and Stage 114 labels ${joinOrNone([...revisionCoverageRow.revisionCoverageLabels, ...revisionCoverageRow.staticRevisionCheckLabels])} before editing outside the app without saved reviewer answers, answer drafts, revision drafts, reviewer notes, response notes, response-readiness selections, draft-check selections, revision-prompt selections, revision coverage selections, revision-check selections, revision follow-up selections, review-path state, priorities, rankings, scores, certifications, owners, routes, exports, signoff, meetings, packages, task launchers, runnable checklists, or commands.`,
+    staticNonGoalContext:
+      "Static Stage 115 revision coverage review-path context: manual Stage 114 revision-coverage-row, static revision-check, Stage 113 review-path, Stage 112 through Stage 64 source-lineage, local anchor, callback, gap-prompt, deferred-reminder, and revision follow-up prompt comparison only; no saved reviewer answers, saved answer drafts, saved revision drafts, saved reviewer notes, saved response notes, saved response-readiness selections, saved revision coverage selections, saved revision-check selections, saved revision follow-up selections, saved review-path state, persistence, routing, scoring, ranking, certification, owner assignment, meeting workflow, exports, handoff packages, task launchers, runnable checklists, or commands.",
+    staticNonGoalFlags: stage115StaticNonGoalFlags(
+      revisionCoverageRow.staticNonGoalFlags,
+    ),
+  };
+}
+
+function buildStage115StaticRevisionFollowUpPromptCard(
+  staticRevisionCheckCard: Stage114StaticRevisionCheckCard,
+  revisionCoverageRows: Stage114RevisionCoverageRow[],
+): Stage115StaticRevisionFollowUpPromptCard {
+  const sourceStaticRevisionCheckCardId =
+    staticRevisionCheckCard.staticRevisionCheckCardId;
+  const matchedRevisionCoverageRows = revisionCoverageRows.filter((row) =>
+    stage115RowMatchesStaticRevisionFollowUpPromptCard(
+      row,
+      staticRevisionCheckCard,
+    ),
+  );
+  const sourceRevisionCoverageRowIds = matchedRevisionCoverageRows.map(
+    (row) => row.revisionCoverageRowId,
+  );
+  const revisionCoverageReviewPathLabels =
+    buildStage115CardRevisionCoverageReviewPathLabels(
+      staticRevisionCheckCard,
+      matchedRevisionCoverageRows,
+    );
+  const staticRevisionFollowUpPromptLabels =
+    buildStage115CardStaticRevisionFollowUpPromptLabels(
+      staticRevisionCheckCard,
+      matchedRevisionCoverageRows,
+    );
+  const staticRevisionFollowUpPromptCardId =
+    `${stage115IdPrefix}:static-revision-follow-up:${sourceStaticRevisionCheckCardId}`;
+
+  return {
+    ...staticRevisionCheckCard,
+    staticRevisionFollowUpPromptCardId,
+    staticRevisionFollowUpPromptCardIds: [staticRevisionFollowUpPromptCardId],
+    staticRevisionFollowUpPromptOrder:
+      staticRevisionCheckCard.staticRevisionCheckOrder,
+    sourceStaticRevisionCheckCardId,
+    sourceStaticRevisionCheckCardIds: [sourceStaticRevisionCheckCardId],
+    sourceRevisionCoverageRowIds,
+    revisionCoverageReviewPathLabels,
+    staticRevisionFollowUpPromptLabels,
+    revisionCoverageReviewPathText:
+      `Revision coverage review-path card ${sourceStaticRevisionCheckCardId}: carry Stage 114 static revision-check card ${sourceStaticRevisionCheckCardId}, Stage 114 revision coverage rows ${joinOrNone(sourceRevisionCoverageRowIds)}, Stage 113 static revision-prompt card ${staticRevisionCheckCard.sourceStaticRevisionPromptCardId}, Stage 113 response-readiness review path steps ${joinOrNone(staticRevisionCheckCard.sourceResponseReadinessReviewPathStepIds)}, Stage 112 static draft-check card ${staticRevisionCheckCard.sourceStaticDraftCheckCardId}, Stage 112 response-readiness rows ${joinOrNone(staticRevisionCheckCard.sourceResponseReadinessRowIds)}, Stage 111 static response cue card ${staticRevisionCheckCard.sourceStaticResponseCueCardId}, Stage 111 coverage-review path steps ${joinOrNone(staticRevisionCheckCard.sourceCoverageReviewPathStepIds)}, Stage 110 static review prompt card ${staticRevisionCheckCard.sourceStaticReviewPromptCardId}, Stage 110 coverage rows ${joinOrNone(staticRevisionCheckCard.sourceCoverageRowIds)}, Stage 109 static readiness cue ${staticRevisionCheckCard.sourceStaticReadinessCueCardId}, Stage 109 follow-up review path steps ${joinOrNone(staticRevisionCheckCard.sourceFollowUpReviewPathStepIds)}, Stage 108 static follow-up prompt card ${staticRevisionCheckCard.sourceStaticFollowUpPromptCardId}, Stage 108 readiness rows ${joinOrNone(staticRevisionCheckCard.sourceEvidenceGapReadinessRowIds)}, Stage 107 citation-gap cue ${staticRevisionCheckCard.sourceStaticCitationGapCueCardId}, Stage 107 evidence-check review path steps ${joinOrNone(staticRevisionCheckCard.sourceEvidenceCheckReviewPathStepIds)}, Stage 106 citation-review lane row ${staticRevisionCheckCard.sourceCitationReviewLaneRowId}, Stage 106 static evidence-check prompt cards ${joinOrNone(staticRevisionCheckCard.sourceStaticEvidenceCheckPromptCardIds)}, Stage 105 citation prompt card ${staticRevisionCheckCard.sourceStaticCitationCheckPromptCardId}, Stage 105 source follow-up map entries ${joinOrNone(staticRevisionCheckCard.sourceSourceFollowUpMapEntryIds)}, Stage 112 through Stage 64 source lineage ids preserved from the Stage 114 static revision-check card, anchors ${joinOrNone(staticRevisionCheckCard.sourceLocalAnchorHrefs)}, callbacks ${joinOrNone(staticRevisionCheckCard.evidenceCallbackIds)}, gap prompts ${joinOrNone(staticRevisionCheckCard.gapDiscussionPointIds)}, deferred reminders ${joinOrNone(staticRevisionCheckCard.deferredScopeReminderIds)}, revision coverage review-path labels ${joinOrNone(revisionCoverageReviewPathLabels)}, static revision follow-up prompt labels ${joinOrNone(staticRevisionFollowUpPromptLabels)}, Stage 114 revision coverage text "${displayCarriedText(staticRevisionCheckCard.revisionCoverageText)}", Stage 114 static revision-check text "${displayCarriedText(staticRevisionCheckCard.staticRevisionCheckText)}", and local-only flag ${staticRevisionCheckCard.localOnly ? "true" : "false"} as deterministic manual revision coverage review-path context only.`,
+    staticRevisionFollowUpPromptText:
+      `Static revision follow-up prompt card ${sourceStaticRevisionCheckCardId}: inspect Stage 114 static revision-check card ${sourceStaticRevisionCheckCardId}, Stage 114 revision coverage rows ${joinOrNone(sourceRevisionCoverageRowIds)}, Stage 113 static revision-prompt card ${staticRevisionCheckCard.sourceStaticRevisionPromptCardId}, Stage 112 static draft-check card ${staticRevisionCheckCard.sourceStaticDraftCheckCardId}, Stage 111 static response cue card ${staticRevisionCheckCard.sourceStaticResponseCueCardId}, Stage 110 static review prompt card ${staticRevisionCheckCard.sourceStaticReviewPromptCardId}, Stage 109 static readiness cue ${staticRevisionCheckCard.sourceStaticReadinessCueCardId}, Stage 108 static follow-up prompt card ${staticRevisionCheckCard.sourceStaticFollowUpPromptCardId}, Stage 107 citation-gap cue ${staticRevisionCheckCard.sourceStaticCitationGapCueCardId}, Stage 106 citation-review lane row ${staticRevisionCheckCard.sourceCitationReviewLaneRowId}, Stage 105 citation prompt card ${staticRevisionCheckCard.sourceStaticCitationCheckPromptCardId}, Stage 112 through Stage 64 source lineage ids, anchors ${joinOrNone(staticRevisionCheckCard.sourceLocalAnchorHrefs)}, callbacks ${joinOrNone(staticRevisionCheckCard.evidenceCallbackIds)}, gap prompts ${joinOrNone(staticRevisionCheckCard.gapDiscussionPointIds)}, deferred reminders ${joinOrNone(staticRevisionCheckCard.deferredScopeReminderIds)}, and Stage 114 labels ${joinOrNone([...staticRevisionCheckCard.revisionCoverageLabels, ...staticRevisionCheckCard.staticRevisionCheckLabels])} before editing outside the app without saved reviewer answers, answer drafts, revision drafts, reviewer notes, response notes, response-readiness selections, draft-check selections, revision-prompt selections, revision coverage selections, revision-check selections, revision follow-up selections, review-path state, priorities, rankings, scores, certifications, owners, routes, exports, signoff, meetings, packages, task launchers, runnable checklists, or commands.`,
+    staticNonGoalContext:
+      "Static Stage 115 revision follow-up prompt context: manual Stage 114 static revision-check, revision-coverage-row, Stage 113 revision prompt, Stage 112 through Stage 64 source-lineage, local anchor, callback, gap-prompt, and deferred-reminder review only; no saved reviewer answers, saved answer drafts, saved revision drafts, saved reviewer notes, saved response notes, saved response-readiness selections, saved revision coverage selections, saved revision-check selections, saved revision follow-up selections, saved review-path state, persistence, routing, scoring, ranking, certification, owner assignment, meeting workflow, exports, handoff packages, task launchers, runnable checklists, or commands.",
+    staticNonGoalFlags: stage115StaticNonGoalFlags(
+      staticRevisionCheckCard.staticNonGoalFlags,
+    ),
+  };
+}
+
+function stage115RowMatchesStaticRevisionFollowUpPromptCard(
+  revisionCoverageRow: Stage114RevisionCoverageRow,
+  staticRevisionCheckCard: Stage114StaticRevisionCheckCard,
+): boolean {
+  return (
+    revisionCoverageRow.sourceStaticRevisionPromptCardIds.includes(
+      staticRevisionCheckCard.sourceStaticRevisionPromptCardId,
+    ) ||
+    staticRevisionCheckCard.sourceResponseReadinessReviewPathStepIds.includes(
+      revisionCoverageRow.sourceResponseReadinessReviewPathStepId,
+    )
+  );
+}
+
+function buildStage115Counts(
+  revisionCoverageReviewPathSteps: Stage115RevisionCoverageReviewPathStep[],
+  staticRevisionFollowUpPromptCards: Stage115StaticRevisionFollowUpPromptCard[],
+  revisionCoverageBoard: Stage114View,
+): Stage115Summary["counts"] {
+  const sourceCounts = revisionCoverageBoard.summary.counts;
+
+  return {
+    ...sourceCounts,
+    revisionCoverageReviewPathStepCount:
+      revisionCoverageReviewPathSteps.length,
+    staticRevisionFollowUpPromptCardCount:
+      staticRevisionFollowUpPromptCards.length,
+    revisionCoverageReviewPathLabelCount: unique([
+      ...revisionCoverageReviewPathSteps.flatMap(
+        (step) => step.revisionCoverageReviewPathLabels,
+      ),
+      ...staticRevisionFollowUpPromptCards.flatMap(
+        (card) => card.revisionCoverageReviewPathLabels,
+      ),
+    ]).length,
+    staticRevisionFollowUpPromptLabelCount: unique([
+      ...revisionCoverageReviewPathSteps.flatMap(
+        (step) => step.staticRevisionFollowUpPromptLabels,
+      ),
+      ...staticRevisionFollowUpPromptCards.flatMap(
+        (card) => card.staticRevisionFollowUpPromptLabels,
+      ),
+    ]).length,
+    localOnlyRevisionCoverageReviewPathStepCount:
+      revisionCoverageReviewPathSteps.filter((step) => step.localOnly).length,
+    localOnlyStaticRevisionFollowUpPromptCardCount:
+      staticRevisionFollowUpPromptCards.filter((card) => card.localOnly).length,
+  };
+}
+
+function buildStage115StepRevisionCoverageReviewPathLabels(
+  revisionCoverageRow: Stage114RevisionCoverageRow,
+  matchedStaticRevisionCheckCards: Stage114StaticRevisionCheckCard[],
+): string[] {
+  const labels = [
+    "revision coverage review-path step",
+    "Stage 114 revision coverage row carry-forward",
+  ];
+
+  if (matchedStaticRevisionCheckCards.length) {
+    labels.push("matched Stage 114 static revision-check context");
+  }
+
+  if (revisionCoverageRow.revisionCoverageLabels.length) {
+    labels.push("revision coverage label carry-forward");
+  }
+
+  return labels;
+}
+
+function buildStage115StepStaticRevisionFollowUpPromptLabels(
+  revisionCoverageRow: Stage114RevisionCoverageRow,
+  matchedStaticRevisionCheckCards: Stage114StaticRevisionCheckCard[],
+): string[] {
+  const labels = [
+    "static revision follow-up prompt carry-forward",
+    "Stage 114 revision coverage review-path comparison",
+  ];
+
+  if (matchedStaticRevisionCheckCards.length) {
+    labels.push("matched Stage 114 static revision-check card");
+  }
+
+  if (
+    revisionCoverageRow.gapDiscussionPointIds.length ||
+    revisionCoverageRow.deferredScopeReminderIds.length
+  ) {
+    labels.push("gap prompt and deferred reminder follow-up");
+  }
+
+  return labels;
+}
+
+function buildStage115CardRevisionCoverageReviewPathLabels(
+  staticRevisionCheckCard: Stage114StaticRevisionCheckCard,
+  matchedRevisionCoverageRows: Stage114RevisionCoverageRow[],
+): string[] {
+  const labels = [
+    "revision coverage review-path card",
+    "Stage 114 static revision-check carry-forward",
+  ];
+
+  if (matchedRevisionCoverageRows.length) {
+    labels.push("matched revision coverage rows");
+  }
+
+  if (staticRevisionCheckCard.revisionCoverageLabels.length) {
+    labels.push("revision coverage card label carry-forward");
+  }
+
+  return labels;
+}
+
+function buildStage115CardStaticRevisionFollowUpPromptLabels(
+  staticRevisionCheckCard: Stage114StaticRevisionCheckCard,
+  matchedRevisionCoverageRows: Stage114RevisionCoverageRow[],
+): string[] {
+  const labels = [
+    "static revision follow-up prompt card",
+    "Stage 114 static revision-check carry-forward",
+  ];
+
+  if (matchedRevisionCoverageRows.length) {
+    labels.push("matched revision coverage row context");
+  }
+
+  if (
+    staticRevisionCheckCard.gapDiscussionPointIds.length ||
+    staticRevisionCheckCard.deferredScopeReminderIds.length
+  ) {
+    labels.push("gap prompt and deferred reminder follow-up");
+  }
+
+  return labels;
+}
+
+function stage115StaticNonGoalFlags(
+  sourceFlags: Stage114StaticNonGoalFlags,
+): Stage115StaticNonGoalFlags {
+  return {
+    ...sourceFlags,
+    noSavedRevisionCoverageReviewPathState: true,
+    noSavedRevisionCoverageReviewPathSteps: true,
+    noSavedRevisionCoverageReviewPathSelections: true,
+    noSavedRevisionFollowUpPromptState: true,
+    noSavedRevisionFollowUpPromptSelections: true,
+    noSavedStaticRevisionFollowUpPromptCards: true,
   };
 }
 

@@ -782,3 +782,151 @@ test("Stage 114 revision coverage board derives rows from Stage 113 review path"
     ),
   );
 });
+
+test("Stage 115 revision coverage review path derives steps from Stage 114 coverage rows", async () => {
+  const {
+    buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath,
+  } = await import(
+    "../../frontend/src/lib/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath.ts"
+  ).catch((error) =>
+    assert.fail(`expected Stage 115 helper export to exist: ${error.message}`),
+  );
+  assert.equal(
+    typeof buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath,
+    "function",
+  );
+
+  const view = buildMissionConsoleView(stage07ConsoleFixture);
+  const sourceRevisionCoverageBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoard;
+  const revisionCoverageReviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath;
+  const missionConsoleSource = readFileSync(
+    resolve(repoRoot, "frontend/src/features/mission-console/MissionConsole.tsx"),
+    "utf8",
+  );
+
+  assert.ok(sourceRevisionCoverageBoard);
+
+  const builtRevisionCoverageReviewPath =
+    buildConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath(
+      sourceRevisionCoverageBoard,
+    );
+
+  assert.ok(revisionCoverageReviewPath);
+  assert.ok(builtRevisionCoverageReviewPath);
+  assert.deepEqual(revisionCoverageReviewPath, builtRevisionCoverageReviewPath);
+  assert.equal(
+    revisionCoverageReviewPath.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix_evidence_gap_follow_up_review_path_evidence_gap_follow_up_coverage_board_evidence_gap_follow_up_coverage_review_path_response_readiness_board_response_readiness_review_path_revision_coverage_review_path.v1",
+  );
+  assert.strictEqual(
+    revisionCoverageReviewPath.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageBoard,
+    sourceRevisionCoverageBoard,
+  );
+  assert.deepEqual(
+    revisionCoverageReviewPath.revisionCoverageReviewPathSteps.map(
+      (step) => step.sourceRevisionCoverageRowId,
+    ),
+    sourceRevisionCoverageBoard.revisionCoverageRows.map(
+      (row) => row.revisionCoverageRowId,
+    ),
+  );
+  assert.deepEqual(
+    revisionCoverageReviewPath.staticRevisionFollowUpPromptCards.map(
+      (card) => card.sourceStaticRevisionCheckCardId,
+    ),
+    sourceRevisionCoverageBoard.staticRevisionCheckCards.map(
+      (card) => card.staticRevisionCheckCardId,
+    ),
+  );
+  assert.deepEqual(
+    revisionCoverageReviewPath.summary.defaultRevisionCoverageReviewPathContext
+      .sourceStage114DefaultRevisionCoverageContext,
+    sourceRevisionCoverageBoard.summary.defaultRevisionCoverageContext,
+  );
+
+  const firstStep = revisionCoverageReviewPath.revisionCoverageReviewPathSteps[0];
+  assert.equal(firstStep.revisionCoverageReviewPathStepOrder, 1);
+  assert.ok(
+    firstStep.revisionCoverageReviewPathText.includes(
+      firstStep.sourceRevisionCoverageRowId,
+    ),
+  );
+  assert.ok(
+    firstStep.revisionCoverageReviewPathText.includes(
+      firstStep.sourceStaticRevisionCheckCardIds[0],
+    ),
+  );
+  assert.ok(
+    firstStep.staticRevisionFollowUpPromptText.includes(
+      firstStep.sourceResponseReadinessReviewPathStepId,
+    ),
+  );
+  assert.ok(
+    firstStep.staticRevisionFollowUpPromptText.includes(
+      firstStep.sourceStaticRevisionPromptCardIds[0],
+    ),
+  );
+  assert.ok(
+    firstStep.revisionCoverageReviewPathLabels.includes(
+      "revision coverage review-path step",
+    ),
+  );
+  assert.ok(
+    firstStep.staticRevisionFollowUpPromptLabels.includes(
+      "static revision follow-up prompt carry-forward",
+    ),
+  );
+  assert.equal(
+    firstStep.staticNonGoalFlags.noSavedRevisionCoverageReviewPathState,
+    true,
+  );
+  assert.equal(
+    firstStep.staticNonGoalFlags.noSavedRevisionCoverageReviewPathSelections,
+    true,
+  );
+  assert.equal(
+    firstStep.staticNonGoalFlags.noSavedRevisionFollowUpPromptState,
+    true,
+  );
+  assert.equal(firstStep.staticNonGoalFlags.noSavedRevisionCoverageState, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedRevisionDrafts, true);
+
+  const firstPrompt =
+    revisionCoverageReviewPath.staticRevisionFollowUpPromptCards[0];
+  assert.equal(firstPrompt.staticRevisionFollowUpPromptOrder, 1);
+  assert.ok(
+    firstPrompt.staticRevisionFollowUpPromptText.includes(
+      firstPrompt.sourceStaticRevisionCheckCardId,
+    ),
+  );
+  assert.ok(
+    firstPrompt.staticRevisionFollowUpPromptText.includes(
+      firstPrompt.sourceStaticRevisionPromptCardId,
+    ),
+  );
+  assert.ok(
+    firstPrompt.staticRevisionFollowUpPromptLabels.includes(
+      "static revision follow-up prompt card",
+    ),
+  );
+  assert.equal(
+    firstPrompt.staticNonGoalFlags.noSavedStaticRevisionFollowUpPromptCards,
+    true,
+  );
+  assert.equal(
+    firstPrompt.staticNonGoalFlags.noSavedRevisionFollowUpPromptState,
+    true,
+  );
+  assert.equal(
+    firstPrompt.staticNonGoalFlags.noSavedStaticRevisionCheckCards,
+    true,
+  );
+  assert.ok(missionConsoleSource.includes("Stage 115 revision coverage review path"));
+  assert.ok(
+    missionConsoleSource.includes(
+      "Revision coverage review path and static revision follow-up prompts",
+    ),
+  );
+});

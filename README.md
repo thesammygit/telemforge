@@ -1,6 +1,6 @@
 # TelemForge
 
-TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, bounded websocket telemetry streaming, manual alert acknowledgement and resolution workflows, replay/anomaly inspection, guided scenario playback, incident review packets and evidence export, deterministic replay playback timelines, and a fixture-backed React/Vite mission console with a local review decision register.
+TelemForge is an open-source synthetic telemetry and mission-operations sandbox. The current workspace includes a local FastAPI backend, SQLite persistence, deterministic telemetry simulation, bounded websocket telemetry streaming, manual alert acknowledgement and resolution workflows, replay/anomaly inspection, guided scenario playback, incident review packets and evidence export, deterministic replay playback timelines, and a fixture-backed React/Vite mission console with staged local review, handoff, source-readiness, and constraint-response surfaces through Stage 115.
 
 ## Quick Verification
 
@@ -24,6 +24,8 @@ node --experimental-strip-types --test tests/frontend/stage09LiveConsoleAdapter.
 node --experimental-strip-types --test tests/frontend/incidentReviewPackets.test.ts
 node --experimental-strip-types --test tests/frontend/scenarioRunbooks.test.ts
 node --experimental-strip-types --test tests/frontend/reviewDecisionRegister.test.ts
+node --experimental-strip-types --test tests/frontend/constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath.test.ts
+npm --prefix frontend run test
 ```
 
 The smoke command runs the core backend workflow in process: health, session creation, tiny simulation, manual fault injection, telemetry, alerts, events, replay, and anomalies.
@@ -78,7 +80,7 @@ docs/       Architecture, local runbook, readiness docs, staged development path
 
 ## Current Scope
 
-Implemented through the current Stage 48 review-ready slices:
+Implemented through the current Stage 115 review-ready slices:
 
 - telemetry contracts and fixture examples;
 - deterministic simulation artifacts;
@@ -96,6 +98,7 @@ Implemented through the current Stage 48 review-ready slices:
 - a deterministic local review decision register and handoff checklist for the existing thermal-alert review flow;
 - deterministic local review briefing, action, proof, and handoff surfaces through Stage 27, including the briefing board, action queue, walkthrough path, readiness script, coverage matrix, gap triage/resolution, readiness summary, outcome board, proof packet, and human test gate;
 - deterministic local review proof, observation, and handoff surfaces through Stage 48, including proof navigation/crosswalks, surface indexing, walkthroughs, observation lens/coverage/citations/boundaries/storyline, and the handoff deck, coverage, questions, agenda, path, dry run, debrief, continuity, drift, calibration, and synthesis views;
+- deterministic local relay, source-readiness, constraint-response, and revision-follow-up surfaces through Stage 115, including the relay trail, source crosswalk/walkthrough/readout/readiness sequence, response trace and follow-up readiness ladders, answer walkthrough/source crosswalk coverage, evidence-check and citation-gap review surfaces, evidence-gap follow-up coverage/review boards, response-readiness boards, revision coverage boards, and the Stage 115 revision coverage review path with static revision follow-up prompts;
 - local review and handoff surfaces remain deterministic, local-only, non-persistent, and non-certifying by design.
 
 Deferred:
