@@ -6057,6 +6057,70 @@ test("buildMissionConsoleView exposes the Stage 118 response-prompt readiness bo
   );
 });
 
+test("buildMissionConsoleView exposes the Stage 119 answer-review path from Stage 118", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture);
+  const sourceResponsePromptReadinessBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoardRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard;
+  const answerReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath;
+
+  assert.ok(sourceResponsePromptReadinessBoard);
+  assert.ok(answerReviewPath);
+  assert.equal(
+    answerReviewPath.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path.v1",
+  );
+  assert.strictEqual(
+    answerReviewPath.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoardRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard,
+    sourceResponsePromptReadinessBoard,
+  );
+  assert.equal(
+    answerReviewPath.summary.counts.answerReviewPathStepCount,
+    sourceResponsePromptReadinessBoard.staticAnswerCheckCards.length,
+  );
+  assert.equal(
+    answerReviewPath.summary.counts.staticConstraintNoteCardCount,
+    sourceResponsePromptReadinessBoard.responsePromptReadinessRows.length,
+  );
+  assert.deepEqual(
+    answerReviewPath.summary.defaultAnswerReviewContext
+      .sourceStage118DefaultResponsePromptReadinessContext,
+    sourceResponsePromptReadinessBoard.summary
+      .defaultResponsePromptReadinessContext,
+  );
+  assert.ok(
+    answerReviewPath.answerReviewPathSteps.every(
+      (step) =>
+        step.answerReviewPathStepId.length > 0 &&
+        step.answerReviewPathText.includes(step.sourceStaticAnswerCheckCardId) &&
+        step.answerReviewPathText.includes(
+          step.sourceStaticResponsePromptCardId,
+        ) &&
+        step.answerReviewPathLabels.includes("answer-review path step") &&
+        step.staticNonGoalFlags.noSavedAnswerReviewState &&
+        step.staticNonGoalFlags.noSavedConstraintNoteState &&
+        step.staticNonGoalFlags.noSavedPromptReadinessState &&
+        step.staticNonGoalFlags.noSavedAnswerCheckState,
+    ),
+  );
+  assert.ok(
+    answerReviewPath.staticConstraintNoteCards.every(
+      (card) =>
+        card.staticConstraintNoteCardId.length > 0 &&
+        card.staticConstraintNoteText.includes(
+          card.sourceResponsePromptReadinessRowId,
+        ) &&
+        card.staticConstraintNoteText.includes(
+          card.sourceRevisionFollowUpReadinessReviewPathStepId,
+        ) &&
+        card.staticConstraintNoteLabels.includes("static constraint note") &&
+        card.staticNonGoalFlags.noSavedAnswerReviewState &&
+        card.staticNonGoalFlags.noSavedConstraintNoteState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+});
+
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
   const acknowledgedFixture = acknowledgeAlertInFixture(
     stage07ConsoleFixture,

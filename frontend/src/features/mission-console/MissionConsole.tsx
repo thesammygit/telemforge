@@ -196,6 +196,8 @@ export function MissionConsole({
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoardRevisionFollowUpReadinessReviewPath;
   const stage118ResponsePromptReadinessBoard =
     view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoardRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoard;
+  const stage119AnswerReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -21288,6 +21290,203 @@ export function MissionConsole({
                 {
                   stage118ResponsePromptReadinessBoard
                     .staticResponsePromptReadinessBoundarySummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage119AnswerReviewPath ? (
+        <section
+          className="constraint-response-stage119-answer-review-section"
+          aria-label="Stage 119 answer-review path"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 119 answer-review path</span>
+              <h2>Answer-review path and static constraint notes</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage119AnswerReviewPath.localStatus}`}
+            >
+              {stage119AnswerReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {stage119AnswerReviewPath.summary.counts.answerReviewPathStepCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Constraint notes</span>
+              <strong>
+                {
+                  stage119AnswerReviewPath.summary.counts
+                    .staticConstraintNoteCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Stage 118 checks</span>
+              <strong>
+                {stage119AnswerReviewPath.summary.counts.staticAnswerCheckCardCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Stage 118 rows</span>
+              <strong>
+                {
+                  stage119AnswerReviewPath.summary.counts
+                    .responsePromptReadinessRowCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-stage119-answer-review-layout">
+            <div className="constraint-response-stage119-answer-review-list">
+              {stage119AnswerReviewPath.answerReviewPathSteps.map((step) => (
+                <article key={step.answerReviewPathStepId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Answer-review step {step.answerReviewPathStepOrder} -{" "}
+                        {step.sourceStaticAnswerCheckCardId}
+                      </span>
+                      <h3>{step.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {step.sourceResponsePromptReadinessRowIds.length} rows
+                    </span>
+                  </div>
+                  <p>{step.answerReviewPathText}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Stage 118 card</span>
+                      <strong>{step.sourceStaticAnswerCheckCardIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stage 118 rows</span>
+                      <strong>{step.sourceResponsePromptReadinessRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stage 117 prompts</span>
+                      <strong>{step.sourceStaticResponsePromptCardIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved answers</span>
+                      <strong>
+                        {step.staticNonGoalFlags.noSavedReviewerAnswers
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {step.sourceLocalAnchorHrefs.map((href) => (
+                      <a key={`${step.answerReviewPathStepId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{step.sourceStaticResponsePromptCardId}</span>
+                    <span>{step.sourceStaticResponseCheckCardId}</span>
+                    <span>{step.sourceStaticRevisionFollowUpPromptCardId}</span>
+                    <span>{step.sourceStaticRevisionCheckCardId}</span>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {step.answerReviewPathLabels.map((label) => (
+                      <span key={`${step.answerReviewPathStepId}:${label}`}>
+                        {label}
+                      </span>
+                    ))}
+                  </div>
+                  <p>{step.staticConstraintNoteText}</p>
+                  <p>{step.staticNonGoalContext}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="constraint-response-stage119-answer-review-panel">
+              <span className="metric-label">Default answer-review context</span>
+              <strong>{stage119AnswerReviewPath.defaultAnswerReviewPathStep.label}</strong>
+              <p>{stage119AnswerReviewPath.summary.summary}</p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage119AnswerReviewPath.summary.defaultAnswerReviewContext
+                      .defaultAnswerReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    stage119AnswerReviewPath.summary.defaultAnswerReviewContext
+                      .defaultStaticConstraintNoteCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage119AnswerReviewPath.summary.defaultAnswerReviewContext
+                      .defaultStaticAnswerCheckCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage119AnswerReviewPath.summary.defaultAnswerReviewContext
+                      .defaultResponsePromptReadinessRowId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-stage119-answer-review-note-list">
+                {stage119AnswerReviewPath.staticConstraintNoteCards.map((card) => (
+                  <article key={card.staticConstraintNoteCardId}>
+                    <span className="event-type">
+                      Constraint note {card.staticConstraintNoteOrder} -{" "}
+                      {card.sourceResponsePromptReadinessRowId}
+                    </span>
+                    <strong>{card.label}</strong>
+                    <p>{card.staticConstraintNoteText}</p>
+                    <div className="gap-reference-strip">
+                      {card.sourceStaticAnswerCheckCardIds.map((id) => (
+                        <span key={`${card.staticConstraintNoteCardId}:${id}`}>
+                          {id}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="gap-reference-strip">
+                      {card.staticConstraintNoteLabels.map((label) => (
+                        <span key={`${card.staticConstraintNoteCardId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                  </article>
+                ))}
+              </div>
+              <div className="constraint-response-stage119-answer-review-boundary-list">
+                {[
+                  "No saved answer-review state",
+                  "No saved constraint-note state",
+                  "No saved reviewer answers or answer drafts",
+                  "No saved prompt-readiness or answer-check state",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage119AnswerReviewPath
+                    .staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathBoundarySummary
                 }
               </p>
             </aside>
