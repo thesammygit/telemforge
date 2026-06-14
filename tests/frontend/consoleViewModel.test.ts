@@ -5906,6 +5906,80 @@ test("buildMissionConsoleView exposes the Stage 116 revision follow-up readiness
   );
 });
 
+test("buildMissionConsoleView exposes the Stage 117 revision follow-up readiness review path from Stage 116", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture);
+  const sourceRevisionFollowUpReadinessBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoard;
+  const reviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoardRevisionFollowUpReadinessReviewPath;
+
+  assert.ok(sourceRevisionFollowUpReadinessBoard);
+  assert.ok(reviewPath);
+  assert.equal(
+    reviewPath.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix_evidence_gap_follow_up_review_path_evidence_gap_follow_up_coverage_board_evidence_gap_follow_up_coverage_review_path_response_readiness_board_response_readiness_review_path_revision_coverage_review_path_revision_follow_up_readiness_board_revision_follow_up_readiness_review_path.v1",
+  );
+  assert.strictEqual(
+    reviewPath.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoard,
+    sourceRevisionFollowUpReadinessBoard,
+  );
+  assert.equal(
+    reviewPath.summary.counts.revisionFollowUpReadinessReviewPathStepCount,
+    sourceRevisionFollowUpReadinessBoard.revisionFollowUpReadinessRows.length,
+  );
+  assert.equal(
+    reviewPath.summary.counts.staticResponsePromptCardCount,
+    sourceRevisionFollowUpReadinessBoard.staticResponseCheckCards.length,
+  );
+  assert.deepEqual(
+    reviewPath.summary.defaultRevisionFollowUpReadinessReviewPathContext
+      .sourceStage116DefaultRevisionFollowUpReadinessContext,
+    sourceRevisionFollowUpReadinessBoard.summary
+      .defaultRevisionFollowUpReadinessContext,
+  );
+  assert.ok(
+    reviewPath.revisionFollowUpReadinessReviewPathSteps.every(
+      (step) =>
+        step.revisionFollowUpReadinessReviewPathStepId.length > 0 &&
+        step.revisionFollowUpReadinessReviewPathText.includes(
+          step.sourceRevisionFollowUpReadinessRowId,
+        ) &&
+        step.revisionFollowUpReadinessReviewPathText.includes(
+          step.sourceStaticResponseCheckCardIds[0],
+        ) &&
+        step.responsePromptText.includes(
+          step.sourceStaticRevisionFollowUpPromptCardIds[0],
+        ) &&
+        step.revisionFollowUpReadinessReviewPathLabels.includes(
+          "revision follow-up readiness review-path step",
+        ) &&
+        step.staticResponsePromptLabels.includes(
+          "static response-prompt carry-forward",
+        ) &&
+        step.staticNonGoalFlags.noSavedRevisionFollowUpReadinessReviewPathState &&
+        step.staticNonGoalFlags
+          .noSavedRevisionFollowUpReadinessReviewPathSelections &&
+        step.staticNonGoalFlags.noSavedResponsePromptSelections &&
+        step.staticNonGoalFlags.noSavedResponseDrafts &&
+        step.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    reviewPath.staticResponsePromptCards.every(
+      (card) =>
+        card.staticResponsePromptCardId.length > 0 &&
+        card.responsePromptText.includes(card.sourceStaticResponseCheckCardId) &&
+        card.responsePromptText.includes(
+          card.sourceStaticRevisionFollowUpPromptCardId,
+        ) &&
+        card.staticResponsePromptLabels.includes("static response-prompt card") &&
+        card.staticNonGoalFlags.noSavedStaticResponsePromptCards &&
+        card.staticNonGoalFlags.noSavedResponsePromptState &&
+        card.staticNonGoalFlags.noSavedResponsePromptSelections,
+    ),
+  );
+});
+
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
   const acknowledgedFixture = acknowledgeAlertInFixture(
     stage07ConsoleFixture,
