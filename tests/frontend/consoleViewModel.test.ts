@@ -5831,6 +5831,81 @@ test("buildMissionConsoleView exposes the Stage 115 revision coverage review pat
   );
 });
 
+test("buildMissionConsoleView exposes the Stage 116 revision follow-up readiness board from Stage 115", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture);
+  const sourceRevisionCoverageReviewPath =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath;
+  const readinessBoard =
+    view.constraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPathRevisionFollowUpReadinessBoard;
+
+  assert.ok(sourceRevisionCoverageReviewPath);
+  assert.ok(readinessBoard);
+  assert.equal(
+    readinessBoard.schema,
+    "telemforge.constraint_response_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix_evidence_gap_follow_up_review_path_evidence_gap_follow_up_coverage_board_evidence_gap_follow_up_coverage_review_path_response_readiness_board_response_readiness_review_path_revision_coverage_review_path_revision_follow_up_readiness_board.v1",
+  );
+  assert.strictEqual(
+    readinessBoard.sourceConstraintResponseRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPathEvidenceGapFollowUpCoverageBoardEvidenceGapFollowUpCoverageReviewPathResponseReadinessBoardResponseReadinessReviewPathRevisionCoverageReviewPath,
+    sourceRevisionCoverageReviewPath,
+  );
+  assert.equal(
+    readinessBoard.summary.counts.revisionFollowUpReadinessRowCount,
+    sourceRevisionCoverageReviewPath.revisionCoverageReviewPathSteps.length,
+  );
+  assert.equal(
+    readinessBoard.summary.counts.staticResponseCheckCardCount,
+    sourceRevisionCoverageReviewPath.staticRevisionFollowUpPromptCards.length,
+  );
+  assert.deepEqual(
+    readinessBoard.summary.defaultRevisionFollowUpReadinessContext
+      .sourceStage115DefaultRevisionCoverageReviewPathContext,
+    sourceRevisionCoverageReviewPath.summary.defaultRevisionCoverageReviewPathContext,
+  );
+  assert.ok(
+    readinessBoard.revisionFollowUpReadinessRows.every(
+      (row) =>
+        row.revisionFollowUpReadinessRowId.length > 0 &&
+        row.revisionFollowUpReadinessText.includes(
+          row.sourceRevisionCoverageReviewPathStepId,
+        ) &&
+        row.revisionFollowUpReadinessText.includes(
+          row.sourceStaticRevisionFollowUpPromptCardIds[0],
+        ) &&
+        row.staticResponseCheckText.includes(
+          row.sourceStaticRevisionCheckCardIds[0],
+        ) &&
+        row.revisionFollowUpReadinessLabels.includes(
+          "revision follow-up readiness row",
+        ) &&
+        row.staticResponseCheckLabels.includes(
+          "static response-check carry-forward",
+        ) &&
+        row.staticNonGoalFlags.noSavedRevisionFollowUpReadinessBoardState &&
+        row.staticNonGoalFlags.noSavedRevisionFollowUpReadinessSelections &&
+        row.staticNonGoalFlags.noSavedResponseCheckSelections &&
+        row.staticNonGoalFlags.noSavedResponseDrafts &&
+        row.staticNonGoalFlags.noSavedRevisionDrafts &&
+        row.staticNonGoalFlags.noSavedReviewerNotes,
+    ),
+  );
+  assert.ok(
+    readinessBoard.staticResponseCheckCards.every(
+      (card) =>
+        card.staticResponseCheckCardId.length > 0 &&
+        card.staticResponseCheckText.includes(
+          card.sourceStaticRevisionFollowUpPromptCardId,
+        ) &&
+        card.staticResponseCheckText.includes(
+          card.sourceStaticRevisionCheckCardId,
+        ) &&
+        card.staticResponseCheckLabels.includes("static response-check card") &&
+        card.staticNonGoalFlags.noSavedStaticResponseCheckCards &&
+        card.staticNonGoalFlags.noSavedResponseCheckSelections &&
+        card.staticNonGoalFlags.noSavedStaticRevisionFollowUpPromptCards,
+    ),
+  );
+});
+
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
   const acknowledgedFixture = acknowledgeAlertInFixture(
     stage07ConsoleFixture,

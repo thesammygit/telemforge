@@ -929,4 +929,10 @@ test("Stage 115 revision coverage review path derives steps from Stage 114 cover
       "Revision coverage review path and static revision follow-up prompts",
     ),
   );
+  assert.ok(missionConsoleSource.includes("Stage 116 revision follow-up readiness"));
+  assert.ok(
+    missionConsoleSource.includes(
+      "Revision follow-up readiness board and static response checks",
+    ),
+  );
 });
