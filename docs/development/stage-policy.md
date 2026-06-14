@@ -97,5 +97,6 @@ proved a deterministic local revision coverage review path and static revision
 follow-up prompt surface over the Stage 114 revision coverage board and static
 revision-check cards.
 
-New work should begin in Stage 116 unless a focused Stage 115 regression is
-found.
+Stage 116 should now build the next deterministic local revision follow-up
+readiness board and static response-check surface over Stage 115 unless a
+focused Stage 115 regression is found.
