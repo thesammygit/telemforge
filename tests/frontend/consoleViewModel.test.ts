@@ -6133,6 +6133,8 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk;
   const sourceReviewPath =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath;
+  const sourceReviewReadinessLane =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane;
 
   assert.ok(sourceAnswerReviewPath);
   assert.ok(constraintCoverageMap);
@@ -6340,6 +6342,65 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
         card.staticNonGoalFlags.noSavedSourceReviewState &&
         card.staticNonGoalFlags.noSavedSourceReviewSelections &&
         card.staticNonGoalFlags.noSavedStaticReviewChecks,
+    ),
+  );
+  assert.ok(sourceReviewReadinessLane);
+  assert.equal(
+    sourceReviewReadinessLane.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane.v1",
+  );
+  assert.strictEqual(
+    sourceReviewReadinessLane.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath,
+    sourceReviewPath,
+  );
+  assert.equal(
+    sourceReviewReadinessLane.summary.counts.sourceReviewReadinessLaneRowCount,
+    sourceReviewPath.sourceReviewPathSteps.length,
+  );
+  assert.equal(
+    sourceReviewReadinessLane.summary.counts.staticSourceFollowUpCueCardCount,
+    sourceReviewPath.staticSourceReviewPromptCards.length,
+  );
+  assert.deepEqual(
+    sourceReviewReadinessLane.summary.defaultSourceReviewReadinessContext
+      .sourceStage123DefaultSourceReviewContext,
+    sourceReviewPath.summary.defaultSourceReviewContext,
+  );
+  assert.ok(
+    sourceReviewReadinessLane.sourceReviewReadinessLaneRows.every(
+      (row) =>
+        row.sourceReviewReadinessLaneText.includes(
+          row.sourceSourceReviewPathStepId,
+        ) &&
+        row.sourceReviewReadinessLaneText.includes(row.sourceCrosswalkRowId) &&
+        row.staticSourceFollowUpCueText.includes(
+          row.sourceSourceReviewPathStepId,
+        ) &&
+        row.sourceReviewReadinessLaneLabels.includes(
+          "source-review readiness lane row",
+        ) &&
+        row.staticNonGoalFlags.noSavedSourceReviewReadinessState &&
+        row.staticNonGoalFlags.noSavedSourceReviewReadinessLaneState &&
+        row.staticNonGoalFlags.noSavedSourceFollowUpState &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    sourceReviewReadinessLane.staticSourceFollowUpCueCards.every(
+      (card) =>
+        card.staticSourceFollowUpCueText.includes(
+          card.sourceStaticSourceReviewPromptCardId,
+        ) &&
+        card.staticSourceFollowUpCueText.includes(
+          card.sourceStaticReviewCheckCardId,
+        ) &&
+        card.staticSourceFollowUpCueLabels.includes(
+          "static source-follow-up cue card",
+        ) &&
+        card.staticNonGoalFlags.noSavedStaticSourceFollowUpCues &&
+        card.staticNonGoalFlags.noSavedStaticSourceFollowUpCueCards &&
+        card.staticNonGoalFlags.noSavedSourceReviewReadinessState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );
 });

@@ -206,6 +206,8 @@ export function MissionConsole({
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk;
   const stage123SourceReviewPath =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath;
+  const stage124SourceReviewReadinessLane =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -22349,6 +22351,242 @@ export function MissionConsole({
               <p>
                 {
                   stage123SourceReviewPath.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage124SourceReviewReadinessLane ? (
+        <section
+          className="constraint-response-stage124-source-review-readiness-lane-section"
+          aria-label="Stage 124 source-review readiness lane"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 124 source-review readiness lane
+              </span>
+              <h2>Source-readiness lane and static follow-up cues</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage124SourceReviewReadinessLane.localStatus}`}
+            >
+              {stage124SourceReviewReadinessLane.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Readiness rows</span>
+              <strong>
+                {
+                  stage124SourceReviewReadinessLane.summary.counts
+                    .sourceReviewReadinessLaneRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up cues</span>
+              <strong>
+                {
+                  stage124SourceReviewReadinessLane.summary.counts
+                    .staticSourceFollowUpCueCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Lane labels</span>
+              <strong>
+                {
+                  stage124SourceReviewReadinessLane.summary.counts
+                    .sourceReviewReadinessLaneLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Cue labels</span>
+              <strong>
+                {
+                  stage124SourceReviewReadinessLane.summary.counts
+                    .staticSourceFollowUpCueLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-stage124-source-review-readiness-lane-layout">
+            <div className="constraint-response-stage124-source-review-readiness-lane-row-list">
+              {stage124SourceReviewReadinessLane.sourceReviewReadinessLaneRows.map(
+                (row) => (
+                  <article
+                    key={
+                      row.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneRowId
+                    }
+                  >
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Source readiness {row.sourceReviewReadinessLaneRowOrder} -{" "}
+                          {row.sourceConstraintCoverageRowId}
+                        </span>
+                        <h3>{row.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {row.sourceStaticSourceReviewPromptCardIds.length} cues
+                      </span>
+                    </div>
+                    <p>{row.sourceReviewReadinessLaneText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 123 step</span>
+                        <strong>{row.sourceSourceReviewPathStepIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 123 prompts</span>
+                        <strong>
+                          {row.sourceStaticSourceReviewPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{row.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">
+                          Saved readiness state
+                        </span>
+                        <strong>
+                          {row.staticNonGoalFlags.noSavedSourceReviewReadinessState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {row.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${row.sourceSourceReviewPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{row.sourceSourceReviewPathStepId}</span>
+                      <span>{row.sourceCrosswalkRowId}</span>
+                      <span>{row.sourceConstraintCoverageReviewPathStepId}</span>
+                      <span>{row.sourceConstraintCoverageRowId}</span>
+                    </div>
+                    <div className="constraint-response-stage124-source-review-readiness-lane-cue-list">
+                      {row.sourceStaticSourceReviewPromptCardIds.map((promptId) => (
+                        <article
+                          key={`${row.sourceSourceReviewPathStepId}:${promptId}`}
+                        >
+                          <span className="event-type">
+                            Stage 123 source prompt
+                          </span>
+                          <strong>{promptId}</strong>
+                        </article>
+                      ))}
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...row.sourceReviewPathLabels,
+                        ...row.sourceReviewReadinessLaneLabels,
+                      ].map((label) => (
+                        <span key={`${row.sourceSourceReviewPathStepId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{row.sourceReviewPathText}</p>
+                    <p>{row.staticSourceFollowUpCueText}</p>
+                    <p>{row.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-stage124-source-review-readiness-lane-panel">
+              <span className="metric-label">Default source-readiness context</span>
+              <strong>
+                {
+                  stage124SourceReviewReadinessLane
+                    .defaultSourceReviewReadinessLaneRow.label
+                }
+              </strong>
+              <p>{stage124SourceReviewReadinessLane.summary.summary}</p>
+              <div className="constraint-response-stage124-source-review-readiness-lane-static-source-cue-list">
+                {stage124SourceReviewReadinessLane.staticSourceFollowUpCueCards.map(
+                  (card) => (
+                    <article
+                      key={
+                        card.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneStaticSourceFollowUpCueCardId
+                      }
+                    >
+                      <span className="event-type">
+                        Static source-follow-up cue {card.staticSourceFollowUpCueOrder} -{" "}
+                        {card.sourceResponsePromptReadinessRowId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.staticSourceFollowUpCueText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.sourceStaticSourceReviewPromptCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {card.sourceSourceReviewReadinessLaneRowIds.length} rows
+                        </span>
+                        <span>{card.sourceStaticSourceReviewPromptCardId}</span>
+                        <span>{card.sourceStaticReviewCheckCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {[
+                          ...card.staticSourceReviewPromptLabels,
+                          ...card.staticSourceFollowUpCueLabels,
+                        ].map((label) => (
+                          <span
+                            key={`${card.sourceStaticSourceReviewPromptCardId}:${label}`}
+                          >
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                      <p>{card.staticSourceReviewPromptText}</p>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-stage124-source-review-readiness-lane-boundary-list">
+                {[
+                  "No saved source-review readiness state",
+                  "No saved source-review readiness lane state",
+                  "No saved source-follow-up state",
+                  "No saved static source-follow-up cues",
+                  "No saved source selections",
+                  "No saved source-review path state",
+                  "No saved reviewer answers, drafts, or notes",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage124SourceReviewReadinessLane.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSummary
                 }
               </p>
             </aside>
