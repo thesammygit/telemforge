@@ -6127,6 +6127,8 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath;
   const constraintCoverageMap =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap;
+  const constraintCoverageReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath;
 
   assert.ok(sourceAnswerReviewPath);
   assert.ok(constraintCoverageMap);
@@ -6174,6 +6176,65 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
         ) &&
         card.staticNonGoalFlags.noSavedConstraintCoverageState &&
         card.staticNonGoalFlags.noSavedResponseNoteState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(constraintCoverageReviewPath);
+  assert.equal(
+    constraintCoverageReviewPath.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path.v1",
+  );
+  assert.strictEqual(
+    constraintCoverageReviewPath.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap,
+    constraintCoverageMap,
+  );
+  assert.equal(
+    constraintCoverageReviewPath.summary.counts.constraintCoverageReviewPathStepCount,
+    constraintCoverageMap.constraintCoverageRows.length,
+  );
+  assert.equal(
+    constraintCoverageReviewPath.summary.counts.staticResponsePromptCardCount,
+    constraintCoverageMap.staticResponseNotePromptCards.length,
+  );
+  assert.deepEqual(
+    constraintCoverageReviewPath.summary.defaultResponsePromptContext
+      .sourceStage120DefaultResponseNoteContext,
+    constraintCoverageMap.summary.defaultResponseNoteContext,
+  );
+  assert.ok(
+    constraintCoverageReviewPath.constraintCoverageReviewPathSteps.every(
+      (step) =>
+        step.constraintCoverageReviewPathStepId.length > 0 &&
+        step.constraintCoverageReviewPathText.includes(
+          step.sourceConstraintCoverageRowId,
+        ) &&
+        step.constraintCoverageReviewPathText.includes(
+          step.sourceAnswerReviewPathStepId,
+        ) &&
+        step.staticResponsePromptText.includes(step.sourceAnswerReviewPathStepId) &&
+        step.constraintCoverageReviewPathLabels.includes(
+          "constraint-coverage review path step",
+        ) &&
+        step.staticNonGoalFlags.noSavedConstraintCoverageReviewState &&
+        step.staticNonGoalFlags.noSavedReviewPathState &&
+        step.staticNonGoalFlags.noSavedResponsePromptState &&
+        step.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    constraintCoverageReviewPath.staticResponsePromptCards.every(
+      (card) =>
+        card.staticResponsePromptCardId.length > 0 &&
+        card.staticResponsePromptText.includes(
+          card.sourceStaticResponseNotePromptCardId,
+        ) &&
+        card.staticResponsePromptText.includes(
+          card.sourceResponsePromptReadinessRowId,
+        ) &&
+        card.staticResponsePromptLabels.includes("static response prompt") &&
+        card.staticNonGoalFlags.noSavedConstraintCoverageReviewState &&
+        card.staticNonGoalFlags.noSavedReviewPathState &&
+        card.staticNonGoalFlags.noSavedResponsePromptState &&
         card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );

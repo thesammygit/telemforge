@@ -3052,7 +3052,8 @@ button {
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-review-path-revision-follow-up-readiness-board-revision-follow-up-readiness-review-path-section,
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-review-path-revision-follow-up-readiness-board-revision-follow-up-readiness-review-path-response-prompt-readiness-board-section,
 .constraint-response-stage119-answer-review-section,
-.constraint-response-stage120-constraint-coverage-section {
+.constraint-response-stage120-constraint-coverage-section,
+.constraint-response-stage121-constraint-coverage-review-path-section {
   margin-top: 18px;
   border: 1px solid #d7e1e8;
   border-radius: 8px;
@@ -3086,7 +3087,8 @@ button {
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-review-path-revision-follow-up-readiness-board-revision-follow-up-readiness-review-path-layout,
 .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-review-path-revision-follow-up-readiness-board-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout,
 .constraint-response-stage119-answer-review-layout,
-.constraint-response-stage120-constraint-coverage-layout {
+.constraint-response-stage120-constraint-coverage-layout,
+.constraint-response-stage121-constraint-coverage-review-path-layout {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
   gap: 16px;
@@ -3847,6 +3849,11 @@ button {
 .constraint-response-stage120-constraint-coverage-note-list,
 .constraint-response-stage120-constraint-coverage-response-note-list,
 .constraint-response-stage120-constraint-coverage-boundary-list,
+.constraint-response-stage121-constraint-coverage-review-path-step-list,
+.constraint-response-stage121-constraint-coverage-review-path-panel,
+.constraint-response-stage121-constraint-coverage-review-path-prompt-list,
+.constraint-response-stage121-constraint-coverage-review-path-static-response-prompt-list,
+.constraint-response-stage121-constraint-coverage-review-path-boundary-list,
 .constraint-response-revision-follow-up-readiness-board-row-list,
 .constraint-response-revision-follow-up-readiness-board-panel,
 .constraint-response-revision-follow-up-readiness-board-static-check-list,
@@ -3915,6 +3922,11 @@ button {
 .constraint-response-stage120-constraint-coverage-note-list article,
 .constraint-response-stage120-constraint-coverage-response-note-list article,
 .constraint-response-stage120-constraint-coverage-boundary-list div,
+.constraint-response-stage121-constraint-coverage-review-path-step-list article,
+.constraint-response-stage121-constraint-coverage-review-path-panel,
+.constraint-response-stage121-constraint-coverage-review-path-prompt-list article,
+.constraint-response-stage121-constraint-coverage-review-path-static-response-prompt-list article,
+.constraint-response-stage121-constraint-coverage-review-path-boundary-list div,
 .constraint-response-revision-follow-up-readiness-board-row-list article,
 .constraint-response-revision-follow-up-readiness-board-panel,
 .constraint-response-revision-follow-up-readiness-board-static-check-list article,
@@ -5146,6 +5158,7 @@ button {
   .constraint-response-evidence-gap-follow-up-coverage-review-response-readiness-review-path-revision-coverage-review-path-revision-follow-up-readiness-board-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout,
   .constraint-response-stage119-answer-review-layout,
   .constraint-response-stage120-constraint-coverage-layout,
+  .constraint-response-stage121-constraint-coverage-review-path-layout,
   .constraint-response-revision-follow-up-readiness-board-layout,
   .constraint-response-revision-follow-up-readiness-review-path-layout,
   .constraint-response-revision-follow-up-readiness-review-path-response-prompt-readiness-board-layout,

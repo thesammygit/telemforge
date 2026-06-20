@@ -200,6 +200,8 @@ export function MissionConsole({
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath;
   const stage120ConstraintCoverageMap =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap;
+  const stage121ConstraintCoverageReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -21697,6 +21699,226 @@ export function MissionConsole({
               <p>
                 {
                   stage120ConstraintCoverageMap.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage121ConstraintCoverageReviewPath ? (
+        <section
+          className="constraint-response-stage121-constraint-coverage-review-path-section"
+          aria-label="Stage 121 constraint coverage review path"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 121 constraint coverage review path
+              </span>
+              <h2>Coverage review path and response prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage121ConstraintCoverageReviewPath.localStatus}`}
+            >
+              {stage121ConstraintCoverageReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review-path steps</span>
+              <strong>
+                {
+                  stage121ConstraintCoverageReviewPath.summary.counts
+                    .constraintCoverageReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Response prompts</span>
+              <strong>
+                {
+                  stage121ConstraintCoverageReviewPath.summary.counts
+                    .staticResponsePromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Stage 120 rows</span>
+              <strong>
+                {
+                  stage121ConstraintCoverageReviewPath.summary.counts
+                    .constraintCoverageRowCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Stage 120 notes</span>
+              <strong>
+                {
+                  stage121ConstraintCoverageReviewPath.summary.counts
+                    .staticResponseNotePromptCardCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-stage121-constraint-coverage-review-path-layout">
+            <div className="constraint-response-stage121-constraint-coverage-review-path-step-list">
+              {stage121ConstraintCoverageReviewPath.constraintCoverageReviewPathSteps.map(
+                (step) => (
+                  <article key={step.constraintCoverageReviewPathStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Coverage review {step.constraintCoverageReviewPathStepOrder}{" "}
+                          - {step.sourceStaticAnswerCheckCardId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceStaticResponseNotePromptCardIds.length} prompts
+                      </span>
+                    </div>
+                    <p>{step.constraintCoverageReviewPathText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 120 row</span>
+                        <strong>{step.sourceConstraintCoverageRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Response notes</span>
+                        <strong>
+                          {step.sourceStaticResponseNotePromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Callbacks</span>
+                        <strong>{step.evidenceCallbackIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved prompts</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedResponsePromptState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.constraintCoverageReviewPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceConstraintCoverageRowId}</span>
+                      <span>{step.sourceAnswerReviewPathStepId}</span>
+                      <span>{step.sourceStaticAnswerCheckCardId}</span>
+                    </div>
+                    <div className="constraint-response-stage121-constraint-coverage-review-path-prompt-list">
+                      {step.sourceStaticResponseNotePromptCardIds.map(
+                        (promptCardId) => (
+                          <article
+                            key={`${step.constraintCoverageReviewPathStepId}:${promptCardId}`}
+                          >
+                            <span className="event-type">
+                              Stage 120 response-note prompt
+                            </span>
+                            <strong>{promptCardId}</strong>
+                          </article>
+                        ),
+                      )}
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...step.constraintCoverageLabels,
+                        ...step.constraintCoverageReviewPathLabels,
+                      ].map((label) => (
+                        <span
+                          key={`${step.constraintCoverageReviewPathStepId}:${label}`}
+                        >
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{step.staticResponsePromptText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-stage121-constraint-coverage-review-path-panel">
+              <span className="metric-label">Default response-prompt context</span>
+              <strong>
+                {
+                  stage121ConstraintCoverageReviewPath
+                    .defaultConstraintCoverageReviewPathStep.label
+                }
+              </strong>
+              <p>{stage121ConstraintCoverageReviewPath.summary.summary}</p>
+              <div className="constraint-response-stage121-constraint-coverage-review-path-static-response-prompt-list">
+                {stage121ConstraintCoverageReviewPath.staticResponsePromptCards.map(
+                  (card) => (
+                    <article key={card.staticResponsePromptCardId}>
+                      <span className="event-type">
+                        Response prompt {card.staticResponsePromptOrder} -{" "}
+                        {card.sourceResponsePromptReadinessRowId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.staticResponsePromptText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a key={`${card.staticResponsePromptCardId}:${href}`} href={href}>
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {card.sourceConstraintCoverageReviewPathStepIds.length} steps
+                        </span>
+                        <span>{card.sourceStaticResponseNotePromptCardId}</span>
+                        <span>{card.sourceResponsePromptReadinessRowId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {[
+                          ...card.staticResponseNotePromptLabels,
+                          ...card.staticResponsePromptLabels,
+                        ].map((label) => (
+                          <span key={`${card.staticResponsePromptCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                      <p>{card.staticNonGoalContext}</p>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-stage121-constraint-coverage-review-path-boundary-list">
+                {[
+                  "No saved coverage-review state",
+                  "No saved response-prompt state",
+                  "No saved constraint-coverage state",
+                  "No saved response-note state",
+                  "No saved reviewer answers, drafts, or notes",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage121ConstraintCoverageReviewPath.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSummary
                 }
               </p>
             </aside>
