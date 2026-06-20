@@ -6121,6 +6121,64 @@ test("buildMissionConsoleView exposes the Stage 119 answer-review path from Stag
   );
 });
 
+test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from Stage 119", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture);
+  const sourceAnswerReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath;
+  const constraintCoverageMap =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap;
+
+  assert.ok(sourceAnswerReviewPath);
+  assert.ok(constraintCoverageMap);
+  assert.equal(
+    constraintCoverageMap.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map.v1",
+  );
+  assert.strictEqual(
+    constraintCoverageMap.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPath,
+    sourceAnswerReviewPath,
+  );
+  assert.equal(
+    constraintCoverageMap.summary.counts.constraintCoverageRowCount,
+    sourceAnswerReviewPath.answerReviewPathSteps.length,
+  );
+  assert.equal(
+    constraintCoverageMap.summary.counts.staticResponseNotePromptCardCount,
+    sourceAnswerReviewPath.staticConstraintNoteCards.length,
+  );
+  assert.deepEqual(
+    constraintCoverageMap.summary.defaultResponseNoteContext
+      .sourceStage119DefaultAnswerReviewContext,
+    sourceAnswerReviewPath.summary.defaultAnswerReviewContext,
+  );
+  assert.ok(
+    constraintCoverageMap.constraintCoverageRows.every(
+      (row) =>
+        row.constraintCoverageRowId.length > 0 &&
+        row.constraintCoverageText.includes(row.sourceAnswerReviewPathStepId) &&
+        row.constraintCoverageLabels.includes("constraint-coverage row") &&
+        row.staticNonGoalFlags.noSavedConstraintCoverageState &&
+        row.staticNonGoalFlags.noSavedResponseNoteState &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    constraintCoverageMap.staticResponseNotePromptCards.every(
+      (card) =>
+        card.staticResponseNotePromptCardId.length > 0 &&
+        card.staticResponseNotePromptText.includes(
+          card.sourceStaticConstraintNoteCardId,
+        ) &&
+        card.staticResponseNotePromptLabels.includes(
+          "static response-note prompt",
+        ) &&
+        card.staticNonGoalFlags.noSavedConstraintCoverageState &&
+        card.staticNonGoalFlags.noSavedResponseNoteState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+});
+
 test("buildMissionConsoleView surfaces acknowledged alerts and lifecycle history", () => {
   const acknowledgedFixture = acknowledgeAlertInFixture(
     stage07ConsoleFixture,
