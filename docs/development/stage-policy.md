@@ -92,11 +92,11 @@ Executor must:
 
 ## Current Transition
 
-Stage 119 is review-ready/completed for automation-branch development. It
-proved a deterministic local answer-review path and static constraint-note
-surface over the Stage 118 response-prompt readiness board and static
-answer-check cards.
+Stage 120 is review-ready/completed for automation-branch development. It
+proved a deterministic local constraint-coverage map and static response-note
+prompt surface over the Stage 119 answer-review path and static constraint-note
+cards.
 
-Stage 120 should now build the next deterministic local constraint-coverage map
-and static response-note prompt surface over Stage 119 unless a focused Stage
-119 regression is found.
+Stage 121 should now build the next deterministic local constraint-coverage
+review path and static response-prompt surface over Stage 120 unless a focused
+Stage 120 regression is found.
