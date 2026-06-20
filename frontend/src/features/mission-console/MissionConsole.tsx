@@ -204,6 +204,8 @@ export function MissionConsole({
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath;
   const stage122SourceCrosswalk =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk;
+  const stage123SourceReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -22132,6 +22134,221 @@ export function MissionConsole({
               <p>
                 {
                   stage122SourceCrosswalk.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage123SourceReviewPath ? (
+        <section
+          className="constraint-response-stage123-source-review-path-section"
+          aria-label="Stage 123 source-review path"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 123 source-review path</span>
+              <h2>Source-review path and static source prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage123SourceReviewPath.localStatus}`}
+            >
+              {stage123SourceReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  stage123SourceReviewPath.summary.counts
+                    .sourceReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Source prompts</span>
+              <strong>
+                {
+                  stage123SourceReviewPath.summary.counts
+                    .staticSourceReviewPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Path labels</span>
+              <strong>
+                {
+                  stage123SourceReviewPath.summary.counts
+                    .sourceReviewPathLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Prompt labels</span>
+              <strong>
+                {
+                  stage123SourceReviewPath.summary.counts
+                    .staticSourceReviewPromptLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-stage123-source-review-path-layout">
+            <div className="constraint-response-stage123-source-review-path-step-list">
+              {stage123SourceReviewPath.sourceReviewPathSteps.map((step) => (
+                <article
+                  key={
+                    step.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathStepId
+                  }
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Source review path {step.sourceReviewPathStepOrder} -{" "}
+                        {step.sourceConstraintCoverageRowId}
+                      </span>
+                      <h3>{step.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {step.sourceStaticReviewCheckCardIds.length} prompts
+                    </span>
+                  </div>
+                  <p>{step.sourceReviewPathText}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Stage 122 row</span>
+                      <strong>{step.sourceCrosswalkRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stage 122 checks</span>
+                      <strong>{step.sourceStaticReviewCheckCardIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{step.sourceLocalAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved source-review state</span>
+                      <strong>
+                        {step.staticNonGoalFlags.noSavedSourceReviewState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {step.sourceLocalAnchorHrefs.map((href) => (
+                      <a
+                        key={`${step.sourceCrosswalkRowId}:${href}`}
+                        href={href}
+                      >
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{step.sourceCrosswalkRowId}</span>
+                    <span>{step.sourceConstraintCoverageReviewPathStepId}</span>
+                    <span>{step.sourceConstraintCoverageRowId}</span>
+                    <span>{step.sourceAnswerReviewPathStepId}</span>
+                  </div>
+                  <div className="constraint-response-stage123-source-review-path-prompt-list">
+                    {step.sourceStaticReviewCheckCardIds.map((checkCardId) => (
+                      <article key={`${step.sourceCrosswalkRowId}:${checkCardId}`}>
+                        <span className="event-type">
+                          Stage 122 review check
+                        </span>
+                        <strong>{checkCardId}</strong>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="gap-reference-strip">
+                    {[...step.sourceCrosswalkLabels, ...step.sourceReviewPathLabels].map(
+                      (label) => (
+                        <span key={`${step.sourceCrosswalkRowId}:${label}`}>
+                          {label}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  <p>{step.sourceCrosswalkText}</p>
+                  <p>{step.staticSourceReviewPromptText}</p>
+                  <p>{step.staticNonGoalContext}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="constraint-response-stage123-source-review-path-panel">
+              <span className="metric-label">Default source-review context</span>
+              <strong>{stage123SourceReviewPath.defaultSourceReviewPathStep.label}</strong>
+              <p>{stage123SourceReviewPath.summary.summary}</p>
+              <div className="constraint-response-stage123-source-review-path-static-source-prompt-list">
+                {stage123SourceReviewPath.staticSourceReviewPromptCards.map((card) => (
+                  <article
+                    key={
+                      card.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathStaticSourceReviewPromptCardId
+                    }
+                  >
+                    <span className="event-type">
+                      Static source-review prompt {card.staticSourceReviewPromptOrder} -{" "}
+                      {card.sourceResponsePromptReadinessRowId}
+                    </span>
+                    <strong>{card.label}</strong>
+                    <p>{card.staticSourceReviewPromptText}</p>
+                    <div className="gap-reference-strip">
+                      {card.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${card.sourceStaticReviewCheckCardId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>
+                        {card.sourceSourceCrosswalkReviewPathStepIds.length} steps
+                      </span>
+                      <span>{card.sourceStaticReviewCheckCardId}</span>
+                      <span>{card.sourceStaticResponsePromptCardId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[...card.staticReviewCheckLabels, ...card.staticSourceReviewPromptLabels].map(
+                        (label) => (
+                          <span key={`${card.sourceStaticReviewCheckCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                    <p>{card.staticReviewCheckText}</p>
+                    <p>{card.staticNonGoalContext}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="constraint-response-stage123-source-review-path-boundary-list">
+                {[
+                  "No saved source-review state",
+                  "No saved source-review path state",
+                  "No saved static source-review prompts",
+                  "No saved source selections",
+                  "No saved source-crosswalk state",
+                  "No saved review-check state",
+                  "No saved reviewer answers, drafts, or notes",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage123SourceReviewPath.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSummary
                 }
               </p>
             </aside>

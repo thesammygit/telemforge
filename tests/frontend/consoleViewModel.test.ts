@@ -6131,6 +6131,8 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath;
   const sourceCrosswalk =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk;
+  const sourceReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath;
 
   assert.ok(sourceAnswerReviewPath);
   assert.ok(constraintCoverageMap);
@@ -6289,6 +6291,55 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
         card.staticNonGoalFlags.noSavedSourceCheckState &&
         card.staticNonGoalFlags.noSavedResponseReviewState &&
         card.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(sourceReviewPath);
+  assert.equal(
+    sourceReviewPath.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path.v1",
+  );
+  assert.strictEqual(
+    sourceReviewPath.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk,
+    sourceCrosswalk,
+  );
+  assert.equal(
+    sourceReviewPath.summary.counts.sourceReviewPathStepCount,
+    sourceCrosswalk.sourceCrosswalkRows.length,
+  );
+  assert.equal(
+    sourceReviewPath.summary.counts.staticSourceReviewPromptCardCount,
+    sourceCrosswalk.staticReviewCheckCards.length,
+  );
+  assert.deepEqual(
+    sourceReviewPath.summary.defaultSourceReviewContext
+      .sourceStage122DefaultSourceCheckContext,
+    sourceCrosswalk.summary.defaultSourceCheckContext,
+  );
+  assert.ok(
+    sourceReviewPath.sourceReviewPathSteps.every(
+      (step) =>
+        step.sourceReviewPathText.includes(step.sourceCrosswalkRowId) &&
+        step.sourceReviewPathText.includes(step.sourceStaticReviewCheckCardIds[0]) &&
+        step.staticSourceReviewPromptText.includes(step.sourceCrosswalkRowId) &&
+        step.sourceReviewPathLabels.includes("source-crosswalk review path step") &&
+        step.staticNonGoalFlags.noSavedSourceReviewState &&
+        step.staticNonGoalFlags.noSavedSourceReviewPathState &&
+        step.staticNonGoalFlags.noSavedStaticSourceReviewPrompts &&
+        step.staticNonGoalFlags.noSavedSourceCrosswalkState &&
+        step.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    sourceReviewPath.staticSourceReviewPromptCards.every(
+      (card) =>
+        card.staticSourceReviewPromptText.includes(card.sourceStaticReviewCheckCardId) &&
+        card.staticSourceReviewPromptText.includes(card.sourceResponsePromptReadinessRowId) &&
+        card.staticSourceReviewPromptLabels.includes(
+          "static source-review prompt card",
+        ) &&
+        card.staticNonGoalFlags.noSavedSourceReviewState &&
+        card.staticNonGoalFlags.noSavedSourceReviewSelections &&
+        card.staticNonGoalFlags.noSavedStaticReviewChecks,
     ),
   );
 });
