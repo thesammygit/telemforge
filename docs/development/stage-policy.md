@@ -92,11 +92,11 @@ Executor must:
 
 ## Current Transition
 
-Stage 121 is review-ready/completed for automation-branch development. It
-proved a deterministic local constraint-coverage review path and static
-response-prompt surface over the Stage 120 constraint-coverage map and static
-response-note prompt cards.
+Stage 122 is review-ready/completed for automation-branch development. It
+proved a deterministic local source crosswalk and static review-check surface
+over the Stage 121 constraint-coverage review path and static response-prompt
+cards.
 
-Stage 122 should now build the next deterministic local source crosswalk and
-static review-check surface over Stage 121 unless a focused Stage 121
-regression is found.
+Stage 123 should now build the next deterministic local source-crosswalk review
+path and static source-review prompt surface over Stage 122 unless a focused
+Stage 122 regression is found.
