@@ -6129,6 +6129,8 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap;
   const constraintCoverageReviewPath =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath;
+  const sourceCrosswalk =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk;
 
   assert.ok(sourceAnswerReviewPath);
   assert.ok(constraintCoverageMap);
@@ -6235,6 +6237,57 @@ test("buildMissionConsoleView exposes the Stage 120 constraint-coverage map from
         card.staticNonGoalFlags.noSavedConstraintCoverageReviewState &&
         card.staticNonGoalFlags.noSavedReviewPathState &&
         card.staticNonGoalFlags.noSavedResponsePromptState &&
+        card.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(sourceCrosswalk);
+  assert.equal(
+    sourceCrosswalk.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk.v1",
+  );
+  assert.strictEqual(
+    sourceCrosswalk.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath,
+    constraintCoverageReviewPath,
+  );
+  assert.equal(
+    sourceCrosswalk.summary.counts.sourceCrosswalkRowCount,
+    constraintCoverageReviewPath.constraintCoverageReviewPathSteps.length,
+  );
+  assert.equal(
+    sourceCrosswalk.summary.counts.staticReviewCheckCardCount,
+    constraintCoverageReviewPath.staticResponsePromptCards.length,
+  );
+  assert.deepEqual(
+    sourceCrosswalk.summary.defaultSourceCheckContext
+      .sourceStage121DefaultResponsePromptContext,
+    constraintCoverageReviewPath.summary.defaultResponsePromptContext,
+  );
+  assert.ok(
+    sourceCrosswalk.sourceCrosswalkRows.every(
+      (row) =>
+        row.sourceCrosswalkText.includes(
+          row.sourceConstraintCoverageReviewPathStepId,
+        ) &&
+        row.sourceCrosswalkText.includes(row.sourceConstraintCoverageRowId) &&
+        row.staticReviewCheckText.includes(
+          row.sourceConstraintCoverageReviewPathStepId,
+        ) &&
+        row.sourceCrosswalkLabels.includes(
+          "constraint-response source crosswalk row",
+        ) &&
+        row.staticNonGoalFlags.noSavedSourceCrosswalkState &&
+        row.staticNonGoalFlags.noSavedSourceSelections &&
+        row.staticNonGoalFlags.noSavedStaticReviewChecks,
+    ),
+  );
+  assert.ok(
+    sourceCrosswalk.staticReviewCheckCards.every(
+      (card) =>
+        card.staticReviewCheckText.includes(card.sourceStaticResponsePromptCardId) &&
+        card.staticReviewCheckText.includes(card.sourceResponsePromptReadinessRowId) &&
+        card.staticReviewCheckLabels.includes("static review-check card") &&
+        card.staticNonGoalFlags.noSavedSourceCheckState &&
+        card.staticNonGoalFlags.noSavedResponseReviewState &&
         card.staticNonGoalFlags.noSavedReviewerAnswers,
     ),
   );

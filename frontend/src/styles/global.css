@@ -5213,3 +5213,45 @@ button {
     text-align: left;
   }
 }
+
+.constraint-response-stage122-source-crosswalk-section {
+  margin-top: 18px;
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 18px 48px rgba(18, 35, 48, 0.08);
+}
+
+.constraint-response-stage122-source-crosswalk-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(360px, 0.8fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.constraint-response-stage122-source-crosswalk-row-list,
+.constraint-response-stage122-source-crosswalk-panel,
+.constraint-response-stage122-source-crosswalk-check-list,
+.constraint-response-stage122-source-crosswalk-static-review-check-list,
+.constraint-response-stage122-source-crosswalk-boundary-list {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.constraint-response-stage122-source-crosswalk-row-list article,
+.constraint-response-stage122-source-crosswalk-panel,
+.constraint-response-stage122-source-crosswalk-check-list article,
+.constraint-response-stage122-source-crosswalk-static-review-check-list article,
+.constraint-response-stage122-source-crosswalk-boundary-list div {
+  border: 1px solid #d7e1e8;
+  border-radius: 8px;
+  background: #fff;
+  padding: 12px;
+}
+
+@media (max-width: 900px) {
+  .constraint-response-stage122-source-crosswalk-layout {
+    grid-template-columns: 1fr;
+  }
+}

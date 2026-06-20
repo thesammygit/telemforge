@@ -202,6 +202,8 @@ export function MissionConsole({
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMap;
   const stage121ConstraintCoverageReviewPath =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPath;
+  const stage122SourceCrosswalk =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalk;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -21919,6 +21921,217 @@ export function MissionConsole({
               <p>
                 {
                   stage121ConstraintCoverageReviewPath.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSummary
+                }
+              </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage122SourceCrosswalk ? (
+        <section
+          className="constraint-response-stage122-source-crosswalk-section"
+          aria-label="Stage 122 source crosswalk"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 122 source crosswalk</span>
+              <h2>Source crosswalk and static review checks</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage122SourceCrosswalk.localStatus}`}
+            >
+              {stage122SourceCrosswalk.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Crosswalk rows</span>
+              <strong>
+                {stage122SourceCrosswalk.summary.counts.sourceCrosswalkRowCount}
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Review checks</span>
+              <strong>
+                {
+                  stage122SourceCrosswalk.summary.counts
+                    .staticReviewCheckCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Stage 121 steps</span>
+              <strong>
+                {
+                  stage122SourceCrosswalk.summary.counts
+                    .constraintCoverageReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Stage 121 prompts</span>
+              <strong>
+                {
+                  stage122SourceCrosswalk.summary.counts
+                    .staticResponsePromptCardCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-stage122-source-crosswalk-layout">
+            <div className="constraint-response-stage122-source-crosswalk-row-list">
+              {stage122SourceCrosswalk.sourceCrosswalkRows.map((row) => (
+                <article
+                  key={
+                    row.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkRowId
+                  }
+                >
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Source row {row.sourceCrosswalkRowOrder} -{" "}
+                        {row.sourceConstraintCoverageReviewPathStepId}
+                      </span>
+                      <h3>{row.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {row.sourceStaticResponsePromptCardIds.length} checks
+                    </span>
+                  </div>
+                  <p>{row.sourceCrosswalkText}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Stage 121 step</span>
+                      <strong>{row.sourceConstraintCoverageReviewPathStepIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Response prompts</span>
+                      <strong>{row.sourceStaticResponsePromptCardIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Callbacks</span>
+                      <strong>{row.evidenceCallbackIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved source state</span>
+                      <strong>
+                        {row.staticNonGoalFlags.noSavedSourceCrosswalkState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {row.sourceLocalAnchorHrefs.map((href) => (
+                      <a
+                        key={`${row.sourceConstraintCoverageReviewPathStepId}:${href}`}
+                        href={href}
+                      >
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{row.sourceConstraintCoverageReviewPathStepId}</span>
+                    <span>{row.sourceConstraintCoverageRowId}</span>
+                    <span>{row.sourceAnswerReviewPathStepId}</span>
+                  </div>
+                  <div className="constraint-response-stage122-source-crosswalk-check-list">
+                    {row.sourceStaticResponsePromptCardIds.map((promptCardId) => (
+                      <article
+                        key={`${row.sourceConstraintCoverageReviewPathStepId}:${promptCardId}`}
+                      >
+                        <span className="event-type">
+                          Stage 121 response prompt
+                        </span>
+                        <strong>{promptCardId}</strong>
+                      </article>
+                    ))}
+                  </div>
+                  <div className="gap-reference-strip">
+                    {[...row.constraintCoverageReviewPathLabels, ...row.sourceCrosswalkLabels].map(
+                      (label) => (
+                        <span
+                          key={`${row.sourceConstraintCoverageReviewPathStepId}:${label}`}
+                        >
+                          {label}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  <p>{row.staticReviewCheckText}</p>
+                  <p>{row.staticNonGoalContext}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="constraint-response-stage122-source-crosswalk-panel">
+              <span className="metric-label">Default source-check context</span>
+              <strong>{stage122SourceCrosswalk.defaultSourceCrosswalkRow.label}</strong>
+              <p>{stage122SourceCrosswalk.summary.summary}</p>
+              <div className="constraint-response-stage122-source-crosswalk-static-review-check-list">
+                {stage122SourceCrosswalk.staticReviewCheckCards.map((card) => (
+                  <article
+                    key={
+                      card.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkStaticReviewCheckCardId
+                    }
+                  >
+                    <span className="event-type">
+                      Review check {card.staticReviewCheckOrder} -{" "}
+                      {card.sourceResponsePromptReadinessRowId}
+                    </span>
+                    <strong>{card.label}</strong>
+                    <p>{card.staticReviewCheckText}</p>
+                    <div className="gap-reference-strip">
+                      {card.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${card.sourceStaticResponsePromptCardId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>
+                        {card.sourceConstraintCoverageReviewPathStepIds.length} steps
+                      </span>
+                      <span>{card.sourceStaticResponsePromptCardId}</span>
+                      <span>{card.sourceStaticResponseNotePromptCardId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[...card.staticResponsePromptLabels, ...card.staticReviewCheckLabels].map(
+                        (label) => (
+                          <span key={`${card.sourceStaticResponsePromptCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ),
+                      )}
+                    </div>
+                    <p>{card.staticNonGoalContext}</p>
+                  </article>
+                ))}
+              </div>
+              <div className="constraint-response-stage122-source-crosswalk-boundary-list">
+                {[
+                  "No saved source-crosswalk state",
+                  "No saved source selections",
+                  "No saved review-check state",
+                  "No saved response-review state",
+                  "No saved reviewer answers, drafts, or notes",
+                  "No routes, task launchers, exports, or commands",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>
+                {
+                  stage122SourceCrosswalk.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkSummary
                 }
               </p>
             </aside>
