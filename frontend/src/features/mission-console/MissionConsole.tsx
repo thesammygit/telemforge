@@ -208,6 +208,8 @@ export function MissionConsole({
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPath;
   const stage124SourceReviewReadinessLane =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLane;
+  const stage125SourceFollowUpMap =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -22589,6 +22591,209 @@ export function MissionConsole({
                   stage124SourceReviewReadinessLane.staticConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSummary
                 }
               </p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage125SourceFollowUpMap ? (
+        <section
+          className="constraint-response-stage125-source-follow-up-map-section"
+          aria-label="Stage 125 source follow-up map"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">Stage 125 source follow-up map</span>
+              <h2>Source follow-up map and static citation-check prompts</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage125SourceFollowUpMap.localStatus}`}
+            >
+              {stage125SourceFollowUpMap.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Follow-up entries</span>
+              <strong>
+                {
+                  stage125SourceFollowUpMap.summary.counts
+                    .sourceFollowUpMapEntryCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Citation prompts</span>
+              <strong>
+                {
+                  stage125SourceFollowUpMap.summary.counts
+                    .staticCitationCheckPromptCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Follow-up labels</span>
+              <strong>
+                {
+                  stage125SourceFollowUpMap.summary.counts
+                    .sourceFollowUpLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Citation labels</span>
+              <strong>
+                {
+                  stage125SourceFollowUpMap.summary.counts
+                    .citationCheckPromptLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-source-follow-up-map-layout">
+            <div className="constraint-response-source-follow-up-map-entry-list">
+              {stage125SourceFollowUpMap.sourceFollowUpMapEntries.map((entry) => (
+                <article key={entry.sourceFollowUpMapEntryId}>
+                  <div className="surface-index-row-heading">
+                    <div>
+                      <span className="event-type">
+                        Follow-up entry {entry.sourceFollowUpMapEntryOrder} -{" "}
+                        {entry.sourceSourceReviewReadinessLaneRowId}
+                      </span>
+                      <h3>{entry.label}</h3>
+                    </div>
+                    <span className="score-pill">
+                      {entry.sourceStaticSourceFollowUpCueCardIds.length} prompts
+                    </span>
+                  </div>
+                  <p>{entry.sourceFollowUpText}</p>
+                  <div className="surface-index-count-grid">
+                    <div>
+                      <span className="metric-label">Stage 124 row</span>
+                      <strong>{entry.sourceSourceReviewReadinessLaneRowIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Stage 124 cues</span>
+                      <strong>{entry.sourceStaticSourceFollowUpCueCardIds.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Anchors</span>
+                      <strong>{entry.sourceLocalAnchorHrefs.length}</strong>
+                    </div>
+                    <div>
+                      <span className="metric-label">Saved citation state</span>
+                      <strong>
+                        {entry.staticNonGoalFlags.noSavedCitationCheckState
+                          ? "no"
+                          : "yes"}
+                      </strong>
+                    </div>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {entry.sourceLocalAnchorHrefs.map((href) => (
+                      <a key={`${entry.sourceFollowUpMapEntryId}:${href}`} href={href}>
+                        {href.replace("#", "")}
+                      </a>
+                    ))}
+                    <span>{entry.sourceSourceReviewReadinessLaneRowId}</span>
+                    <span>{entry.sourceSourceReviewPathStepId}</span>
+                    <span>{entry.sourceCrosswalkRowId}</span>
+                    <span>{entry.sourceConstraintCoverageRowId}</span>
+                  </div>
+                  <div className="gap-reference-strip">
+                    {[...entry.sourceFollowUpLabels, ...entry.citationCheckLabels].map(
+                      (label) => (
+                        <span key={`${entry.sourceFollowUpMapEntryId}:${label}`}>
+                          {label}
+                        </span>
+                      ),
+                    )}
+                  </div>
+                  <p>{entry.citationCheckPromptText}</p>
+                  <p>{entry.staticNonGoalContext}</p>
+                </article>
+              ))}
+            </div>
+            <aside className="constraint-response-source-follow-up-map-panel">
+              <span className="metric-label">Default follow-up context</span>
+              <strong>{stage125SourceFollowUpMap.defaultSourceFollowUpMapEntry.label}</strong>
+              <p>{stage125SourceFollowUpMap.summary.summary}</p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage125SourceFollowUpMap.summary.defaultSourceFollowUpContext
+                      .defaultSourceFollowUpMapEntryId
+                  }
+                </span>
+                <span>
+                  {
+                    stage125SourceFollowUpMap.summary.defaultSourceFollowUpContext
+                      .defaultStaticCitationCheckPromptCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage125SourceFollowUpMap.summary.defaultSourceFollowUpContext
+                      .defaultSourceReviewReadinessLaneRowId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-source-follow-up-map-citation-list">
+                {stage125SourceFollowUpMap.staticCitationCheckPromptCards.map(
+                  (card) => (
+                    <article key={card.staticCitationCheckPromptCardId}>
+                      <span className="event-type">
+                        Citation prompt {card.staticCitationCheckPromptOrder} -{" "}
+                        {card.sourceStaticSourceFollowUpCueCardId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.citationCheckPromptText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticCitationCheckPromptCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>{card.sourceSourceFollowUpMapEntryIds.length} entries</span>
+                        <span>{card.sourceStaticSourceFollowUpCueCardId}</span>
+                        <span>{card.sourceStaticSourceReviewPromptCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {card.staticCitationCheckLabels.map((label) => (
+                          <span key={`${card.staticCitationCheckPromptCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-source-follow-up-map-boundary-list">
+                {[
+                  "No saved source selections",
+                  "No saved citation selections",
+                  "No saved source-follow-up state",
+                  "No saved citation-check state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{stage125SourceFollowUpMap.staticCitationCheckBoundarySummary}</p>
             </aside>
           </div>
         </section>
