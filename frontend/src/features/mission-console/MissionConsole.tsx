@@ -212,6 +212,8 @@ export function MissionConsole({
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMap;
   const stage126SourceCitationReviewLane =
     view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane;
+  const stage127EvidenceCheckReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath;
   const observationCountSignalById = new Map(
     observationLens?.countSignals.map((signal) => [signal.signalId, signal]) ??
       [],
@@ -23016,6 +23018,236 @@ export function MissionConsole({
                 ))}
               </div>
               <p>{stage126SourceCitationReviewLane.staticEvidenceCheckBoundarySummary}</p>
+            </aside>
+          </div>
+        </section>
+      ) : null}
+
+      {stage127EvidenceCheckReviewPath ? (
+        <section
+          className="constraint-response-evidence-check-review-path-section"
+          aria-label="Stage 127 evidence-check review path"
+        >
+          <a
+            id="constraint-response-revision-coverage-review-path-revision-follow-up-readiness-review-path-response-prompt-readiness-board-answer-review-path-constraint-coverage-map-review-path-source-crosswalk-review-path-source-review-readiness-lane-source-follow-up-map-source-citation-review-lane-evidence-check-review-path"
+            className="section-anchor"
+          />
+          <div className="section-heading">
+            <div>
+              <span className="metric-label">
+                Stage 127 evidence-check review path
+              </span>
+              <h2>Evidence-check review path and static citation-gap cues</h2>
+            </div>
+            <span
+              className={`status-chip playback-status-${stage127EvidenceCheckReviewPath.localStatus}`}
+            >
+              {stage127EvidenceCheckReviewPath.localStatus}
+            </span>
+          </div>
+          <div className="gap-summary-grid">
+            <div>
+              <span className="metric-label">Review steps</span>
+              <strong>
+                {
+                  stage127EvidenceCheckReviewPath.summary.counts
+                    .evidenceCheckReviewPathStepCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Citation cues</span>
+              <strong>
+                {
+                  stage127EvidenceCheckReviewPath.summary.counts
+                    .staticCitationGapCueCardCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Evidence labels</span>
+              <strong>
+                {
+                  stage127EvidenceCheckReviewPath.summary.counts
+                    .evidenceCheckReviewLabelCount
+                }
+              </strong>
+            </div>
+            <div>
+              <span className="metric-label">Gap labels</span>
+              <strong>
+                {
+                  stage127EvidenceCheckReviewPath.summary.counts
+                    .citationGapCueLabelCount
+                }
+              </strong>
+            </div>
+          </div>
+          <div className="constraint-response-evidence-check-review-path-layout">
+            <div className="constraint-response-evidence-check-review-path-step-list">
+              {stage127EvidenceCheckReviewPath.evidenceCheckReviewPathSteps.map(
+                (step) => (
+                  <article key={step.evidenceCheckReviewPathStepId}>
+                    <div className="surface-index-row-heading">
+                      <div>
+                        <span className="event-type">
+                          Evidence review step {step.evidenceCheckReviewPathStepOrder} -{" "}
+                          {step.sourceStaticEvidenceCheckPromptCardId}
+                        </span>
+                        <h3>{step.label}</h3>
+                      </div>
+                      <span className="score-pill">
+                        {step.sourceCitationReviewLaneRowIds.length} rows
+                      </span>
+                    </div>
+                    <p>{step.evidenceCheckReviewText}</p>
+                    <div className="surface-index-count-grid">
+                      <div>
+                        <span className="metric-label">Stage 126 prompt</span>
+                        <strong>
+                          {step.sourceStaticEvidenceCheckPromptCardIds.length}
+                        </strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Stage 126 rows</span>
+                        <strong>{step.sourceCitationReviewLaneRowIds.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Anchors</span>
+                        <strong>{step.sourceLocalAnchorHrefs.length}</strong>
+                      </div>
+                      <div>
+                        <span className="metric-label">Saved review state</span>
+                        <strong>
+                          {step.staticNonGoalFlags.noSavedEvidenceCheckReviewState
+                            ? "no"
+                            : "yes"}
+                        </strong>
+                      </div>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {step.sourceLocalAnchorHrefs.map((href) => (
+                        <a
+                          key={`${step.evidenceCheckReviewPathStepId}:${href}`}
+                          href={href}
+                        >
+                          {href.replace("#", "")}
+                        </a>
+                      ))}
+                      <span>{step.sourceStaticEvidenceCheckPromptCardId}</span>
+                      <span>{step.sourceSourceFollowUpMapEntryId}</span>
+                      <span>{step.sourceSourceReviewReadinessLaneRowId}</span>
+                      <span>{step.sourceSourceReviewPathStepId}</span>
+                    </div>
+                    <div className="gap-reference-strip">
+                      {[
+                        ...step.evidenceCheckReviewLabels,
+                        ...step.citationGapCueLabels,
+                      ].map((label) => (
+                        <span key={`${step.evidenceCheckReviewPathStepId}:${label}`}>
+                          {label}
+                        </span>
+                      ))}
+                    </div>
+                    <p>{step.citationGapCueText}</p>
+                    <p>{step.staticNonGoalContext}</p>
+                  </article>
+                ),
+              )}
+            </div>
+            <aside className="constraint-response-evidence-check-review-path-panel">
+              <span className="metric-label">Default evidence-check context</span>
+              <strong>
+                {stage127EvidenceCheckReviewPath.defaultEvidenceCheckReviewPathStep.label}
+              </strong>
+              <p>{stage127EvidenceCheckReviewPath.summary.summary}</p>
+              <div className="gap-reference-strip">
+                <span>
+                  {
+                    stage127EvidenceCheckReviewPath.summary
+                      .defaultEvidenceCheckReviewContext
+                      .defaultEvidenceCheckReviewPathStepId
+                  }
+                </span>
+                <span>
+                  {
+                    stage127EvidenceCheckReviewPath.summary
+                      .defaultEvidenceCheckReviewContext
+                      .defaultStaticCitationGapCueCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage127EvidenceCheckReviewPath.summary
+                      .defaultEvidenceCheckReviewContext
+                      .defaultStaticEvidenceCheckPromptCardId
+                  }
+                </span>
+                <span>
+                  {
+                    stage127EvidenceCheckReviewPath.summary
+                      .defaultEvidenceCheckReviewContext.defaultCitationReviewLaneRowId
+                  }
+                </span>
+              </div>
+              <div className="constraint-response-evidence-check-review-path-cue-list">
+                {stage127EvidenceCheckReviewPath.staticCitationGapCueCards.map(
+                  (card) => (
+                    <article key={card.staticCitationGapCueCardId}>
+                      <span className="event-type">
+                        Citation gap cue {card.staticCitationGapCueOrder} -{" "}
+                        {card.sourceCitationReviewLaneRowId}
+                      </span>
+                      <strong>{card.label}</strong>
+                      <p>{card.citationGapCueText}</p>
+                      <div className="gap-reference-strip">
+                        {card.sourceLocalAnchorHrefs.map((href) => (
+                          <a
+                            key={`${card.staticCitationGapCueCardId}:${href}`}
+                            href={href}
+                          >
+                            {href.replace("#", "")}
+                          </a>
+                        ))}
+                        <span>
+                          {card.sourceStaticEvidenceCheckPromptCardIds.length} prompts
+                        </span>
+                        <span>{card.sourceStaticCitationCheckPromptCardId}</span>
+                        <span>{card.sourceStaticSourceFollowUpCueCardId}</span>
+                      </div>
+                      <div className="gap-reference-strip">
+                        {[
+                          ...card.evidenceCheckReviewLabels,
+                          ...card.citationGapCueLabels,
+                        ].map((label) => (
+                          <span key={`${card.staticCitationGapCueCardId}:${label}`}>
+                            {label}
+                          </span>
+                        ))}
+                      </div>
+                    </article>
+                  ),
+                )}
+              </div>
+              <div className="constraint-response-evidence-check-review-path-boundary-list">
+                {[
+                  "No saved source selections",
+                  "No saved citation selections",
+                  "No saved evidence-check selections",
+                  "No saved evidence-check review state",
+                  "No saved static citation-gap cue state",
+                  "No routes or task launchers",
+                  "No owner assignment",
+                  "No audit, scoring, ranking, or certification",
+                  "No exports, packages, meetings, or commands",
+                ].map((label) => (
+                  <div key={label}>
+                    <span className="event-type">Static boundary</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
+              </div>
+              <p>{stage127EvidenceCheckReviewPath.staticCitationGapBoundarySummary}</p>
             </aside>
           </div>
         </section>

@@ -216,3 +216,199 @@ test("Stage 126 source citation-review lane derives evidence checks from Stage 1
   assert.match(missionConsoleSource, /Source citation-review lane and static evidence checks/);
   assert.match(missionConsoleSource, /No saved evidence-check state/);
 });
+
+test("Stage 127 evidence-check review path derives citation-gap cues from Stage 126", async () => {
+  const {
+    buildConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath,
+  } = await import(
+    "../../frontend/src/lib/constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.ts"
+  );
+  assert.equal(
+    typeof buildConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath,
+    "function",
+  );
+
+  const view = buildMissionConsoleView(stage07ConsoleFixture, "thermal");
+  const sourceCitationReviewLane =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane;
+  const evidenceCheckReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath;
+  const builtEvidenceCheckReviewPath =
+    buildConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath(
+      sourceCitationReviewLane,
+    );
+  const missionConsoleSource = readFileSync(
+    resolve(repoRoot, "frontend/src/features/mission-console/MissionConsole.tsx"),
+    "utf8",
+  );
+
+  assert.ok(sourceCitationReviewLane);
+  assert.ok(evidenceCheckReviewPath);
+  assert.ok(builtEvidenceCheckReviewPath);
+  assert.deepEqual(evidenceCheckReviewPath, builtEvidenceCheckReviewPath);
+  assert.strictEqual(
+    evidenceCheckReviewPath.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane,
+    sourceCitationReviewLane,
+  );
+  assert.equal(
+    evidenceCheckReviewPath.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path.v1",
+  );
+  assert.equal(
+    evidenceCheckReviewPath.contractLabel,
+    "local deterministic constraint-response revision coverage review-path revision follow-up readiness review-path response-prompt readiness-board answer-review path constraint-coverage map review path source-crosswalk review path source-review readiness lane source follow-up map source citation-review lane evidence-check review path and static citation-gap cues",
+  );
+  assert.equal(evidenceCheckReviewPath.localStatus, "fixture");
+  assert.equal(
+    evidenceCheckReviewPath.summary.counts.evidenceCheckReviewPathStepCount,
+    sourceCitationReviewLane.staticEvidenceCheckPromptCards.length,
+  );
+  assert.equal(
+    evidenceCheckReviewPath.summary.counts.staticCitationGapCueCardCount,
+    sourceCitationReviewLane.citationReviewLaneRows.length,
+  );
+  assert.deepEqual(
+    evidenceCheckReviewPath.evidenceCheckReviewPathSteps.map((step) => [
+      step.evidenceCheckReviewPathStepOrder,
+      step.sourceStaticEvidenceCheckPromptCardId,
+      step.sourceCitationReviewLaneRowIds,
+      step.sourceSourceFollowUpMapEntryId,
+      step.sourceStaticCitationCheckPromptCardIds,
+      step.sourceSourceReviewReadinessLaneRowId,
+      step.sourceSourceReviewPathStepId,
+      step.sourceCrosswalkRowId,
+      step.sourceConstraintCoverageReviewPathStepId,
+      step.sourceRevisionFollowUpReadinessReviewPathStepIds,
+      step.sourceLocalAnchorHrefs,
+      step.evidenceCallbackIds,
+      step.gapDiscussionPointIds,
+      step.deferredScopeReminderIds,
+    ]),
+    sourceCitationReviewLane.staticEvidenceCheckPromptCards.map((card) => [
+      card.staticEvidenceCheckPromptOrder,
+      card.staticEvidenceCheckPromptCardId,
+      evidenceCheckReviewPath.evidenceCheckReviewPathSteps.find(
+        (step) =>
+          step.sourceStaticEvidenceCheckPromptCardId ===
+          card.staticEvidenceCheckPromptCardId,
+      )?.sourceCitationReviewLaneRowIds,
+      card.sourceSourceFollowUpMapEntryId,
+      card.sourceStaticCitationCheckPromptCardIds,
+      card.sourceSourceReviewReadinessLaneRowId,
+      card.sourceSourceReviewPathStepId,
+      card.sourceCrosswalkRowId,
+      card.sourceConstraintCoverageReviewPathStepId,
+      card.sourceRevisionFollowUpReadinessReviewPathStepIds,
+      card.sourceLocalAnchorHrefs,
+      card.evidenceCallbackIds,
+      card.gapDiscussionPointIds,
+      card.deferredScopeReminderIds,
+    ]),
+  );
+  assert.deepEqual(
+    evidenceCheckReviewPath.staticCitationGapCueCards.map((card) => [
+      card.staticCitationGapCueOrder,
+      card.sourceCitationReviewLaneRowId,
+      card.sourceStaticEvidenceCheckPromptCardIds,
+      card.sourceStaticCitationCheckPromptCardId,
+      card.sourceSourceFollowUpMapEntryIds,
+      card.sourceStaticSourceFollowUpCueCardId,
+      card.sourceSourceReviewPathStepIds,
+      card.sourceCrosswalkRowIds,
+      card.sourceRevisionFollowUpReadinessReviewPathStepIds,
+      card.sourceLocalAnchorHrefs,
+      card.evidenceCallbackIds,
+      card.gapDiscussionPointIds,
+      card.deferredScopeReminderIds,
+    ]),
+    sourceCitationReviewLane.citationReviewLaneRows.map((row) => [
+      row.citationReviewLaneRowOrder,
+      row.citationReviewLaneRowId,
+      evidenceCheckReviewPath.staticCitationGapCueCards.find(
+        (card) =>
+          card.sourceCitationReviewLaneRowId === row.citationReviewLaneRowId,
+      )?.sourceStaticEvidenceCheckPromptCardIds,
+      row.sourceStaticCitationCheckPromptCardId,
+      row.sourceSourceFollowUpMapEntryIds,
+      row.sourceStaticSourceFollowUpCueCardId,
+      row.sourceSourceReviewPathStepIds,
+      row.sourceCrosswalkRowIds,
+      row.sourceRevisionFollowUpReadinessReviewPathStepIds,
+      row.sourceLocalAnchorHrefs,
+      row.evidenceCallbackIds,
+      row.gapDiscussionPointIds,
+      row.deferredScopeReminderIds,
+    ]),
+  );
+  assert.deepEqual(
+    evidenceCheckReviewPath.summary.defaultEvidenceCheckReviewContext
+      .sourceStage126DefaultCitationReviewContext,
+    sourceCitationReviewLane.summary.defaultCitationReviewContext,
+  );
+
+  const firstStep = evidenceCheckReviewPath.evidenceCheckReviewPathSteps[0];
+  assert.ok(
+    firstStep.evidenceCheckReviewText.includes(
+      firstStep.sourceStaticEvidenceCheckPromptCardId,
+    ),
+  );
+  assert.ok(
+    firstStep.evidenceCheckReviewText.includes(
+      firstStep.sourceCitationReviewLaneRowIds[0],
+    ),
+  );
+  assert.ok(
+    firstStep.evidenceCheckReviewText.includes(
+      firstStep.sourceSourceFollowUpMapEntryId,
+    ),
+  );
+  assert.ok(firstStep.evidenceCheckReviewText.includes(firstStep.sourceCrosswalkRowId));
+  assert.ok(
+    firstStep.evidenceCheckReviewLabels.includes(
+      "evidence-check review path step",
+    ),
+  );
+  assert.ok(
+    firstStep.citationGapCueLabels.includes("matched citation-gap cue context"),
+  );
+  assert.equal(firstStep.staticNonGoalFlags.noSavedEvidenceCheckReviewState, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedEvidenceCheckSelections, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedReviewerAnswers, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedCitationSelections, true);
+
+  const firstCue = evidenceCheckReviewPath.staticCitationGapCueCards[0];
+  assert.ok(
+    firstCue.citationGapCueText.includes(firstCue.sourceCitationReviewLaneRowId),
+  );
+  assert.ok(
+    firstCue.citationGapCueText.includes(
+      firstCue.sourceStaticCitationCheckPromptCardId,
+    ),
+  );
+  assert.ok(
+    firstCue.citationGapCueText.includes(
+      firstCue.sourceStaticEvidenceCheckPromptCardIds[0],
+    ),
+  );
+  assert.ok(firstCue.citationGapCueLabels.includes("static citation-gap cue card"));
+  assert.equal(firstCue.staticNonGoalFlags.noSavedStaticCitationGapCueCards, true);
+  assert.equal(firstCue.staticNonGoalFlags.noSavedEvidenceCheckReviewPathState, true);
+  assert.equal(firstCue.staticNonGoalFlags.noSavedSourceSelections, true);
+  assert.ok(
+    evidenceCheckReviewPath.staticCitationGapBoundarySummary.includes(
+      "no saved reviewer answers",
+    ),
+  );
+
+  assert.equal(
+    missionConsoleSource.match(/aria-label="Stage 127 evidence-check review path"/g)
+      ?.length ?? 0,
+    1,
+  );
+  assert.match(missionConsoleSource, /Stage 127 evidence-check review path/);
+  assert.match(
+    missionConsoleSource,
+    /Evidence-check review path and static citation-gap cues/,
+  );
+  assert.match(missionConsoleSource, /No saved evidence-check review state/);
+});
