@@ -6689,6 +6689,79 @@ test("buildMissionConsoleView exposes Stage 109 evidence-gap follow-up review pa
   );
 });
 
+test("buildMissionConsoleView exposes Stage 128 evidence-gap readiness matrix from Stage 127", () => {
+  const view = buildMissionConsoleView(stage07ConsoleFixture, "thermal");
+  const sourceEvidenceCheckReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath;
+  const evidenceGapReadinessMatrix =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrix;
+
+  assert.ok(sourceEvidenceCheckReviewPath);
+  assert.ok(evidenceGapReadinessMatrix);
+  assert.equal(
+    evidenceGapReadinessMatrix.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix.v1",
+  );
+  assert.strictEqual(
+    evidenceGapReadinessMatrix.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPath,
+    sourceEvidenceCheckReviewPath,
+  );
+  assert.equal(
+    evidenceGapReadinessMatrix.summary.counts.evidenceGapReadinessRowCount,
+    sourceEvidenceCheckReviewPath.evidenceCheckReviewPathSteps.length,
+  );
+  assert.equal(
+    evidenceGapReadinessMatrix.summary.counts.staticFollowUpPromptCardCount,
+    sourceEvidenceCheckReviewPath.staticCitationGapCueCards.length,
+  );
+  assert.deepEqual(
+    evidenceGapReadinessMatrix.summary.defaultEvidenceGapReadinessContext
+      .sourceStage127DefaultEvidenceCheckReviewContext,
+    sourceEvidenceCheckReviewPath.summary.defaultEvidenceCheckReviewContext,
+  );
+  assert.deepEqual(
+    evidenceGapReadinessMatrix.evidenceGapReadinessRows.map(
+      (row) => row.sourceEvidenceCheckReviewPathStepId,
+    ),
+    sourceEvidenceCheckReviewPath.evidenceCheckReviewPathSteps.map(
+      (step) => step.evidenceCheckReviewPathStepId,
+    ),
+  );
+  assert.deepEqual(
+    evidenceGapReadinessMatrix.staticFollowUpPromptCards.map(
+      (card) => card.sourceStaticCitationGapCueCardId,
+    ),
+    sourceEvidenceCheckReviewPath.staticCitationGapCueCards.map(
+      (card) => card.staticCitationGapCueCardId,
+    ),
+  );
+  assert.ok(
+    evidenceGapReadinessMatrix.evidenceGapReadinessRows.every(
+      (row) =>
+        row.readinessText.includes(row.sourceEvidenceCheckReviewPathStepId) &&
+        row.readinessText.includes(row.sourceStaticCitationGapCueCardIds[0]) &&
+        row.followUpPromptText.includes(row.sourceEvidenceCheckReviewPathStepId) &&
+        row.readinessLabels.includes("evidence-gap readiness matrix row") &&
+        row.followUpPromptLabels.includes("static follow-up prompt context") &&
+        row.staticNonGoalFlags.noSavedEvidenceGapReadinessState &&
+        row.staticNonGoalFlags.noSavedEvidenceGapReadinessSelections &&
+        row.staticNonGoalFlags.noSavedEvidenceCheckSelections &&
+        row.staticNonGoalFlags.noSavedReviewerAnswers,
+    ),
+  );
+  assert.ok(
+    evidenceGapReadinessMatrix.staticFollowUpPromptCards.every(
+      (card) =>
+        card.followUpPromptText.includes(card.sourceStaticCitationGapCueCardId) &&
+        card.followUpPromptText.includes(card.sourceCitationReviewLaneRowId) &&
+        card.followUpPromptLabels.includes("static follow-up prompt card") &&
+        card.staticNonGoalFlags.noSavedStaticFollowUpPromptCards &&
+        card.staticNonGoalFlags.noSavedEvidenceGapReadinessMatrixState &&
+        card.staticNonGoalFlags.noSavedCitationSelections,
+    ),
+  );
+});
+
 function readCsv(path: string): Array<Record<string, string>> {
   const [headerLine, ...lines] = readFileSync(path, "utf8").trim().split("\n");
   const headers = headerLine.split(",");
