@@ -92,11 +92,11 @@ Executor must:
 
 ## Current Transition
 
-Stage 126 is review-ready/completed for automation-branch development. It
-proved a deterministic local source citation-review lane and static
-evidence-check prompt surface over the Stage 125 source follow-up map and
-static citation-check prompt cards.
+Stage 127 is review-ready/completed for automation-branch development. It
+proved a deterministic local evidence-check review path and static
+citation-gap cue surface over the Stage 126 source citation-review lane and
+static evidence-check prompt cards.
 
-Stage 127 should now build the next deterministic local evidence-check review
-path and static citation-gap cue surface over Stage 126 unless a focused Stage
-126 regression is found.
+Stage 128 should now build the next deterministic local evidence-gap readiness
+matrix and static follow-up prompt surface over Stage 127 unless a focused
+Stage 127 regression is found.
