@@ -92,11 +92,11 @@ Executor must:
 
 ## Current Transition
 
-Stage 128 is review-ready/completed for automation-branch development. It
-proved a deterministic local evidence-gap readiness matrix and static
-follow-up prompt surface over the Stage 127 evidence-check review path and
-static citation-gap cue cards.
+Stage 129 is review-ready/completed for automation-branch development. It
+proved a deterministic local evidence-gap follow-up review path and static
+readiness cue surface over the Stage 128 evidence-gap readiness matrix and
+static follow-up prompt cards.
 
-Stage 129 should now build the next deterministic local evidence-gap follow-up
-review path and static readiness cue surface over Stage 128 unless a focused
-Stage 128 regression is found.
+Stage 130 should now build the next deterministic local evidence-gap follow-up
+coverage board and static review prompt surface over Stage 129 unless a focused
+Stage 129 regression is found.
