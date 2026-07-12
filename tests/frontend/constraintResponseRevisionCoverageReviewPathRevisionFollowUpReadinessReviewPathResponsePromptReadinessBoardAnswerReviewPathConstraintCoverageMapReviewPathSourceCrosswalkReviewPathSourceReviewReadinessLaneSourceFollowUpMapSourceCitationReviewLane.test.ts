@@ -562,3 +562,125 @@ test("Stage 128 evidence-gap readiness matrix derives static follow-up prompts f
   );
   assert.match(missionConsoleSource, /No saved evidence-gap readiness state/);
 });
+
+test("Stage 129 evidence-gap follow-up review path derives readiness cues from Stage 128", async () => {
+  const {
+    buildConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPath,
+  } = await import(
+    "../../frontend/src/lib/constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLane.ts"
+  );
+  assert.equal(
+    typeof buildConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPath,
+    "function",
+  );
+
+  const view = buildMissionConsoleView(stage07ConsoleFixture, "thermal");
+  const evidenceGapReadinessMatrix =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrix;
+  const followUpReviewPath =
+    view.constraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPath;
+  const builtFollowUpReviewPath =
+    buildConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrixEvidenceGapFollowUpReviewPath(
+      evidenceGapReadinessMatrix,
+    );
+  const missionConsoleSource = readFileSync(
+    resolve(repoRoot, "frontend/src/features/mission-console/MissionConsole.tsx"),
+    "utf8",
+  );
+
+  assert.ok(evidenceGapReadinessMatrix);
+  assert.ok(followUpReviewPath);
+  assert.ok(builtFollowUpReviewPath);
+  assert.deepEqual(followUpReviewPath, builtFollowUpReviewPath);
+  assert.strictEqual(
+    followUpReviewPath.sourceConstraintResponseRevisionCoverageReviewPathRevisionFollowUpReadinessReviewPathResponsePromptReadinessBoardAnswerReviewPathConstraintCoverageMapReviewPathSourceCrosswalkReviewPathSourceReviewReadinessLaneSourceFollowUpMapSourceCitationReviewLaneEvidenceCheckReviewPathEvidenceGapReadinessMatrix,
+    evidenceGapReadinessMatrix,
+  );
+  assert.equal(
+    followUpReviewPath.schema,
+    "telemforge.constraint_response_revision_coverage_review_path_revision_follow_up_readiness_review_path_response_prompt_readiness_board_answer_review_path_constraint_coverage_map_review_path_source_crosswalk_review_path_source_review_readiness_lane_source_follow_up_map_source_citation_review_lane_evidence_check_review_path_evidence_gap_readiness_matrix_evidence_gap_follow_up_review_path.v1",
+  );
+  assert.equal(
+    followUpReviewPath.summary.counts.followUpReviewPathStepCount,
+    evidenceGapReadinessMatrix.evidenceGapReadinessRows.length,
+  );
+  assert.equal(
+    followUpReviewPath.summary.counts.staticReadinessCueCardCount,
+    evidenceGapReadinessMatrix.staticFollowUpPromptCards.length,
+  );
+  assert.deepEqual(
+    followUpReviewPath.followUpReviewPathSteps.map(
+      (step) => step.sourceEvidenceGapReadinessRowId,
+    ),
+    evidenceGapReadinessMatrix.evidenceGapReadinessRows.map(
+      (row) => row.evidenceGapReadinessRowId,
+    ),
+  );
+  assert.deepEqual(
+    followUpReviewPath.staticReadinessCueCards.map(
+      (card) => card.sourceStaticFollowUpPromptCardId,
+    ),
+    evidenceGapReadinessMatrix.staticFollowUpPromptCards.map(
+      (card) => card.staticFollowUpPromptCardId,
+    ),
+  );
+  assert.deepEqual(
+    followUpReviewPath.summary.defaultFollowUpReviewContext
+      .sourceStage128DefaultEvidenceGapReadinessContext,
+    evidenceGapReadinessMatrix.summary.defaultEvidenceGapReadinessContext,
+  );
+
+  const firstStep = followUpReviewPath.followUpReviewPathSteps[0];
+  assert.ok(firstStep.followUpReviewText.includes(firstStep.sourceEvidenceGapReadinessRowId));
+  assert.ok(firstStep.followUpReviewText.includes(firstStep.sourceStaticFollowUpPromptCardIds[0]));
+  assert.ok(firstStep.followUpReviewText.includes(firstStep.sourceEvidenceCheckReviewPathStepId));
+  assert.ok(firstStep.readinessCueText.includes(firstStep.sourceEvidenceGapReadinessRowId));
+  assert.ok(firstStep.followUpReviewLabels.includes("evidence-gap follow-up review path step"));
+  assert.ok(firstStep.readinessCueLabels.includes("static readiness cue context"));
+  assert.equal(firstStep.staticNonGoalFlags.noSavedFollowUpReviewPathState, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedEvidenceGapFollowUpSelections, true);
+  assert.equal(firstStep.staticNonGoalFlags.noSavedEvidenceGapReadinessSelections, true);
+
+  const firstCard = followUpReviewPath.staticReadinessCueCards[0];
+  assert.ok(firstCard.readinessCueText.includes(firstCard.sourceStaticFollowUpPromptCardId));
+  assert.ok(firstCard.readinessCueText.includes(firstCard.sourceStaticCitationGapCueCardId));
+  assert.ok(firstCard.followUpReviewText.includes(firstCard.sourceEvidenceGapReadinessRowIds[0]));
+  assert.ok(firstCard.readinessCueLabels.includes("static readiness cue card"));
+  assert.equal(firstCard.staticNonGoalFlags.noSavedStaticReadinessCueCards, true);
+  assert.equal(firstCard.staticNonGoalFlags.noSavedEvidenceGapFollowUpSelections, true);
+
+  const stage129PromptStrings = [
+    followUpReviewPath.summary.summary,
+    followUpReviewPath.staticFollowUpReviewBoundarySummary,
+    ...followUpReviewPath.followUpReviewPathSteps.flatMap((step) => [
+      step.followUpReviewText,
+      step.readinessCueText,
+      step.staticNonGoalContext,
+      ...step.followUpReviewLabels,
+      ...step.readinessCueLabels,
+    ]),
+    ...followUpReviewPath.staticReadinessCueCards.flatMap((card) => [
+      card.followUpReviewText,
+      card.readinessCueText,
+      card.staticNonGoalContext,
+      ...card.followUpReviewLabels,
+      ...card.readinessCueLabels,
+    ]),
+  ];
+  assert.equal(
+    stage129PromptStrings.filter((value) => value.includes("undefined")).length,
+    0,
+  );
+  assert.equal(
+    missionConsoleSource.match(
+      /aria-label="Stage 129 evidence gap follow-up review path"/g,
+    )?.length ?? 0,
+    1,
+  );
+  assert.match(missionConsoleSource, /Stage 129 evidence gap follow-up review path/);
+  assert.match(
+    missionConsoleSource,
+    /Evidence gap follow-up review path and static readiness cues/,
+  );
+  assert.match(missionConsoleSource, /No saved evidence-gap follow-up selections/);
+});
